@@ -1,15 +1,15 @@
 "use client"
 
 import { useEffect } from "react"
-import { Inter, Playfair_Display, Alexandria } from "next/font/google"
+import { Playfair_Display, Outfit, Noto_Sans_Arabic } from "next/font/google"
 import "./globals.css"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import { I18nProvider, useI18n } from "@/lib/i18n-context"
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" })
-const alexandria = Alexandria({ subsets: ["arabic"], variable: "--font-arabic" })
+const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-heading" })
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-body" })
+const notoSansArabic = Noto_Sans_Arabic({ subsets: ["arabic"], weight: ["300", "400", "500", "600", "700"], variable: "--font-arabic" })
 
 function HtmlWrapper({ children }: { children: React.ReactNode }) {
   const { dir, lang } = useI18n()
@@ -25,8 +25,8 @@ function HtmlWrapper({ children }: { children: React.ReactNode }) {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html className={`${inter.variable} ${playfair.variable} ${alexandria.variable}`}>
-      <body className="font-sans antialiased bg-neutral-50 text-neutral-900">
+    <html className={`${playfair.variable} ${outfit.variable} ${notoSansArabic.variable}`}>
+      <body className="font-body antialiased bg-cream text-brown-900">
         <I18nProvider>
           <HtmlWrapper>
             <Navbar />
