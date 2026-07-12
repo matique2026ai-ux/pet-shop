@@ -2,8 +2,11 @@
 
 import Link from "next/link"
 import { PawPrint, Phone, Mail, MapPin, Clock, Heart } from "lucide-react"
+import { useI18n } from "@/lib/i18n-context"
 
 export default function Footer() {
+  const { t } = useI18n()
+
   return (
     <footer className="bg-neutral-900 text-neutral-300">
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-16">
@@ -15,9 +18,7 @@ export default function Footer() {
               </div>
               <span className="text-lg font-bold text-white">Paws & Wings</span>
             </div>
-            <p className="text-sm text-neutral-400 leading-relaxed mb-4">
-              Your trusted pet shop and veterinary clinic. We care for your furry and feathered friends with love and expertise.
-            </p>
+            <p className="text-sm text-neutral-400 leading-relaxed mb-4">{t.footer.desc}</p>
             <div className="flex gap-3">
               {["facebook", "instagram", "youtube"].map((s) => (
                 <a key={s} href="#" className="w-9 h-9 rounded-full bg-neutral-800 flex items-center justify-center hover:bg-brand-500 transition-colors">
@@ -28,26 +29,24 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-white font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-white font-semibold mb-4">{t.footer.quickLinks}</h3>
             <ul className="space-y-2.5">
               {[
-                { href: "/products", label: "All Products" },
-                { href: "/products/cats", label: "Cat Supplies" },
-                { href: "/products/birds", label: "Bird Supplies" },
-                { href: "/products/accessories", label: "Accessories" },
-                { href: "/vet", label: "Vet Clinic" },
+                { href: "/products", label: t.footer.allProducts },
+                { href: "/products/cats", label: t.footer.catSupplies },
+                { href: "/products/birds", label: t.footer.birdSupplies },
+                { href: "/products/accessories", label: t.footer.accessories },
+                { href: "/vet", label: t.nav.vet },
               ].map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm hover:text-brand-400 transition-colors">
-                    {link.label}
-                  </Link>
+                  <Link href={link.href} className="text-sm hover:text-brand-400 transition-colors">{link.label}</Link>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h3 className="text-white font-semibold mb-4">Services</h3>
+            <h3 className="text-white font-semibold mb-4">{t.footer.services}</h3>
             <ul className="space-y-2.5">
               {[
                 "General Consultation",
@@ -57,16 +56,14 @@ export default function Footer() {
                 "Dental Care",
               ].map((s) => (
                 <li key={s}>
-                  <Link href="/vet" className="text-sm hover:text-brand-400 transition-colors">
-                    {s}
-                  </Link>
+                  <Link href="/vet" className="text-sm hover:text-brand-400 transition-colors">{s}</Link>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h3 className="text-white font-semibold mb-4">Visit Us</h3>
+            <h3 className="text-white font-semibold mb-4">{t.footer.visitUs}</h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-3 text-sm">
                 <MapPin className="w-4 h-4 text-brand-400 mt-0.5 shrink-0" />
@@ -95,10 +92,10 @@ export default function Footer() {
       <div className="border-t border-neutral-800">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-5 flex flex-col md:flex-row items-center justify-between gap-3">
           <p className="text-xs text-neutral-500">
-            &copy; {new Date().getFullYear()} Paws & Wings. All rights reserved.
+            &copy; {new Date().getFullYear()} Paws & Wings. {t.footer.rights}
           </p>
           <p className="text-xs text-neutral-600 flex items-center gap-1">
-            Made with <Heart className="w-3 h-3 text-red-500" /> for your pets
+            {t.footer.madeWith} <Heart className="w-3 h-3 text-red-500" /> {t.footer.forYourPets}
           </p>
         </div>
       </div>
