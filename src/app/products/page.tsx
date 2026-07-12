@@ -88,11 +88,7 @@ export default function ProductsPage() {
               <motion.div key={product.id} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
                 <Link href={`/products/${product.category}/${product.id}`} className="group block bg-white rounded-2xl border border-neutral-100 overflow-hidden hover:shadow-xl hover:shadow-brand-500/10 transition-all duration-500">
                   <div className="relative aspect-square bg-gradient-to-br from-neutral-100 to-neutral-200 overflow-hidden">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      {product.category === "cats" ? <PawPrint className="w-16 h-16 text-neutral-300" /> :
-                       product.category === "birds" ? <Bird className="w-16 h-16 text-neutral-300" /> :
-                       <Heart className="w-16 h-16 text-neutral-300" />}
-                    </div>
+                    <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     <div className={`absolute top-3 flex gap-2 ${isRtl ? "right-3" : "left-3"}`}>
                       {product.isNew && <span className="px-2.5 py-1 bg-vet-500 text-white text-[10px] font-bold rounded-full">{t.products.new}</span>}
@@ -120,3 +116,4 @@ export default function ProductsPage() {
     </div>
   )
 }
+

@@ -115,11 +115,12 @@ export default function HomePage() {
             >
               <div className="relative w-full aspect-square">
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-200 to-vet-200 rounded-[3rem] rotate-6 opacity-60" />
-                <div className="relative w-full h-full bg-gradient-to-br from-brand-400 via-brand-500 to-vet-600 rounded-[2.5rem] flex items-center justify-center overflow-hidden">
-                  <div className="text-center text-white p-12">
-                    <PawPrint className="w-24 h-24 mx-auto mb-6 opacity-80 animate-float" />
+                <div className="relative w-full h-full rounded-[2.5rem] overflow-hidden shadow-2xl">
+                  <img src="https://placehold.co/700x700/EA580C/FFFFFF?text=Paws+%26+Wings&font=playfair" alt="Paws & Wings" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  <div className="absolute bottom-8 left-8 text-white">
                     <h3 className="text-3xl font-bold">Paws & Wings</h3>
-                    <p className="text-white/80 mt-2">Where pets come first</p>
+                    <p className="text-white/80 mt-1">Where pets come first</p>
                   </div>
                 </div>
               </div>
@@ -338,3 +339,4 @@ export default function HomePage() {
     </>
   )
 }
+
