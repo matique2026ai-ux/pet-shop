@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState, useMemo } from "react";
+import { Suspense, useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -8,15 +8,22 @@ import { useI18n } from "@/lib/i18n-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
 import AnimatedSection from "@/components/animated-section";
 import ProductCard from "@/components/product-card";
-import { Search } from "lucide-react";
+import { Search, ArrowUpDown } from "lucide-react";
 
 function ProductsContent() {
   const { t } = useI18n();
   const { products, categories } = useTranslatedData();
   const searchParams = useSearchParams();
   const initialFilter = searchParams.get("filter");
-  const [search, setSearch] = useState("");
+  const initialSearch = searchParams.get("q") || "";
+  const [search, setSearch] = useState(initialSearch);
   const [category, setCategory] = useState<string>("all");
+  const [sort, setSort] = useState("default");
+
+  useEffect(() => {
+    const q = searchParams.get("q");
+    if (q) setSearch(q);
+  }, [searchParams]);
 
   const filtered = useMemo(() => {
     let list = products;
@@ -25,12 +32,19 @@ function ProductsContent() {
     } else if (initialFilter === "offers") {
       list = list.filter((p) => p.badge === "SALE" || p.originalPrice);
     }
-    return list.filter((p) => {
+    list = list.filter((p) => {
       const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());
       const matchCat = category === "all" || p.category === category;
       return matchSearch && matchCat;
     });
-  }, [search, category, initialFilter]);
+    switch (sort) {
+      case "price-asc": return [...list].sort((a, b) => a.price - b.price);
+      case "price-desc": return [...list].sort((a, b) => b.price - a.price);
+      case "rating": return [...list].sort((a, b) => b.rating - a.rating);
+      case "name": return [...list].sort((a, b) => a.name.localeCompare(b.name));
+      default: return list;
+    }
+  }, [search, category, initialFilter, sort]);
 
   return (
     <div>
@@ -67,6 +81,17 @@ function ProductsContent() {
                 </button>
               ))}
             </div>
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+              className="px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600"
+            >
+              <option value="default">{t.products.sortBy}</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="rating">Top Rated</option>
+              <option value="name">Name A-Z</option>
+            </select>
           </div>
         </div>
       </section>

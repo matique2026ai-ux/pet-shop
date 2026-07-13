@@ -32,7 +32,7 @@ export default function VetPage() {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#2E241A]/85 via-[#4A3A2A]/60 to-[#2E241A]/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1a1512]/85 via-[#3a220a]/60 to-[#1a1512]/40" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <AnimatedSection>
             <div className="max-w-xl">
@@ -42,7 +42,7 @@ export default function VetPage() {
               <h1 className="text-5xl lg:text-7xl font-bold text-white mb-4 leading-tight">{t.vet.title}</h1>
               <p className="text-emerald-100/70 text-lg mb-8 max-w-md leading-relaxed">{t.vet.subtitle}</p>
               <div className="flex items-center gap-4">
-                <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-[#4A3A2A] px-7 py-3.5 rounded-2xl font-bold hover:bg-emerald-50 transition-all shadow-xl hover:-translate-y-0.5">
+                <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-[#3a220a] px-7 py-3.5 rounded-2xl font-bold hover:bg-emerald-50 transition-all shadow-xl hover:-translate-y-0.5">
                   <Phone className="w-4 h-4" />
                   {t.vet.bookNow}
                 </Link>
@@ -59,7 +59,7 @@ export default function VetPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="bg-white/80 backdrop-blur-xl rounded-3xl px-8 py-8 grid grid-cols-2 md:grid-cols-4 gap-8 border border-white/40"
-              style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.06)" }}
+              style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.3)" }}
             >
               {[
                 { label: t.vet.stats.happyPets, value: "2,500+" },
@@ -81,7 +81,7 @@ export default function VetPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center mb-12">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#F7F3ED] rounded-full text-sm text-[#8B7560] border border-[#EDE6DB] mb-3">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#fef8e7] rounded-full text-sm text-[#b87a30] border border-[#fdf0c8] mb-3">
                 <Stethoscope className="w-4 h-4" /> {t.vet.servicesTitle}
               </span>
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t.vet.servicesTitle}</h2>
@@ -89,7 +89,7 @@ export default function VetPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {vetServices.map((s) => (
                 <div key={s.id} className="group relative overflow-hidden rounded-3xl transition-all duration-500 hover:-translate-y-1.5 bg-white"
-                  style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.04)" }}
+                  style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.25)" }}
                 >
                   <div className="relative h-52 overflow-hidden">
                     <Image
@@ -108,7 +108,7 @@ export default function VetPage() {
                   <div className="p-5">
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="font-bold text-gray-900">{s.title}</h3>
-                      <span className="text-lg font-bold text-[#8B7560]">{currency}{s.price}</span>
+                      <span className="text-lg font-bold text-[#b87a30]">{currency}{s.price}</span>
                     </div>
                     <p className="text-sm text-gray-500 leading-relaxed line-clamp-2">{s.description}</p>
                     <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
@@ -116,7 +116,7 @@ export default function VetPage() {
                         <Clock className="w-3.5 h-3.5" />
                         {s.duration}
                       </span>
-                      <span className="flex items-center gap-1 text-xs font-medium text-[#8B7560] group-hover:gap-2 transition-all">
+                      <span className="flex items-center gap-1 text-xs font-medium text-[#b87a30] group-hover:gap-2 transition-all">
                         {t.vet.bookNow} <ChevronRight className="w-3 h-3" />
                       </span>
                     </div>
@@ -132,13 +132,13 @@ export default function VetPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center mb-12">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full text-sm text-[#8B7560] border border-[#EDE6DB] mb-3">{t.vet.teamBadge}</span>
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full text-sm text-[#b87a30] border border-[#fdf0c8] mb-3">{t.vet.teamBadge}</span>
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t.vet.teamTitle}</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
               {team.map((m) => (
                 <div key={m.id} className="group relative bg-white rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-1.5"
-                  style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.04)" }}
+                  style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.25)" }}
                 >
                   <div className="relative h-56 overflow-hidden">
                     <Image
@@ -167,13 +167,13 @@ export default function VetPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center mb-12">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#F7F3ED] rounded-full text-sm text-[#8B7560] border border-[#EDE6DB] mb-3">{t.vet.testimonialsBadge}</span>
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#fef8e7] rounded-full text-sm text-[#b87a30] border border-[#fdf0c8] mb-3">{t.vet.testimonialsBadge}</span>
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t.vet.testimonialsTitle}</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               {testimonials.slice(0, 3).map((rev) => (
                 <div key={rev.id} className="bg-white rounded-3xl p-7 transition-all duration-500 hover:-translate-y-1.5"
-                  style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.04)" }}
+                  style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.25)" }}
                 >
                   <div className="flex items-center gap-1 mb-4">
                     {Array.from({ length: rev.rating }).map((_, i) => (
@@ -182,7 +182,7 @@ export default function VetPage() {
                   </div>
                   <p className="text-sm text-gray-600 mb-5 leading-relaxed">&ldquo;{rev.text}&rdquo;</p>
                   <div className="flex items-center gap-3 pt-3 border-t border-gray-100">
-                    <div className="w-9 h-9 bg-gradient-to-br from-[#EDE6DB] to-[#F7F3ED] rounded-full flex items-center justify-center text-xs font-bold text-[#8B7560]">{rev.initials}</div>
+                    <div className="w-9 h-9 bg-gradient-to-br from-[#fdf0c8] to-[#fef8e7] rounded-full flex items-center justify-center text-xs font-bold text-[#b87a30]">{rev.initials}</div>
                     <span className="text-sm font-semibold text-gray-900">{rev.name}</span>
                   </div>
                 </div>
@@ -199,7 +199,7 @@ export default function VetPage() {
           fill
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#2E241A]/90 via-[#4A3A2A]/70 to-[#2E241A]/80" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1a1512]/90 via-[#3a220a]/70 to-[#1a1512]/80" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative w-full">
           <AnimatedSection>
             <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-xl rounded-full text-sm text-emerald-200 border border-white/10 mb-4">
@@ -209,7 +209,7 @@ export default function VetPage() {
             <p className="text-emerald-100/60 mb-8 max-w-md mx-auto text-lg">
               {t.vet.ctaText}
             </p>
-            <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-[#4A3A2A] px-8 py-3.5 rounded-2xl font-bold hover:bg-emerald-50 transition-all shadow-xl hover:-translate-y-0.5">
+            <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-[#3a220a] px-8 py-3.5 rounded-2xl font-bold hover:bg-emerald-50 transition-all shadow-xl hover:-translate-y-0.5">
               {t.vet.bookNow}
               <ArrowRight className="w-4 h-4" />
             </Link>

@@ -4,17 +4,43 @@
   --font-outfit: "Outfit", sans-serif;
   --font-playfair: "Playfair Display", serif;
   --font-tajawal: "Tajawal", sans-serif;
-  --color-emerald-50: #F7F3ED;
-  --color-emerald-100: #EDE6DB;
-  --color-emerald-200: #E0D5C4;
-  --color-emerald-300: #D4C5B0;
-  --color-emerald-400: #BFA98E;
-  --color-emerald-500: #A0896C;
-  --color-emerald-600: #8B7560;
-  --color-emerald-700: #7D6B55;
-  --color-emerald-800: #5C4A32;
-  --color-emerald-900: #4A3A2A;
-  --color-emerald-950: #2E241A;
+
+  --color-white: #f5efe6;
+
+  --color-gray-50: #f5efe6;
+  --color-gray-100: #ede4d8;
+  --color-gray-200: #ddd0c0;
+  --color-gray-300: #c8b8a0;
+  --color-gray-400: #a09070;
+  --color-gray-500: #706050;
+  --color-gray-600: #5a4a3a;
+  --color-gray-700: #4a3a2a;
+  --color-gray-800: #3a2a1a;
+  --color-gray-900: #2a1a0a;
+
+  --color-emerald-50: #fef8e7;
+  --color-emerald-100: #fdf0c8;
+  --color-emerald-200: #fce0a0;
+  --color-emerald-300: #f5c76a;
+  --color-emerald-400: #e8a540;
+  --color-emerald-500: #d4943f;
+  --color-emerald-600: #b87a30;
+  --color-emerald-700: #9a6225;
+  --color-emerald-800: #7a4d1a;
+  --color-emerald-900: #5c3812;
+  --color-emerald-950: #3a220a;
+
+  --color-amber: #c88b3f;
+  --color-amber-light: #e8a540;
+  --color-sage: #5a8f4a;
+  --color-sage-light: #7aaf6a;
+  --color-rust: #b86a38;
+  --color-card: #2d261f;
+  --color-surface: #1a1512;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 [dir="rtl"] {
@@ -30,18 +56,13 @@
   animation: fadeInUp 0.6s ease-out;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
-}
-
 @keyframes shimmer {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, #fff 0%, #D4C5B0 25%, #fff 50%, #D4C5B0 75%, #fff 100%);
+  background: linear-gradient(90deg, #f0e6d8 0%, #d4943f 25%, #f0e6d8 50%, #d4943f 75%, #f0e6d8 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;

@@ -36,8 +36,8 @@ export default function AboutPage() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#2E241A]/90 via-[#4A3A2A]/70 to-[#2E241A]/60" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#2E241A] via-transparent to-transparent opacity-60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1a1512]/90 via-[#3a220a]/70 to-[#1a1512]/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1a1512] via-transparent to-transparent opacity-60" />
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,7 +48,7 @@ export default function AboutPage() {
             <h1 className="text-5xl lg:text-7xl font-bold text-white mb-4 leading-tight">{t.about.title}</h1>
             <p className="text-emerald-100/70 text-xl max-w-lg leading-relaxed">{t.about.subtitle}</p>
             <div className="flex items-center gap-3 mt-8">
-              <Link href="/products" className="inline-flex items-center gap-2 bg-white text-[#4A3A2A] px-7 py-3 rounded-2xl font-bold hover:bg-emerald-50 transition-all shadow-xl hover:-translate-y-0.5">
+              <Link href="/products" className="inline-flex items-center gap-2 bg-white text-[#3a220a] px-7 py-3 rounded-2xl font-bold hover:bg-emerald-50 transition-all shadow-xl hover:-translate-y-0.5">
                 {t.hero.cta1}
                 <ChevronRight className="w-4 h-4" />
               </Link>
@@ -64,7 +64,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="bg-white rounded-3xl px-8 py-8 grid grid-cols-2 md:grid-cols-4 gap-8"
-              style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.06)" }}
+              style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.3)" }}
             >
               {statValues.map((s, i) => (
                 <div key={i} className="text-center">
@@ -94,7 +94,7 @@ export default function AboutPage() {
                 </div>
                 <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl px-6 py-4 shadow-xl border border-gray-100 hidden lg:block">
                   <div className="flex items-center gap-3">
-                    <span className="w-12 h-12 bg-[#EDE6DB] rounded-xl flex items-center justify-center text-[#8B7560]">
+                    <span className="w-12 h-12 bg-[#fdf0c8] rounded-xl flex items-center justify-center text-[#b87a30]">
                       <PawPrint className="w-6 h-6" />
                     </span>
                     <div>
@@ -106,18 +106,18 @@ export default function AboutPage() {
               </div>
             </AnimatedSection>
             <AnimatedSection>
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#F7F3ED] rounded-full text-sm text-[#8B7560] font-medium mb-4">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#fef8e7] rounded-full text-sm text-[#b87a30] font-medium mb-4">
                 <Sparkles className="w-4 h-4" /> {t.about.story}
               </span>
               <h2 className="text-4xl font-bold text-gray-900 mb-5 leading-tight">{t.about.storyTitle}</h2>
               <p className="text-gray-600 leading-relaxed text-lg">{t.about.storyText}</p>
               <div className="mt-6 flex items-center gap-6">
                 <div className="flex items-center gap-2 text-sm text-gray-500">
-                  <MapPin className="w-4 h-4 text-[#8B7560]" />
+                  <MapPin className="w-4 h-4 text-[#b87a30]" />
                   <span>{t.about.address}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-500">
-                  <Clock className="w-4 h-4 text-[#8B7560]" />
+                  <Clock className="w-4 h-4 text-[#b87a30]" />
                   <span>{t.about.hours}</span>
                 </div>
               </div>
@@ -133,7 +133,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="max-w-2xl mx-auto text-center mb-12">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full text-sm text-[#8B7560] border border-emerald-200/50 shadow-sm mb-3">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full text-sm text-[#b87a30] border border-emerald-200/50 shadow-sm mb-3">
                 <Heart className="w-4 h-4" /> {t.about.purpose}
               </span>
               <h2 className="text-4xl font-bold text-gray-900 mb-4">{t.about.mission}</h2>
@@ -148,14 +148,14 @@ export default function AboutPage() {
                 <div
                   key={i}
                   className="group relative overflow-hidden rounded-2xl p-5 transition-all duration-500 hover:-translate-y-1"
-                  style={{ background: i % 2 === 0 ? "#FFFFFF" : "#F7F3ED" }}
+                  style={{ background: i % 2 === 0 ? "#FFFFFF" : "#fef8e7" }}
                 >
                   <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-20 group-hover:opacity-30 transition-opacity"
-                    style={{ background: i % 2 === 0 ? "#EDE6DB" : "#E0D5C4" }}
+                    style={{ background: i % 2 === 0 ? "#fdf0c8" : "#fce0a0" }}
                   />
                   <div className="relative flex items-start gap-4">
-                    <span className="w-12 h-12 shrink-0 rounded-xl flex items-center justify-center text-[#8B7560] text-lg font-bold"
-                      style={{ background: i % 2 === 0 ? "#F7F3ED" : "#FFFFFF" }}
+                    <span className="w-12 h-12 shrink-0 rounded-xl flex items-center justify-center text-[#b87a30] text-lg font-bold"
+                      style={{ background: i % 2 === 0 ? "#fef8e7" : "#FFFFFF" }}
                     >
                       {valueIcons[i]}
                     </span>
@@ -172,7 +172,7 @@ export default function AboutPage() {
       </section>
 
       <section className="relative overflow-hidden py-16 lg:py-20"
-        style={{ background: "linear-gradient(135deg, #2E241A 0%, #4A3A2A 50%, #2E241A 100%)" }}
+        style={{ background: "linear-gradient(135deg, #1a1512 0%, #3a220a 50%, #1a1512 100%)" }}
       >
         <div className="absolute top-10 right-20 w-72 h-72 bg-emerald-500/10 rounded-full blur-[100px]" />
         <div className="absolute bottom-10 left-20 w-96 h-96 bg-emerald-400/8 rounded-full blur-[120px]" />
@@ -184,7 +184,7 @@ export default function AboutPage() {
             <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">{t.about.cta}</h2>
             <p className="text-emerald-100/60 mb-8 max-w-md mx-auto text-lg">{t.about.ctaSub}</p>
             <div className="flex items-center justify-center gap-4">
-              <a href="tel:+1234567890" className="inline-flex items-center gap-2 bg-white text-[#4A3A2A] px-8 py-3.5 rounded-2xl font-bold hover:bg-emerald-50 transition-all shadow-xl hover:-translate-y-0.5">
+              <a href="tel:+1234567890" className="inline-flex items-center gap-2 bg-white text-[#3a220a] px-8 py-3.5 rounded-2xl font-bold hover:bg-emerald-50 transition-all shadow-xl hover:-translate-y-0.5">
                 <Phone className="w-4 h-4" />
                 {t.nav.callNow}
               </a>

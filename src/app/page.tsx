@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useI18n } from "@/lib/i18n-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
+import { useRecentlyViewed } from "@/lib/use-recently-viewed";
 import AnimatedSection from "@/components/animated-section";
 import ProductCard from "@/components/product-card";
 import VetCard from "@/components/vet-card";
@@ -36,6 +37,8 @@ export default function HomePage() {
   const isRtl = dir === "rtl";
   const Arrow = isRtl ? ChevronLeft : ChevronRight;
   const bestsellers = products.filter((p) => p.rating >= 4.6).slice(0, 8);
+  const { ids: recentIds } = useRecentlyViewed();
+  const recentProducts = products.filter((p) => recentIds.includes(p.id)).slice(0, 4);
   const [videoIdx, setVideoIdx] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -124,6 +127,21 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {recentProducts.length > 0 && (
+        <section className="py-12 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold text-gray-900">Recently Viewed</h2>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 gap-y-8">
+              {recentProducts.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

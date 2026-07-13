@@ -1,15 +1,37 @@
 "use client";
 
+import { useState } from "react";
 import { useCart } from "@/lib/cart-context";
 import { useI18n } from "@/lib/i18n-context";
 import Link from "next/link";
 import Image from "next/image";
 import AnimatedSection from "@/components/animated-section";
-import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus } from "lucide-react";
+import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, Lock } from "lucide-react";
 
 export default function CartPage() {
-  const { items, removeItem, updateQuantity, totalPrice } = useCart();
+  const { items, removeItem, updateQuantity, totalPrice, clearCart } = useCart();
   const { t, currency } = useI18n();
+  const [checkingOut, setCheckingOut] = useState(false);
+  const [orderPlaced, setOrderPlaced] = useState(false);
+
+  if (orderPlaced) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
+        <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mb-6">
+          <CheckCircle className="w-10 h-10 text-emerald-600" />
+        </div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">{t.cart.orderConfirmed}</h2>
+        <p className="text-gray-500 mb-8 max-w-md">{t.cart.orderConfirmedDesc}</p>
+        <Link
+          href="/products"
+          className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-emerald-700 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          {t.cart.continueShopping}
+        </Link>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (
@@ -108,7 +130,7 @@ export default function CartPage() {
                   </div>
 
                   <button
-                    onClick={() => alert("Checkout coming soon")}
+                    onClick={() => setCheckingOut(true)}
                     className="w-full mt-6 bg-emerald-600 text-white py-3 rounded-xl font-medium hover:bg-emerald-700 transition-colors"
                   >
                     {t.cart.checkout}
@@ -127,6 +149,108 @@ export default function CartPage() {
           </AnimatedSection>
         </div>
       </section>
+
+      {checkingOut && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-start justify-center pt-20 px-4 pb-10 overflow-y-auto">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-gray-900">{t.cart.checkout}</h2>
+              <button onClick={() => setCheckingOut(false)} className="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+            </div>
+
+            <div className="space-y-4 mb-6 max-h-60 overflow-y-auto">
+              {items.map((item) => (
+                <div key={item.productId} className="flex items-center gap-3 text-sm">
+                  <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-gray-50 shrink-0">
+                    <Image src={item.image} alt={item.name} fill className="object-cover" sizes="48px" />
+                  </div>
+                  <span className="flex-1 text-gray-700 truncate">{item.name} x{item.quantity}</span>
+                  <span className="font-medium text-gray-900">{currency}{(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t border-gray-100 pt-4 mb-6">
+              <div className="flex items-center justify-between text-lg font-bold text-gray-900">
+                <span>{t.cart.total}</span>
+                <span>{currency}{totalPrice.toFixed(2)}</span>
+              </div>
+            </div>
+
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const form = e.currentTarget;
+                const fd = new FormData(form);
+                const order = {
+                  customer_name: fd.get("name") as string,
+                  customer_email: fd.get("email") as string,
+                  customer_phone: fd.get("phone") as string,
+                  delivery_address: fd.get("address") as string,
+                  items: items.map((i) => ({ productId: i.productId, name: i.name, price: i.price, quantity: i.quantity })),
+                  total: totalPrice,
+                };
+                try {
+                  await fetch("/api/orders", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(order),
+                  });
+                } catch {}
+                setOrderPlaced(true);
+                clearCart();
+              }}
+              className="space-y-4"
+            >
+              <input
+                type="text"
+                name="name"
+                placeholder={t.cart.namePlaceholder}
+                required
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder={t.cart.emailPlaceholder}
+                required
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+              <input
+                type="tel"
+                name="phone"
+                placeholder={t.cart.phonePlaceholder}
+                required
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+              <textarea
+                name="address"
+                placeholder={t.cart.addressPlaceholder}
+                required
+                rows={3}
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+              />
+              <button
+                type="submit"
+                className="w-full bg-emerald-600 text-white py-3 rounded-xl font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"
+              >
+                <CreditCard className="w-4 h-4" />
+                {t.cart.placeOrder}
+              </button>
+              <div className="flex items-center justify-center gap-3 text-xs text-gray-400 pt-2">
+                <Lock className="w-3 h-3" />
+                <span>{t.cart.secureCheckout}</span>
+                <span className="w-px h-3 bg-gray-200" />
+                <span>Visa</span>
+                <span className="w-px h-3 bg-gray-200" />
+                <span>Mastercard</span>
+                <span className="w-px h-3 bg-gray-200" />
+                <span>CCP</span>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

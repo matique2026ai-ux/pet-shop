@@ -36,7 +36,7 @@ export default function VetCard({ service }: VetCardProps) {
   const { t, currency } = useI18n();
   return (
     <div className="group relative overflow-hidden rounded-3xl transition-all duration-500 hover:-translate-y-1.5"
-      style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.05)" }}
+      style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.25)" }}
     >
       <div className="relative h-72 overflow-hidden">
         <Image
@@ -45,8 +45,8 @@ export default function VetCard({ service }: VetCardProps) {
           fill
           className="object-cover transition-all duration-700 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#2E241A]/90 via-[#4A3A2A]/30 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#2E241A]/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1a1512]/90 via-[#3a220a]/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#1a1512]/40" />
 
         <div className="absolute top-4 left-4">
           <span className="w-10 h-10 bg-white/20 backdrop-blur-xl rounded-xl flex items-center justify-center text-white border border-white/30 shadow-lg">
@@ -68,7 +68,7 @@ export default function VetCard({ service }: VetCardProps) {
           <Clock className="w-3.5 h-3.5" />
           {service.duration}
         </span>
-        <span className="flex items-center gap-1 text-xs font-semibold text-[#8B7560]">
+        <span className="flex items-center gap-1 text-xs font-semibold text-[#b87a30]">
           <Sparkles className="w-3 h-3" /> {t.vet.bookNow}
         </span>
       </div>

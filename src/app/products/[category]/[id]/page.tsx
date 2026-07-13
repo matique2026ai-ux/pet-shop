@@ -1,19 +1,30 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useI18n } from "@/lib/i18n-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
+import { useCart } from "@/lib/cart-context";
+import { useRecentlyViewed } from "@/lib/use-recently-viewed";
 import AnimatedSection from "@/components/animated-section";
 import ProductCard from "@/components/product-card";
-import { Star, ChevronRight, Check, ShoppingCart, ArrowLeft } from "lucide-react";
+import { Star, ChevronRight, Check, ShoppingCart, Plus, Minus, Share2, X, ZoomIn } from "lucide-react";
 
 export default function ProductDetailPage() {
   const { t, currency } = useI18n();
   const { products, categories } = useTranslatedData();
+  const { addItem } = useCart();
+  const { addId } = useRecentlyViewed();
   const params = useParams();
   const product = products.find((p) => p.id === params.id);
+  const [qty, setQty] = useState(1);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  useEffect(() => {
+    if (product) addId(product.id);
+  }, [product?.id]);
 
   if (!product) {
     return (
@@ -29,8 +40,9 @@ export default function ProductDetailPage() {
   const related = products.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 4);
 
   return (
-    <div>
-      <section className="bg-white border-b border-gray-100 py-6">
+    <>
+      <div>
+        <section className="bg-white border-b border-gray-100 py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2 text-sm text-gray-400">
             <Link href="/" className="hover:text-emerald-600">{t.products.breadcrumbHome}</Link>
@@ -48,8 +60,13 @@ export default function ProductDetailPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              <div className="relative aspect-square bg-gray-50 rounded-2xl overflow-hidden border border-gray-100">
-                <Image src={product.image || "/placeholder.svg"} alt={product.name} fill className="object-cover" />
+              <div className="relative aspect-square bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 cursor-pointer group" onClick={() => setLightboxOpen(true)}>
+                <Image src={product.image || "/placeholder.svg"} alt={product.name} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 rounded-full p-2 shadow-lg">
+                    <ZoomIn className="w-5 h-5 text-gray-700" />
+                  </span>
+                </div>
                 {product.badge && (
                   <span className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold ${product.badge === "NEW" ? "bg-emerald-600 text-white" : "bg-gray-900 text-white"}`}>
                     {product.badge === "NEW" ? t.products.new : t.products.sale}
@@ -76,6 +93,22 @@ export default function ProductDetailPage() {
                   )}
                 </div>
 
+                <div className="flex items-center gap-2 mb-6">
+                  <button
+                    onClick={() => {
+                      if (navigator.share) {
+                        navigator.share({ title: product.name, url: window.location.href });
+                      } else {
+                        navigator.clipboard.writeText(window.location.href);
+                      }
+                    }}
+                    className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-emerald-600 transition-colors"
+                  >
+                    <Share2 className="w-4 h-4" />
+                    {t.products.share}
+                  </button>
+                </div>
+
                 <div className="mb-6">
                   <h3 className="font-semibold text-gray-900 mb-3">Features</h3>
                   <ul className="space-y-2">
@@ -89,10 +122,30 @@ export default function ProductDetailPage() {
                 </div>
 
                 {product.inStock ? (
-                  <button className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-emerald-700 transition-colors">
-                    <ShoppingCart className="w-4 h-4" />
-                    {t.products.addToCart}
-                  </button>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2 bg-gray-100 rounded-xl">
+                      <button
+                        onClick={() => setQty(Math.max(1, qty - 1))}
+                        className="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors"
+                      >
+                        <Minus className="w-4 h-4" />
+                      </button>
+                      <span className="w-8 text-center font-semibold text-gray-900">{qty}</span>
+                      <button
+                        onClick={() => setQty(qty + 1)}
+                        className="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors"
+                      >
+                        <Plus className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <button
+                      onClick={() => { addItem(product, qty); setQty(1); }}
+                      className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-emerald-700 transition-colors"
+                    >
+                      <ShoppingCart className="w-4 h-4" />
+                      {t.products.addToCart}
+                    </button>
+                  </div>
                 ) : (
                   <span className="inline-block bg-gray-100 text-gray-500 px-6 py-3 rounded-xl font-semibold">
                     {t.products.outOfStock}
@@ -118,6 +171,18 @@ export default function ProductDetailPage() {
           </div>
         </section>
       )}
-    </div>
+      </div>
+
+      {lightboxOpen && (
+        <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4" onClick={() => setLightboxOpen(false)}>
+          <button onClick={() => setLightboxOpen(false)} className="absolute top-4 right-4 text-white/70 hover:text-white z-10">
+            <X className="w-8 h-8" />
+          </button>
+          <div className="relative max-w-4xl max-h-[90vh] w-full h-full" onClick={(e) => e.stopPropagation()}>
+            <Image src={product.image || "/placeholder.svg"} alt={product.name} fill className="object-contain" />
+          </div>
+        </div>
+      )}
+    </>
   );
 }

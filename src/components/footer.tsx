@@ -1,11 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Heart, Globe, Camera, MessageCircle } from "lucide-react";
+import { Heart, Globe, Camera, MessageCircle, Mail, CheckCircle } from "lucide-react";
 import { useI18n } from "@/lib/i18n-context";
 
 export default function Footer() {
   const { t } = useI18n();
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email) setSubscribed(true);
+  };
 
   return (
     <footer className="bg-stone-900 text-gray-300">
@@ -29,6 +37,8 @@ export default function Footer() {
               {[
                 { href: "/products", label: t.nav.products },
                 { href: "/vet", label: t.nav.vet },
+                { href: "/faq", label: t.nav.faq },
+                { href: "/shipping", label: t.nav.shipping },
                 { href: "/about", label: t.nav.about },
                 { href: "/contact", label: t.nav.contact },
               ].map((l) => (
@@ -50,15 +60,38 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold text-white mb-4">{t.footer.followUs}</h3>
-            <div className="flex gap-3">
-              <a href="#" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors">
-                <Globe className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors">
+            <h3 className="font-semibold text-white mb-4">{t.footer.newsletter}</h3>
+            {subscribed ? (
+              <div className="flex items-center gap-2 text-emerald-400 text-sm">
+                <CheckCircle className="w-4 h-4" />
+                <span>{t.footer.subscribed}</span>
+              </div>
+            ) : (
+              <form onSubmit={handleSubscribe} className="flex gap-2">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={t.footer.emailPlaceholder}
+                  required
+                  className="flex-1 px-3 py-2 rounded-lg bg-stone-800 text-white text-sm placeholder-stone-500 border border-stone-700 focus:outline-none focus:border-emerald-600"
+                />
+                <button
+                  type="submit"
+                  className="px-3 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                >
+                  <Mail className="w-4 h-4" />
+                </button>
+              </form>
+            )}
+            <div className="flex gap-3 mt-4">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors" aria-label="Instagram">
                 <Camera className="w-4 h-4" />
               </a>
-              <a href="#" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors" aria-label="Facebook">
+                <Globe className="w-4 h-4" />
+              </a>
+              <a href="https://wa.me/+1234567890" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors" aria-label="WhatsApp">
                 <MessageCircle className="w-4 h-4" />
               </a>
             </div>

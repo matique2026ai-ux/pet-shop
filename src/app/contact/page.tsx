@@ -1,12 +1,36 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { useI18n } from "@/lib/i18n-context";
 import AnimatedSection from "@/components/animated-section";
-import { MapPin, Phone, Mail, Clock, Send, Sparkles, ChevronRight } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, Sparkles, ChevronRight, CheckCircle, Loader2 } from "lucide-react";
 
 export default function ContactPage() {
   const { t } = useI18n();
+  const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSending(true);
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    try {
+      const res = await fetch("https://formspree.io/f/xjkyqkdr", {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+      if (res.ok) {
+        setSent(true);
+        form.reset();
+      }
+    } catch {
+      // silent
+    }
+    setSending(false);
+  };
 
   const info = [
     { icon: <MapPin className="w-5 h-5" />, title: t.contact.address, text: t.contact.addressText },
@@ -25,7 +49,7 @@ export default function ContactPage() {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#2E241A]/85 via-[#4A3A2A]/60 to-[#2E241A]/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1a1512]/85 via-[#3a220a]/60 to-[#1a1512]/40" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <AnimatedSection>
             <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-xl rounded-full text-sm text-emerald-200 border border-white/10 mb-4">
@@ -46,10 +70,10 @@ export default function ContactPage() {
                 <div className="space-y-4">
                   {info.map((item) => (
                     <div key={item.title} className="bg-white rounded-2xl p-5 flex items-start gap-4 transition-all duration-300 hover:-translate-x-1"
-                      style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.04)" }}
+                      style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.25)" }}
                     >
                       <span className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center text-white"
-                        style={{ background: "linear-gradient(135deg, #8B7560, #A0896C)" }}
+                        style={{ background: "linear-gradient(135deg, #b87a30, #d4943f)" }}
                       >
                         {item.icon}
                       </span>
@@ -66,31 +90,42 @@ export default function ContactPage() {
             <div className="lg:col-span-3">
               <AnimatedSection>
                 <div className="bg-white rounded-3xl p-8 lg:p-10"
-                  style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.06)" }}
+                  style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.3)" }}
                 >
                   <h2 className="text-2xl font-bold text-gray-900 mb-1">{t.contact.formTitle}</h2>
                   <p className="text-sm text-gray-500 mb-6">{t.contact.formSubtitle}</p>
-                  <form action="https://formspree.io/f/xjkyqkdr" method="POST" className="space-y-5">
+                  {sent ? (
+                    <div className="flex flex-col items-center justify-center py-12 text-center">
+                      <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                        <CheckCircle className="w-8 h-8 text-emerald-600" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-1">{t.contact.formSuccess}</h3>
+                      <p className="text-sm text-gray-500 mb-6">{t.contact.formSuccessDesc}</p>
+                      <button onClick={() => setSent(false)} className="text-sm text-emerald-600 hover:underline font-medium">{t.contact.formSendAnother}</button>
+                    </div>
+                  ) : (
+                  <form onSubmit={handleSubmit} className="space-y-5">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.contact.formName}</label>
-                        <input type="text" name="name" required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8B7560]/20 focus:border-[#8B7560] focus:bg-white transition-all" placeholder={t.contact.formNamePlaceholder} />
+                        <input type="text" name="name" required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#b87a30]/20 focus:border-[#b87a30] focus:bg-white transition-all" placeholder={t.contact.formNamePlaceholder} />
                       </div>
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.contact.formEmail}</label>
-                        <input type="email" name="email" required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8B7560]/20 focus:border-[#8B7560] focus:bg-white transition-all" placeholder={t.contact.formEmailPlaceholder} />
+                        <input type="email" name="email" required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#b87a30]/20 focus:border-[#b87a30] focus:bg-white transition-all" placeholder={t.contact.formEmailPlaceholder} />
                       </div>
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.contact.formMessage}</label>
-                      <textarea name="message" required rows={5} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8B7560]/20 focus:border-[#8B7560] focus:bg-white transition-all resize-none" placeholder={t.contact.formMessagePlaceholder} />
+                      <textarea name="message" required rows={5} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#b87a30]/20 focus:border-[#b87a30] focus:bg-white transition-all resize-none" placeholder={t.contact.formMessagePlaceholder} />
                     </div>
-                    <button type="submit" className="inline-flex items-center gap-2 bg-[#8B7560] text-white px-8 py-3.5 rounded-2xl font-bold hover:bg-[#7D6B55] transition-all shadow-lg shadow-[#8B7560]/20 hover:shadow-xl hover:-translate-y-0.5">
-                      <Send className="w-4 h-4" />
+                    <button type="submit" disabled={sending} className="inline-flex items-center gap-2 bg-[#b87a30] text-white px-8 py-3.5 rounded-2xl font-bold hover:bg-[#9a6225] transition-all shadow-lg shadow-[#b87a30]/20 hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-60">
+                      {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                       {t.contact.formSubmit}
                       <ChevronRight className="w-4 h-4" />
                     </button>
                   </form>
+                  )}
                 </div>
               </AnimatedSection>
             </div>
@@ -99,7 +134,7 @@ export default function ContactPage() {
           <AnimatedSection>
             <div className="mt-12 relative overflow-hidden rounded-3xl h-72">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.2219901290355!2d-74.00369368400567!3d40.71312837933024!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a316f5e5b5b%3A0x2c8a7c9c6f5e5b5b!2sNew+York%2C+NY!5e0!3m2!1sen!2sus!4v1"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127835.67076020296!2d3.005981227634014!3d36.75288711017331!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128e4b6e4b8b4b4b%3A0x8b4b4b8b4b4b4b4b!2sAlgiers%2C%20Algeria!5e0!3m2!1sen!2sdz!4v1"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -111,7 +146,7 @@ export default function ContactPage() {
               />
               <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-xl rounded-2xl px-5 py-3 border border-white/40 shadow-lg">
                 <div className="flex items-center gap-3">
-                  <MapPin className="w-5 h-5 text-[#8B7560]" />
+                  <MapPin className="w-5 h-5 text-[#b87a30]" />
                   <div>
                     <p className="font-bold text-gray-900 text-sm">{t.contact.storeName}</p>
                     <p className="text-xs text-gray-500">{t.contact.storeAddress}</p>

@@ -30,9 +30,9 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
     >
       <div className="relative transition-all duration-500 ease-out group-hover:-translate-y-1.5">
         <div
-          className="relative overflow-hidden rounded-2xl transition-all duration-[600ms] ease-out bg-white/70 backdrop-blur-xl border border-white/40 shadow-lg shadow-emerald-500/10 group-hover:shadow-2xl group-hover:shadow-emerald-500/30 group-hover:bg-white/90 group-hover:border-emerald-300/60"
+          className="relative overflow-hidden rounded-2xl transition-all duration-[600ms] ease-out bg-white border border-gray-100/80 shadow-sm shadow-emerald-500/10 group-hover:shadow-xl group-hover:shadow-emerald-500/20 group-hover:border-emerald-200/60"
         >
-          <div className={`relative ${isRelated ? "aspect-square" : "aspect-square"} bg-gray-50/50 overflow-hidden`}>
+          <div className={`relative ${isRelated ? "aspect-square" : "aspect-square"} bg-gray-50 overflow-hidden`}>
             <Image
               src={product.image || "/placeholder.svg"}
               alt={product.name}

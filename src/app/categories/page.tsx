@@ -28,7 +28,7 @@ export default function CategoriesPage() {
   return (
     <div>
       <section className="relative overflow-hidden py-16 lg:py-24">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#2E241A] via-[#4A3A2A] to-[#2E241A]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1a1512] via-[#3a220a] to-[#1a1512]" />
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-[120px]" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-400/5 rounded-full blur-[100px]" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -49,7 +49,7 @@ export default function CategoriesPage() {
                   className="group block"
                 >
                   <div className="bg-white rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-1.5"
-                    style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.02)" }}
+                    style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.25), 0 1px 4px rgba(0,0,0,0.02)" }}
                   >
                     <div className="relative aspect-[4/3] overflow-hidden bg-gray-50">
                       <Image
@@ -76,7 +76,7 @@ export default function CategoriesPage() {
                         {cat.subcategories.map((sub) => (
                           <span
                             key={sub.id}
-                            className="px-3 py-1 bg-gray-50 text-gray-500 text-xs rounded-full border border-gray-100 transition-colors group-hover:bg-[#F7F3ED] group-hover:text-[#8B7560] group-hover:border-[#EDE6DB]"
+                            className="px-3 py-1 bg-gray-50 text-gray-500 text-xs rounded-full border border-gray-100 transition-colors group-hover:bg-[#fef8e7] group-hover:text-[#b87a30] group-hover:border-[#fdf0c8]"
                           >
                             {sub.name}
                           </span>
@@ -85,7 +85,7 @@ export default function CategoriesPage() {
 
                       <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                         <span className="text-xs text-gray-400">{t.nav.subcategoryCount.replace("{n}", String(cat.subcategories.length))}</span>
-                        <span className="flex items-center gap-1 text-sm font-semibold text-[#8B7560] group-hover:gap-2 transition-all">
+                        <span className="flex items-center gap-1 text-sm font-semibold text-[#b87a30] group-hover:gap-2 transition-all">
                           {t.categories.browseAll} <ChevronRight className="w-3.5 h-3.5" />
                         </span>
                       </div>
@@ -105,7 +105,7 @@ export default function CategoriesPage() {
             <p className="text-gray-500 mb-6 max-w-md mx-auto">{t.categories.notSureDesc}</p>
             <div className="flex items-center justify-center gap-4">
               <Link href="/products" className="inline-flex items-center gap-2 bg-white text-gray-900 px-7 py-3 rounded-2xl font-bold border border-gray-200 hover:border-gray-300 hover:-translate-y-0.5 transition-all shadow-sm">{t.categories.allProductsLink}</Link>
-              <Link href="/vet" className="inline-flex items-center gap-2 bg-[#8B7560] text-white px-7 py-3 rounded-2xl font-bold hover:bg-[#7D6B55] hover:-translate-y-0.5 transition-all shadow-lg shadow-[#8B7560]/20">{t.categories.visitVet}</Link>
+              <Link href="/vet" className="inline-flex items-center gap-2 bg-[#b87a30] text-white px-7 py-3 rounded-2xl font-bold hover:bg-[#9a6225] hover:-translate-y-0.5 transition-all shadow-lg shadow-[#b87a30]/20">{t.categories.visitVet}</Link>
             </div>
           </AnimatedSection>
         </div>

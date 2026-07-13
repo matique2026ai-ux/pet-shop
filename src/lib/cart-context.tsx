@@ -16,7 +16,7 @@ interface CartState {
 }
 
 type CartAction =
-  | { type: "ADD_ITEM"; payload: Product }
+  | { type: "ADD_ITEM"; payload: { product: Product; quantity?: number } }
   | { type: "REMOVE_ITEM"; payload: string }
   | { type: "UPDATE_QUANTITY"; payload: { productId: string; quantity: number } }
   | { type: "CLEAR_CART" };
@@ -26,18 +26,18 @@ const STORAGE_KEY = "cart";
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case "ADD_ITEM": {
-      const product = action.payload;
+      const { product, quantity = 1 } = action.payload;
       const existingIndex = state.items.findIndex((i) => i.productId === product.id);
       if (existingIndex >= 0) {
         const items = state.items.map((item, i) =>
-          i === existingIndex ? { ...item, quantity: item.quantity + 1 } : item,
+          i === existingIndex ? { ...item, quantity: item.quantity + quantity } : item,
         );
         return { items };
       }
       return {
         items: [
           ...state.items,
-          { productId: product.id, name: product.name, price: product.price, image: product.image, quantity: 1 },
+          { productId: product.id, name: product.name, price: product.price, image: product.image, quantity },
         ],
       };
     }
@@ -73,7 +73,7 @@ function loadCart(): CartState {
 
 interface CartContextType {
   items: CartItem[];
-  addItem: (product: Product) => void;
+  addItem: (product: Product, quantity?: number) => void;
   removeItem: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
@@ -98,7 +98,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }, [state]);
 
-  const addItem = useCallback((product: Product) => dispatch({ type: "ADD_ITEM", payload: product }), []);
+  const addItem = useCallback((product: Product, quantity?: number) => dispatch({ type: "ADD_ITEM", payload: { product, quantity } }), []);
   const removeItem = useCallback((productId: string) => dispatch({ type: "REMOVE_ITEM", payload: productId }), []);
   const updateQuantity = useCallback(
     (productId: string, quantity: number) => dispatch({ type: "UPDATE_QUANTITY", payload: { productId, quantity } }),

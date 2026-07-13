@@ -11,7 +11,7 @@ type Translations = DeepStringify<typeof en>;
 
 const translations: Record<Language, Translations> = { en: en as unknown as Translations, fr: fr as unknown as Translations, ar: ar as unknown as Translations };
 
-const currencyMap: Record<Language, string> = { en: "$", fr: "€", ar: "د.ج" };
+const currencyMap: Record<Language, string> = { en: "د.ج", fr: "د.ج", ar: "د.ج" };
 
 interface I18nContextType {
   lang: Language;
