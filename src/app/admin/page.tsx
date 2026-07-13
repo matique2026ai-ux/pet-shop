@@ -11,7 +11,7 @@ import {
 import {
   Users, ShoppingBag, DollarSign, Package, TrendingUp, TrendingDown,
   MoreHorizontal, Eye, Edit, Trash2, ArrowUpRight, Calendar, Menu, X, Lock,
-  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon,
+  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown,
 } from "lucide-react";
 
 const COLORS = ["#059669", "#10B981", "#34D399", "#6EE7B7", "#A7F3D0"];
@@ -191,6 +191,9 @@ export default function AdminDashboard() {
   const [form, setForm] = useState<FormState>(emptyForm);
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [saving, setSaving] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [useUrlInput, setUseUrlInput] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   const [deleteTarget, setDeleteTarget] = useState<ProductData | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -363,6 +366,27 @@ export default function AdminDashboard() {
       alert("Failed to delete: " + (e as Error).message);
     } finally {
       setDeleting(false);
+    }
+  };
+
+  const handleImageUpload = async (file: File) => {
+    setUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const secret = getSecret();
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        headers: secret ? { "x-admin-secret": secret } : {},
+        body: formData,
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      setForm({ ...form, image: data.url });
+    } catch (e) {
+      alert("Upload failed: " + (e as Error).message);
+    } finally {
+      setUploadingImage(false);
     }
   };
 
@@ -950,94 +974,167 @@ export default function AdminDashboard() {
                   />
                   {formErrors.price && <p className="text-xs text-red-500 mt-1">{formErrors.price}</p>}
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Original Price</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    value={form.originalPrice}
-                    onChange={(e) => setForm({ ...form, originalPrice: e.target.value })}
-                    className={`w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${formErrors.originalPrice ? "border-red-300" : "border-gray-200"}`}
-                  />
-                  {formErrors.originalPrice && <p className="text-xs text-red-500 mt-1">{formErrors.originalPrice}</p>}
-                </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="text"
-                    value={form.image}
-                    onChange={(e) => setForm({ ...form, image: e.target.value })}
-                    placeholder="https://..."
-                    className="flex-1 px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  />
-                  {form.image && (
-                    <img src={form.image} alt="preview" className="w-10 h-10 rounded-lg object-cover" />
-                  )}
-                </div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Image</label>
+                {!useUrlInput ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3">
+                      <label className={`px-4 py-2.5 rounded-xl text-sm font-medium cursor-pointer transition-colors ${uploadingImage ? "bg-gray-100 text-gray-400" : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"}`}>
+                        {uploadingImage ? (
+                          <span className="inline-flex items-center gap-2">
+                            <div className="animate-spin w-4 h-4 border-2 border-emerald-600 border-t-transparent rounded-full" />
+                            Uploading...
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-2">
+                            <Upload className="w-4 h-4" />
+                            Choose Image
+                          </span>
+                        )}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          disabled={uploadingImage}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) handleImageUpload(file);
+                          }}
+                          className="hidden"
+                        />
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setUseUrlInput(true)}
+                        className="text-xs text-gray-400 hover:text-gray-600 underline"
+                      >
+                        Or paste URL
+                      </button>
+                    </div>
+                    {form.image && (
+                      <div className="flex items-center gap-3">
+                        <img src={form.image} alt="preview" className="w-16 h-16 rounded-lg object-cover border border-gray-200" />
+                        <button
+                          type="button"
+                          onClick={() => setForm({ ...form, image: "" })}
+                          className="text-xs text-red-500 hover:text-red-700"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="text"
+                      value={form.image}
+                      onChange={(e) => setForm({ ...form, image: e.target.value })}
+                      placeholder="https://..."
+                      className="flex-1 px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setUseUrlInput(false)}
+                      className="text-xs text-gray-400 hover:text-gray-600 underline whitespace-nowrap"
+                    >
+                      Upload instead
+                    </button>
+                    {form.image && (
+                      <img src={form.image} alt="preview" className="w-10 h-10 rounded-lg object-cover" />
+                    )}
+                  </div>
+                )}
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Badge</label>
-                  <select
-                    value={form.badge}
-                    onChange={(e) => setForm({ ...form, badge: e.target.value as "" | "NEW" | "SALE" })}
-                    className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  >
-                    <option value="">None</option>
-                    <option value="NEW">NEW</option>
-                    <option value="SALE">SALE</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Rating (1-5)</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    min="1"
-                    max="5"
-                    value={form.rating}
-                    onChange={(e) => setForm({ ...form, rating: e.target.value })}
-                    className={`w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${formErrors.rating ? "border-red-300" : "border-gray-200"}`}
-                  />
-                  {formErrors.rating && <p className="text-xs text-red-500 mt-1">{formErrors.rating}</p>}
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Reviews</label>
-                  <input
-                    type="number"
-                    step="1"
-                    value={form.reviews}
-                    onChange={(e) => setForm({ ...form, reviews: e.target.value })}
-                    className={`w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${formErrors.reviews ? "border-red-300" : "border-gray-200"}`}
-                  />
-                  {formErrors.reviews && <p className="text-xs text-red-500 mt-1">{formErrors.reviews}</p>}
-                </div>
-              </div>
+              <button
+                type="button"
+                onClick={() => setShowAdvanced(!showAdvanced)}
+                className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+              >
+                <span className="inline-flex items-center gap-2">
+                  <Settings className="w-4 h-4" />
+                  Advanced Options
+                </span>
+                <ChevronDown className={`w-4 h-4 transition-transform ${showAdvanced ? "rotate-180" : ""}`} />
+              </button>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                <textarea
-                  rows={3}
-                  value={form.description}
-                  onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
-                />
-              </div>
+              {showAdvanced && (
+                <div className="space-y-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Original Price</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={form.originalPrice}
+                      onChange={(e) => setForm({ ...form, originalPrice: e.target.value })}
+                      className={`w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${formErrors.originalPrice ? "border-red-300" : "border-gray-200"}`}
+                    />
+                    {formErrors.originalPrice && <p className="text-xs text-red-500 mt-1">{formErrors.originalPrice}</p>}
+                  </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Features (comma-separated)</label>
-                <input
-                  type="text"
-                  value={form.features}
-                  onChange={(e) => setForm({ ...form, features: e.target.value })}
-                  placeholder="Feature 1, Feature 2, Feature 3"
-                  className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                />
-              </div>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Badge</label>
+                      <select
+                        value={form.badge}
+                        onChange={(e) => setForm({ ...form, badge: e.target.value as "" | "NEW" | "SALE" })}
+                        className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      >
+                        <option value="">None</option>
+                        <option value="NEW">NEW</option>
+                        <option value="SALE">SALE</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Rating (1-5)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        min="1"
+                        max="5"
+                        value={form.rating}
+                        onChange={(e) => setForm({ ...form, rating: e.target.value })}
+                        className={`w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${formErrors.rating ? "border-red-300" : "border-gray-200"}`}
+                      />
+                      {formErrors.rating && <p className="text-xs text-red-500 mt-1">{formErrors.rating}</p>}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Reviews</label>
+                      <input
+                        type="number"
+                        step="1"
+                        value={form.reviews}
+                        onChange={(e) => setForm({ ...form, reviews: e.target.value })}
+                        className={`w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${formErrors.reviews ? "border-red-300" : "border-gray-200"}`}
+                      />
+                      {formErrors.reviews && <p className="text-xs text-red-500 mt-1">{formErrors.reviews}</p>}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea
+                      rows={3}
+                      value={form.description}
+                      onChange={(e) => setForm({ ...form, description: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Features (comma-separated)</label>
+                    <input
+                      type="text"
+                      value={form.features}
+                      onChange={(e) => setForm({ ...form, features: e.target.value })}
+                      placeholder="Feature 1, Feature 2, Feature 3"
+                      className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                </div>
+              )}
 
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
