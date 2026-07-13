@@ -11,7 +11,7 @@ import {
 import {
   Users, ShoppingBag, DollarSign, Package, TrendingUp, TrendingDown,
   MoreHorizontal, Eye, Edit, Trash2, ArrowUpRight, Calendar, Menu, X, Lock,
-  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown,
+  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Database,
 } from "lucide-react";
 
 const COLORS = ["#059669", "#10B981", "#34D399", "#6EE7B7", "#A7F3D0"];
@@ -194,6 +194,7 @@ export default function AdminDashboard() {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [useUrlInput, setUseUrlInput] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [seeding, setSeeding] = useState(false);
 
   const [deleteTarget, setDeleteTarget] = useState<ProductData | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -387,6 +388,26 @@ export default function AdminDashboard() {
       alert("Upload failed: " + (e as Error).message);
     } finally {
       setUploadingImage(false);
+    }
+  };
+
+  const handleSeed = async () => {
+    if (!confirm("Import all demo products into the database?")) return;
+    setSeeding(true);
+    try {
+      const secret = getSecret();
+      const res = await fetch("/api/seed", {
+        method: "POST",
+        headers: secret ? { "x-admin-secret": secret } : {},
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      alert(`Imported ${data.inserted} products successfully!`);
+      await loadProducts();
+    } catch (e) {
+      alert("Seed failed: " + (e as Error).message);
+    } finally {
+      setSeeding(false);
     }
   };
 
@@ -742,19 +763,38 @@ export default function AdminDashboard() {
             {/* ===== PRODUCTS ===== */}
             {activeTab === "products" && (
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div className="p-6 pb-4 flex items-center justify-between">
-                  <div>
-                    <h2 className="text-lg font-bold text-gray-900">All Products</h2>
-                    <p className="text-sm text-gray-500 mt-0.5">{productCount} products total</p>
+                  <div className="p-6 pb-4 flex items-center justify-between flex-wrap gap-3">
+                    <div>
+                      <h2 className="text-lg font-bold text-gray-900">All Products</h2>
+                      <p className="text-sm text-gray-500 mt-0.5">{productCount} products total</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={handleSeed}
+                        disabled={seeding}
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-50 text-amber-700 rounded-xl text-sm font-medium hover:bg-amber-100 transition-colors disabled:opacity-50"
+                      >
+                        {seeding ? (
+                          <>
+                            <div className="animate-spin w-4 h-4 border-2 border-amber-600 border-t-transparent rounded-full" />
+                            Importing...
+                          </>
+                        ) : (
+                          <>
+                            <Database className="w-4 h-4" />
+                            Seed
+                          </>
+                        )}
+                      </button>
+                      <button
+                        onClick={openAddModal}
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 transition-colors"
+                      >
+                        <Plus className="w-4 h-4" />
+                        Add Product
+                      </button>
+                    </div>
                   </div>
-                  <button
-                    onClick={openAddModal}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 transition-colors"
-                  >
-                    <Plus className="w-4 h-4" />
-                    Add Product
-                  </button>
-                </div>
                 <div className="overflow-x-auto">
                   {loadingProducts ? (
                     <div className="flex items-center justify-center py-16 text-gray-400">
@@ -766,13 +806,32 @@ export default function AdminDashboard() {
                       <Package2 className="w-12 h-12 mb-3 text-gray-300" />
                       <p className="text-sm font-medium text-gray-500">No products yet</p>
                       <p className="text-xs text-gray-400 mt-1">Add your first product to get started</p>
-                      <button
-                        onClick={openAddModal}
-                        className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 transition-colors"
-                      >
-                        <Plus className="w-4 h-4" />
-                        Add Product
-                      </button>
+                      <div className="mt-4 flex items-center gap-3">
+                        <button
+                          onClick={openAddModal}
+                          className="px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 transition-colors"
+                        >
+                          <Plus className="w-4 h-4 inline-block mr-1" />
+                          Add Product
+                        </button>
+                        <button
+                          onClick={handleSeed}
+                          disabled={seeding}
+                          className="px-4 py-2.5 bg-amber-50 text-amber-700 rounded-xl text-sm font-medium hover:bg-amber-100 transition-colors disabled:opacity-50 inline-flex items-center gap-2"
+                        >
+                          {seeding ? (
+                            <>
+                              <div className="animate-spin w-4 h-4 border-2 border-amber-600 border-t-transparent rounded-full" />
+                              Importing...
+                            </>
+                          ) : (
+                            <>
+                              <Database className="w-4 h-4" />
+                              Seed Demo Data
+                            </>
+                          )}
+                        </button>
+                      </div>
                     </div>
                   ) : (
                     <table className="w-full text-sm">
