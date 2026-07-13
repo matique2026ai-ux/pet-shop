@@ -176,6 +176,7 @@ export default function AdminDashboard() {
   const { t } = useI18n();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
   const [authed, setAuthed] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
 
@@ -233,20 +234,31 @@ export default function AdminDashboard() {
   const [deleteTarget, setDeleteTarget] = useState<ProductData | null>(null);
   const [deleting, setDeleting] = useState(false);
 
-  const ADMIN_PASSWORD = "admin123";
-
   useEffect(() => {
     if (sessionStorage.getItem("admin_auth") === "1") setAuthed(true);
   }, []);
 
   const getSecret = useCallback(() => sessionStorage.getItem("admin_secret") || "", []);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === ADMIN_PASSWORD) {
+    setLoginError("");
+    try {
+      const res = await fetch("/api/admin/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      if (!res.ok) {
+        setLoginError(t.admin.invalidPassword);
+        return;
+      }
+      const data = await res.json();
       setAuthed(true);
       sessionStorage.setItem("admin_auth", "1");
-      sessionStorage.setItem("admin_secret", password);
+      sessionStorage.setItem("admin_secret", data.secret);
+    } catch {
+      setLoginError(t.admin.invalidPassword);
     }
   };
 
@@ -463,6 +475,9 @@ export default function AdminDashboard() {
               className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               autoFocus
             />
+            {loginError && (
+              <p className="text-sm text-red-600 text-left">{loginError}</p>
+            )}
             <button type="submit" className="w-full bg-emerald-600 text-white py-3 rounded-xl font-medium hover:bg-emerald-700 transition-colors">
               Access Dashboard
             </button>
@@ -1120,8 +1135,8 @@ export default function AdminDashboard() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Admin Password</label>
-                        <input type="password" value="admin123" readOnly className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm bg-gray-50 text-gray-500" />
-                        <p className="text-xs text-gray-400 mt-1">Change in page.tsx ADMIN_PASSWORD</p>
+                        <input type="password" value="••••••••" readOnly className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm bg-gray-50 text-gray-500" />
+                        <p className="text-xs text-gray-400 mt-1">Managed by the ADMIN_SECRET environment variable</p>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Supabase Project</label>

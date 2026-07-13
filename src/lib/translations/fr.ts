@@ -351,4 +351,7 @@ export const fr = {
       "rev4": { name: "Carlos D.", text: "Prix abordables et qualité premium. Je recommande vivement!" },
     },
   },
+  admin: {
+    invalidPassword: "Mot de passe incorrect. Veuillez réessayer.",
+  },
 } as const;

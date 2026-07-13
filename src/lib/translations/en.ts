@@ -351,4 +351,7 @@ export const en = {
       "rev4": { name: "Carlos D.", text: "Affordable prices and premium quality. The staff genuinely cares about animals. Highly recommended!" },
     },
   },
+  admin: {
+    invalidPassword: "Invalid password. Please try again.",
+  },
 } as const;
