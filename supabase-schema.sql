@@ -66,16 +66,22 @@ CREATE POLICY "Allow public read products" ON products FOR SELECT USING (true);
 CREATE POLICY "Allow public read categories" ON categories FOR SELECT USING (true);
 CREATE POLICY "Allow public read subcategories" ON subcategories FOR SELECT USING (true);
 
--- Only authenticated admin can write
-CREATE POLICY "Allow authenticated insert products" ON products FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "Allow authenticated update products" ON products FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "Allow authenticated delete products" ON products FOR DELETE USING (auth.role() = 'authenticated');
+-- IMPORTANT: The anonymous key is public (it ships in the browser bundle). All
+-- admin writes go through the SERVICE-ROLE key inside API routes that are gated
+-- by the x-admin-secret header. The service-role key BYPASSES RLS, so we must
+-- NOT grant the anon role any write access here. An attacker who calls the
+-- Supabase REST API directly with the anon key can therefore only read public
+-- data and create pending orders — never modify products or read customer data.
+--
+-- (No INSERT/UPDATE/DELETE policies for the anon role on products, categories
+--  or subcategories => anon writes are denied by default.)
 
-CREATE POLICY "Allow authenticated read orders" ON orders FOR SELECT USING (auth.role() = 'authenticated');
-CREATE POLICY "Allow authenticated update orders" ON orders FOR UPDATE USING (auth.role() = 'authenticated');
+-- Orders: customers (anon) may only INSERT, and only with status 'pending'.
+CREATE POLICY "Allow public insert orders" ON orders FOR INSERT WITH CHECK (coalesce(status, 'pending') = 'pending');
 
--- Allow public insert orders (customers can place orders)
-CREATE POLICY "Allow public insert orders" ON orders FOR INSERT WITH CHECK (true);
+-- All other access to orders (read/update/delete) requires the service-role
+-- key used by the admin API, which bypasses RLS. No anon policy is created,
+-- so anonymous users cannot read or modify orders.
 
 -- Insert default categories
 INSERT INTO categories (id, name, icon, "order") VALUES

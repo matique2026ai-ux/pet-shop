@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase";
+import { createAdminClient } from "@/lib/supabase";
 import { products, categories } from "@/lib/data";
 
 export async function POST(request: Request) {
@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const supabase = createClient();
+  const supabase = createAdminClient();
 
   // Ensure subcategories exist (upsert from data.ts)
   const subcatInserts = categories.flatMap((c) =>
