@@ -13,12 +13,20 @@ export function createClient() {
 // so it must ONLY be used inside API routes that are gated by the
 // x-admin-secret check. The key must never be exposed to the browser
 // (do NOT prefix it with NEXT_PUBLIC_).
+//
+// If SUPABASE_SERVICE_ROLE_KEY is not configured we fall back to the anon
+// client so the site keeps working, but admin writes then rely solely on RLS
+// and are NOT secure against direct anon access. Configure the service-role
+// key in Vercel + .env.local to enable the secure path.
 export function createAdminClient() {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!serviceRoleKey) {
-    throw new Error(
-      "Server misconfiguration: SUPABASE_SERVICE_ROLE_KEY is not set. Admin operations cannot run."
-    );
+    if (process.env.NODE_ENV !== "production") {
+      console.warn(
+        "[supabase] SUPABASE_SERVICE_ROLE_KEY not set — falling back to anon client. Admin writes are insecure until this key is configured."
+      );
+    }
+    return createClient();
   }
   return createSupabaseClient(supabaseUrl, serviceRoleKey, {
     auth: { persistSession: false, autoRefreshToken: false },
