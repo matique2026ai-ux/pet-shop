@@ -1,49 +1,51 @@
-"use client"
+"use client";
 
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react"
-import en from "./translations/en"
-import fr from "./translations/fr"
-import ar from "./translations/ar"
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { en } from "./translations/en";
+import { fr } from "./translations/fr";
+import { ar } from "./translations/ar";
 
-export type Lang = "en" | "fr" | "ar"
+type Language = "en" | "fr" | "ar";
+type DeepStringify<T> = { [K in keyof T]: T[K] extends string ? string : T[K] extends object ? DeepStringify<T[K]> : never };
+type Translations = DeepStringify<typeof en>;
 
-const translations: Record<Lang, typeof en> = { en, fr, ar }
+const translations: Record<Language, Translations> = { en: en as unknown as Translations, fr: fr as unknown as Translations, ar: ar as unknown as Translations };
 
 interface I18nContextType {
-  lang: Lang
-  t: typeof en
-  dir: "ltr" | "rtl"
-  setLang: (lang: Lang) => void
+  lang: Language;
+  setLang: (l: Language) => void;
+  t: Translations;
+  dir: "ltr" | "rtl";
 }
 
 const I18nContext = createContext<I18nContextType>({
   lang: "en",
+  setLang: () => {},
   t: en,
   dir: "ltr",
-  setLang: () => {},
-})
+});
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("en")
+  const [lang, setLang] = useState<Language>("en");
 
   useEffect(() => {
-    const saved = localStorage.getItem("lang") as Lang | null
-    if (saved && ["en", "fr", "ar"].includes(saved)) setLangState(saved)
-  }, [])
+    const saved = localStorage.getItem("lang") as Language | null;
+    if (saved && saved in translations) setLang(saved);
+  }, []);
 
-  const setLang = useCallback((l: Lang) => {
-    setLangState(l)
-    localStorage.setItem("lang", l)
-  }, [])
+  const setLangPersist = (l: Language) => {
+    setLang(l);
+    localStorage.setItem("lang", l);
+  };
 
-  const t = translations[lang]
-  const dir: "ltr" | "rtl" = lang === "ar" ? "rtl" : "ltr"
+  const t = translations[lang];
+  const dir = lang === "ar" ? "rtl" : "ltr";
 
   return (
-    <I18nContext.Provider value={{ lang, t, dir, setLang }}>
-      {children}
+    <I18nContext.Provider value={{ lang, setLang: setLangPersist, t, dir }}>
+      <div dir={dir}>{children}</div>
     </I18nContext.Provider>
-  )
+  );
 }
 
-export const useI18n = () => useContext(I18nContext)
+export const useI18n = () => useContext(I18nContext);

@@ -1,384 +1,218 @@
 export interface Product {
-  id: string
-  name: string
-  category: "cats" | "birds" | "accessories"
-  subcategory: string
-  price: number
-  description: string
-  image: string
-  features: string[]
-  inStock: boolean
-  isNew?: boolean
-  isSale?: boolean
-  salePrice?: number
+  id: string;
+  name: string;
+  category: string;
+  subcategory: string;
+  price: number;
+  originalPrice?: number;
+  image: string;
+  badge?: "NEW" | "SALE";
+  rating: number;
+  reviews: number;
+  description: string;
+  features: string[];
+  inStock: boolean;
+}
+
+export interface Subcategory {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  subcategories: Subcategory[];
 }
 
 export interface VetService {
-  id: string
-  title: string
-  description: string
-  icon: string
-  price: string
-  duration: string
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  duration: string;
+  icon: string;
 }
 
 export interface TeamMember {
-  id: string
-  name: string
-  role: string
-  image: string
-  bio: string
+  id: string;
+  name: string;
+  role: string;
+  bio: string;
+  initials: string;
 }
 
 export interface Testimonial {
-  id: string
-  name: string
-  pet: string
-  text: string
-  rating: number
-  image: string
+  id: string;
+  name: string;
+  text: string;
+  rating: number;
+  initials: string;
 }
 
+export const categories: Category[] = [
+  {
+    id: "cats",
+    name: "Cats",
+    description: "Everything for your feline friend",
+    icon: "cat",
+    subcategories: [
+      { id: "cats-food", name: "Food", slug: "cats/food" },
+      { id: "cats-litter", name: "Litter & Accessories", slug: "cats/litter" },
+      { id: "cats-toys", name: "Toys", slug: "cats/toys" },
+      { id: "cats-health", name: "Health Care", slug: "cats/health" },
+      { id: "cats-beds", name: "Beds & Furniture", slug: "cats/beds" },
+      { id: "cats-bowls", name: "Bowls & Feeders", slug: "cats/bowls" },
+      { id: "cats-grooming", name: "Grooming", slug: "cats/grooming" },
+    ],
+  },
+  {
+    id: "dogs",
+    name: "Dogs",
+    description: "Premium supplies for your canine companion",
+    icon: "dog",
+    subcategories: [
+      { id: "dogs-food", name: "Food", slug: "dogs/food" },
+      { id: "dogs-toys", name: "Toys", slug: "dogs/toys" },
+      { id: "dogs-health", name: "Health Care", slug: "dogs/health" },
+      { id: "dogs-accessories", name: "Accessories", slug: "dogs/accessories" },
+    ],
+  },
+  {
+    id: "birds",
+    name: "Birds",
+    description: "Premium bird supplies",
+    icon: "bird",
+    subcategories: [
+      { id: "birds-food", name: "Food", slug: "birds/food" },
+      { id: "birds-cages", name: "Cages", slug: "birds/cages" },
+      { id: "birds-accessories", name: "Accessories", slug: "birds/accessories" },
+    ],
+  },
+  {
+    id: "fish",
+    name: "Fish & Reptiles",
+    description: "Aquariums, terrariums & supplies",
+    icon: "fish",
+    subcategories: [
+      { id: "fish-aquariums", name: "Aquariums & Tanks", slug: "fish/aquariums" },
+      { id: "fish-food", name: "Food", slug: "fish/food" },
+      { id: "fish-accessories", name: "Accessories", slug: "fish/accessories" },
+    ],
+  },
+  {
+    id: "small-pets",
+    name: "Rabbits & Hamsters",
+    description: "Everything for small pets",
+    icon: "rabbit",
+    subcategories: [
+      { id: "smallpets-food", name: "Food", slug: "small-pets/food" },
+      { id: "smallpets-cages", name: "Cages & Accessories", slug: "small-pets/cages" },
+    ],
+  },
+];
+
 export const products: Product[] = [
-  {
-    id: "premium-cat-food",
-    name: "Premium Cat Food Salmon",
-    category: "cats",
-    subcategory: "Food",
-    price: 2800,
-    description: "Premium quality salmon-based cat food rich in omega-3 for a shiny coat and healthy skin. Made with 70% fresh salmon, sweet potatoes, and essential vitamins.",
-    image: "https://placehold.co/600x700/EA580C/FFFFFF?text=Premium+Cat+Food&font=playfair",
-    features: ["70% fresh salmon", "Grain-free recipe", "Omega-3 & 6", "No artificial colors", "Supports digestion"],
-    inStock: true,
-    isNew: true,
-  },
-  {
-    id: "organic-cat-treats",
-    name: "Organic Cat Treats",
-    category: "cats",
-    subcategory: "Treats",
-    price: 1200,
-    description: "Irresistible organic cat treats made with real chicken and catnip. Perfect for training or spoiling your feline friend.",
-    image: "https://placehold.co/600x700/F97316/FFFFFF?text=Organic+Cat+Treats&font=playfair",
-    features: ["100% organic", "Real chicken", "With catnip", "No preservatives", "Crunchy texture"],
-    inStock: true,
-  },
-  {
-    id: "luxury-cat-bed",
-    name: "Luxury Donut Cat Bed",
-    category: "cats",
-    subcategory: "Bedding",
-    price: 4500,
-    description: "Ultra-soft donut-shaped cat bed with raised edges for head support. Machine washable cover for easy cleaning.",
-    image: "https://placehold.co/600x700/9A3412/FFFFFF?text=Luxury+Cat+Bed&font=playfair",
-    features: ["Donut shape", "Raised edges", "Machine washable", "Anti-slip base", "Available in 3 colors"],
-    inStock: true,
-    isNew: true,
-  },
-  {
-    id: "cat-scratching-post",
-    name: "Premium Scratching Post",
-    category: "cats",
-    subcategory: "Toys",
-    price: 3500,
-    description: "180cm tall scratching post with natural sisal rope, dangling toys, and a cozy perch. Keeps your furniture safe.",
-    image: "https://placehold.co/600x700/C2410C/FFFFFF?text=Scratching+Post&font=playfair",
-    features: ["180cm height", "Natural sisal", "Dangling toys", "Cozy perch", "Sturdy base"],
-    inStock: true,
-  },
-  {
-    id: "cat-litter-box",
-    name: "Self-Cleaning Litter Box",
-    category: "cats",
-    subcategory: "Litter",
-    price: 12000,
-    description: "Automatic self-cleaning litter box with carbon filter and odor control. Smart sensor detects your cat and cleans automatically.",
-    image: "https://placehold.co/600x700/7C2D12/FFFFFF?text=Self-Cleaning+Litter&font=playfair",
-    features: ["Automatic cleaning", "Carbon filter", "Odor control", "Smart sensor", "Low noise"],
-    inStock: true,
-  },
-  {
-    id: "cat-water-fountain",
-    name: "Stainless Steel Water Fountain",
-    category: "cats",
-    subcategory: "Accessories",
-    price: 3200,
-    description: "3-liter stainless steel water fountain with triple filtration. Encourages your cat to drink more water for better health.",
-    image: "https://placehold.co/600x700/FDBA74/1C1917?text=Water+Fountain&font=playfair",
-    features: ["3L capacity", "Triple filtration", "Stainless steel", "Quiet pump", "Dishwasher safe"],
-    inStock: true,
-    isSale: true,
-    salePrice: 2800,
-  },
-  {
-    id: "premium-bird-seed",
-    name: "Premium Bird Seed Mix",
-    category: "birds",
-    subcategory: "Food",
-    price: 1500,
-    description: "Hand-selected premium seed mix with sunflower seeds, millet, and dried fruits. Suitable for all pet birds.",
-    image: "https://placehold.co/600x700/0D9488/FFFFFF?text=Premium+Bird+Seed&font=playfair",
-    features: ["Sunflower seeds", "Millet", "Dried fruits", "Vitamin enriched", "No fillers"],
-    inStock: true,
-    isNew: true,
-  },
-  {
-    id: "bird-pellets",
-    name: "Nutritional Bird Pellets",
-    category: "birds",
-    subcategory: "Food",
-    price: 2200,
-    description: "Complete nutritional pellets formulated by avian veterinarians. Balanced diet for all bird species.",
-    image: "https://placehold.co/600x700/14B8A6/FFFFFF?text=Nutritional+Pellets&font=playfair",
-    features: ["Complete nutrition", "Vet formulated", "All species", "No artificial colors", "Easy to digest"],
-    inStock: true,
-  },
-  {
-    id: "bird-cage-large",
-    name: "Deluxe Large Bird Cage",
-    category: "birds",
-    subcategory: "Cages",
-    price: 15000,
-    description: "Spacious 80x50x100cm bird cage with powder-coated finish, multiple perches, feeding doors, and a pull-out tray.",
-    image: "https://placehold.co/600x700/0F766E/FFFFFF?text=Deluxe+Bird+Cage&font=playfair",
-    features: ["80x50x100cm", "Powder-coated", "Multiple perches", "Pull-out tray", "Feeding doors"],
-    inStock: true,
-    isNew: true,
-  },
-  {
-    id: "bird-toy-set",
-    name: "Bird Toy Variety Pack",
-    category: "birds",
-    subcategory: "Toys",
-    price: 1800,
-    description: "Set of 5 interactive bird toys including bells, ropes, and wooden blocks. Keeps your bird entertained for hours.",
-    image: "https://placehold.co/600x700/115E59/FFFFFF?text=Bird+Toy+Pack&font=playfair",
-    features: ["5 toys", "Bells & ropes", "Wooden blocks", "Safe materials", "For all bird sizes"],
-    inStock: true,
-  },
-  {
-    id: "bird-perch-set",
-    name: "Natural Wood Perch Set",
-    category: "birds",
-    subcategory: "Accessories",
-    price: 900,
-    description: "Set of 3 natural wood perches of varying diameters for foot health. Untreated, chemical-free wood.",
-    image: "https://placehold.co/600x700/5EEAD4/1C1917?text=Wood+Perch+Set&font=playfair",
-    features: ["3 perches", "Natural wood", "Various diameters", "Chemical-free", "Foot health"],
-    inStock: true,
-  },
-  {
-    id: "bird-bath",
-    name: "Bird Bath with Mirror",
-    category: "birds",
-    subcategory: "Accessories",
-    price: 1400,
-    description: "Attachable bird bath with integrated mirror. Encourages natural bathing behavior and preening.",
-    image: "https://placehold.co/600x700/2DD4BF/FFFFFF?text=Bird+Bath&font=playfair",
-    features: ["Easy attach", "With mirror", "Encourages bathing", "Durable plastic", "Easy clean"],
-    inStock: true,
-  },
-  {
-    id: "pet-bowl-set",
-    name: "Ceramic Pet Bowl Set",
-    category: "accessories",
-    subcategory: "Bowls",
-    price: 2500,
-    description: "Set of 2 handcrafted ceramic bowls with non-slip silicone base. Elegant design for both cats and birds.",
-    image: "https://placehold.co/600x700/292524/FFFFFF?text=Ceramic+Bowl+Set&font=playfair",
-    features: ["Handcrafted ceramic", "Non-slip base", "Dishwasher safe", "2 bowls", "Elegant design"],
-    inStock: true,
-    isNew: true,
-  },
-  {
-    id: "pet-carrier",
-    name: "Ventilated Pet Carrier",
-    category: "accessories",
-    subcategory: "Travel",
-    price: 6500,
-    description: "Comfortable ventilated pet carrier with padded interior and secure lock. Perfect for vet visits and travel.",
-    image: "https://placehold.co/600x700/44403C/FFFFFF?text=Pet+Carrier&font=playfair",
-    features: ["Ventilated", "Padded interior", "Secure lock", "Foldable", "Carry handle"],
-    inStock: true,
-  },
-  {
-    id: "grooming-kit",
-    name: "Professional Grooming Kit",
-    category: "accessories",
-    subcategory: "Grooming",
-    price: 4000,
-    description: "Complete 8-piece grooming kit with brush, comb, nail clippers, and deshedding tool for cats.",
-    image: "https://placehold.co/600x700/57534E/FFFFFF?text=Grooming+Kit&font=playfair",
-    features: ["8 pieces", "Deshedding tool", "Nail clippers", "Soft brush", "Travel case"],
-    inStock: true,
-    isSale: true,
-    salePrice: 3500,
-  },
-  {
-    id: "pet-tag",
-    name: "Personalized Pet ID Tag",
-    category: "accessories",
-    subcategory: "Identification",
-    price: 800,
-    description: "Stainless steel personalized ID tag with your pet's name and your phone number. Engraved for durability.",
-    image: "https://placehold.co/600x700/78716C/FFFFFF?text=Pet+ID+Tag&font=playfair",
-    features: ["Stainless steel", "Personalized", "Engraved", "Durable", "Heart shape"],
-    inStock: true,
-  },
-  {
-    id: "pet-bed-mats",
-    name: "Orthopedic Pet Bed Mat",
-    category: "accessories",
-    subcategory: "Bedding",
-    price: 3800,
-    description: "Memory foam orthopedic bed mat with washable cover. Provides joint support for aging pets.",
-    image: "https://placehold.co/600x700/292524/FFFFFF?text=Orthopedic+Mat&font=playfair",
-    features: ["Memory foam", "Orthopedic", "Washable cover", "Non-slip", "Joint support"],
-    inStock: true,
-    isNew: true,
-  },
-  {
-    id: "food-storage",
-    name: "Airtight Pet Food Storage",
-    category: "accessories",
-    subcategory: "Storage",
-    price: 3000,
-    description: "10-liter airtight container with airtight seal and pouring spout. Keeps pet food fresh and pest-free.",
-    image: "https://placehold.co/600x700/44403C/FFFFFF?text=Food+Storage&font=playfair",
-    features: ["10L capacity", "Airtight seal", "Pouring spout", "BPA free", "Transparent body"],
-    inStock: true,
-  },
-]
+  // ===== CATS =====
+  { id: "c1", name: "Premium Dry Cat Food 2kg", category: "cats", subcategory: "cats-food", price: 32.99, originalPrice: 39.99, image: "https://loremflickr.com/400/400/cat,food?random=1", badge: "SALE", rating: 4.7, reviews: 89, description: "High-protein dry cat food with real chicken.", features: ["Real chicken first ingredient", "No artificial colors", "Grain-free option", "Omega-3 fatty acids"], inStock: true },
+  { id: "c2", name: "Wet Cat Food Variety Pack 12x85g", category: "cats", subcategory: "cats-food", price: 24.99, image: "https://loremflickr.com/400/400/cat,food?random=1", badge: "NEW", rating: 4.8, reviews: 124, description: "Assorted wet food pack with tuna, salmon & chicken.", features: ["12 pouches", "No preservatives", "High moisture content", "Taurine enriched"], inStock: true },
+  { id: "c3", name: "Clumping Cat Litter 10kg", category: "cats", subcategory: "cats-litter", price: 18.99, originalPrice: 22.99, image: "https://loremflickr.com/400/400/cat,litter?random=2", badge: "SALE", rating: 4.6, reviews: 203, description: "Ultra-clumping bentonite cat litter.", features: ["99% dust-free", "Instant clumping", "Odor control", "Natural clay"], inStock: true },
+  { id: "c4", name: "Self-Cleaning Litter Box", category: "cats", subcategory: "cats-litter", price: 89.99, image: "https://loremflickr.com/400/400/cat,litter?random=2", rating: 4.4, reviews: 67, description: "Automatic self-scooping litter box.", features: ["Auto-clean cycle", "Carbon filter", "Low energy", "Easy dump tray"], inStock: true },
+  { id: "c5", name: "Interactive Feather Wand Toy", category: "cats", subcategory: "cats-toys", price: 12.99, image: "https://loremflickr.com/400/400/cat,toy?random=3", rating: 4.5, reviews: 156, description: "Teaser wand with realistic feathers.", features: ["Real feathers", "Retractable string", "Replaceable attachments", "Ergonomic handle"], inStock: true },
+  { id: "c6", name: "Catnip Kick Stick Toy Set", category: "cats", subcategory: "cats-toys", price: 9.99, image: "https://loremflickr.com/400/400/cat,toy?random=3", rating: 4.3, reviews: 98, description: "Set of 3 catnip-filled kicker toys.", features: ["Organic catnip", "Crinkle material", "Assorted colors", "Machine washable"], inStock: true },
+  { id: "c7", name: "Flea & Tick Prevention Drops", category: "cats", subcategory: "cats-health", price: 34.99, image: "https://loremflickr.com/400/400/cat,health?random=4", rating: 4.7, reviews: 312, description: "Monthly topical flea and tick protection.", features: ["Lasts 30 days", "Water-resistant", "Kills fleas in 12 hours", "For cats over 1.5kg"], inStock: true },
+  { id: "c8", name: "Dental Care Kit for Cats", category: "cats", subcategory: "cats-health", price: 19.99, image: "https://loremflickr.com/400/400/cat,health?random=4", badge: "NEW", rating: 4.2, reviews: 45, description: "Toothbrush and toothpaste set for feline dental health.", features: ["Soft bristle brush", "Poultry-flavored toothpaste", "Enzymatic formula", "Finger brush included"], inStock: true },
+  { id: "c9", name: "Orthopedic Cat Bed - Large", category: "cats", subcategory: "cats-beds", price: 59.99, originalPrice: 79.99, image: "https://loremflickr.com/400/400/cat,bed?random=5", badge: "SALE", rating: 4.8, reviews: 88, description: "Memory foam orthopedic cat bed with washable cover.", features: ["Memory foam filling", "Machine washable cover", "Anti-slip base", "Water-resistant liner"], inStock: true },
+  { id: "c10", name: "Cat Tree Tower 6-Level", category: "cats", subcategory: "cats-beds", price: 139.99, image: "https://loremflickr.com/400/400/cat,bed?random=5", rating: 4.6, reviews: 73, description: "Multi-level cat tree with sisal scratching posts.", features: ["6 platforms", "Sisal rope posts", "Hanging toy", "Removable cushions"], inStock: true },
+  { id: "c11", name: "Stainless Steel Cat Bowls Set", category: "cats", subcategory: "cats-bowls", price: 22.99, image: "https://loremflickr.com/400/400/cat,bowl?random=6", rating: 4.7, reviews: 134, description: "Set of 2 stainless steel bowls with silicone mat.", features: ["Stainless steel", "Non-slip silicone base", "Dishwasher safe", "Raised design"], inStock: true },
+  { id: "c12", name: "Automatic Cat Water Fountain", category: "cats", subcategory: "cats-bowls", price: 39.99, image: "https://loremflickr.com/400/400/cat,bowl?random=6", rating: 4.5, reviews: 211, description: "Filtered water fountain with 2L capacity.", features: ["Carbon filter", "Quiet pump", "2L capacity", "BPA-free"], inStock: true },
+  { id: "c13", name: "Cat Grooming Brush - Deshedding", category: "cats", subcategory: "cats-grooming", price: 14.99, image: "https://loremflickr.com/400/400/cat,grooming?random=7", rating: 4.4, reviews: 167, description: "Stainless steel deshedding brush.", features: ["Stainless steel blade", "Ergonomic handle", "Self-cleaning button", "Reduces shedding by 90%"], inStock: true },
+  { id: "c14", name: "Cat Nail Clippers & File Set", category: "cats", subcategory: "cats-grooming", price: 11.99, image: "https://loremflickr.com/400/400/cat,grooming?random=7", rating: 4.3, reviews: 89, description: "Safety nail clippers with file and guide.", features: ["Safety guard", "Stainless steel", "Nail file included", "Non-slip handles"], inStock: true },
+
+  // ===== DOGS =====
+  { id: "d1", name: "Premium Dry Dog Food 3kg", category: "dogs", subcategory: "dogs-food", price: 38.99, originalPrice: 45.99, image: "https://loremflickr.com/400/400/dog,food?random=8", badge: "SALE", rating: 4.8, reviews: 245, description: "High-protein dry food with real beef and vegetables.", features: ["Real beef first", "Brown rice & barley", "Glucosamine added", "No corn or soy"], inStock: true },
+  { id: "d2", name: "Wet Dog Food Trays 12x100g", category: "dogs", subcategory: "dogs-food", price: 28.99, image: "https://loremflickr.com/400/400/dog,food?random=8", rating: 4.6, reviews: 134, description: "Assorted wet food with lamb, chicken & beef.", features: ["12 trays", "Grain-free", "Natural ingredients", "Complete nutrition"], inStock: true },
+  { id: "d3", name: "Dental Chew Bones 20-pack", category: "dogs", subcategory: "dogs-food", price: 16.99, image: "https://loremflickr.com/400/400/dog,food?random=8", badge: "NEW", rating: 4.5, reviews: 312, description: "Veterinarian-recommended dental chews.", features: ["Reduces plaque", "Low fat", "Digestible", "Sizes for all breeds"], inStock: true },
+  { id: "d4", name: "Squeaky Plush Toy Set - 3 Pack", category: "dogs", subcategory: "dogs-toys", price: 19.99, image: "https://loremflickr.com/400/400/dog,toy?random=9", rating: 4.4, reviews: 178, description: "Soft plush toys with hidden squeakers.", features: ["3 different animals", "Hidden squeaker", "Durable stitching", "Machine washable"], inStock: true },
+  { id: "d5", name: "Rope Tug Toy - Heavy Duty", category: "dogs", subcategory: "dogs-toys", price: 12.99, image: "https://loremflickr.com/400/400/dog,toy?random=9", rating: 4.3, reviews: 92, description: "Knotted cotton rope toy for interactive play.", features: ["100% cotton", "Natural dyes", "Dental cleaning fibers", "Great for fetch"], inStock: true },
+  { id: "d6", name: "Heartworm Prevention Monthly", category: "dogs", subcategory: "dogs-health", price: 44.99, image: "https://loremflickr.com/400/400/dog,health?random=10", rating: 4.9, reviews: 401, description: "Monthly chewable heartworm prevention.", features: ["Beef-flavored chew", "Prevents heartworm", "Controls roundworms", "For dogs 2-25kg"], inStock: true },
+  { id: "d7", name: "Joint Supplement Chews 60ct", category: "dogs", subcategory: "dogs-health", price: 36.99, image: "https://loremflickr.com/400/400/dog,health?random=10", badge: "NEW", rating: 4.6, reviews: 267, description: "Glucosamine and chondroitin joint support.", features: ["Glucosamine + chondroitin", "MSM added", "Peanut butter flavor", "Soft chew format"], inStock: true },
+  { id: "d8", name: "Adjustable Dog Harness", category: "dogs", subcategory: "dogs-accessories", price: 34.99, image: "https://loremflickr.com/400/400/dog,accessories?random=11", rating: 4.7, reviews: 345, description: "No-pull harness with padded chest plate.", features: ["4 adjustment points", "Reflective stitching", "Padded chest", "Quick-release buckles"], inStock: true },
+  { id: "d9", name: "Extendable Dog Leash 5m", category: "dogs", subcategory: "dogs-accessories", price: 29.99, image: "https://loremflickr.com/400/400/dog,accessories?random=11", rating: 4.5, reviews: 156, description: "One-hand brake extendable leash.", features: ["5m length", "One-hand brake", "Ergonomic handle", "Reflective cord"], inStock: true },
+  { id: "d10", name: "Collapsible Travel Dog Bowl", category: "dogs", subcategory: "dogs-accessories", price: 14.99, image: "https://loremflickr.com/400/400/dog,accessories?random=11", rating: 4.4, reviews: 89, description: "Portable silicone travel bowl with carabiner.", features: ["Collapsible design", "Food-grade silicone", "Carabiner clip", "Easy to clean"], inStock: true },
+
+  // ===== BIRDS =====
+  { id: "b1", name: "Premium Seed Mix 1.5kg", category: "birds", subcategory: "birds-food", price: 16.99, originalPrice: 19.99, image: "https://loremflickr.com/400/400/bird,seed?random=12", badge: "SALE", rating: 4.6, reviews: 78, description: "Vitamin-enriched seed mix for all bird species.", features: ["Vitamin enriched", "Dried fruits", "No artificial colors", "For all bird types"], inStock: true },
+  { id: "b2", name: "Pellets for Parakeets 500g", category: "birds", subcategory: "birds-food", price: 12.99, image: "https://loremflickr.com/400/400/bird,seed?random=12", rating: 4.5, reviews: 56, description: "Nutritionally complete pelleted diet.", features: ["Complete nutrition", "Small pellet size", "Veggie-based colors", "No mess"], inStock: true },
+  { id: "b3", name: "Large Parrot Cage 80x60x120cm", category: "birds", subcategory: "birds-cages", price: 229.99, originalPrice: 289.99, image: "https://loremflickr.com/400/400/bird,cage?random=13", badge: "SALE", rating: 4.7, reviews: 34, description: "Spacious powder-coated cage with play top.", features: ["Powder-coated steel", "Pull-out tray", "4 feeding doors", "Play top with perch"], inStock: true },
+  { id: "b4", name: "Small Bird Travel Cage", category: "birds", subcategory: "birds-cages", price: 54.99, image: "https://loremflickr.com/400/400/bird,cage?random=13", rating: 4.3, reviews: 28, description: "Portable carrier cage for small birds.", features: ["Lightweight", "Removable perch", "Ventilated", "Carry handle"], inStock: true },
+  { id: "b5", name: "Natural Wood Perch Set", category: "birds", subcategory: "birds-accessories", price: 14.99, image: "https://loremflickr.com/400/400/bird,perch?random=14", rating: 4.4, reviews: 67, description: "Set of 3 natural wood perches varying diameters.", features: ["Natural wood", "Variable diameter", "Easy attachment", "Foot exercise"], inStock: true },
+  { id: "b6", name: "Bird Bath & Water Dispenser", category: "birds", subcategory: "birds-accessories", price: 19.99, image: "https://loremflickr.com/400/400/bird,perch?random=14", badge: "NEW", rating: 4.2, reviews: 41, description: "Dual-function ceramic bath and water dispenser.", features: ["Ceramic construction", "Easy to clean", "Sturdy base", "Dual function"], inStock: true },
+
+  // ===== FISH & REPTILES =====
+  { id: "f1", name: "Aquarium Starter Kit 20L", category: "fish", subcategory: "fish-aquariums", price: 89.99, originalPrice: 109.99, image: "https://loremflickr.com/400/400/aquarium,fish?random=15", badge: "SALE", rating: 4.5, reviews: 92, description: "Complete starter kit with filter, light and heater.", features: ["20L tank", "LED lighting", "Internal filter", "50W heater"], inStock: true },
+  { id: "f2", name: "Terrarium for Reptiles 40x30x30cm", category: "fish", subcategory: "fish-aquariums", price: 119.99, image: "https://loremflickr.com/400/400/aquarium,fish?random=15", rating: 4.6, reviews: 47, description: "Glass terrarium with ventilation panels.", features: ["Front ventilation", "Sliding doors", "Screen top", "Waterproof base"], inStock: true },
+  { id: "f3", name: "Tropical Fish Flakes 250ml", category: "fish", subcategory: "fish-food", price: 9.99, image: "https://loremflickr.com/400/400/fish,food?random=16", rating: 4.4, reviews: 134, description: "Balanced flake food for tropical fish.", features: ["Slow-sinking flakes", "Color enhancing", "Vitamin C added", "For all tropical fish"], inStock: true },
+  { id: "f4", name: "Reptile Calcium + D3 Powder", category: "fish", subcategory: "fish-food", price: 11.99, image: "https://loremflickr.com/400/400/fish,food?random=16", rating: 4.5, reviews: 78, description: "Calcium supplement for reptiles and amphibians.", features: ["With D3", "Ultra-fine powder", "No phosphorus", "UVB stable"], inStock: true },
+  { id: "f5", name: "Aquarium Filter - External 600L/h", category: "fish", subcategory: "fish-accessories", price: 59.99, image: "https://loremflickr.com/400/400/aquarium,filter?random=17", rating: 4.6, reviews: 89, description: "External canister filter for aquariums up to 100L.", features: ["600L/h flow rate", "3-stage filtration", "Quiet operation", "Easy priming"], inStock: true },
+  { id: "f6", name: "LED Aquarium Light Bar 60cm", category: "fish", subcategory: "fish-accessories", price: 44.99, image: "https://loremflickr.com/400/400/aquarium,filter?random=17", badge: "NEW", rating: 4.3, reviews: 56, description: "Full-spectrum LED light with day/night modes.", features: ["Full spectrum", "Day/night cycle", "Adjustable brackets", "Low power"], inStock: true },
+  { id: "f7", name: "Submersible Aquarium Heater 100W", category: "fish", subcategory: "fish-accessories", price: 24.99, image: "https://loremflickr.com/400/400/aquarium,filter?random=17", rating: 4.4, reviews: 112, description: "Automatic thermostat heater for aquariums.", features: ["Automatic shut-off", "External thermostat", "100W output", "Suitable for 30-60L"], inStock: true },
+
+  // ===== RABBITS & HAMSTERS =====
+  { id: "s1", name: "Rabbit Pellet Food 2kg", category: "small-pets", subcategory: "smallpets-food", price: 14.99, image: "https://loremflickr.com/400/400/rabbit,food?random=18", rating: 4.6, reviews: 89, description: "Timothy hay-based pellets for adult rabbits.", features: ["Timothy hay base", "Vitamin fortified", "No added sugar", "High fiber"], inStock: true },
+  { id: "s2", name: "Hamster & Gerbil Seed Mix 500g", category: "small-pets", subcategory: "smallpets-food", price: 8.99, image: "https://loremflickr.com/400/400/rabbit,food?random=18", badge: "NEW", rating: 4.3, reviews: 56, description: "Nutritious seed mix with dried vegetables.", features: ["Seed & veggie mix", "Fortified with vitamins", "No artificial colors", "Small animal friendly"], inStock: true },
+  { id: "s3", name: "Rabbit Cage 2-Tier Deluxe", category: "small-pets", subcategory: "smallpets-cages", price: 159.99, originalPrice: 189.99, image: "https://loremflickr.com/400/400/hamster,cage?random=19", badge: "SALE", rating: 4.7, reviews: 43, description: "Spacious two-level rabbit hutch with ramp.", features: ["2 levels", "Removable tray", "Ramp included", "Waterproof roof"], inStock: true },
+  { id: "s4", name: "Hamster Habitat Starter Kit", category: "small-pets", subcategory: "smallpets-cages", price: 49.99, image: "https://loremflickr.com/400/400/hamster,cage?random=19", rating: 4.5, reviews: 112, description: "Complete hamster home with accessories.", features: ["Wire-top base", "Water bottle", "Exercise wheel", "Hideout house"], inStock: true },
+  { id: "s5", name: "Rabbit Hay Feeder & Hay 1kg", category: "small-pets", subcategory: "smallpets-cages", price: 22.99, image: "https://loremflickr.com/400/400/hamster,cage?random=19", rating: 4.4, reviews: 67, description: "Wooden hay feeder with premium timothy hay.", features: ["Wooden feeder", "Timothy hay", "High fiber", "Promotes natural grazing"], inStock: true },
+  { id: "s6", name: "Small Animal Bedding 10L", category: "small-pets", subcategory: "smallpets-cages", price: 12.99, image: "https://loremflickr.com/400/400/hamster,cage?random=19", rating: 4.3, reviews: 145, description: "Soft paper-based bedding for small animals.", features: ["Paper-based", "99% dust-free", "Highly absorbent", "Biodegradable"], inStock: true },
+];
+
+export const categoryIcons: Record<string, string> = {
+  cat: "cat",
+  dog: "dog",
+  bird: "bird",
+  fish: "fish",
+  rabbit: "rabbit",
+};
 
 export const vetServices: VetService[] = [
-  {
-    id: "consultation",
-    title: "General Consultation",
-    description: "Complete health check-up including physical examination, weight monitoring, and dietary advice for your pet.",
-    icon: "stethoscope",
-    price: "1500 DZD",
-    duration: "30 min",
-  },
-  {
-    id: "vaccination",
-    title: "Vaccination Program",
-    description: "Comprehensive vaccination schedule for cats and birds following international standards for disease prevention.",
-    icon: "syringe",
-    price: "2500 DZD",
-    duration: "20 min",
-  },
-  {
-    id: "surgery",
-    title: "Surgical Services",
-    description: "State-of-the-art surgical suite for spaying, neutering, and other minor surgeries with full anesthesia monitoring.",
-    icon: "scalpel",
-    price: "From 8000 DZD",
-    duration: "1-2 hours",
-  },
-  {
-    id: "grooming",
-    title: "Pet Grooming",
-    description: "Professional grooming service including bathing, brushing, nail trimming, and feather care for birds.",
-    icon: "scissors",
-    price: "2000 DZD",
-    duration: "45 min",
-  },
-  {
-    id: "dental",
-    title: "Dental Care",
-    description: "Professional teeth cleaning, tartar removal, and oral health assessment to keep your pet's smile bright.",
-    icon: "tooth",
-    price: "3500 DZD",
-    duration: "30 min",
-  },
-  {
-    id: "laboratory",
-    title: "Laboratory Analysis",
-    description: "In-house lab testing including blood work, fecal analysis, and parasite screening for accurate diagnosis.",
-    icon: "microscope",
-    price: "From 3000 DZD",
-    duration: "Varies",
-  },
-  {
-    id: "emergency",
-    title: "Emergency Care",
-    description: "24/7 emergency veterinary services for urgent medical situations. Call ahead for immediate assistance.",
-    icon: "ambulance",
-    price: "From 5000 DZD",
-    duration: "As needed",
-  },
-  {
-    id: "nutrition",
-    title: "Nutritional Counseling",
-    description: "Personalized diet plans for your pets based on their breed, age, weight, and specific health requirements.",
-    icon: "apple",
-    price: "2000 DZD",
-    duration: "30 min",
-  },
-]
+  { id: "v1", title: "General Checkup", description: "Comprehensive health examination for your pet", price: 49, duration: "30 min", icon: "stethoscope" },
+  { id: "v2", title: "Vaccination", description: "Essential vaccinations for disease prevention", price: 35, duration: "20 min", icon: "syringe" },
+  { id: "v3", title: "Dental Care", description: "Professional teeth cleaning and oral health", price: 89, duration: "45 min", icon: "tooth" },
+  { id: "v4", title: "Surgery", description: "Safe and advanced surgical procedures", price: 299, duration: "1-2 hrs", icon: "scalpel" },
+  { id: "v5", title: "Microchipping", description: "Permanent pet identification", price: 25, duration: "10 min", icon: "smartphone" },
+  { id: "v6", title: "Lab Tests", description: "Blood work and diagnostic testing", price: 59, duration: "15 min", icon: "flask" },
+  { id: "v7", title: "Grooming", description: "Full grooming service with bath & trim", price: 45, duration: "1 hr", icon: "scissors" },
+  { id: "v8", title: "Nutrition Plan", description: "Personalized diet and nutrition counseling", price: 39, duration: "30 min", icon: "apple" },
+];
+
+export const groomingPackages = [
+  { id: "g1", title: "Basic Grooming", description: "Bath, brush, nail trim & ear cleaning", price: 35, duration: "45 min", includes: ["Bath with premium shampoo", "Brushing & detangling", "Nail trimming", "Ear cleaning"] },
+  { id: "g2", title: "Full Grooming", description: "Basic plus haircut & styling", price: 65, duration: "1.5 hrs", includes: ["Everything in Basic", "Full haircut & styling", "Fragrance spray", "Bandana or bow"] },
+  { id: "g3", title: "Spa Package", description: "Full grooming with luxury spa treatments", price: 95, duration: "2 hrs", includes: ["Everything in Full", "Deep conditioning", "Paw balm treatment", "Teeth brushing", "Cologne spritz"] },
+];
 
 export const team: TeamMember[] = [
-  {
-    id: "dr-amina",
-    name: "Dr. Amina Benali",
-    role: "Chief Veterinarian",
-    image: "https://placehold.co/300x300/0D9488/FFFFFF?text=Dr.+Amina&font=playfair",
-    bio: "With over 12 years of experience in small animal and avian medicine, Dr. Amina leads our clinic with passion and expertise.",
-  },
-  {
-    id: "dr-youssef",
-    name: "Dr. Youssef Meziane",
-    role: "Veterinary Surgeon",
-    image: "https://placehold.co/300x300/14B8A6/FFFFFF?text=Dr.+Youssef&font=playfair",
-    bio: "Specialized in veterinary surgery with advanced training in minimally invasive procedures for companion animals.",
-  },
-  {
-    id: "nadia",
-    name: "Nadia Khelifa",
-    role: "Veterinary Nurse",
-    image: "https://placehold.co/300x300/0F766E/FFFFFF?text=Nadia&font=playfair",
-    bio: "Certified veterinary nurse with a gentle touch and a special love for caring for birds and exotic pets.",
-  },
-]
+  { id: "t1", name: "Dr. Sarah Johnson", role: "Lead Veterinarian", bio: "15+ years of experience in small animal medicine", initials: "SJ" },
+  { id: "t2", name: "Dr. Mark Wilson", role: "Veterinary Surgeon", bio: "Specialist in orthopedic and soft tissue surgery", initials: "MW" },
+  { id: "t3", name: "Emma Davis", role: "Pet Nutritionist", bio: "Certified animal nutrition specialist", initials: "ED" },
+];
 
 export const testimonials: Testimonial[] = [
-  {
-    id: "1",
-    name: "Sarah Mansouri",
-    pet: "Milo (Cat)",
-    text: "The best pet store in town! My cat Milo loves their premium food, and the vet clinic is exceptional. Dr. Amina saved Milo's life last year.",
-    rating: 5,
-    image: "https://placehold.co/100x100/EA580C/FFFFFF?text=S&font=playfair",
-  },
-  {
-    id: "2",
-    name: "Karim Bensalem",
-    pet: "Coco (Parrot)",
-    text: "I've been coming here for 3 years for my parrot Coco. The bird section is incredible - from cages to toys, everything is top quality.",
-    rating: 5,
-    image: "https://placehold.co/100x100/F97316/FFFFFF?text=K&font=playfair",
-  },
-  {
-    id: "3",
-    name: "Lyla Oukaci",
-    pet: "Simba & Luna (Cats)",
-    text: "The grooming service is wonderful! My two cats come out looking and feeling amazing. The staff truly cares about animals.",
-    rating: 5,
-    image: "https://placehold.co/100x100/9A3412/FFFFFF?text=L&font=playfair",
-  },
-  {
-    id: "4",
-    name: "Amine Touati",
-    pet: "Kiwi (Budgie)",
-    text: "Found the perfect cage for my budgie Kiwi at an affordable price. The team helped me set it up too. Highly recommended!",
-    rating: 4,
-    image: "https://placehold.co/100x100/C2410C/FFFFFF?text=A&font=playfair",
-  },
-]
+  { id: "rev1", name: "Sarah M.", text: "The best pet shop in town! My cat loves the organic food and the vet team is incredibly professional.", rating: 5, initials: "SM" },
+  { id: "rev2", name: "Ahmed K.", text: "Excellent service and high quality products. The bird cage I bought is perfect for my parakeet.", rating: 5, initials: "AK" },
+  { id: "rev3", name: "Lisa R.", text: "I trust Paws & Wings with all my pets' needs. The grooming service is outstanding!", rating: 5, initials: "LR" },
+  { id: "rev4", name: "Carlos D.", text: "Affordable prices and premium quality. The staff genuinely cares about animals. Highly recommended!", rating: 5, initials: "CD" },
+];
 
-export const categories = [
-  { id: "cats", name: "Cats", description: "Premium food, toys, beds & accessories for your feline friend", icon: "cat", count: 6 },
-  { id: "birds", name: "Birds", description: "Seed mixes, cages, toys & perches for happy birds", icon: "bird", count: 6 },
-  { id: "accessories", name: "Accessories", description: "Bowls, carriers, grooming tools & more", icon: "package", count: 6 },
-]
+export const siteStats = [
+  { label: "Happy Pets", value: "10,000+" },
+  { label: "Products", value: "500+" },
+  { label: "Years Experience", value: "12+" },
+  { label: "Veterinarians", value: "8+" },
+];
+
 

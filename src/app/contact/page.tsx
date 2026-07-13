@@ -1,120 +1,123 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { Phone, Mail, MapPin, Clock, Send, Check, Heart } from "lucide-react"
-import AnimatedSection from "@/components/animated-section"
-import { useI18n } from "@/lib/i18n-context"
+import Image from "next/image";
+import { useI18n } from "@/lib/i18n-context";
+import AnimatedSection from "@/components/animated-section";
+import { MapPin, Phone, Mail, Clock, Send, Sparkles, ChevronRight } from "lucide-react";
 
 export default function ContactPage() {
-  const { t, dir } = useI18n()
-  const isRtl = dir === "rtl"
-  const [sent, setSent] = useState(false)
-  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" })
+  const { t } = useI18n();
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setSent(true)
-    setTimeout(() => setSent(false), 3000)
-    setForm({ name: "", email: "", phone: "", message: "" })
-  }
+  const info = [
+    { icon: <MapPin className="w-5 h-5" />, title: t.contact.address, text: "123 Pet Street\nNew York, NY 10001" },
+    { icon: <Phone className="w-5 h-5" />, title: t.contact.phone, text: "+1 (234) 567-890" },
+    { icon: <Mail className="w-5 h-5" />, title: t.contact.email, text: "hello@pawsandwings.com" },
+    { icon: <Clock className="w-5 h-5" />, title: t.contact.hours, text: `${t.contact.weekday}\n${t.contact.weekend}` },
+  ];
 
   return (
-    <>
-      <section className="relative min-h-[50vh] flex items-center bg-gradient-to-br from-brown-900 via-brown-800 to-brown-900 text-cream overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 right-20 w-72 h-72 bg-gold-500/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-10 left-10 w-48 h-48 bg-brown-600/20 rounded-full blur-3xl" />
-        </div>
-        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-16 relative z-10">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="inline-flex items-center gap-2 px-5 py-2 bg-gold-500/10 text-gold-300 text-xs font-medium tracking-widest uppercase rounded-full mb-8">
-              <Heart className="w-3 h-3" /> {t.contact.badge}
+    <div>
+      <section className="relative overflow-hidden py-16 lg:py-24 flex items-center min-h-[50vh]">
+        <Image
+          src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1400&h=600&fit=crop"
+          alt="Contact us"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#2E241A]/85 via-[#4A3A2A]/60 to-[#2E241A]/40" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <AnimatedSection>
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-xl rounded-full text-sm text-emerald-200 border border-white/10 mb-4">
+              <Sparkles className="w-4 h-4" /> Get in Touch
             </span>
-            <h1 className="text-5xl md:text-7xl font-heading font-bold tracking-tight mb-6">{t.contact.heading}</h1>
-            <p className="text-lg text-brown-300 max-w-xl">{t.contact.desc}</p>
-          </motion.div>
+            <h1 className="text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">{t.contact.title}</h1>
+            <p className="text-emerald-100/70 text-lg max-w-lg">{t.contact.subtitle}</p>
+          </AnimatedSection>
         </div>
       </section>
 
-      <section className="py-28 bg-cream">
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <div className={`grid lg:grid-cols-2 gap-16`}>
-            <AnimatedSection direction={isRtl ? "right" : "left"}>
-              <span className="text-brown-500 text-sm font-medium tracking-[0.2em] uppercase">{t.contact.contactInfo}</span>
-              <h2 className="text-3xl font-heading font-bold text-brown-900 mt-3 mb-8 tracking-tight">{t.contact.visitHeading}</h2>
-              <div className="w-16 h-0.5 bg-gold-500 mb-8" />
+      <section className="py-16 lg:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            <div className="lg:col-span-2">
+              <AnimatedSection>
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h2>
+                <div className="space-y-4">
+                  {info.map((item) => (
+                    <div key={item.title} className="bg-white rounded-2xl p-5 flex items-start gap-4 transition-all duration-300 hover:-translate-x-1"
+                      style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.04)" }}
+                    >
+                      <span className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center text-white"
+                        style={{ background: "linear-gradient(135deg, #8B7560, #A0896C)" }}
+                      >
+                        {item.icon}
+                      </span>
+                      <div>
+                        <h3 className="font-bold text-gray-900 text-sm">{item.title}</h3>
+                        <p className="text-sm text-gray-500 whitespace-pre-line mt-0.5">{item.text}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </AnimatedSection>
+            </div>
 
-              <div className="space-y-6">
-                {[
-                  { icon: MapPin, label: t.contact.address, value: t.contact.addressValue, sub: t.contact.addressSub },
-                  { icon: Phone, label: t.contact.phone, value: "+213 555 12 34 56", sub: t.contact.phoneSub, href: "tel:+213555123456" },
-                  { icon: Mail, label: t.contact.email, value: "hello@pawswings.dz", sub: t.contact.emailSub, href: "mailto:hello@pawswings.dz" },
-                  { icon: Clock, label: t.contact.hours, value: t.contact.hoursValue, sub: t.contact.hoursSub },
-                ].map((item) => (
-                  <div key={item.label} className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-brown-100 flex items-center justify-center shrink-0">
-                      <item.icon className="w-5 h-5 text-brown-600" />
+            <div className="lg:col-span-3">
+              <AnimatedSection>
+                <div className="bg-white rounded-3xl p-8 lg:p-10"
+                  style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.06)" }}
+                >
+                  <h2 className="text-2xl font-bold text-gray-900 mb-1">Send us a message</h2>
+                  <p className="text-sm text-gray-500 mb-6">Fill out the form below and we&apos;ll get back to you shortly.</p>
+                  <form onSubmit={(e) => e.preventDefault()} className="space-y-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.contact.formName}</label>
+                        <input type="text" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8B7560]/20 focus:border-[#8B7560] focus:bg-white transition-all" placeholder="Your name" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.contact.formEmail}</label>
+                        <input type="email" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8B7560]/20 focus:border-[#8B7560] focus:bg-white transition-all" placeholder="your@email.com" />
+                      </div>
                     </div>
                     <div>
-                      <p className="text-sm text-brown-500">{item.label}</p>
-                      {item.href ? (
-                        <a href={item.href} className="font-medium text-brown-900 hover:text-brown-700 transition-colors">{item.value}</a>
-                      ) : (
-                        <p className="font-medium text-brown-900">{item.value}</p>
-                      )}
-                      <p className="text-sm text-brown-400">{item.sub}</p>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.contact.formMessage}</label>
+                      <textarea rows={5} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8B7560]/20 focus:border-[#8B7560] focus:bg-white transition-all resize-none" placeholder="Tell us about your pet's needs..." />
                     </div>
-                  </div>
-                ))}
-              </div>
-            </AnimatedSection>
-
-            <AnimatedSection direction={isRtl ? "left" : "right"}>
-              <div className="bg-warm rounded-2xl p-8 border border-brown-200">
-                <h3 className="text-xl font-heading font-bold text-brown-900 mb-6">{t.contact.sendMessage}</h3>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-brown-700 mb-1.5">{t.contact.yourName}</label>
-                      <input type="text" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
-                        className="w-full px-4 py-3 bg-cream border border-brown-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brown-500/20 focus:border-brown-500 transition-all placeholder:text-brown-400" placeholder="John Doe" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-brown-700 mb-1.5">{t.contact.emailLabel}</label>
-                      <input type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
-                        className="w-full px-4 py-3 bg-cream border border-brown-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brown-500/20 focus:border-brown-500 transition-all placeholder:text-brown-400" placeholder="john@example.com" />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-brown-700 mb-1.5">{t.contact.phoneLabel}</label>
-                    <input type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                      className="w-full px-4 py-3 bg-cream border border-brown-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brown-500/20 focus:border-brown-500 transition-all placeholder:text-brown-400" placeholder="+213 555 00 00 00" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-brown-700 mb-1.5">{t.contact.message}</label>
-                    <textarea required rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      className="w-full px-4 py-3 bg-cream border border-brown-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brown-500/20 focus:border-brown-500 transition-all resize-none placeholder:text-brown-400"
-                      placeholder={t.contact.messagePlaceholder} />
-                  </div>
-                  <button type="submit"
-                    className="w-full px-6 py-3.5 bg-brown-800 text-cream font-medium rounded-xl hover:bg-brown-900 transition-all shadow-lg shadow-brown-800/20 flex items-center justify-center gap-2">
-                    {sent ? <><Check className="w-4 h-4" /> {t.contact.messageSent}</> : <><Send className="w-4 h-4" /> {t.contact.send}</>}
-                  </button>
-                </form>
-              </div>
-            </AnimatedSection>
+                    <button type="submit" className="inline-flex items-center gap-2 bg-[#8B7560] text-white px-8 py-3.5 rounded-2xl font-bold hover:bg-[#7D6B55] transition-all shadow-lg shadow-[#8B7560]/20 hover:shadow-xl hover:-translate-y-0.5">
+                      <Send className="w-4 h-4" />
+                      {t.contact.formSubmit}
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </form>
+                </div>
+              </AnimatedSection>
+            </div>
           </div>
-        </div>
-      </section>
 
-      <section className="h-80 bg-brown-100 flex items-center justify-center">
-        <div className="text-center text-brown-500">
-          <MapPin className="w-10 h-10 mx-auto mb-2" />
-          <p className="font-heading font-semibold">Google Maps</p>
-          <p className="text-sm">123 Rue Didouche Mourad, Algiers</p>
+          <AnimatedSection>
+            <div className="mt-12 relative overflow-hidden rounded-3xl h-72">
+              <Image
+                src="https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=1200&h=400&fit=crop"
+                alt="Map"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-xl rounded-2xl px-5 py-3 border border-white/40 shadow-lg">
+                <div className="flex items-center gap-3">
+                  <MapPin className="w-5 h-5 text-[#8B7560]" />
+                  <div>
+                    <p className="font-bold text-gray-900 text-sm">Paws & Wings</p>
+                    <p className="text-xs text-gray-500">123 Pet Street, New York</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
         </div>
       </section>
-    </>
-  )
+    </div>
+  );
 }

@@ -1,40 +1,44 @@
-"use client"
+import type { Metadata } from "next";
+import { Playfair_Display, Outfit, Tajawal } from "next/font/google";
+import "./globals.css";
+import { I18nProvider } from "@/lib/i18n-context";
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 
-import { useEffect } from "react"
-import { Playfair_Display, Outfit, Noto_Sans_Arabic } from "next/font/google"
-import "./globals.css"
-import Navbar from "@/components/navbar"
-import Footer from "@/components/footer"
-import { I18nProvider, useI18n } from "@/lib/i18n-context"
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  display: "swap",
+});
 
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-heading" })
-const outfit = Outfit({ subsets: ["latin"], variable: "--font-body" })
-const notoSansArabic = Noto_Sans_Arabic({ subsets: ["arabic"], weight: ["300", "400", "500", "600", "700"], variable: "--font-arabic" })
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
+});
 
-function HtmlWrapper({ children }: { children: React.ReactNode }) {
-  const { dir, lang } = useI18n()
+const tajawal = Tajawal({
+  subsets: ["arabic"],
+  weight: ["300", "400", "500", "700", "800"],
+  variable: "--font-tajawal",
+  display: "swap",
+});
 
-  useEffect(() => {
-    document.documentElement.dir = dir
-    document.documentElement.lang = lang
-    document.documentElement.classList.toggle("lang-ar", lang === "ar")
-  }, [dir, lang])
-
-  return <>{children}</>
-}
+export const metadata: Metadata = {
+  title: "Paws & Wings | Pet Shop & Veterinary Clinic",
+  description: "Premium pet products and veterinary care for cats, birds, and more.",
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html className={`${playfair.variable} ${outfit.variable} ${notoSansArabic.variable}`}>
-      <body className="font-body antialiased bg-cream text-brown-900">
+    <html lang="en" className={`${playfair.variable} ${outfit.variable} ${tajawal.variable}`} suppressHydrationWarning>
+      <body className="font-outfit bg-emerald-50 text-gray-900 antialiased">
         <I18nProvider>
-          <HtmlWrapper>
-            <Navbar />
-            <main className="min-h-screen">{children}</main>
-            <Footer />
-          </HtmlWrapper>
+          <Navbar />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
         </I18nProvider>
       </body>
     </html>
-  )
+  );
 }

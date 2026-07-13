@@ -1,171 +1,220 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Syringe, Stethoscope, Scissors, Smile, Microscope, Ambulance, Apple, Heart, Phone, Star, ChevronRight, Calendar } from "lucide-react"
-import AnimatedSection from "@/components/animated-section"
-import { vetServices, team, testimonials } from "@/lib/data"
-import { useI18n } from "@/lib/i18n-context"
+import Link from "next/link";
+import Image from "next/image";
+import { useI18n } from "@/lib/i18n-context";
+import { useTranslatedData } from "@/lib/use-translated-data";
+import AnimatedSection from "@/components/animated-section";
+import { ArrowRight, Star, Phone, Stethoscope, Sparkles, Clock, ChevronRight } from "lucide-react";
 
-const iconMap: Record<string, React.ReactNode> = {
-  stethoscope: <Stethoscope className="w-6 h-6 text-gold-400" />,
-  syringe: <Syringe className="w-6 h-6 text-gold-400" />,
-  scalpel: <Stethoscope className="w-6 h-6 text-gold-400" />,
-  scissors: <Scissors className="w-6 h-6 text-gold-400" />,
-  tooth: <Smile className="w-6 h-6 text-gold-400" />,
-  microscope: <Microscope className="w-6 h-6 text-gold-400" />,
-  ambulance: <Ambulance className="w-6 h-6 text-gold-400" />,
-  apple: <Apple className="w-6 h-6 text-gold-400" />,
-}
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.5, delay: i * 0.05, ease: [0.25, 0.1, 0.25, 1] as const },
-  }),
-}
+const serviceImages: Record<string, string> = {
+  "vet-1": "https://loremflickr.com/600/700/vet,checkup?random=1",
+  "vet-2": "https://loremflickr.com/600/700/vaccination,pet?random=2",
+  "vet-3": "https://loremflickr.com/600/700/dental,pet?random=3",
+  "vet-4": "https://loremflickr.com/600/700/veterinary,surgery?random=4",
+  "vet-5": "https://loremflickr.com/600/700/pet,care?random=5",
+  "vet-6": "https://loremflickr.com/600/700/cat,litter?random=6",
+  "vet-7": "https://loremflickr.com/600/700/pet,toy?random=7",
+  "vet-8": "https://loremflickr.com/600/700/pet,grooming?random=8",
+};
 
 export default function VetPage() {
-  const { t, dir } = useI18n()
-  const isRtl = dir === "rtl"
+  const { t } = useI18n();
 
   return (
-    <>
-      <section className="relative min-h-[60vh] flex items-center bg-gradient-to-br from-brown-900 via-brown-800 to-brown-900 text-cream overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 right-20 w-80 h-80 bg-gold-500/5 rounded-full blur-3xl" />
-          <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-brown-600/20 rounded-full blur-3xl" />
-        </div>
-        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-16 relative z-10">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="inline-flex items-center gap-2 px-5 py-2 bg-gold-500/10 text-gold-300 text-xs font-medium tracking-widest uppercase rounded-full mb-8">
-              <Stethoscope className="w-3 h-3" /> {t.vet.badge}
-            </span>
-          </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-5xl md:text-7xl font-heading font-bold tracking-tight mb-6">
-            {t.vet.title1} <span className="text-gold-400">{t.vet.titleAccent}</span>
-          </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-lg text-brown-300 max-w-xl mb-8">{t.vet.desc}</motion.p>
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex flex-wrap gap-4">
-            <a href="#services" className="px-7 py-3.5 bg-gold-500 text-brown-900 font-medium rounded-full hover:bg-gold-400 transition-colors shadow-lg">{t.vet.ourServices}</a>
-            <a href="tel:+213555123456" className="px-7 py-3.5 border-2 border-brown-700 text-cream font-medium rounded-full hover:bg-brown-700/50 transition-colors flex items-center gap-2">
-              <Phone className="w-4 h-4" /> {t.vet.emergencyCall}
-            </a>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="py-16 bg-cream border-b border-brown-200">
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { num: "2,500+", label: t.vet.petsTreated },
-              { num: "12+", label: t.vet.yearsExperience },
-              { num: "8", label: t.vet.vetServices },
-              { num: "98%", label: t.vet.happyClients },
-            ].map((stat, i) => (
-              <motion.div key={stat.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center">
-                <p className="text-3xl md:text-4xl font-heading font-bold text-brown-800">{stat.num}</p>
-                <p className="text-sm text-brown-500 mt-1">{stat.label}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="services" className="py-28 bg-warm">
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <AnimatedSection className="text-center mb-16">
-            <span className="text-brown-500 text-sm font-medium tracking-[0.2em] uppercase">{t.vet.whatWeOffer}</span>
-            <h2 className="text-4xl md:text-5xl font-heading font-bold text-brown-900 mt-4 tracking-tight">{t.vet.heading}</h2>
-            <div className="w-16 h-0.5 bg-gold-500 mx-auto mt-4" />
-            <p className="text-brown-600 mt-4 max-w-xl mx-auto">{t.vet.subheading}</p>
-          </AnimatedSection>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {vetServices.map((service, i) => (
-              <motion.div key={service.id} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-                className="group bg-cream rounded-2xl p-6 border border-brown-200 hover:border-brown-400 hover:shadow-xl hover:shadow-brown-900/10 transition-all duration-500">
-                <div className="w-12 h-12 rounded-xl bg-brown-100 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-brown-800 transition-all duration-500">
-                  {iconMap[service.icon] || <Heart className="w-6 h-6 text-gold-400" />}
-                </div>
-                <h3 className="font-heading font-bold text-brown-900 mb-2">{service.title}</h3>
-                <p className="text-sm text-brown-600 leading-relaxed mb-4">{service.description}</p>
-                <div className="flex items-center justify-between pt-3 border-t border-brown-200">
-                  <span className="text-sm font-medium text-brown-800">{service.price}</span>
-                  <span className="text-xs text-brown-400">{service.duration}</span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-28 bg-cream">
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <AnimatedSection className="text-center mb-16">
-            <span className="text-brown-500 text-sm font-medium tracking-[0.2em] uppercase">{t.vet.ourTeam}</span>
-            <h2 className="text-4xl md:text-5xl font-heading font-bold text-brown-900 mt-4 tracking-tight">{t.vet.teamHeading}</h2>
-            <div className="w-16 h-0.5 bg-gold-500 mx-auto mt-4" />
-            <p className="text-brown-600 mt-4 max-w-xl mx-auto">{t.vet.teamSub}</p>
-          </AnimatedSection>
-          <div className="grid md:grid-cols-3 gap-8">
-            {team.map((member, i) => (
-              <motion.div key={member.id} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="group text-center">
-                <div className="w-40 h-40 mx-auto rounded-full bg-gradient-to-br from-brown-700 to-brown-800 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform duration-500 shadow-lg shadow-brown-900/20">
-                  <span className="text-5xl font-heading font-bold text-gold-400">{member.name[0]}</span>
-                </div>
-                <h3 className="text-xl font-heading font-bold text-brown-900">{member.name}</h3>
-                <p className="text-sm text-gold-500 font-medium mb-3">{member.role}</p>
-                <p className="text-sm text-brown-600 max-w-xs mx-auto">{member.bio}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-28 bg-warm">
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <AnimatedSection className="text-center mb-16">
-            <span className="text-brown-500 text-sm font-medium tracking-[0.2em] uppercase">{t.testimonials.title}</span>
-            <h2 className="text-4xl md:text-5xl font-heading font-bold text-brown-900 mt-4 tracking-tight">{t.vet.clientSay}</h2>
-            <div className="w-16 h-0.5 bg-gold-500 mx-auto mt-4" />
-          </AnimatedSection>
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.slice(0, 3).map((test, i) => (
-              <motion.div key={test.id} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-                className="bg-cream rounded-2xl p-6 border border-brown-200 hover:shadow-lg transition-shadow">
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, s) => (<Star key={s} className={`w-4 h-4 ${s < test.rating ? "text-gold-500 fill-gold-500" : "text-brown-200"}`} />))}
-                </div>
-                <p className="text-sm text-brown-600 leading-relaxed mb-4">&ldquo;{test.text}&rdquo;</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-brown-800 flex items-center justify-center text-gold-400 text-sm font-medium">{test.name[0]}</div>
-                  <div><p className="text-sm font-medium text-brown-900">{test.name}</p><p className="text-xs text-brown-500">{test.pet}</p></div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 bg-gradient-to-r from-brown-800 to-brown-900 text-cream">
-        <div className="max-w-3xl mx-auto px-4 md:px-8 text-center">
+    <div>
+      <section className="relative overflow-hidden min-h-[70vh] flex items-center">
+        <Image
+          src="https://loremflickr.com/1400/900/cat,veterinary?random=100"
+          alt="Veterinary clinic"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#2E241A]/85 via-[#4A3A2A]/60 to-[#2E241A]/40" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <AnimatedSection>
-            <Calendar className="w-14 h-14 mx-auto mb-5 text-gold-400" />
-            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">{t.vet.bookAppointment}</h2>
-            <div className="w-16 h-0.5 bg-gold-500 mx-auto mb-6" />
-            <p className="text-brown-300 mb-8 max-w-lg mx-auto">{t.vet.bookDesc}</p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <a href="tel:+213555123456" className="px-7 py-3.5 bg-gold-500 text-brown-900 font-medium rounded-full hover:bg-gold-400 transition-colors shadow-lg flex items-center gap-2">
-                <Phone className="w-4 h-4" /> +213 555 12 34 56</a>
-              <a href="/contact" className="px-7 py-3.5 border-2 border-brown-700 text-cream font-medium rounded-full hover:bg-brown-700/50 transition-colors">{t.vet.sendMessage}</a>
+            <div className="max-w-xl">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-xl rounded-full text-sm text-emerald-200 border border-white/10 mb-5">
+                <Sparkles className="w-4 h-4" /> Premium Veterinary Care
+              </span>
+              <h1 className="text-5xl lg:text-7xl font-bold text-white mb-4 leading-tight">{t.vet.title}</h1>
+              <p className="text-emerald-100/70 text-lg mb-8 max-w-md leading-relaxed">{t.vet.subtitle}</p>
+              <div className="flex items-center gap-4">
+                <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-[#4A3A2A] px-7 py-3.5 rounded-2xl font-bold hover:bg-emerald-50 transition-all shadow-xl hover:-translate-y-0.5">
+                  <Phone className="w-4 h-4" />
+                  {t.vet.bookNow}
+                </Link>
+                <Link href="#services" className="inline-flex items-center gap-2 text-white px-6 py-3.5 rounded-2xl font-medium border border-white/20 hover:bg-white/10 transition-all hover:-translate-y-0.5">
+                  View Services
+                </Link>
+              </div>
             </div>
           </AnimatedSection>
         </div>
       </section>
-    </>
-  )
+
+      <section className="relative z-10 -mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="bg-white/80 backdrop-blur-xl rounded-3xl px-8 py-8 grid grid-cols-2 md:grid-cols-4 gap-8 border border-white/40"
+              style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.06)" }}
+            >
+              {[
+                { label: "Happy Pets", value: "2,500+" },
+                { label: "Years Experience", value: "12+" },
+                { label: "Services", value: "8+" },
+                { label: "Satisfaction", value: "98%" },
+              ].map((s) => (
+                <div key={s.label} className="text-center">
+                  <div className="text-3xl font-bold text-gray-900 mb-1">{s.value}</div>
+                  <div className="text-sm text-gray-500">{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      <section id="services" className="py-16 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center mb-12">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#F7F3ED] rounded-full text-sm text-[#8B7560] border border-[#EDE6DB] mb-3">
+                <Stethoscope className="w-4 h-4" /> Our Services
+              </span>
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t.vet.servicesTitle}</h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {vetServices.map((s) => (
+                <div key={s.id} className="group relative overflow-hidden rounded-3xl transition-all duration-500 hover:-translate-y-1.5 bg-white"
+                  style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.04)" }}
+                >
+                  <div className="relative h-52 overflow-hidden">
+                    <Image
+                      src={serviceImages[s.id] || serviceImages["vet-1"]}
+                      alt={s.title}
+                      fill
+                      className="object-cover transition-all duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                    <div className="absolute bottom-3 left-4 right-4">
+                      <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs text-white border border-white/20">
+                        {s.duration}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="font-bold text-gray-900">{s.title}</h3>
+                      <span className="text-lg font-bold text-[#8B7560]">${s.price}</span>
+                    </div>
+                    <p className="text-sm text-gray-500 leading-relaxed line-clamp-2">{s.description}</p>
+                    <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                      <span className="flex items-center gap-1.5 text-xs text-gray-400">
+                        <Clock className="w-3.5 h-3.5" />
+                        {s.duration}
+                      </span>
+                      <span className="flex items-center gap-1 text-xs font-medium text-[#8B7560] group-hover:gap-2 transition-all">
+                        Book now <ChevronRight className="w-3 h-3" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      <section className="py-16 lg:py-20" style={{ background: "#F8F6F3" }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center mb-12">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full text-sm text-[#8B7560] border border-[#EDE6DB] mb-3">Our Team</span>
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t.vet.teamTitle}</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+              {team.map((m) => (
+                <div key={m.id} className="group relative bg-white rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-1.5"
+                  style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.04)" }}
+                >
+                  <div className="relative h-56 overflow-hidden">
+                    <Image
+                      src={m.id === "team-1" ? "https://loremflickr.com/400/500/veterinary,doctor?random=201" : m.id === "team-2" ? "https://loremflickr.com/400/500/pet,doctor?random=202" : "https://loremflickr.com/400/500/vet,nurse?random=203"}
+                      alt={m.name}
+                      fill
+                      className="object-cover transition-all duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <h3 className="text-white font-bold text-lg">{m.name}</h3>
+                      <p className="text-emerald-200 text-sm">{m.role}</p>
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <p className="text-sm text-gray-500 leading-relaxed">{m.bio}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      <section className="py-16 lg:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center mb-12">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#F7F3ED] rounded-full text-sm text-[#8B7560] border border-[#EDE6DB] mb-3">Testimonials</span>
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t.vet.testimonialsTitle}</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              {testimonials.slice(0, 3).map((rev) => (
+                <div key={rev.id} className="bg-white rounded-3xl p-7 transition-all duration-500 hover:-translate-y-1.5"
+                  style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.04)" }}
+                >
+                  <div className="flex items-center gap-1 mb-4">
+                    {Array.from({ length: rev.rating }).map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-emerald-500 text-emerald-500" />
+                    ))}
+                  </div>
+                  <p className="text-sm text-gray-600 mb-5 leading-relaxed">&ldquo;{rev.text}&rdquo;</p>
+                  <div className="flex items-center gap-3 pt-3 border-t border-gray-100">
+                    <div className="w-9 h-9 bg-gradient-to-br from-[#EDE6DB] to-[#F7F3ED] rounded-full flex items-center justify-center text-xs font-bold text-[#8B7560]">{rev.initials}</div>
+                    <span className="text-sm font-semibold text-gray-900">{rev.name}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden py-16 lg:py-20 min-h-[50vh] flex items-center">
+        <Image
+          src="https://loremflickr.com/1400/600/dog,veterinary?random=101"
+          alt="Veterinary care"
+          fill
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#2E241A]/90 via-[#4A3A2A]/70 to-[#2E241A]/80" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative w-full">
+          <AnimatedSection>
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-xl rounded-full text-sm text-emerald-200 border border-white/10 mb-4">
+              <Sparkles className="w-4 h-4" /> We&apos;re Here for Your Pet
+            </span>
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">Ready to Book?</h2>
+            <p className="text-emerald-100/60 mb-8 max-w-md mx-auto text-lg">
+              Schedule an appointment with our expert veterinarians today.
+            </p>
+            <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-[#4A3A2A] px-8 py-3.5 rounded-2xl font-bold hover:bg-emerald-50 transition-all shadow-xl hover:-translate-y-0.5">
+              {t.vet.bookNow}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </AnimatedSection>
+        </div>
+      </section>
+    </div>
+  );
 }

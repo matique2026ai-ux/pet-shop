@@ -1,62 +1,50 @@
 @import "tailwindcss";
 
 @theme {
-  --font-heading: "Playfair Display", serif;
-  --font-body: "Outfit", system-ui, sans-serif;
-
-  --color-brown-900: #2D1810;
-  --color-brown-800: #4A2C1A;
-  --color-brown-700: #6B3F28;
-  --color-brown-600: #8B5E3C;
-  --color-brown-500: #A67C52;
-  --color-brown-400: #C4A27A;
-  --color-brown-300: #D4BFA0;
-  --color-brown-200: #E8DCC8;
-  --color-brown-100: #F5EDE0;
-  --color-brown-50: #FCF8F0;
-  --color-gold-500: #D4A853;
-  --color-gold-400: #E0C078;
-  --color-gold-300: #ECD8A0;
-  --color-gold-100: #FBF3E0;
-  --color-cream: #FCF8F0;
-  --color-warm: #F5EDE0;
+  --font-outfit: "Outfit", sans-serif;
+  --font-playfair: "Playfair Display", serif;
+  --font-tajawal: "Tajawal", sans-serif;
+  --color-emerald-50: #F7F3ED;
+  --color-emerald-100: #EDE6DB;
+  --color-emerald-200: #E0D5C4;
+  --color-emerald-300: #D4C5B0;
+  --color-emerald-400: #BFA98E;
+  --color-emerald-500: #A0896C;
+  --color-emerald-600: #8B7560;
+  --color-emerald-700: #7D6B55;
+  --color-emerald-800: #5C4A32;
+  --color-emerald-900: #4A3A2A;
+  --color-emerald-950: #2E241A;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
-html.lang-ar {
-  font-family: var(--font-arabic), system-ui, sans-serif;
+[dir="rtl"] {
+  font-family: var(--font-tajawal), sans-serif;
 }
 
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #F5EDE0; }
-::-webkit-scrollbar-thumb { background: #A67C52; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #8B5E3C; }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-::selection { background: #A67C52; color: white; }
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out;
+}
 
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-12px); }
+  50% { transform: translateY(-6px); }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
 }
 
-@keyframes scale-in {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-.animate-float { animation: float 4s ease-in-out infinite; }
-.animate-scale-in { animation: scale-in 0.5s ease-out; }
-
-.shimmer-bg {
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite;
+.animate-shimmer {
+  background: linear-gradient(90deg, #fff 0%, #D4C5B0 25%, #fff 50%, #D4C5B0 75%, #fff 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s ease-in-out infinite;
 }

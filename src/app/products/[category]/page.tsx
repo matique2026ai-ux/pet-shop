@@ -1,86 +1,143 @@
-"use client"
+"use client";
 
-import { useParams } from "next/navigation"
-import Link from "next/link"
-import { motion } from "framer-motion"
-import { ChevronRight, PawPrint, Bird, Heart } from "lucide-react"
-import AnimatedSection from "@/components/animated-section"
-import { products, categories } from "@/lib/data"
-import { useI18n } from "@/lib/i18n-context"
+import { useParams, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import { useI18n } from "@/lib/i18n-context";
+import { useTranslatedData } from "@/lib/use-translated-data";
+import AnimatedSection from "@/components/animated-section";
+import ProductCard from "@/components/product-card";
+import { ChevronRight, ArrowLeft, LayoutGrid, List, Cat, Dog, Bird, Fish, Rabbit, PawPrint, Sparkles } from "lucide-react";
+import { useState } from "react";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.5, delay: i * 0.05, ease: [0.25, 0.1, 0.25, 1] as const },
-  }),
-}
+const catHeroImages: Record<string, string> = {
+  cats: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1200&h=600&fit=crop",
+  dogs: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=1200&h=600&fit=crop",
+  birds: "https://images.unsplash.com/photo-1480044965905-02098d419e96?w=1200&h=600&fit=crop",
+  fish: "https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=1200&h=600&fit=crop",
+  "small-pets": "https://images.unsplash.com/photo-1535241749838-299277b6305f?w=1200&h=600&fit=crop",
+};
 
-const iconMap: Record<string, React.ReactNode> = {
-  cats: <PawPrint className="w-6 h-6 text-gold-400" />,
-  birds: <Bird className="w-6 h-6 text-gold-400" />,
-  accessories: <Heart className="w-6 h-6 text-gold-400" />,
-}
+const catIcons: Record<string, React.ReactNode> = {
+  cat: <Cat className="w-6 h-6" />,
+  dog: <Dog className="w-6 h-6" />,
+  bird: <Bird className="w-6 h-6" />,
+  fish: <Fish className="w-6 h-6" />,
+  rabbit: <Rabbit className="w-6 h-6" />,
+};
 
 export default function CategoryPage() {
-  const { t, dir } = useI18n()
-  const isRtl = dir === "rtl"
-  const { category } = useParams<{ category: string }>()
-  const catInfo = categories.find((c) => c.id === category)
-  const filtered = products.filter((p) => p.category === category)
+  const { t, dir } = useI18n();
+  const { products, categories } = useTranslatedData();
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const catSlug = params.category as string;
+  const activeSub = searchParams.get("sub");
+  const cat = categories.find((c) => c.id === catSlug);
+  const catProducts = products.filter((p) => p.category === catSlug);
+
+  const filtered = activeSub
+    ? catProducts.filter((p) => p.subcategory === activeSub)
+    : catProducts;
+
+  if (!cat) {
+    return (
+      <div className="text-center py-20">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">Category Not Found</h1>
+        <Link href="/products" className="text-emerald-600 hover:underline">View All Products</Link>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen pt-28 pb-20 bg-cream">
-      <div className="max-w-7xl mx-auto px-4 md:px-8">
-        <AnimatedSection className="mb-12">
-          <div className="inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-brown-800 text-cream mb-4">
-            {iconMap[category]}
+    <div>
+      <section className="relative overflow-hidden py-16 lg:py-24">
+        <div className="absolute inset-0">
+          <Image
+            src={catHeroImages[cat.id] || catHeroImages.cats}
+            alt={cat.name}
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/80 via-emerald-900/60 to-transparent" />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-2 text-sm text-emerald-200/80 mb-4">
+            <Link href="/" className="hover:text-white transition-colors">Home</Link>
+            <ChevronRight className="w-3 h-3" />
+            <Link href="/categories" className="hover:text-white transition-colors">Categories</Link>
+            <ChevronRight className="w-3 h-3" />
+            <span className="text-white font-medium">{cat.name}</span>
+          </div>
+          <div className="flex items-center gap-4 mb-3">
+            <span className="w-14 h-14 bg-white/10 backdrop-blur-xl rounded-2xl flex items-center justify-center text-white border border-white/20">
+              {catIcons[cat.icon] ?? <PawPrint className="w-7 h-7" />}
+            </span>
             <div>
-              <p className="text-xs text-gold-400 font-medium">{t.products.category}</p>
-              <p className="font-heading font-bold text-lg">{catInfo?.name || category}</p>
+              <h1 className="text-4xl lg:text-5xl font-bold text-white">{cat.name}</h1>
+              <p className="text-emerald-100/80 mt-1 text-lg">{cat.description}</p>
             </div>
           </div>
-          <h1 className="text-4xl md:text-5xl font-heading font-bold text-brown-900 tracking-tight">{catInfo?.name || category}</h1>
-          <p className="text-brown-600 mt-3 max-w-xl">{catInfo?.description}</p>
-        </AnimatedSection>
-
-        <div className="flex items-center gap-2 text-sm text-brown-400 mb-8">
-          <Link href="/" className="hover:text-brown-700 transition-colors">Home</Link>
-          <ChevronRight className={`w-3 h-3 ${isRtl ? "rotate-180" : ""}`} />
-          <Link href="/products" className="hover:text-brown-700 transition-colors">{t.products.title}</Link>
-          <ChevronRight className={`w-3 h-3 ${isRtl ? "rotate-180" : ""}`} />
-          <span className="text-brown-800 font-medium">{catInfo?.name || category}</span>
+          <div className="flex items-center gap-2 mt-4">
+            <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs text-white border border-white/20">
+              {filtered.length} Products
+            </span>
+          </div>
         </div>
+      </section>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filtered.map((product, i) => (
-            <motion.div key={product.id} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-              <Link href={`/products/${product.category}/${product.id}`}
-                className="group block bg-cream rounded-2xl border border-brown-200 overflow-hidden hover:shadow-xl hover:shadow-brown-900/10 transition-all duration-500">
-                <div className="relative aspect-[4/5] overflow-hidden bg-brown-100">
-                  <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brown-900/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className={`absolute top-3 flex gap-2 ${isRtl ? "right-3" : "left-3"}`}>
-                    {product.isNew && <span className="px-2.5 py-1 bg-brown-800 text-gold-300 text-[10px] font-medium tracking-wider uppercase rounded-full">{t.products.new}</span>}
-                    {product.isSale && <span className="px-2.5 py-1 bg-gold-500 text-brown-900 text-[10px] font-medium tracking-wider uppercase rounded-full">{t.products.sale}</span>}
-                  </div>
-                  <div className={`absolute bottom-3 ${isRtl ? "left-3" : "right-3"} w-10 h-10 rounded-full bg-cream/90 flex items-center justify-center opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500`}>
-                    <ChevronRight className={`w-4 h-4 text-brown-800 ${isRtl ? "rotate-180" : ""}`} />
-                  </div>
-                </div>
-                <div className="p-5">
-                  <p className="text-[10px] text-brown-500 font-medium tracking-[0.2em] uppercase mb-1">{product.subcategory}</p>
-                  <h3 className="font-heading font-semibold text-sm leading-snug mb-2 text-brown-900 group-hover:text-brown-700 transition-colors">{product.name}</h3>
-                  <div className="flex items-center gap-2">
-                    <span className="font-heading font-bold text-lg text-brown-800">{product.isSale ? product.salePrice : product.price} DZD</span>
-                    {product.isSale && <span className="text-sm text-brown-400 line-through">{product.price} DZD</span>}
-                  </div>
-                </div>
+      <section className="py-8 border-b border-gray-100 sticky top-16 bg-white/80 backdrop-blur-xl z-30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+            <Link
+              href={`/products/${cat.id}`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${
+                !activeSub
+                  ? "bg-emerald-600 text-white shadow-lg shadow-emerald-600/20"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              <Sparkles className="w-4 h-4" />
+              All {cat.name}
+            </Link>
+            {cat.subcategories.map((sub) => (
+              <Link
+                key={sub.id}
+                href={`/products/${cat.id}?sub=${sub.id}`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${
+                  activeSub === sub.id
+                    ? "bg-emerald-600 text-white shadow-lg shadow-emerald-600/20"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
+              >
+                {sub.name}
               </Link>
-            </motion.div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
+
+      <section className="py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            {filtered.length === 0 ? (
+              <div className="text-center py-20">
+                <p className="text-gray-500">No products in this {activeSub ? "subcategory" : "category"} yet.</p>
+                <Link href="/products" className="inline-flex items-center gap-1 text-emerald-600 mt-4 hover:underline">
+                  <ArrowLeft className="w-4 h-4" /> Back to All Products
+                </Link>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 gap-y-8">
+                {filtered.map((p) => (
+                  <ProductCard key={p.id} product={p} t={t} />
+                ))}
+              </div>
+            )}
+          </AnimatedSection>
+        </div>
+      </section>
     </div>
-  )
+  );
 }

@@ -1,0 +1,115 @@
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { useI18n } from "@/lib/i18n-context";
+import { useTranslatedData } from "@/lib/use-translated-data";
+import { products as rawProducts } from "@/lib/data";
+import AnimatedSection from "@/components/animated-section";
+import { ChevronRight } from "lucide-react";
+
+const catBgImages: Record<string, string> = {
+  cats: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800&h=800&fit=crop",
+  dogs: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=800&h=800&fit=crop",
+  birds: "https://images.unsplash.com/photo-1480044965905-02098d419e96?w=800&h=800&fit=crop",
+  fish: "https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=800&h=800&fit=crop",
+  "small-pets": "https://images.unsplash.com/photo-1535241749838-299277b6305f?w=800&h=800&fit=crop",
+};
+
+export default function CategoriesPage() {
+  const { t } = useI18n();
+  const { categories } = useTranslatedData();
+
+  const catCounts: Record<string, number> = {};
+  categories.forEach((cat) => {
+    catCounts[cat.id] = rawProducts.filter((p) => p.category === cat.id).length;
+  });
+
+  return (
+    <div>
+      <section className="relative overflow-hidden py-16 lg:py-24">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#2E241A] via-[#4A3A2A] to-[#2E241A]" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-400/5 rounded-full blur-[100px]" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl">
+            <h1 className="text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">{t.categories.title}</h1>
+            <p className="text-emerald-100/60 text-lg max-w-lg">{t.categories.subtitle}</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 lg:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {categories.map((cat, idx) => (
+              <AnimatedSection key={cat.id}>
+                <Link
+                  href={`/products/${cat.id}`}
+                  className="group block"
+                >
+                  <div className="bg-white rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-1.5"
+                    style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.02)" }}
+                  >
+                    <div className="relative aspect-[4/3] overflow-hidden bg-gray-50">
+                      <Image
+                        src={catBgImages[cat.id] || catBgImages.cats}
+                        alt={cat.name}
+                        fill
+                        className="object-cover transition-all duration-700 group-hover:scale-105"
+                        priority={idx < 3}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    </div>
+
+                    <div className="p-6">
+                      <div className="flex items-center justify-between mb-3">
+                        <h2 className="text-xl font-bold text-gray-900">{cat.name}</h2>
+                        <span className="text-sm text-gray-400 bg-gray-50 px-3 py-1 rounded-full">
+                          {catCounts[cat.id] || cat.subcategories.length} items
+                        </span>
+                      </div>
+
+                      <p className="text-sm text-gray-500 mb-4 line-clamp-2">{cat.description}</p>
+
+                      <div className="flex flex-wrap gap-1.5 mb-4">
+                        {cat.subcategories.map((sub) => (
+                          <span
+                            key={sub.id}
+                            className="px-3 py-1 bg-gray-50 text-gray-500 text-xs rounded-full border border-gray-100 transition-colors group-hover:bg-[#F7F3ED] group-hover:text-[#8B7560] group-hover:border-[#EDE6DB]"
+                          >
+                            {sub.name}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                        <span className="text-xs text-gray-400">{cat.subcategories.length} subcategories</span>
+                        <span className="flex items-center gap-1 text-sm font-semibold text-[#8B7560] group-hover:gap-2 transition-all">
+                          Browse All <ChevronRight className="w-3.5 h-3.5" />
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 relative overflow-hidden" style={{ background: "#F8F6F3" }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <AnimatedSection>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Not sure what you need?</h2>
+            <p className="text-gray-500 mb-6 max-w-md mx-auto">Browse all products or visit our vet clinic for expert advice.</p>
+            <div className="flex items-center justify-center gap-4">
+              <Link href="/products" className="inline-flex items-center gap-2 bg-white text-gray-900 px-7 py-3 rounded-2xl font-bold border border-gray-200 hover:border-gray-300 hover:-translate-y-0.5 transition-all shadow-sm">All Products</Link>
+              <Link href="/vet" className="inline-flex items-center gap-2 bg-[#8B7560] text-white px-7 py-3 rounded-2xl font-bold hover:bg-[#7D6B55] hover:-translate-y-0.5 transition-all shadow-lg shadow-[#8B7560]/20">Visit Vet Clinic</Link>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+    </div>
+  );
+}
