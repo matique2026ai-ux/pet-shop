@@ -190,10 +190,25 @@ export const fr = {
   faq: {
     title: "Foire Aux Questions",
     subtitle: "Tout ce que vous devez savoir sur vos achats",
+    items: [
+      { q: "Quels modes de paiement acceptez-vous ?", a: "Nous acceptons le paiement à la livraison et les virements bancaires dans toute l'Algérie." },
+      { q: "Combien de temps prend la livraison ?", a: "La livraison prend 2 à 5 jours ouvrables selon votre wilaya." },
+      { q: "Quelle est votre politique de retour ?", a: "Vous pouvez retourner les produits non utilisés dans les 7 jours suivant la livraison. Contactez-nous pour initier un retour." },
+      { q: "Livrez-vous en dehors de l'Algérie ?", a: "Actuellement, nous livrons uniquement en Algérie. La livraison internationale arrive bientôt." },
+      { q: "Comment puis-je suivre ma commande ?", a: "Après avoir passé une commande, nous vous contacterons par téléphone pour confirmer les détails de livraison." },
+      { q: "Vos produits sont-ils authentiques ?", a: "Oui, tous nos produits proviennent de marques de confiance et de fournisseurs vérifiés." },
+      { q: "Puis-je annuler ma commande ?", a: "Vous pouvez annuler dans les 24 heures suivant la commande. Passé ce délai, elle est déjà en cours de traitement." },
+      { q: "Avez-vous un magasin physique ?", a: "Oui, visitez notre magasin à Alger. Consultez la page Contact pour plus de détails." },
+    ],
   },
   shipping: {
     title: "Livraison et Retours",
     subtitle: "Politiques de livraison et de retour",
+    sections: [
+      { title: "Informations de Livraison", text: "Nous livrons dans toutes les wilayas d'Algérie. Les commandes sont traitées sous 24 heures et livrées sous 2 à 5 jours ouvrables. La livraison est gratuite pour les commandes de plus de 5 000 DZD. Les frais de livraison standard sont de 500 DZD." },
+      { title: "Politique de Retour", text: "Vous pouvez retourner les produits non utilisés et non ouverts dans les 7 jours suivant la livraison. Pour initier un retour, contactez notre service client. Les frais de retour sont à la charge du client sauf si le produit est défectueux." },
+      { title: "Moyens de Paiement", text: "Nous acceptons le paiement à la livraison pour toutes les commandes. Les virements bancaires sont également acceptés pour les commandes de plus de 10 000 DZD. Tous les prix sont en Dinar Algérien (DZD) et incluent les taxes applicables." },
+    ],
   },
   contact: {
     title: "Contactez-Nous",

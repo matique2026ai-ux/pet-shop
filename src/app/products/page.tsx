@@ -8,7 +8,7 @@ import { useI18n } from "@/lib/i18n-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
 import AnimatedSection from "@/components/animated-section";
 import ProductCard from "@/components/product-card";
-import { Search, ArrowUpDown } from "lucide-react";
+import { Search } from "lucide-react";
 
 function ProductsContent() {
   const { t } = useI18n();

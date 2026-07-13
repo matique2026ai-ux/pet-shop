@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     rating: p.rating,
     reviews: p.reviews,
     description: p.description,
-    features: JSON.stringify(p.features),
+    features: p.features,
     in_stock: p.inStock,
   }));
 

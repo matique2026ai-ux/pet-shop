@@ -4,26 +4,10 @@ import { useI18n } from "@/lib/i18n-context";
 import AnimatedSection from "@/components/animated-section";
 import { Truck, RotateCcw, CreditCard, Sparkles, CheckCircle } from "lucide-react";
 
+const icons = [<Truck className="w-6 h-6" />, <RotateCcw className="w-6 h-6" />, <CreditCard className="w-6 h-6" />];
+
 export default function ShippingPage() {
   const { t } = useI18n();
-
-  const sections = [
-    {
-      icon: <Truck className="w-6 h-6" />,
-      title: "Shipping Information",
-      text: "We deliver across all wilayas of Algeria. Delivery takes 2-5 business days. Cash on delivery is available nationwide.",
-    },
-    {
-      icon: <RotateCcw className="w-6 h-6" />,
-      title: "Returns & Exchanges",
-      text: "You may return unused products within 7 days of delivery. Items must be in original packaging. Contact us via phone or the contact form to initiate a return.",
-    },
-    {
-      icon: <CreditCard className="w-6 h-6" />,
-      title: "Payment Methods",
-      text: "We accept cash on delivery (COD) and bank transfers.",
-    },
-  ];
 
   return (
     <div>
@@ -44,7 +28,7 @@ export default function ShippingPage() {
       <section className="py-16 lg:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-6">
-            {sections.map((s, i) => (
+            {(t.shipping.sections as unknown as { title: string; text: string }[]).map((s, i) => (
               <AnimatedSection key={i}>
                 <div
                   className="bg-white rounded-2xl p-6 lg:p-8 flex items-start gap-5 transition-all duration-300 hover:-translate-y-0.5"
@@ -53,7 +37,7 @@ export default function ShippingPage() {
                   <span className="w-12 h-12 shrink-0 rounded-xl flex items-center justify-center text-white"
                     style={{ background: "linear-gradient(135deg, #b87a30, #d4943f)" }}
                   >
-                    {s.icon}
+                    {icons[i] || icons[0]}
                   </span>
                   <div className="min-w-0">
                     <h2 className="text-xl font-bold text-gray-900 mb-2">{s.title}</h2>
@@ -69,9 +53,9 @@ export default function ShippingPage() {
               <div className="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="w-7 h-7 text-emerald-600" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Need Help?</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">{t.shipping.title}</h2>
               <p className="text-gray-500 max-w-md mx-auto">
-                If you have any questions about shipping or returns, don&apos;t hesitate to contact our support team.
+                {t.shipping.subtitle}
               </p>
             </div>
           </AnimatedSection>

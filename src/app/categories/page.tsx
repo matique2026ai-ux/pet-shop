@@ -66,7 +66,7 @@ export default function CategoriesPage() {
                       <div className="flex items-center justify-between mb-3">
                         <h2 className="text-xl font-bold text-gray-900">{cat.name}</h2>
                         <span className="text-sm text-gray-400 bg-gray-50 px-3 py-1 rounded-full">
-                          {catCounts[cat.id] || cat.subcategories.length} {t.categories.items}
+                          {catCounts[cat.id] !== undefined ? catCounts[cat.id] : cat.subcategories.length} {t.categories.items}
                         </span>
                       </div>
 

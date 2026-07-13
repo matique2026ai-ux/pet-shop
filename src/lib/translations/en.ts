@@ -190,10 +190,25 @@ export const en = {
   faq: {
     title: "Frequently Asked Questions",
     subtitle: "Everything you need to know about shopping with us",
+    items: [
+      { q: "What payment methods do you accept?", a: "We accept cash on delivery (COD) and bank transfers across Algeria." },
+      { q: "How long does delivery take?", a: "Delivery takes 2-5 business days depending on your wilaya (province)." },
+      { q: "What is your return policy?", a: "You can return unused products within 7 days of delivery. Contact us to initiate a return." },
+      { q: "Do you deliver outside Algeria?", a: "Currently we only deliver within Algeria. International delivery coming soon." },
+      { q: "How can I track my order?", a: "After placing an order, we'll contact you by phone to confirm delivery details." },
+      { q: "Are your products authentic?", a: "Yes, all our products are sourced from trusted brands and verified suppliers." },
+      { q: "Can I cancel my order?", a: "You can cancel within 24 hours of placing the order. After that, it's already being processed." },
+      { q: "Do you have a physical store?", a: "Yes, visit our store in Algiers. Check the Contact page for details." },
+    ],
   },
   shipping: {
     title: "Shipping & Returns",
     subtitle: "Delivery and return policies",
+    sections: [
+      { title: "Delivery Information", text: "We deliver to all wilayas across Algeria. Orders are processed within 24 hours and delivered within 2-5 business days. Delivery is free for orders over 5,000 DZD. Standard delivery fee is 500 DZD." },
+      { title: "Return Policy", text: "You may return unused and unopened products within 7 days of delivery. To initiate a return, contact our customer service team. Return shipping costs are the responsibility of the customer unless the product is defective." },
+      { title: "Payment Methods", text: "We accept cash on delivery (COD) for all orders. Bank transfers are also accepted for orders over 10,000 DZD. All prices are in Algerian Dinar (DZD) and include applicable taxes." },
+    ],
   },
   contact: {
     title: "Get in Touch",

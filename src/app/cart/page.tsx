@@ -191,12 +191,16 @@ export default function CartPage() {
                   total: totalPrice,
                 };
                 try {
-                  await fetch("/api/orders", {
+                  const res = await fetch("/api/orders", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(order),
                   });
-                } catch {}
+                  if (!res.ok) throw new Error("Server error");
+                } catch (e) {
+                  alert("Failed to place order. Please try again.");
+                  return;
+                }
                 setOrderPlaced(true);
                 clearCart();
               }}

@@ -5,41 +5,6 @@ import { useI18n } from "@/lib/i18n-context";
 import AnimatedSection from "@/components/animated-section";
 import { ChevronDown, HelpCircle, Sparkles } from "lucide-react";
 
-const faqItems: { q: string; a: string }[] = [
-  {
-    q: "What payment methods do you accept?",
-    a: "We accept cash on delivery (COD) and bank transfers across Algeria.",
-  },
-  {
-    q: "How long does delivery take?",
-    a: "Delivery takes 2-5 business days depending on your wilaya (province).",
-  },
-  {
-    q: "What is your return policy?",
-    a: "You can return unused products within 7 days of delivery. Contact us to initiate a return.",
-  },
-  {
-    q: "Do you deliver outside Algeria?",
-    a: "Currently we only deliver within Algeria. International delivery coming soon.",
-  },
-  {
-    q: "How can I track my order?",
-    a: "After placing an order, we'll contact you by phone to confirm delivery details.",
-  },
-  {
-    q: "Are your products authentic?",
-    a: "Yes, all our products are sourced from trusted brands and verified suppliers.",
-  },
-  {
-    q: "Can I cancel my order?",
-    a: "You can cancel within 24 hours of placing the order. After that, it's already being processed.",
-  },
-  {
-    q: "Do you have a physical store?",
-    a: "Yes, visit our store in Algiers. Check the Contact page for details.",
-  },
-];
-
 export default function FAQPage() {
   const { t } = useI18n();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -66,7 +31,7 @@ export default function FAQPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="space-y-3">
-              {faqItems.map((item, i) => (
+              {(t.faq.items as unknown as { q: string; a: string }[]).map((item, i) => (
                 <div
                   key={i}
                   className="bg-white rounded-2xl overflow-hidden transition-all duration-300"

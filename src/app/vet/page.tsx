@@ -136,13 +136,13 @@ export default function VetPage() {
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t.vet.teamTitle}</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-              {team.map((m) => (
+              {team.map((m, i) => (
                 <div key={m.id} className="group relative bg-white rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-1.5"
                   style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.25)" }}
                 >
                   <div className="relative h-56 overflow-hidden">
                     <Image
-                      src={m.id === "team-1" ? "https://picsum.photos/seed/vet-team1/400/500" : m.id === "team-2" ? "https://picsum.photos/seed/vet-team2/400/500" : "https://picsum.photos/seed/vet-team3/400/500"}
+                      src={`https://picsum.photos/seed/vet-team${i + 1}/400/500`}
                       alt={m.name}
                       fill
                       className="object-cover transition-all duration-700 group-hover:scale-105"

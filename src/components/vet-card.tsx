@@ -6,14 +6,14 @@ import type { VetService } from "@/lib/data";
 import { useI18n } from "@/lib/i18n-context";
 
 const serviceImages: Record<string, string> = {
-  "vet-1": "https://picsum.photos/seed/vet-checkup-card/600/800",
-  "vet-2": "https://picsum.photos/seed/vet-vaccination-card/600/800",
-  "vet-3": "https://picsum.photos/seed/vet-dental-card/600/800",
-  "vet-4": "https://picsum.photos/seed/vet-surgery-card/600/800",
-  "vet-5": "https://picsum.photos/seed/vet-microchip-card/600/800",
-  "vet-6": "https://picsum.photos/seed/vet-labs-card/600/800",
-  "vet-7": "https://picsum.photos/seed/vet-grooming-card/600/800",
-  "vet-8": "https://picsum.photos/seed/vet-nutrition-card/600/800",
+  v1: "https://picsum.photos/seed/vet-service1/600/400",
+  v2: "https://picsum.photos/seed/vet-service2/600/400",
+  v3: "https://picsum.photos/seed/vet-service3/600/400",
+  v4: "https://picsum.photos/seed/vet-service4/600/400",
+  v5: "https://picsum.photos/seed/vet-service5/600/400",
+  v6: "https://picsum.photos/seed/vet-service6/600/400",
+  v7: "https://picsum.photos/seed/vet-service7/600/400",
+  v8: "https://picsum.photos/seed/vet-service8/600/400",
 };
 
 const iconMap: Record<string, React.ReactNode> = {

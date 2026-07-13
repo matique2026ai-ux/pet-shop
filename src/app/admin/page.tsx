@@ -10,7 +10,7 @@ import {
 } from "recharts";
 import {
   Users, ShoppingBag, DollarSign, Package, TrendingUp, TrendingDown,
-  MoreHorizontal, Eye, Edit, Trash2, ArrowUpRight, Calendar, Menu, X, Lock,
+  Edit, Trash2, ArrowUpRight, Calendar, Menu, X, Lock,
   LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Database,
 } from "lucide-react";
 
@@ -473,10 +473,10 @@ export default function AdminDashboard() {
   }
 
   const productCount = products.length;
-  const totalRevenue = products.reduce((s, p) => s + p.price, 0);
+  const inventoryValue = products.reduce((s, p) => s + p.price, 0);
   const catDist = categories.map((c) => ({
     name: c.name,
-    value: products.filter((p) => p.category === c.id).length || 1,
+    value: products.filter((p) => p.category === c.id).length,
   }));
 
   return (
@@ -587,8 +587,8 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   <StatCard
                     icon={DollarSign}
-                    label="Total Revenue"
-                    value={productsError ? "$124,500" : `$${totalRevenue.toLocaleString()}`}
+                    label="Inventory Value"
+                    value={productsError ? "$124,500" : `$${inventoryValue.toLocaleString()}`}
                     trend="+12.5% from last month"
                     trendUp
                     color="bg-emerald-100 text-emerald-600"
@@ -677,15 +677,19 @@ export default function AdminDashboard() {
                       </ResponsiveContainer>
                     </div>
                     <div className="space-y-2.5 mt-2">
-                      {(catDist.length ? catDist : sampleCategoryDist).map((item, i) => (
-                        <div key={item.name} className="flex items-center justify-between text-sm">
-                          <div className="flex items-center gap-2">
-                            <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COLORS[i] }} />
-                            <span className="text-gray-700">{item.name}</span>
+                      {(catDist.length ? catDist : sampleCategoryDist).map((item, i) => {
+                        const total = (catDist.length ? catDist : sampleCategoryDist).reduce((s: number, d: any) => s + d.value, 0) || 1;
+                        const pct = Math.round((item.value / total) * 100);
+                        return (
+                          <div key={item.name} className="flex items-center justify-between text-sm">
+                            <div className="flex items-center gap-2">
+                              <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COLORS[i] }} />
+                              <span className="text-gray-700">{item.name}</span>
+                            </div>
+                            <span className="font-semibold text-gray-900">{item.value} ({pct}%)</span>
                           </div>
-                          <span className="font-semibold text-gray-900">{item.value}%</span>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -1130,13 +1134,13 @@ export default function AdminDashboard() {
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <h2 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <Link href="/api/seed" className="flex items-center gap-3 p-4 rounded-xl bg-amber-50 border border-amber-100 hover:bg-amber-100 transition-colors">
-                      <Database className="w-5 h-5 text-amber-600" />
+                    <button onClick={handleSeed} disabled={seeding} className="flex items-center gap-3 p-4 rounded-xl bg-amber-50 border border-amber-100 hover:bg-amber-100 transition-colors text-left disabled:opacity-50 w-full">
+                      <Database className="w-5 h-5 text-amber-600 shrink-0" />
                       <div>
                         <p className="text-sm font-semibold text-amber-900">Re-seed Database</p>
-                        <p className="text-xs text-amber-700">Import all demo products</p>
+                        <p className="text-xs text-amber-700">{seeding ? "Importing..." : "Import all demo products"}</p>
                       </div>
-                    </Link>
+                    </button>
                     <Link href="/" className="flex items-center gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 transition-colors">
                       <ArrowUpRight className="w-5 h-5 text-emerald-600" />
                       <div>

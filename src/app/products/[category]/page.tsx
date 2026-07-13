@@ -7,8 +7,7 @@ import { useI18n } from "@/lib/i18n-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
 import AnimatedSection from "@/components/animated-section";
 import ProductCard from "@/components/product-card";
-import { ChevronRight, ArrowLeft, LayoutGrid, List, Cat, Dog, Bird, Fish, Rabbit, PawPrint, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { ChevronRight, ArrowLeft, Cat, Dog, Bird, Fish, Rabbit, PawPrint, Sparkles } from "lucide-react";
 
 const catHeroImages: Record<string, string> = {
   cats: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1200&h=600&fit=crop",
