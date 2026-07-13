@@ -90,4 +90,4 @@ INSERT INTO subcategories (id, category_id, name) VALUES
   ('dogs-accessories', 'dogs', 'Accessories'),
   ('birds-food', 'birds', 'Food'), ('birds-cages', 'birds', 'Cages'), ('birds-accessories', 'birds', 'Accessories'),
   ('fish-aquariums', 'fish', 'Aquariums'), ('fish-food', 'fish', 'Food'), ('fish-accessories', 'fish', 'Accessories'),
-  ('small-food', 'small-pets', 'Food'), ('small-cages', 'small-pets', 'Cages');
+   ('smallpets-food', 'small-pets', 'Food'), ('smallpets-cages', 'small-pets', 'Cages');

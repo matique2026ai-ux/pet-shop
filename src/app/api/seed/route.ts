@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase";
-import { products } from "@/lib/data";
+import { products, categories } from "@/lib/data";
 
 export async function POST(request: Request) {
   if (request.headers.get("x-admin-secret") !== process.env.ADMIN_SECRET) {
@@ -9,6 +9,23 @@ export async function POST(request: Request) {
 
   const supabase = createClient();
 
+  // Ensure subcategories exist (upsert from data.ts)
+  const subcatInserts = categories.flatMap((c) =>
+    c.subcategories.map((s) => ({
+      id: s.id,
+      category_id: c.id,
+      name: s.name,
+    }))
+  );
+
+  for (const sc of subcatInserts) {
+    await supabase.from("subcategories").upsert(sc, { onConflict: "id" });
+  }
+
+  // Delete existing products to avoid duplicates
+  await supabase.from("products").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+
+  // Insert all products from data.ts
   const mapped = products.map((p) => ({
     name: p.name,
     category: p.category,
