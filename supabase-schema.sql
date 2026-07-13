@@ -61,6 +61,17 @@ ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE subcategories ENABLE ROW LEVEL SECURITY;
 
+-- Drop any pre-existing policies so this script is safe to re-run.
+DROP POLICY IF EXISTS "Allow public read products" ON products;
+DROP POLICY IF EXISTS "Allow public read categories" ON categories;
+DROP POLICY IF EXISTS "Allow public read subcategories" ON subcategories;
+DROP POLICY IF EXISTS "Allow authenticated insert products" ON products;
+DROP POLICY IF EXISTS "Allow authenticated update products" ON products;
+DROP POLICY IF EXISTS "Allow authenticated delete products" ON products;
+DROP POLICY IF EXISTS "Allow authenticated read orders" ON orders;
+DROP POLICY IF EXISTS "Allow authenticated update orders" ON orders;
+DROP POLICY IF EXISTS "Allow public insert orders" ON orders;
+
 -- Allow public read access
 CREATE POLICY "Allow public read products" ON products FOR SELECT USING (true);
 CREATE POLICY "Allow public read categories" ON categories FOR SELECT USING (true);
