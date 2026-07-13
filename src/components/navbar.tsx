@@ -148,7 +148,7 @@ export default function Navbar() {
                     {catIcons[cat.icon] ?? <PawPrint className="w-5 h-5" />}
                   </span>
                   <h3 className="font-bold text-gray-900 text-sm mb-1">{cat.name}</h3>
-                  <p className="text-xs text-gray-400 mb-3">{cat.subcategories.length} subcategories</p>
+                  <p className="text-xs text-gray-400 mb-3">{t.nav.subcategoryCount.replace("{n}", String(cat.subcategories.length))}</p>
                   <div className="flex flex-wrap gap-1">
                     {cat.subcategories.slice(0, 3).map((sub) => (
                       <span key={sub.id} className="px-2 py-0.5 bg-white text-[10px] text-gray-500 rounded-md border border-gray-100">
@@ -170,7 +170,7 @@ export default function Navbar() {
                   <Stethoscope className="w-5 h-5" />
                 </span>
                 <h3 className="font-bold text-gray-900 text-sm mb-1">{t.nav.vet}</h3>
-                <p className="text-xs text-gray-400">Book an appointment</p>
+                <p className="text-xs text-gray-400">{t.nav.bookAppointment}</p>
               </Link>
             </div>
           </div>

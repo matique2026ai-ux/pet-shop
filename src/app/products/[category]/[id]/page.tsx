@@ -11,18 +11,20 @@ import { Star, ChevronRight, Check, ShoppingCart, ArrowLeft } from "lucide-react
 
 export default function ProductDetailPage() {
   const { t } = useI18n();
-  const { products } = useTranslatedData();
+  const { products, categories } = useTranslatedData();
   const params = useParams();
   const product = products.find((p) => p.id === params.id);
 
   if (!product) {
     return (
       <div className="text-center py-20">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h1>
-        <Link href="/products" className="text-emerald-600 hover:underline">View All Products</Link>
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">{t.products.notFound}</h1>
+        <Link href="/products" className="text-emerald-600 hover:underline">{t.products.viewAll}</Link>
       </div>
     );
   }
+
+  const catName = categories.find((c) => c.id === product.category)?.name ?? product.category;
 
   const related = products.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 4);
 
@@ -31,11 +33,11 @@ export default function ProductDetailPage() {
       <section className="bg-white border-b border-gray-100 py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2 text-sm text-gray-400">
-            <Link href="/" className="hover:text-emerald-600">Home</Link>
+            <Link href="/" className="hover:text-emerald-600">{t.products.breadcrumbHome}</Link>
             <ChevronRight className="w-3 h-3" />
             <Link href="/products" className="hover:text-emerald-600">{t.products.title}</Link>
             <ChevronRight className="w-3 h-3" />
-            <Link href={`/products/${product.category}`} className="hover:text-emerald-600 capitalize">{product.category}</Link>
+            <Link href={`/products/${product.category}`} className="hover:text-emerald-600">{catName}</Link>
             <ChevronRight className="w-3 h-3" />
             <span className="text-gray-900">{product.name}</span>
           </div>
@@ -57,7 +59,7 @@ export default function ProductDetailPage() {
 
               <div>
                 <div className="mb-2">
-                  <span className="text-xs font-medium text-emerald-600 uppercase tracking-wider">{product.category}</span>
+                  <span className="text-xs font-medium text-emerald-600 uppercase tracking-wider">{catName}</span>
                 </div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
                 <div className="flex items-center gap-1 mb-4">

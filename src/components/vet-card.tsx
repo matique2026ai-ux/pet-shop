@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Clock, Stethoscope, Syringe, Bone, Scissors, Apple, FlaskRound, Smartphone, Sword, Sparkles } from "lucide-react";
 import type { VetService } from "@/lib/data";
+import { useI18n } from "@/lib/i18n-context";
 
 const serviceImages: Record<string, string> = {
   "vet-1": "https://loremflickr.com/600/800/vet,checkup?random=1",
@@ -32,6 +33,7 @@ interface VetCardProps {
 }
 
 export default function VetCard({ service }: VetCardProps) {
+  const { t } = useI18n();
   return (
     <div className="group relative overflow-hidden rounded-3xl transition-all duration-500 hover:-translate-y-1.5"
       style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.05)" }}
@@ -67,7 +69,7 @@ export default function VetCard({ service }: VetCardProps) {
           {service.duration}
         </span>
         <span className="flex items-center gap-1 text-xs font-semibold text-[#8B7560]">
-          <Sparkles className="w-3 h-3" /> Book now
+          <Sparkles className="w-3 h-3" /> {t.vet.bookNow}
         </span>
       </div>
     </div>

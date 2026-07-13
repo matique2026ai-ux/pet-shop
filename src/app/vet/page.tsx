@@ -20,13 +20,14 @@ const serviceImages: Record<string, string> = {
 
 export default function VetPage() {
   const { t } = useI18n();
+  const { vetServices, team, testimonials } = useTranslatedData();
 
   return (
     <div>
       <section className="relative overflow-hidden min-h-[70vh] flex items-center">
         <Image
           src="https://loremflickr.com/1400/900/cat,veterinary?random=100"
-          alt="Veterinary clinic"
+          alt={t.vet.title}
           fill
           className="object-cover"
           priority
@@ -36,7 +37,7 @@ export default function VetPage() {
           <AnimatedSection>
             <div className="max-w-xl">
               <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-xl rounded-full text-sm text-emerald-200 border border-white/10 mb-5">
-                <Sparkles className="w-4 h-4" /> Premium Veterinary Care
+                <Sparkles className="w-4 h-4" /> {t.vet.heroBadge}
               </span>
               <h1 className="text-5xl lg:text-7xl font-bold text-white mb-4 leading-tight">{t.vet.title}</h1>
               <p className="text-emerald-100/70 text-lg mb-8 max-w-md leading-relaxed">{t.vet.subtitle}</p>
@@ -46,7 +47,7 @@ export default function VetPage() {
                   {t.vet.bookNow}
                 </Link>
                 <Link href="#services" className="inline-flex items-center gap-2 text-white px-6 py-3.5 rounded-2xl font-medium border border-white/20 hover:bg-white/10 transition-all hover:-translate-y-0.5">
-                  View Services
+                  {t.vet.viewServices}
                 </Link>
               </div>
             </div>
@@ -61,12 +62,12 @@ export default function VetPage() {
               style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.06)" }}
             >
               {[
-                { label: "Happy Pets", value: "2,500+" },
-                { label: "Years Experience", value: "12+" },
-                { label: "Services", value: "8+" },
-                { label: "Satisfaction", value: "98%" },
+                { label: t.vet.stats.happyPets, value: "2,500+" },
+                { label: t.vet.stats.yearsExperience, value: "12+" },
+                { label: t.vet.stats.services, value: "8+" },
+                { label: t.vet.stats.satisfaction, value: "98%" },
               ].map((s) => (
-                <div key={s.label} className="text-center">
+                <div key={s.label as string} className="text-center">
                   <div className="text-3xl font-bold text-gray-900 mb-1">{s.value}</div>
                   <div className="text-sm text-gray-500">{s.label}</div>
                 </div>
@@ -81,7 +82,7 @@ export default function VetPage() {
           <AnimatedSection>
             <div className="text-center mb-12">
               <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#F7F3ED] rounded-full text-sm text-[#8B7560] border border-[#EDE6DB] mb-3">
-                <Stethoscope className="w-4 h-4" /> Our Services
+                <Stethoscope className="w-4 h-4" /> {t.vet.servicesTitle}
               </span>
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t.vet.servicesTitle}</h2>
             </div>
@@ -116,7 +117,7 @@ export default function VetPage() {
                         {s.duration}
                       </span>
                       <span className="flex items-center gap-1 text-xs font-medium text-[#8B7560] group-hover:gap-2 transition-all">
-                        Book now <ChevronRight className="w-3 h-3" />
+                        {t.vet.bookNow} <ChevronRight className="w-3 h-3" />
                       </span>
                     </div>
                   </div>
@@ -131,7 +132,7 @@ export default function VetPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center mb-12">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full text-sm text-[#8B7560] border border-[#EDE6DB] mb-3">Our Team</span>
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full text-sm text-[#8B7560] border border-[#EDE6DB] mb-3">{t.vet.teamBadge}</span>
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t.vet.teamTitle}</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
@@ -166,7 +167,7 @@ export default function VetPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center mb-12">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#F7F3ED] rounded-full text-sm text-[#8B7560] border border-[#EDE6DB] mb-3">Testimonials</span>
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#F7F3ED] rounded-full text-sm text-[#8B7560] border border-[#EDE6DB] mb-3">{t.vet.testimonialsBadge}</span>
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t.vet.testimonialsTitle}</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
@@ -194,7 +195,7 @@ export default function VetPage() {
       <section className="relative overflow-hidden py-16 lg:py-20 min-h-[50vh] flex items-center">
         <Image
           src="https://loremflickr.com/1400/600/dog,veterinary?random=101"
-          alt="Veterinary care"
+          alt={t.vet.subtitle}
           fill
           className="object-cover"
         />
@@ -202,11 +203,11 @@ export default function VetPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative w-full">
           <AnimatedSection>
             <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-xl rounded-full text-sm text-emerald-200 border border-white/10 mb-4">
-              <Sparkles className="w-4 h-4" /> We&apos;re Here for Your Pet
+              <Sparkles className="w-4 h-4" /> {t.vet.ctaBadge}
             </span>
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">Ready to Book?</h2>
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">{t.vet.ctaTitle}</h2>
             <p className="text-emerald-100/60 mb-8 max-w-md mx-auto text-lg">
-              Schedule an appointment with our expert veterinarians today.
+              {t.vet.ctaText}
             </p>
             <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-[#4A3A2A] px-8 py-3.5 rounded-2xl font-bold hover:bg-emerald-50 transition-all shadow-xl hover:-translate-y-0.5">
               {t.vet.bookNow}

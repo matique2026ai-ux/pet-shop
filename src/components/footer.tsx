@@ -42,10 +42,10 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4">{t.footer.contactInfo}</h3>
             <ul className="space-y-2 text-sm text-stone-400">
-              <li>123 Pet Street</li>
-              <li>New York, NY 10001</li>
-              <li>+1 (234) 567-890</li>
-              <li>hello@pawsandwings.com</li>
+              <li>{t.contact.addressText?.split("\n")[0] || "123 Pet Street"}</li>
+              <li>{t.contact.addressText?.split("\n")[1] || "New York, NY 10001"}</li>
+              <li>{t.contact.phoneText || "+1 (234) 567-890"}</li>
+              <li>{t.contact.emailText || "hello@pawsandwings.com"}</li>
             </ul>
           </div>
 

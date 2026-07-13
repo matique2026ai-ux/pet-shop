@@ -18,10 +18,10 @@ const categoryImages: Record<string, string> = {
   "small-pets": "https://images.unsplash.com/photo-1535241749838-299277b6305f?w=400&h=400&fit=crop",
 };
 
-const benefits = [
-  { icon: <Truck className="w-6 h-6" />, title: "توصيل إلى باب المنزل", text: "بأقل الأسعار وأسرع وقت" },
-  { icon: <Shield className="w-6 h-6" />, title: "طلباتك معانا في أمان", text: "جودة منتجات مضمونة 100%" },
-  { icon: <Heart className="w-6 h-6" />, title: "تنوع المنتجات", text: "كل ما يحتاجه أليفك في مكان واحد" },
+const benefitIcons = [
+  <Truck className="w-6 h-6" />,
+  <Shield className="w-6 h-6" />,
+  <Heart className="w-6 h-6" />,
 ];
 
 const heroVideos = [
@@ -81,8 +81,8 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center mb-2">
-              <p className="text-lg text-emerald-600 font-medium">نعمل معاً ... لإسعاد أليفك</p>
-              <p className="text-gray-500 text-sm mt-1">كل ما يحتاجه أليفك .. متوفر لدينا</p>
+              <p className="text-lg text-emerald-600 font-medium">{t.home.tagline}</p>
+              <p className="text-gray-500 text-sm mt-1">{t.home.taglineSub}</p>
             </div>
           </AnimatedSection>
         </div>
@@ -111,9 +111,9 @@ export default function HomePage() {
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold text-gray-900">الأكثر مبيعاً</h2>
+            <h2 className="text-2xl font-bold text-gray-900">{t.home.bestsellers}</h2>
             <Link href="/products" className="flex items-center gap-1 text-emerald-600 font-medium text-sm hover:text-emerald-700">
-              عرض الكل <Arrow className="w-4 h-4" />
+              {t.home.viewAll} <Arrow className="w-4 h-4" />
             </Link>
           </div>
 
@@ -128,12 +128,12 @@ export default function HomePage() {
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
-            <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">مزايا التسوق من نوادر الطيور</h2>
+            <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">{t.home.benefitsTitle}</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {benefits.map((b, i) => (
+              {t.home.benefits.map((b: { title: string; text: string }, i: number) => (
                 <div key={i} className="bg-emerald-50 rounded-2xl p-6 text-center border border-emerald-100">
                   <div className="w-14 h-14 bg-emerald-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-4">
-                    {b.icon}
+                    {benefitIcons[i]}
                   </div>
                   <h3 className="font-bold text-gray-900 mb-1">{b.title}</h3>
                   <p className="text-sm text-gray-500">{b.text}</p>
@@ -201,10 +201,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <h2 className="text-3xl font-bold text-white mb-4">
-              Ready to Give Your Pet the Best?
+              {t.home.ctaTitle}
             </h2>
             <p className="text-gray-400 mb-8 max-w-lg mx-auto">
-              Visit our store or book an appointment with our expert veterinarians today.
+              {t.home.ctaText}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link href="/products" className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-emerald-700 transition-colors">

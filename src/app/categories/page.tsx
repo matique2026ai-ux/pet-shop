@@ -66,7 +66,7 @@ export default function CategoriesPage() {
                       <div className="flex items-center justify-between mb-3">
                         <h2 className="text-xl font-bold text-gray-900">{cat.name}</h2>
                         <span className="text-sm text-gray-400 bg-gray-50 px-3 py-1 rounded-full">
-                          {catCounts[cat.id] || cat.subcategories.length} items
+                          {catCounts[cat.id] || cat.subcategories.length} {t.categories.items}
                         </span>
                       </div>
 
@@ -84,9 +84,9 @@ export default function CategoriesPage() {
                       </div>
 
                       <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                        <span className="text-xs text-gray-400">{cat.subcategories.length} subcategories</span>
+                        <span className="text-xs text-gray-400">{t.nav.subcategoryCount.replace("{n}", String(cat.subcategories.length))}</span>
                         <span className="flex items-center gap-1 text-sm font-semibold text-[#8B7560] group-hover:gap-2 transition-all">
-                          Browse All <ChevronRight className="w-3.5 h-3.5" />
+                          {t.categories.browseAll} <ChevronRight className="w-3.5 h-3.5" />
                         </span>
                       </div>
                     </div>
@@ -101,11 +101,11 @@ export default function CategoriesPage() {
       <section className="py-16 relative overflow-hidden" style={{ background: "#F8F6F3" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <AnimatedSection>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Not sure what you need?</h2>
-            <p className="text-gray-500 mb-6 max-w-md mx-auto">Browse all products or visit our vet clinic for expert advice.</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">{t.categories.notSure}</h2>
+            <p className="text-gray-500 mb-6 max-w-md mx-auto">{t.categories.notSureDesc}</p>
             <div className="flex items-center justify-center gap-4">
-              <Link href="/products" className="inline-flex items-center gap-2 bg-white text-gray-900 px-7 py-3 rounded-2xl font-bold border border-gray-200 hover:border-gray-300 hover:-translate-y-0.5 transition-all shadow-sm">All Products</Link>
-              <Link href="/vet" className="inline-flex items-center gap-2 bg-[#8B7560] text-white px-7 py-3 rounded-2xl font-bold hover:bg-[#7D6B55] hover:-translate-y-0.5 transition-all shadow-lg shadow-[#8B7560]/20">Visit Vet Clinic</Link>
+              <Link href="/products" className="inline-flex items-center gap-2 bg-white text-gray-900 px-7 py-3 rounded-2xl font-bold border border-gray-200 hover:border-gray-300 hover:-translate-y-0.5 transition-all shadow-sm">{t.categories.allProductsLink}</Link>
+              <Link href="/vet" className="inline-flex items-center gap-2 bg-[#8B7560] text-white px-7 py-3 rounded-2xl font-bold hover:bg-[#7D6B55] hover:-translate-y-0.5 transition-all shadow-lg shadow-[#8B7560]/20">{t.categories.visitVet}</Link>
             </div>
           </AnimatedSection>
         </div>
