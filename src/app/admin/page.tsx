@@ -20,8 +20,8 @@ const sidebarTabs = [
   { label: "Dashboard", icon: LayoutDashboard, key: "dashboard" },
   { label: "Products", icon: Package2, key: "products" },
   { label: "Orders", icon: ShoppingCart, key: "orders" },
-  { label: "Analytics", icon: BarChart3, key: "analytics", soon: true },
-  { label: "Settings", icon: Settings, key: "settings", soon: true },
+  { label: "Analytics", icon: BarChart3, key: "analytics" },
+  { label: "Settings", icon: Settings, key: "settings" },
 ];
 
 interface Category {
@@ -512,26 +512,17 @@ export default function AdminDashboard() {
                 <button
                   key={tab.key}
                   onClick={() => {
-                    if (!tab.soon) {
-                      setActiveTab(tab.key);
-                      setSidebarOpen(false);
-                    }
+                    setActiveTab(tab.key);
+                    setSidebarOpen(false);
                   }}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                     isActive
                       ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                      : tab.soon
-                        ? "text-white/30 cursor-not-allowed"
-                        : "text-white/60 hover:text-white hover:bg-white/5"
+                      : "text-white/60 hover:text-white hover:bg-white/5"
                   }`}
                 >
                   <Icon className="w-5 h-5" />
                   <span>{tab.label}</span>
-                  {tab.soon && (
-                    <span className="ml-auto text-[10px] uppercase tracking-wider text-white/20 bg-white/5 px-2 py-0.5 rounded-full">
-                      Soon
-                    </span>
-                  )}
                 </button>
               );
             })}
@@ -991,14 +982,177 @@ export default function AdminDashboard() {
               </div>
             )}
 
-            {/* ===== ANALYTICS / SETTINGS ===== */}
-            {(activeTab === "analytics" || activeTab === "settings") && (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 flex flex-col items-center justify-center text-center">
-                <BarChart3 className="w-16 h-16 text-gray-200 mb-4" />
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Coming Soon</h3>
-                <p className="text-sm text-gray-500 max-w-xs">
-                  This section is under development. Check back later for updates.
-                </p>
+            {/* ===== ANALYTICS ===== */}
+            {activeTab === "analytics" && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center mb-3">
+                      <Package className="w-5 h-5 text-emerald-600" />
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900">{products.length}</p>
+                    <p className="text-sm text-gray-500">Total Products</p>
+                  </div>
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center mb-3">
+                      <Package className="w-5 h-5 text-green-600" />
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900">{products.filter((p) => p.in_stock).length}</p>
+                    <p className="text-sm text-gray-500">In Stock</p>
+                  </div>
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center mb-3">
+                      <Package className="w-5 h-5 text-red-600" />
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900">{products.filter((p) => !p.in_stock).length}</p>
+                    <p className="text-sm text-gray-500">Out of Stock</p>
+                  </div>
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center mb-3">
+                      <LayoutDashboard className="w-5 h-5 text-purple-600" />
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900">{categories.length}</p>
+                    <p className="text-sm text-gray-500">Categories</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <h2 className="text-lg font-bold text-gray-900 mb-4">Products per Category</h2>
+                    <div className="h-72">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={categories.map((c) => ({ name: c.name, count: products.filter((p) => p.category === c.id).length }))}>
+                          <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#9CA3AF" }} />
+                          <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
+                          <Tooltip />
+                          <Bar dataKey="count" name="Products" fill="#059669" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <h2 className="text-lg font-bold text-gray-900 mb-4">Price Distribution</h2>
+                    <div className="space-y-3">
+                      {[
+                        { label: "Under $20", range: [0, 20] },
+                        { label: "$20 - $50", range: [20, 50] },
+                        { label: "$50 - $100", range: [50, 100] },
+                        { label: "$100+", range: [100, Infinity] },
+                      ].map((b) => {
+                        const count = products.filter((p) => p.price >= b.range[0] && p.price < b.range[1]).length;
+                        const pct = products.length ? (count / products.length) * 100 : 0;
+                        return (
+                          <div key={b.label}>
+                            <div className="flex items-center justify-between text-sm mb-1">
+                              <span className="text-gray-700">{b.label}</span>
+                              <span className="font-semibold text-gray-900">{count} ({pct.toFixed(0)}%)</span>
+                            </div>
+                            <div className="w-full bg-gray-100 rounded-full h-2">
+                              <div className="bg-emerald-500 h-2 rounded-full transition-all" style={{ width: `${pct}%` }} />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                  <div className="p-6 pb-4">
+                    <h2 className="text-lg font-bold text-gray-900">Top Rated Products</h2>
+                    <p className="text-sm text-gray-500 mt-0.5">Products with highest ratings</p>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-y border-gray-100 bg-gray-50/50">
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Name</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Category</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Rating</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Reviews</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Price</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[...products].sort((a, b) => b.rating - a.rating).slice(0, 10).map((product) => {
+                          const cat = categories.find((c) => c.id === product.category);
+                          return (
+                            <tr key={product.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                              <td className="px-6 py-4 font-semibold text-gray-900">{product.name}</td>
+                              <td className="px-6 py-4 text-gray-700">{cat?.name || product.category}</td>
+                              <td className="px-6 py-4">
+                                <span className="inline-flex items-center gap-1 text-amber-500">
+                                  ★ {product.rating}
+                                </span>
+                              </td>
+                              <td className="px-6 py-4 text-gray-700">{product.reviews}</td>
+                              <td className="px-6 py-4 font-semibold text-gray-900">${product.price.toFixed(2)}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ===== SETTINGS ===== */}
+            {activeTab === "settings" && (
+              <div className="space-y-6">
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                  <h2 className="text-lg font-bold text-gray-900 mb-4">Store Settings</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Store Name</label>
+                      <input type="text" defaultValue="Paws & Wings" readOnly className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm bg-gray-50 text-gray-500" />
+                      <p className="text-xs text-gray-400 mt-1">Edit in layout.tsx</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Currency</label>
+                      <input type="text" value="DZD (Algerian Dinar)" readOnly className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm bg-gray-50 text-gray-500" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Admin Password</label>
+                        <input type="password" value="admin123" readOnly className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm bg-gray-50 text-gray-500" />
+                        <p className="text-xs text-gray-400 mt-1">Change in page.tsx ADMIN_PASSWORD</p>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Supabase Project</label>
+                        <input type="text" value="Connected ✓" readOnly className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm bg-emerald-50 text-emerald-700 font-medium" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                  <h2 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <Link href="/api/seed" className="flex items-center gap-3 p-4 rounded-xl bg-amber-50 border border-amber-100 hover:bg-amber-100 transition-colors">
+                      <Database className="w-5 h-5 text-amber-600" />
+                      <div>
+                        <p className="text-sm font-semibold text-amber-900">Re-seed Database</p>
+                        <p className="text-xs text-amber-700">Import all demo products</p>
+                      </div>
+                    </Link>
+                    <Link href="/" className="flex items-center gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 transition-colors">
+                      <ArrowUpRight className="w-5 h-5 text-emerald-600" />
+                      <div>
+                        <p className="text-sm font-semibold text-emerald-900">View Store</p>
+                        <p className="text-xs text-emerald-700">Open public site</p>
+                      </div>
+                    </Link>
+                    <Link href="/products" className="flex items-center gap-3 p-4 rounded-xl bg-blue-50 border border-blue-100 hover:bg-blue-100 transition-colors">
+                      <Package2 className="w-5 h-5 text-blue-600" />
+                      <div>
+                        <p className="text-sm font-semibold text-blue-900">Browse Products</p>
+                        <p className="text-xs text-blue-700">View product catalog</p>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
               </div>
             )}
           </main>
