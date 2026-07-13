@@ -29,6 +29,7 @@ export const en = {
     allCategories: "All Categories",
     subcategoryCount: "{n} subcategories",
     bookAppointment: "Book an appointment",
+    whatsapp: "Chat with us on WhatsApp",
   },
   hero: {
     title: "Your Pet Deserves the Best",
@@ -92,6 +93,17 @@ export const en = {
     noCategory: "No products in this category yet.",
     breadcrumbHome: "Home",
     breadcrumbCategories: "Categories",
+  },
+  cart: {
+    title: "Shopping Cart",
+    empty: "Your cart is empty",
+    emptyDesc: "Looks like you haven't added anything yet",
+    continueShopping: "Continue Shopping",
+    summary: "Order Summary",
+    subtotal: "Subtotal",
+    checkout: "Checkout",
+    remove: "Remove",
+    quantity: "Qty",
   },
   vet: {
     title: "Veterinary Clinic",

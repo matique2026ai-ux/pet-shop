@@ -29,6 +29,7 @@ export const fr = {
     allCategories: "Toutes les Catégories",
     subcategoryCount: "{n} sous-catégories",
     bookAppointment: "Prendre RDV",
+    whatsapp: "Discutez avec nous sur WhatsApp",
   },
   hero: {
     title: "Votre Mérite le Meilleur",
@@ -92,6 +93,17 @@ export const fr = {
     noCategory: "Aucun produit dans cette catégorie",
     breadcrumbHome: "Accueil",
     breadcrumbCategories: "Catégories",
+  },
+  cart: {
+    title: "Panier",
+    empty: "Votre panier est vide",
+    emptyDesc: "Vous n'avez pas encore ajouté d'articles",
+    continueShopping: "Continuer vos achats",
+    summary: "Récapitulatif",
+    subtotal: "Sous-total",
+    checkout: "Commander",
+    remove: "Supprimer",
+    quantity: "Qté",
   },
   vet: {
     title: "Clinique Vétérinaire",

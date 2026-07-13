@@ -70,20 +70,20 @@ export default function ContactPage() {
                 >
                   <h2 className="text-2xl font-bold text-gray-900 mb-1">{t.contact.formTitle}</h2>
                   <p className="text-sm text-gray-500 mb-6">{t.contact.formSubtitle}</p>
-                  <form onSubmit={(e) => e.preventDefault()} className="space-y-5">
+                  <form action="https://formspree.io/f/xjkyqkdr" method="POST" className="space-y-5">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.contact.formName}</label>
-                        <input type="text" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8B7560]/20 focus:border-[#8B7560] focus:bg-white transition-all" placeholder={t.contact.formNamePlaceholder} />
+                        <input type="text" name="name" required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8B7560]/20 focus:border-[#8B7560] focus:bg-white transition-all" placeholder={t.contact.formNamePlaceholder} />
                       </div>
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.contact.formEmail}</label>
-                        <input type="email" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8B7560]/20 focus:border-[#8B7560] focus:bg-white transition-all" placeholder={t.contact.formEmailPlaceholder} />
+                        <input type="email" name="email" required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8B7560]/20 focus:border-[#8B7560] focus:bg-white transition-all" placeholder={t.contact.formEmailPlaceholder} />
                       </div>
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.contact.formMessage}</label>
-                      <textarea rows={5} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8B7560]/20 focus:border-[#8B7560] focus:bg-white transition-all resize-none" placeholder={t.contact.formMessagePlaceholder} />
+                      <textarea name="message" required rows={5} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8B7560]/20 focus:border-[#8B7560] focus:bg-white transition-all resize-none" placeholder={t.contact.formMessagePlaceholder} />
                     </div>
                     <button type="submit" className="inline-flex items-center gap-2 bg-[#8B7560] text-white px-8 py-3.5 rounded-2xl font-bold hover:bg-[#7D6B55] transition-all shadow-lg shadow-[#8B7560]/20 hover:shadow-xl hover:-translate-y-0.5">
                       <Send className="w-4 h-4" />
@@ -98,13 +98,17 @@ export default function ContactPage() {
 
           <AnimatedSection>
             <div className="mt-12 relative overflow-hidden rounded-3xl h-72">
-              <Image
-                src="https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=1200&h=400&fit=crop"
-                alt={t.contact.storeName}
-                fill
-                className="object-cover"
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.2219901290355!2d-74.00369368400567!3d40.71312837933024!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a316f5e5b5b%3A0x2c8a7c9c6f5e5b5b!2sNew+York%2C+NY!5e0!3m2!1sen!2sus!4v1"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="rounded-3xl"
+                title={t.contact.storeName}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
               <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-xl rounded-2xl px-5 py-3 border border-white/40 shadow-lg">
                 <div className="flex items-center gap-3">
                   <MapPin className="w-5 h-5 text-[#8B7560]" />

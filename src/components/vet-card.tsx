@@ -6,14 +6,14 @@ import type { VetService } from "@/lib/data";
 import { useI18n } from "@/lib/i18n-context";
 
 const serviceImages: Record<string, string> = {
-  "vet-1": "https://loremflickr.com/600/800/vet,checkup?random=1",
-  "vet-2": "https://loremflickr.com/600/800/vaccination,pet?random=2",
-  "vet-3": "https://loremflickr.com/600/800/dental,pet?random=3",
-  "vet-4": "https://loremflickr.com/600/800/veterinary,surgery?random=4",
-  "vet-5": "https://loremflickr.com/600/800/pet,care?random=5",
-  "vet-6": "https://loremflickr.com/600/800/cat,litter?random=6",
-  "vet-7": "https://loremflickr.com/600/800/pet,toy?random=7",
-  "vet-8": "https://loremflickr.com/600/800/pet,grooming?random=8",
+  "vet-1": "https://picsum.photos/seed/vet-checkup-card/600/800",
+  "vet-2": "https://picsum.photos/seed/vet-vaccination-card/600/800",
+  "vet-3": "https://picsum.photos/seed/vet-dental-card/600/800",
+  "vet-4": "https://picsum.photos/seed/vet-surgery-card/600/800",
+  "vet-5": "https://picsum.photos/seed/vet-microchip-card/600/800",
+  "vet-6": "https://picsum.photos/seed/vet-labs-card/600/800",
+  "vet-7": "https://picsum.photos/seed/vet-grooming-card/600/800",
+  "vet-8": "https://picsum.photos/seed/vet-nutrition-card/600/800",
 };
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -33,7 +33,7 @@ interface VetCardProps {
 }
 
 export default function VetCard({ service }: VetCardProps) {
-  const { t } = useI18n();
+  const { t, currency } = useI18n();
   return (
     <div className="group relative overflow-hidden rounded-3xl transition-all duration-500 hover:-translate-y-1.5"
       style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.05)" }}
@@ -57,7 +57,7 @@ export default function VetCard({ service }: VetCardProps) {
         <div className="absolute bottom-4 left-4 right-4">
           <div className="flex items-center justify-between mb-1">
             <h3 className="text-xl font-bold text-white drop-shadow-lg">{service.title}</h3>
-            <span className="text-2xl font-bold text-white drop-shadow-lg">${service.price}</span>
+            <span className="text-2xl font-bold text-white drop-shadow-lg">{currency}{service.price}</span>
           </div>
           <p className="text-sm text-emerald-100/80 drop-shadow line-clamp-2">{service.description}</p>
         </div>

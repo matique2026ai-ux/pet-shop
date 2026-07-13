@@ -10,7 +10,7 @@ import ProductCard from "@/components/product-card";
 import { Star, ChevronRight, Check, ShoppingCart, ArrowLeft } from "lucide-react";
 
 export default function ProductDetailPage() {
-  const { t } = useI18n();
+  const { t, currency } = useI18n();
   const { products, categories } = useTranslatedData();
   const params = useParams();
   const product = products.find((p) => p.id === params.id);
@@ -70,9 +70,9 @@ export default function ProductDetailPage() {
                 <p className="text-gray-600 mb-6 leading-relaxed">{product.description}</p>
 
                 <div className="flex items-center gap-3 mb-6">
-                  <span className="text-3xl font-bold text-gray-900">${product.price}</span>
+                  <span className="text-3xl font-bold text-gray-900">{currency}{product.price}</span>
                   {product.originalPrice && (
-                    <span className="text-lg text-gray-400 line-through">${product.originalPrice}</span>
+                    <span className="text-lg text-gray-400 line-through">{currency}{product.originalPrice}</span>
                   )}
                 </div>
 
@@ -111,7 +111,7 @@ export default function ProductDetailPage() {
             <AnimatedSection>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 gap-y-8">
                 {related.map((p) => (
-                  <ProductCard key={p.id} product={p} t={t} variant="related" />
+                  <ProductCard key={p.id} product={p} variant="related" />
                 ))}
               </div>
             </AnimatedSection>

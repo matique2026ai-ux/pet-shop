@@ -11,11 +11,14 @@ type Translations = DeepStringify<typeof en>;
 
 const translations: Record<Language, Translations> = { en: en as unknown as Translations, fr: fr as unknown as Translations, ar: ar as unknown as Translations };
 
+const currencyMap: Record<Language, string> = { en: "$", fr: "€", ar: "د.م." };
+
 interface I18nContextType {
   lang: Language;
   setLang: (l: Language) => void;
   t: Translations;
   dir: "ltr" | "rtl";
+  currency: string;
 }
 
 const I18nContext = createContext<I18nContextType>({
@@ -23,6 +26,7 @@ const I18nContext = createContext<I18nContextType>({
   setLang: () => {},
   t: en,
   dir: "ltr",
+  currency: "$",
 });
 
 export function I18nProvider({ children }: { children: ReactNode }) {
@@ -40,9 +44,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   const t = translations[lang];
   const dir = lang === "ar" ? "rtl" : "ltr";
+  const currency = currencyMap[lang];
 
   return (
-    <I18nContext.Provider value={{ lang, setLang: setLangPersist, t, dir }}>
+    <I18nContext.Provider value={{ lang, setLang: setLangPersist, t, dir, currency }}>
       <div dir={dir}>{children}</div>
     </I18nContext.Provider>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useI18n } from "@/lib/i18n-context";
+import { useCart } from "@/lib/cart-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
@@ -22,6 +23,7 @@ const catIcons: Record<string, React.ReactNode> = {
 
 export default function Navbar() {
   const { t, lang, setLang, dir } = useI18n();
+  const { totalItems } = useCart();
   const { categories } = useTranslatedData();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
@@ -113,9 +115,14 @@ export default function Navbar() {
               {t.nav.callNow}
             </a>
 
-            <button className="relative p-2 text-white hover:text-emerald-300">
+            <Link href="/cart" className="relative p-2 text-white hover:text-emerald-300">
               <ShoppingCart className="w-5 h-5" />
-            </button>
+              {totalItems > 0 && (
+                <span className="absolute top-0 right-0 rounded-full bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
+            </Link>
 
             <button onClick={() => setMobileOpen(!mobileOpen)} className="lg:hidden p-2 text-white">
               {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

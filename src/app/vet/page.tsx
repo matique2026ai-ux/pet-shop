@@ -8,25 +8,25 @@ import AnimatedSection from "@/components/animated-section";
 import { ArrowRight, Star, Phone, Stethoscope, Sparkles, Clock, ChevronRight } from "lucide-react";
 
 const serviceImages: Record<string, string> = {
-  "vet-1": "https://loremflickr.com/600/700/vet,checkup?random=1",
-  "vet-2": "https://loremflickr.com/600/700/vaccination,pet?random=2",
-  "vet-3": "https://loremflickr.com/600/700/dental,pet?random=3",
-  "vet-4": "https://loremflickr.com/600/700/veterinary,surgery?random=4",
-  "vet-5": "https://loremflickr.com/600/700/pet,care?random=5",
-  "vet-6": "https://loremflickr.com/600/700/cat,litter?random=6",
-  "vet-7": "https://loremflickr.com/600/700/pet,toy?random=7",
-  "vet-8": "https://loremflickr.com/600/700/pet,grooming?random=8",
+  "vet-1": "https://picsum.photos/seed/vet-checkup/600/700",
+  "vet-2": "https://picsum.photos/seed/vet-vaccination/600/700",
+  "vet-3": "https://picsum.photos/seed/vet-dental/600/700",
+  "vet-4": "https://picsum.photos/seed/vet-surgery/600/700",
+  "vet-5": "https://picsum.photos/seed/vet-microchip/600/700",
+  "vet-6": "https://picsum.photos/seed/vet-labs/600/700",
+  "vet-7": "https://picsum.photos/seed/vet-grooming/600/700",
+  "vet-8": "https://picsum.photos/seed/vet-nutrition/600/700",
 };
 
 export default function VetPage() {
-  const { t } = useI18n();
+  const { t, currency } = useI18n();
   const { vetServices, team, testimonials } = useTranslatedData();
 
   return (
     <div>
       <section className="relative overflow-hidden min-h-[70vh] flex items-center">
         <Image
-          src="https://loremflickr.com/1400/900/cat,veterinary?random=100"
+          src="https://picsum.photos/seed/vet-hero/1400/900"
           alt={t.vet.title}
           fill
           className="object-cover"
@@ -108,7 +108,7 @@ export default function VetPage() {
                   <div className="p-5">
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="font-bold text-gray-900">{s.title}</h3>
-                      <span className="text-lg font-bold text-[#8B7560]">${s.price}</span>
+                      <span className="text-lg font-bold text-[#8B7560]">{currency}{s.price}</span>
                     </div>
                     <p className="text-sm text-gray-500 leading-relaxed line-clamp-2">{s.description}</p>
                     <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
@@ -142,7 +142,7 @@ export default function VetPage() {
                 >
                   <div className="relative h-56 overflow-hidden">
                     <Image
-                      src={m.id === "team-1" ? "https://loremflickr.com/400/500/veterinary,doctor?random=201" : m.id === "team-2" ? "https://loremflickr.com/400/500/pet,doctor?random=202" : "https://loremflickr.com/400/500/vet,nurse?random=203"}
+                      src={m.id === "team-1" ? "https://picsum.photos/seed/vet-team1/400/500" : m.id === "team-2" ? "https://picsum.photos/seed/vet-team2/400/500" : "https://picsum.photos/seed/vet-team3/400/500"}
                       alt={m.name}
                       fill
                       className="object-cover transition-all duration-700 group-hover:scale-105"
@@ -194,7 +194,7 @@ export default function VetPage() {
 
       <section className="relative overflow-hidden py-16 lg:py-20 min-h-[50vh] flex items-center">
         <Image
-          src="https://loremflickr.com/1400/600/dog,veterinary?random=101"
+          src="https://picsum.photos/seed/vet-cta/1400/600"
           alt={t.vet.subtitle}
           fill
           className="object-cover"

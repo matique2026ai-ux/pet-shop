@@ -29,6 +29,7 @@ export const ar = {
     allCategories: "جميع الأقسام",
     subcategoryCount: "{n} أقسام فرعية",
     bookAppointment: "احجز موعداً",
+    whatsapp: "تواصل معنا عبر واتساب",
   },
   hero: {
     title: "حيوانك الأليف يستحق الأفضل",
@@ -92,6 +93,17 @@ export const ar = {
     noCategory: "لا توجد منتجات في هذا القسم بعد",
     breadcrumbHome: "الرئيسية",
     breadcrumbCategories: "الأقسام",
+  },
+  cart: {
+    title: "عربة التسوق",
+    empty: "سلتك فارغة",
+    emptyDesc: "يبدو أنك لم تضف أي منتجات بعد",
+    continueShopping: "متابعة التسوق",
+    summary: "ملخص الطلب",
+    subtotal: "المجموع",
+    checkout: "إتمام الشراء",
+    remove: "إزالة",
+    quantity: "الكمية",
   },
   vet: {
     title: "العيادة البيطرية",

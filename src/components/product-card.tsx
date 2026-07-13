@@ -2,17 +2,26 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Star } from "lucide-react";
+import { Star, ShoppingCart } from "lucide-react";
 import type { Product } from "@/lib/data";
+import { useCart } from "@/lib/cart-context";
+import { useI18n } from "@/lib/i18n-context";
 
 interface ProductCardProps {
   product: Product;
-  t: Record<string, any>;
   variant?: "default" | "related";
 }
 
-export default function ProductCard({ product, t, variant = "default" }: ProductCardProps) {
+export default function ProductCard({ product, variant = "default" }: ProductCardProps) {
   const isRelated = variant === "related";
+  const { addItem } = useCart();
+  const { t, currency } = useI18n();
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addItem(product);
+  };
 
   return (
     <Link
@@ -66,14 +75,22 @@ export default function ProductCard({ product, t, variant = "default" }: Product
 
             <div className="flex items-center gap-2">
               <span className={`font-bold text-gray-900 ${isRelated ? "text-sm" : "text-lg"}`}>
-                ${product.price}
+                {currency}{product.price}
               </span>
               {product.originalPrice && (
                 <span className={`text-gray-400 line-through ${isRelated ? "text-xs" : "text-sm"}`}>
-                  ${product.originalPrice}
+                  {currency}{product.originalPrice}
                 </span>
               )}
             </div>
+
+            <button
+              onClick={handleAddToCart}
+              className="mt-2 inline-flex items-center gap-1.5 bg-emerald-600 text-white rounded-xl px-3 py-1.5 text-xs font-medium hover:bg-emerald-700 transition-colors"
+            >
+              <ShoppingCart className="w-3.5 h-3.5" />
+              {t.products.addToCart}
+            </button>
           </div>
         </div>
       </div>
