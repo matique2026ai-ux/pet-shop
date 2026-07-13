@@ -5,7 +5,7 @@ import { useCart } from "@/lib/cart-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Menu, X, ShoppingCart, Phone, ChevronDown, Globe, Search, MoreHorizontal, Cat, Dog, Bird, Fish, Rabbit, PawPrint, Stethoscope } from "lucide-react";
 
 const languages = [
@@ -62,6 +62,9 @@ function MoreDropdown({ links, rtl }: { links: { href: string; label: string }[]
 }
 
 export default function Navbar() {
+  const pathname = usePathname();
+  if (pathname.startsWith("/admin")) return null;
+
   const { t, lang, setLang, dir } = useI18n();
   const { totalItems } = useCart();
   const { categories } = useTranslatedData();

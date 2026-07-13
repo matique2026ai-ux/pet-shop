@@ -1,11 +1,14 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { MessageCircle } from "lucide-react";
 
 const PHONE_NUMBER = "+213555123456";
 const MESSAGE = encodeURIComponent("Hello! I have a question about your pet products.");
 
 export default function WhatsAppButton() {
+  const pathname = usePathname();
+  if (pathname.startsWith("/admin")) return null;
   const handleClick = () => {
     window.open(
       `https://wa.me/${PHONE_NUMBER}?text=${MESSAGE}`,
