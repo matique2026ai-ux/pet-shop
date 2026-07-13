@@ -1,6 +1,10 @@
 -- Run this in your Supabase SQL Editor
 -- https://supabase.com/dashboard/project/_/sql/new
 
+-- === MIGRATION (run if products table already exists with UUID id) ===
+-- ALTER TABLE products ALTER COLUMN id TYPE TEXT USING id::text;
+-- ======================================================================
+
 -- Categories table
 CREATE TABLE categories (
   id TEXT PRIMARY KEY,
@@ -20,7 +24,7 @@ CREATE TABLE subcategories (
 
 -- Products table
 CREATE TABLE products (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
   category TEXT NOT NULL REFERENCES categories(id),
   subcategory TEXT REFERENCES subcategories(id),

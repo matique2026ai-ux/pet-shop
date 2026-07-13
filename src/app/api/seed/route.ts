@@ -27,6 +27,7 @@ export async function POST(request: Request) {
 
   // Insert all products from data.ts
   const mapped = products.map((p) => ({
+    id: p.id,
     name: p.name,
     category: p.category,
     subcategory: p.subcategory,
