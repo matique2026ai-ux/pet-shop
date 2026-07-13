@@ -34,7 +34,13 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const saved = localStorage.getItem("lang") as Language | null;
-    if (saved && saved in translations) setLang(saved);
+    if (saved && saved in translations) {
+      setLang(saved);
+      return;
+    }
+    const navLang = navigator.language.slice(0, 2);
+    if (navLang === "ar") setLang("ar");
+    else if (navLang === "fr") setLang("fr");
   }, []);
 
   const setLangPersist = (l: Language) => {
