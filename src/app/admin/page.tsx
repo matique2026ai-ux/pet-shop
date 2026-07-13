@@ -195,6 +195,40 @@ export default function AdminDashboard() {
   const [useUrlInput, setUseUrlInput] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [seeding, setSeeding] = useState(false);
+  const [sortBy, setSortBy] = useState<"name" | "category" | "price" | "stock">("name");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+
+  const toggleSort = (field: typeof sortBy) => {
+    if (sortBy === field) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortBy(field);
+      setSortDir("asc");
+    }
+  };
+
+  const sortedProducts = [...products].sort((a, b) => {
+    const getVal = (p: ProductData) => {
+      switch (sortBy) {
+        case "name": return p.name.toLowerCase();
+        case "category": return categories.find((c) => c.id === p.category)?.name || p.category;
+        case "price": return p.price;
+        case "stock": return p.in_stock ? 0 : 1;
+        default: return p.name.toLowerCase();
+      }
+    };
+    const va = getVal(a);
+    const vb = getVal(b);
+    if (typeof va === "string" && typeof vb === "string") {
+      return sortDir === "asc" ? va.localeCompare(vb) : vb.localeCompare(va);
+    }
+    return sortDir === "asc" ? (va as number) - (vb as number) : (vb as number) - (va as number);
+  });
+
+  const SortArrow = ({ field }: { field: typeof sortBy }) =>
+    sortBy === field ? (
+      <span className="ml-1 inline-block text-[10px]">{sortDir === "asc" ? "▲" : "▼"}</span>
+    ) : null;
 
   const [deleteTarget, setDeleteTarget] = useState<ProductData | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -838,16 +872,24 @@ export default function AdminDashboard() {
                       <thead>
                         <tr className="border-y border-gray-100 bg-gray-50/50">
                           <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Image</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Name</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Category</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Price</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Stock</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700 select-none" onClick={() => toggleSort("name")}>
+                            Name<SortArrow field="name" />
+                          </th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700 select-none" onClick={() => toggleSort("category")}>
+                            Category<SortArrow field="category" />
+                          </th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700 select-none" onClick={() => toggleSort("price")}>
+                            Price<SortArrow field="price" />
+                          </th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700 select-none" onClick={() => toggleSort("stock")}>
+                            Stock<SortArrow field="stock" />
+                          </th>
                           <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Badge</th>
                           <th className="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {products.map((product) => {
+                        {sortedProducts.map((product) => {
                           const cat = categories.find((c) => c.id === product.category);
                           return (
                             <tr key={product.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
@@ -875,14 +917,14 @@ export default function AdminDashboard() {
                                 <div className="flex items-center justify-end gap-1">
                                   <button
                                     onClick={() => openEditModal(product)}
-                                    className="p-1.5 rounded-lg text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors"
+                                    className="p-2 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors"
                                     title="Edit"
                                   >
                                     <Edit className="w-4 h-4" />
                                   </button>
                                   <button
                                     onClick={() => setDeleteTarget(product)}
-                                    className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                                    className="p-2 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition-colors"
                                     title="Delete"
                                   >
                                     <Trash2 className="w-4 h-4" />
