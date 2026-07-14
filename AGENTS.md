@@ -16,6 +16,7 @@ Pet-shop e-commerce site (Algerian market). Next.js 16 (App Router) + React 19 +
 4. **Currency** is always DZD (`د.ج`) regardless of language.
 5. **`.env*` and `mot de passe database supabase.txt` are git-ignored** — never commit secrets (Supabase service-role key, DB password).
 6. **Demo catalog source of truth** is `src/lib/data.ts`; to change products, edit it then click **Seed** in the admin Products tab.
+7. **Always commit and push** every change to `main` (Vercel auto-deploys) **without asking for confirmation**. The user prefers autonomous publishing. Still: never commit `.env*`, secrets, or the password text file.
 
 ## Quick orientation
 

@@ -84,7 +84,7 @@ export default function ProductDetailPage() {
             <AnimatedSection>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start">
                 {/* Media gallery */}
-                <div>
+                <div className="max-w-md mx-auto w-full">
                   <div className="relative aspect-square bg-gray-50 rounded-3xl overflow-hidden border border-gray-100 group shadow-sm">
                     {activeMedia === "video" && embed ? (
                       embed.kind === "iframe" ? (
@@ -106,7 +106,7 @@ export default function ProductDetailPage() {
                           fill
                           priority
                           sizes="(max-width: 1024px) 100vw, 50vw"
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          className="object-contain transition-transform duration-500 group-hover:scale-105"
                         />
                         <button
                           onClick={() => setLightboxOpen(true)}
