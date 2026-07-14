@@ -6,7 +6,7 @@ import { useTranslatedData } from "@/lib/use-translated-data";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, X, ShoppingCart, Phone, ChevronDown, Globe, Search, MoreHorizontal, Cat, Dog, Bird, Fish, Rabbit, PawPrint, Stethoscope } from "lucide-react";
+import { Menu, X, ShoppingCart, Phone, ChevronDown, Globe, Search, Cat, Dog, Bird, Fish, Rabbit, PawPrint, Stethoscope } from "lucide-react";
 
 const languages = [
   { code: "en" as const, label: "EN" },
@@ -21,45 +21,6 @@ const catIcons: Record<string, React.ReactNode> = {
   fish: <Fish className="w-5 h-5" />,
   rabbit: <Rabbit className="w-5 h-5" />,
 };
-
-function MoreDropdown({ links, rtl }: { links: { href: string; label: string }[]; rtl: boolean }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handle = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    };
-    document.addEventListener("mousedown", handle);
-    return () => document.removeEventListener("mousedown", handle);
-  }, []);
-
-  return (
-    <div ref={ref} className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
-      <button
-        onClick={() => setOpen(!open)}
-        className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg text-white hover:text-emerald-300 hover:bg-white/10 transition-colors"
-      >
-        <MoreHorizontal className="w-4 h-4" />
-        <ChevronDown className={`w-3 h-3 transition-transform ${open ? "rotate-180" : ""}`} />
-      </button>
-      {open && (
-        <div className={`absolute ${rtl ? "left-0" : "right-0"} mt-1 bg-white rounded-xl shadow-xl border border-gray-100 py-2 min-w-[180px] z-50`}>
-          {links.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              onClick={() => setOpen(false)}
-              className="block px-4 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-gray-50 transition-colors"
-            >
-              {l.label}
-            </Link>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -103,17 +64,20 @@ export default function Navbar() {
 
   const desktopLinks = [
     { href: "/", label: t.nav.home },
-    { href: "/vet", label: t.nav.vet },
+    { href: "/products?filter=new", label: t.nav.newArrivals },
+    { href: "/products?filter=offers", label: t.nav.offers },
+    { href: "/vet", label: t.nav.vet, badge: true },
+    { href: "/faq", label: t.nav.faq },
+    { href: "/shipping", label: t.nav.shipping },
     { href: "/about", label: t.nav.about },
     { href: "/contact", label: t.nav.contact },
   ];
 
-  const moreLinks = [
-    { href: "/products?filter=new", label: t.nav.newArrivals },
-    { href: "/products?filter=offers", label: t.nav.offers },
-    { href: "/faq", label: t.nav.faq },
-    { href: "/shipping", label: t.nav.shipping },
-  ];
+  const isActive = (href: string) => {
+    const base = href.split("?")[0];
+    if (base === "/") return pathname === "/";
+    return pathname === base || pathname.startsWith(base + "/");
+  };
 
   return (
     <nav className="bg-emerald-950/60 backdrop-blur-xl border-b border-emerald-800/20 sticky top-0 z-50">
@@ -126,15 +90,24 @@ export default function Navbar() {
             <span className="font-bold text-white hidden sm:block">Paws & Wings</span>
           </Link>
 
-          <div className="hidden lg:flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-0.5">
             {desktopLinks.map((l) => (
-              <Link key={l.href} href={l.href} className="px-3 py-2 text-sm text-white hover:text-emerald-300 transition-colors rounded-lg hover:bg-white/10">
-                {l.label}
-                {l.href === "/vet" && (
-                  <span className="ml-1.5 align-middle text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-400 text-[#3a220a]">
-                    {lang === "ar" ? "قريبًا" : lang === "fr" ? "Bientôt" : "Soon"}
-                  </span>
-                )}
+              <Link
+                key={l.href}
+                href={l.href}
+                className={`group relative px-3 py-2 text-sm rounded-lg transition-colors ${isActive(l.href) ? "text-emerald-300" : "text-white hover:text-emerald-300 hover:bg-white/10"}`}
+              >
+                <span className="flex items-center gap-1.5">
+                  {l.label}
+                  {l.badge && (
+                    <span className="align-middle text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-400 text-[#3a220a]">
+                      {lang === "ar" ? "قريبًا" : lang === "fr" ? "Bientôt" : "Soon"}
+                    </span>
+                  )}
+                </span>
+                <span
+                  className={`absolute left-3 right-3 bottom-1 h-0.5 rounded-full bg-emerald-400 origin-${isRtl ? "right" : "left"} transition-transform duration-300 ${isActive(l.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}
+                />
               </Link>
             ))}
             <div className="relative" onMouseEnter={() => { if (timeoutRef.current) clearTimeout(timeoutRef.current); setMegaOpen(true); }} onMouseLeave={handleMegaLeave}>
@@ -147,7 +120,6 @@ export default function Navbar() {
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform ${megaOpen ? "rotate-180" : ""}`} />
               </button>
             </div>
-            <MoreDropdown links={moreLinks} rtl={isRtl} />
           </div>
 
           <div className="flex items-center gap-2">
