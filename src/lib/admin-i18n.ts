@@ -5,10 +5,10 @@ import { useState, useEffect } from "react";
 export type AdminLang = "en" | "fr" | "ar";
 
 type AdminTranslations = {
-  nav: { dashboard: string; products: string; orders: string; analytics: string; settings: string; viewStore: string };
-  title: { dashboard: string; products: string; orders: string; analytics: string; settings: string };
+  nav: { dashboard: string; products: string; orders: string; analytics: string; categories: string; settings: string; viewStore: string };
+  title: { dashboard: string; products: string; orders: string; analytics: string; categories: string; settings: string };
   lang: { label: string; en: string; fr: string; ar: string };
-  common: { loading: string; save: string; cancel: string; create: string; update: string; delete: string; search: string; all: string; confirm: string; close: string; add: string };
+  common: { loading: string; save: string; cancel: string; create: string; update: string; delete: string; search: string; all: string; confirm: string; close: string; add: string; name: string; id: string; icon: string; order: string; required: string };
   dashboard: {
     inventoryValue: string; totalOrders: string; totalCustomers: string; totalProducts: string;
     revenueOverview: string; revenueSub: string; recentOrders: string; noRecent: string;
@@ -30,13 +30,17 @@ type AdminTranslations = {
     name: string; rating: string; reviews: string; under20: string; b2050: string; b50100: string; b100: string;
   };
   settings: { title: string; subtitle: string; quickActions: string };
+  cats: {
+    title: string; subtitle: string; addCategory: string; editCategory: string; addSub: string; editSub: string;
+    idHelp: string; noCats: string; subOf: string; subcount: string; manage: string; deleteConfirm: string;
+  };
 };
 
 const en: AdminTranslations = {
-  nav: { dashboard: "Dashboard", products: "Products", orders: "Orders", analytics: "Analytics", settings: "Settings", viewStore: "View Store" },
-  title: { dashboard: "Admin Dashboard", products: "Products", orders: "Orders", analytics: "Analytics", settings: "Settings" },
+  nav: { dashboard: "Dashboard", products: "Products", orders: "Orders", analytics: "Analytics", categories: "Categories", settings: "Settings", viewStore: "View Store" },
+  title: { dashboard: "Admin Dashboard", products: "Products", orders: "Orders", analytics: "Analytics", categories: "Categories", settings: "Settings" },
   lang: { label: "Language", en: "English", fr: "Français", ar: "العربية" },
-  common: { loading: "Loading...", save: "Save", cancel: "Cancel", create: "Create", update: "Update", delete: "Delete", search: "Search", all: "All", confirm: "Confirm", close: "Close", add: "Add" },
+  common: { loading: "Loading...", save: "Save", cancel: "Cancel", create: "Create", update: "Update", delete: "Delete", search: "Search", all: "All", confirm: "Confirm", close: "Close", add: "Add", name: "Name", id: "ID", icon: "Icon", order: "Order", required: "is required" },
   dashboard: {
     inventoryValue: "Inventory Value", totalOrders: "Total Orders", totalCustomers: "Total Customers", totalProducts: "Total Products",
     revenueOverview: "Revenue Overview", revenueSub: "Monthly revenue & order trends", recentOrders: "Recent Orders", noRecent: "No orders yet",
@@ -59,13 +63,18 @@ const en: AdminTranslations = {
     name: "Name", rating: "Rating", reviews: "Reviews", under20: "Under 20", b2050: "20 - 50", b50100: "50 - 100", b100: "100+",
   },
   settings: { title: "Settings", subtitle: "Manage your store configuration", quickActions: "Quick Actions" },
+  cats: {
+    title: "Categories", subtitle: "Manage product categories and subcategories", addCategory: "Add Category", editCategory: "Edit Category",
+    addSub: "Add Subcategory", editSub: "Edit Subcategory", idHelp: "Unique ID (slug), e.g. cats", noCats: "No categories yet",
+    subOf: "Subcategory of", subcount: "{n} subcategories", manage: "Manage", deleteConfirm: "Delete this category and all its subcategories?",
+  },
 };
 
 const fr: AdminTranslations = {
-  nav: { dashboard: "Tableau de bord", products: "Produits", orders: "Commandes", analytics: "Analytique", settings: "Paramètres", viewStore: "Voir la boutique" },
-  title: { dashboard: "Tableau de bord admin", products: "Produits", orders: "Commandes", analytics: "Analytique", settings: "Paramètres" },
+  nav: { dashboard: "Tableau de bord", products: "Produits", orders: "Commandes", analytics: "Analytique", categories: "Catégories", settings: "Paramètres", viewStore: "Voir la boutique" },
+  title: { dashboard: "Tableau de bord admin", products: "Produits", orders: "Commandes", analytics: "Analytique", categories: "Catégories", settings: "Paramètres" },
   lang: { label: "Langue", en: "English", fr: "Français", ar: "العربية" },
-  common: { loading: "Chargement...", save: "Enregistrer", cancel: "Annuler", create: "Créer", update: "Mettre à jour", delete: "Supprimer", search: "Rechercher", all: "Tous", confirm: "Confirmer", close: "Fermer", add: "Ajouter" },
+  common: { loading: "Chargement...", save: "Enregistrer", cancel: "Annuler", create: "Créer", update: "Mettre à jour", delete: "Supprimer", search: "Rechercher", all: "Tous", confirm: "Confirmer", close: "Fermer", add: "Ajouter", name: "Nom", id: "ID", icon: "Icône", order: "Ordre", required: "est requis" },
   dashboard: {
     inventoryValue: "Valeur du stock", totalOrders: "Commandes totales", totalCustomers: "Clients totals", totalProducts: "Produits totals",
     revenueOverview: "Aperçu des revenus", revenueSub: "Tendances mensuelles des revenus et commandes", recentOrders: "Commandes récentes", noRecent: "Aucune commande pour l'instant",
@@ -88,13 +97,18 @@ const fr: AdminTranslations = {
     name: "Nom", rating: "Note", reviews: "Avis", under20: "Moins de 20", b2050: "20 - 50", b50100: "50 - 100", b100: "100+",
   },
   settings: { title: "Paramètres", subtitle: "Gérez la configuration de votre boutique", quickActions: "Actions rapides" },
+  cats: {
+    title: "Catégories", subtitle: "Gérez les catégories et sous-catégories", addCategory: "Ajouter une catégorie", editCategory: "Modifier la catégorie",
+    addSub: "Ajouter une sous-catégorie", editSub: "Modifier la sous-catégorie", idHelp: "ID unique (slug), ex. cats", noCats: "Aucune catégorie pour l'instant",
+    subOf: "Sous-catégorie de", subcount: "{n} sous-catégories", manage: "Gérer", deleteConfirm: "Supprimer cette catégorie et toutes ses sous-catégories ?",
+  },
 };
 
 const ar: AdminTranslations = {
-  nav: { dashboard: "لوحة التحكم", products: "المنتجات", orders: "الطلبات", analytics: "التحليلات", settings: "الإعدادات", viewStore: "عرض المتجر" },
-  title: { dashboard: "لوحة تحكم المدير", products: "المنتجات", orders: "الطلبات", analytics: "التحليلات", settings: "الإعدادات" },
+  nav: { dashboard: "لوحة التحكم", products: "المنتجات", orders: "الطلبات", analytics: "التحليلات", categories: "الفئات", settings: "الإعدادات", viewStore: "عرض المتجر" },
+  title: { dashboard: "لوحة تحكم المدير", products: "المنتجات", orders: "الطلبات", analytics: "التحليلات", categories: "الفئات", settings: "الإعدادات" },
   lang: { label: "اللغة", en: "English", fr: "Français", ar: "العربية" },
-  common: { loading: "جارٍ التحميل...", save: "حفظ", cancel: "إلغاء", create: "إنشاء", update: "تحديث", delete: "حذف", search: "بحث", all: "الكل", confirm: "تأكيد", close: "إغلاق", add: "إضافة" },
+  common: { loading: "جارٍ التحميل...", save: "حفظ", cancel: "إلغاء", create: "إنشاء", update: "تحديث", delete: "حذف", search: "بحث", all: "الكل", confirm: "تأكيد", close: "إغلاق", add: "إضافة", name: "الاسم", id: "المعرّف", icon: "الأيقونة", order: "الترتيب", required: "مطلوب" },
   dashboard: {
     inventoryValue: "قيمة المخزون", totalOrders: "إجمالي الطلبات", totalCustomers: "إجمالي العملاء", totalProducts: "إجمالي المنتجات",
     revenueOverview: "نظرة عامة على الإيرادات", revenueSub: "اتجاهات الإيرادات والطلبات الشهرية", recentOrders: "أحدث الطلبات", noRecent: "لا توجد طلبات بعد",
@@ -117,6 +131,11 @@ const ar: AdminTranslations = {
     name: "الاسم", rating: "التقييم", reviews: "التقييمات", under20: "أقل من 20", b2050: "20 - 50", b50100: "50 - 100", b100: "100+",
   },
   settings: { title: "الإعدادات", subtitle: "إدارة إعدادات متجرك", quickActions: "إجراءات سريعة" },
+  cats: {
+    title: "الفئات", subtitle: "إدارة فئات المنتجات والفئات الفرعية", addCategory: "إضافة فئة", editCategory: "تعديل الفئة",
+    addSub: "إضافة فئة فرعية", editSub: "تعديل الفئة الفرعية", idHelp: "معرّف فريد (slug)، مثل cats", noCats: "لا توجد فئات بعد",
+    subOf: "فئة فرعية من", subcount: "{n} فئات فرعية", manage: "إدارة", deleteConfirm: "حذف هذه الفئة وكل فئاتها الفرعية؟",
+  },
 };
 
 const dict: Record<AdminLang, AdminTranslations> = { en, fr, ar };

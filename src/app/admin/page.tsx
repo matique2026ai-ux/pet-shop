@@ -12,7 +12,7 @@ import {
 import {
   Users, ShoppingBag, DollarSign, Package, TrendingUp, TrendingDown,
   Edit, Trash2, ArrowUpRight, Calendar, Menu, X, Lock,
-  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Search, Filter,
+  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Search, Filter, Tag,
 } from "lucide-react";
 import HeroVideoManager from "@/components/hero-video-manager";
 
@@ -23,6 +23,7 @@ const sidebarTabs = [
   { label: "Products", icon: Package2, key: "products" },
   { label: "Orders", icon: ShoppingCart, key: "orders" },
   { label: "Analytics", icon: BarChart3, key: "analytics" },
+  { label: "Categories", icon: Tag, key: "categories" },
   { label: "Settings", icon: Settings, key: "settings" },
 ];
 
@@ -424,6 +425,71 @@ export default function AdminDashboard() {
       alert("Failed to delete: " + (e as Error).message);
     } finally {
       setDeleting(false);
+    }
+  };
+
+  // ----- Category & Subcategory management -----
+  const [catModal, setCatModal] = useState<{ id: string; name: string; icon: string; order: string; editingId: string | null; open: boolean }>({ id: "", name: "", icon: "paw-print", order: "0", editingId: null, open: false });
+  const [subModal, setSubModal] = useState<{ id: string; name: string; category_id: string; editingId: string | null; open: boolean }>({ id: "", name: "", category_id: "", editingId: null, open: false });
+
+  const openCatModal = (cat?: any) => {
+    if (cat) setCatModal({ id: cat.id, name: cat.name, icon: cat.icon || "paw-print", order: String(cat.order ?? 0), editingId: cat.id, open: true });
+    else setCatModal({ id: "", name: "", icon: "paw-print", order: "0", editingId: null, open: true });
+  };
+  const openSubModal = (categoryId: string, sub?: any) => {
+    if (sub) setSubModal({ id: sub.id, name: sub.name, category_id: categoryId, editingId: sub.id, open: true });
+    else setSubModal({ id: "", name: "", category_id: categoryId, editingId: null, open: true });
+  };
+  const closeCatModal = () => setCatModal({ id: "", name: "", icon: "paw-print", order: "0", editingId: null, open: false });
+  const closeSubModal = () => setSubModal({ id: "", name: "", category_id: "", editingId: null, open: false });
+
+  const saveCategory = async () => {
+    if (!catModal.id.trim() || !catModal.name.trim()) return alert(a.common.name + " / " + a.common.id + " " + a.common.required);
+    try {
+      if (catModal.editingId) {
+        await apiFetch("/api/categories", { method: "PUT", body: JSON.stringify({ id: catModal.editingId, name: catModal.name, icon: catModal.icon, order: Number(catModal.order) }) });
+      } else {
+        await apiFetch("/api/categories", { method: "POST", body: JSON.stringify({ id: catModal.id.trim(), name: catModal.name, icon: catModal.icon, order: Number(catModal.order) }) });
+      }
+      closeCatModal();
+      await loadCategories();
+    } catch (e) {
+      alert("Failed to save category: " + (e as Error).message);
+    }
+  };
+
+  const deleteCategory = async (id: string) => {
+    if (!confirm(a.cats.deleteConfirm)) return;
+    try {
+      await apiFetch(`/api/categories?id=${id}`, { method: "DELETE" });
+      await loadCategories();
+    } catch (e) {
+      alert("Failed to delete: " + (e as Error).message);
+    }
+  };
+
+  const saveSub = async () => {
+    if (!subModal.id.trim() || !subModal.name.trim()) return alert(a.common.name + " / " + a.common.id + " " + a.common.required);
+    try {
+      if (subModal.editingId) {
+        await apiFetch("/api/subcategories", { method: "PUT", body: JSON.stringify({ id: subModal.editingId, name: subModal.name, category_id: subModal.category_id }) });
+      } else {
+        await apiFetch("/api/subcategories", { method: "POST", body: JSON.stringify({ id: subModal.id.trim(), name: subModal.name, category_id: subModal.category_id }) });
+      }
+      closeSubModal();
+      await loadCategories();
+    } catch (e) {
+      alert("Failed to save subcategory: " + (e as Error).message);
+    }
+  };
+
+  const deleteSub = async (id: string) => {
+    if (!confirm(a.cats.deleteConfirm)) return;
+    try {
+      await apiFetch(`/api/subcategories?id=${id}`, { method: "DELETE" });
+      await loadCategories();
+    } catch (e) {
+      alert("Failed to delete: " + (e as Error).message);
     }
   };
 
@@ -1238,6 +1304,78 @@ export default function AdminDashboard() {
               </div>
             )}
 
+            {/* ===== CATEGORIES ===== */}
+            {activeTab === "categories" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-lg font-bold text-gray-900">{a.cats.title}</h2>
+                    <p className="text-sm text-gray-500 mt-0.5">{a.cats.subtitle}</p>
+                  </div>
+                  <button
+                    onClick={() => openCatModal()}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 transition-colors shadow-sm shadow-emerald-600/20"
+                  >
+                    <Plus className="w-4 h-4" /> {a.cats.addCategory}
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                  {categories.length === 0 ? (
+                    <div className="col-span-full flex flex-col items-center justify-center py-16 text-gray-400">
+                      <Tag className="w-12 h-12 mb-3 text-gray-300" />
+                      <p className="text-sm font-medium text-gray-500">{a.cats.noCats}</p>
+                    </div>
+                  ) : (
+                    categories.map((cat) => (
+                      <div key={cat.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                        <div className="flex items-center justify-between p-5 border-b border-gray-100">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                              <Tag className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <p className="font-semibold text-gray-900">{cat.name}</p>
+                              <p className="text-xs text-gray-400">{cat.id} · {a.cats.subcount.replace("{n}", String(cat.subcategories?.length || 0))}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <button onClick={() => openCatModal(cat)} className="p-2 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors" title={a.common.update}>
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button onClick={() => deleteCategory(cat.id)} className="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors" title={a.common.delete}>
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                        <div className="p-4 space-y-2">
+                          {(cat.subcategories || []).map((s: any) => (
+                            <div key={s.id} className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2">
+                              <span className="text-sm text-gray-700">{s.name}</span>
+                              <div className="flex items-center gap-1">
+                                <button onClick={() => openSubModal(cat.id, s)} className="p-1.5 rounded bg-white text-emerald-600 hover:bg-emerald-50 transition-colors" title={a.common.update}>
+                                  <Edit className="w-3.5 h-3.5" />
+                                </button>
+                                <button onClick={() => deleteSub(s.id)} className="p-1.5 rounded bg-white text-red-600 hover:bg-red-50 transition-colors" title={a.common.delete}>
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                          <button
+                            onClick={() => openSubModal(cat.id)}
+                            className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg border border-dashed border-gray-200 text-sm text-gray-500 hover:border-emerald-300 hover:text-emerald-600 transition-colors"
+                          >
+                            <Plus className="w-3.5 h-3.5" /> {a.cats.addSub}
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* ===== SETTINGS ===== */}
             {activeTab === "settings" && (
               <div className="space-y-6">
@@ -1556,6 +1694,99 @@ export default function AdminDashboard() {
                 {saving && <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />}
                 {editingProduct ? a.common.update : a.common.create}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== CATEGORY MODAL ===== */}
+      {catModal.open && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
+          <div className="absolute inset-0 bg-black/50" onClick={closeCatModal} />
+          <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-4">
+            <h2 className="text-lg font-bold text-gray-900">{catModal.editingId ? a.cats.editCategory : a.cats.addCategory}</h2>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{a.common.id}</label>
+              <input
+                value={catModal.id}
+                disabled={!!catModal.editingId}
+                onChange={(e) => setCatModal({ ...catModal, id: e.target.value })}
+                placeholder="cats"
+                className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:bg-gray-100"
+              />
+              <p className="text-xs text-gray-400 mt-1">{a.cats.idHelp}</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{a.common.name}</label>
+              <input
+                value={catModal.name}
+                onChange={(e) => setCatModal({ ...catModal, name: e.target.value })}
+                className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{a.common.icon}</label>
+                <input
+                  value={catModal.icon}
+                  onChange={(e) => setCatModal({ ...catModal, icon: e.target.value })}
+                  className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{a.common.order}</label>
+                <input
+                  type="number"
+                  value={catModal.order}
+                  onChange={(e) => setCatModal({ ...catModal, order: e.target.value })}
+                  className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button onClick={closeCatModal} className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">{a.common.cancel}</button>
+              <button onClick={saveCategory} className="px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 transition-colors">{a.common.save}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== SUBCATEGORY MODAL ===== */}
+      {subModal.open && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
+          <div className="absolute inset-0 bg-black/50" onClick={closeSubModal} />
+          <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-4">
+            <h2 className="text-lg font-bold text-gray-900">{subModal.editingId ? a.cats.editSub : a.cats.addSub}</h2>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{a.cats.subOf}</label>
+              <input
+                value={categories.find((c) => c.id === subModal.category_id)?.name || subModal.category_id}
+                disabled
+                className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm bg-gray-100"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{a.common.id}</label>
+              <input
+                value={subModal.id}
+                disabled={!!subModal.editingId}
+                onChange={(e) => setSubModal({ ...subModal, id: e.target.value })}
+                placeholder="cats-food"
+                className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:bg-gray-100"
+              />
+              <p className="text-xs text-gray-400 mt-1">{a.cats.idHelp}</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{a.common.name}</label>
+              <input
+                value={subModal.name}
+                onChange={(e) => setSubModal({ ...subModal, name: e.target.value })}
+                className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+            </div>
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button onClick={closeSubModal} className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">{a.common.cancel}</button>
+              <button onClick={saveSub} className="px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 transition-colors">{a.common.save}</button>
             </div>
           </div>
         </div>
