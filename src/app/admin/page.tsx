@@ -1515,6 +1515,7 @@ export default function AdminDashboard() {
                         <F label={a.settings.whatsapp} k="whatsapp" />
                         <F label={a.settings.facebook} k="facebook" />
                         <F label={a.settings.instagram} k="instagram" />
+                        <F label={a.settings.tiktok} k="tiktok" />
                         <F label={a.settings.currencyLabel} k="currencyLabel" />
                         <F label={a.settings.deliveryFee} k="deliveryFee" />
                         <F label={a.settings.freeThreshold} k="freeThreshold" />

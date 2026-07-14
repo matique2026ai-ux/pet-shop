@@ -34,7 +34,7 @@ type AdminTranslations = {
   settings: {
     title: string; subtitle: string; quickActions: string;
     store: string; content: string; translations: string; delivery: string;
-    phone: string; email: string; whatsapp: string; address: string; facebook: string; instagram: string;
+    phone: string; email: string; whatsapp: string; address: string; facebook: string; instagram: string; tiktok: string;
     currencyLabel: string; deliveryFee: string; freeThreshold: string; storeName: string;
     heroTitle: string; heroSubtitle: string; heroCta1: string; heroCta2: string; footerText: string; about: string;
     saved: string;
@@ -79,7 +79,7 @@ const en: AdminTranslations = {
   settings: {
     title: "Settings", subtitle: "Manage your store configuration", quickActions: "Quick Actions",
     store: "Store Information", content: "Site Content", translations: "Translations", delivery: "Delivery",
-    phone: "Phone", email: "Email", whatsapp: "WhatsApp", address: "Address", facebook: "Facebook", instagram: "Instagram",
+    phone: "Phone", email: "Email", whatsapp: "WhatsApp", address: "Address", facebook: "Facebook", instagram: "Instagram", tiktok: "TikTok",
     currencyLabel: "Currency Label", deliveryFee: "Delivery Fee", freeThreshold: "Free Delivery Threshold", storeName: "Store Name",
     heroTitle: "Hero Title", heroSubtitle: "Hero Subtitle", heroCta1: "Hero Button 1", heroCta2: "Hero Button 2", footerText: "Footer Text", about: "About Snippet",
     saved: "Saved successfully",
@@ -125,7 +125,7 @@ const fr: AdminTranslations = {
   settings: {
     title: "Paramètres", subtitle: "Gérez la configuration de votre boutique", quickActions: "Actions rapides",
     store: "Informations du magasin", content: "Contenu du site", translations: "Traductions", delivery: "Livraison",
-    phone: "Téléphone", email: "E-mail", whatsapp: "WhatsApp", address: "Adresse", facebook: "Facebook", instagram: "Instagram",
+    phone: "Téléphone", email: "E-mail", whatsapp: "WhatsApp", address: "Adresse", facebook: "Facebook", instagram: "Instagram", tiktok: "TikTok",
     currencyLabel: "Libellé de la devise", deliveryFee: "Frais de livraison", freeThreshold: "Seuil de livraison gratuite", storeName: "Nom du magasin",
     heroTitle: "Titre de l'accueil", heroSubtitle: "Sous-titre de l'accueil", heroCta1: "Bouton 1", heroCta2: "Bouton 2", footerText: "Texte du pied de page", about: "À propos",
     saved: "Enregistré avec succès",
@@ -171,7 +171,7 @@ const ar: AdminTranslations = {
   settings: {
     title: "الإعدادات", subtitle: "إدارة إعدادات متجرك", quickActions: "إجراءات سريعة",
     store: "معلومات المتجر", content: "محتوى الموقع", translations: "الترجمات", delivery: "التوصيل",
-    phone: "الهاتف", email: "البريد الإلكتروني", whatsapp: "واتساب", address: "العنوان", facebook: "فيسبوك", instagram: "إنستغرام",
+    phone: "الهاتف", email: "البريد الإلكتروني", whatsapp: "واتساب", address: "العنوان", facebook: "فيسبوك", instagram: "إنستغرام", tiktok: "تيك توك",
     currencyLabel: "رمز العملة", deliveryFee: "رسوم التوصيل", freeThreshold: "حد التوصيل المجاني", storeName: "اسم المتجر",
     heroTitle: "عنوان الواجهة", heroSubtitle: "العنوان الفرعي للواجهة", heroCta1: "الزر الأول", heroCta2: "الزر الثاني", footerText: "نص التذييل", about: "نبذة عنا",
     saved: "تم الحفظ بنجاح",
