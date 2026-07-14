@@ -333,7 +333,8 @@ export default function AdminDashboard() {
     if (!authed) return;
     if (activeTab === "dashboard") loadOrders();
     if (activeTab === "products" || activeTab === "dashboard") loadProducts();
-  }, [authed, activeTab, loadOrders, loadProducts]);
+    if (activeTab === "settings") loadSettings();
+  }, [authed, activeTab, loadOrders, loadProducts, loadSettings]);
 
   const openAddModal = () => {
     setEditingProduct(null);
@@ -511,6 +512,33 @@ export default function AdminDashboard() {
       alert("Upload failed: " + (e as Error).message);
     } finally {
       setUploadingImage(false);
+    }
+  };
+
+  // ----- Site settings (store info + content) -----
+  const [storeSettings, setStoreSettings] = useState<Record<string, string>>({});
+  const [contentSettings, setContentSettings] = useState<Record<string, string>>({});
+  const [savingSettings, setSavingSettings] = useState(false);
+
+  async function loadSettings() {
+    try {
+      const data = await fetch("/api/settings").then((r) => r.json());
+      if (data && data.store) setStoreSettings(data.store);
+      if (data && data.content) setContentSettings(data.content);
+    } catch {
+      // ignore
+    }
+  }
+
+  const saveSettingsKey = async (key: string, value: Record<string, any>) => {
+    setSavingSettings(true);
+    try {
+      await apiFetch("/api/settings", { method: "PUT", body: JSON.stringify({ key, value }) });
+      alert(a.settings.saved);
+    } catch (e) {
+      alert("Failed to save: " + (e as Error).message);
+    } finally {
+      setSavingSettings(false);
     }
   };
 
@@ -1380,29 +1408,80 @@ export default function AdminDashboard() {
             {activeTab === "settings" && (
               <div className="space-y-6">
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                  <h2 className="text-lg font-bold text-gray-900 mb-4">Store Settings</h2>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Store Name</label>
-                      <input type="text" defaultValue="Paws & Wings" readOnly className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm bg-gray-50 text-gray-500" />
-                      <p className="text-xs text-gray-400 mt-1">Edit in layout.tsx</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Currency</label>
-                      <input type="text" value="DZD (Algerian Dinar)" readOnly className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm bg-gray-50 text-gray-500" />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Admin Password</label>
-                        <input type="password" value="••••••••" readOnly className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm bg-gray-50 text-gray-500" />
-                        <p className="text-xs text-gray-400 mt-1">Managed by the ADMIN_SECRET environment variable</p>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Supabase Project</label>
-                        <input type="text" value="Connected ✓" readOnly className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm bg-emerald-50 text-emerald-700 font-medium" />
-                      </div>
-                    </div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-bold text-gray-900">{a.settings.store}</h2>
+                    <button
+                      onClick={() => saveSettingsKey("store", storeSettings)}
+                      disabled={savingSettings}
+                      className="px-4 py-2 rounded-xl text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 transition-colors disabled:opacity-50 inline-flex items-center gap-2"
+                    >
+                      {savingSettings && <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />}
+                      {a.common.save}
+                    </button>
                   </div>
+                  {(() => {
+                    const F = ({ label, k, type = "text" }: { label: string; k: string; type?: string }) => (
+                      <div className={k === "address" ? "sm:col-span-2" : ""}>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+                        <input
+                          type={type}
+                          value={storeSettings[k] || ""}
+                          onChange={(e) => setStoreSettings({ ...storeSettings, [k]: e.target.value })}
+                          className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        />
+                      </div>
+                    );
+                    return (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <F label={a.settings.storeName} k="storeName" />
+                        <F label={a.settings.phone} k="phone" />
+                        <F label={a.settings.email} k="email" type="email" />
+                        <F label={a.settings.whatsapp} k="whatsapp" />
+                        <F label={a.settings.facebook} k="facebook" />
+                        <F label={a.settings.instagram} k="instagram" />
+                        <F label={a.settings.currencyLabel} k="currencyLabel" />
+                        <F label={a.settings.deliveryFee} k="deliveryFee" />
+                        <F label={a.settings.freeThreshold} k="freeThreshold" />
+                        <F label={a.settings.address} k="address" />
+                      </div>
+                    );
+                  })()}
+                </div>
+
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-bold text-gray-900">{a.settings.content}</h2>
+                    <button
+                      onClick={() => saveSettingsKey("content", contentSettings)}
+                      disabled={savingSettings}
+                      className="px-4 py-2 rounded-xl text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 transition-colors disabled:opacity-50 inline-flex items-center gap-2"
+                    >
+                      {savingSettings && <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />}
+                      {a.common.save}
+                    </button>
+                  </div>
+                  {(() => {
+                    const F = ({ label, k }: { label: string; k: string }) => (
+                      <div className="sm:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+                        <input
+                          value={contentSettings[k] || ""}
+                          onChange={(e) => setContentSettings({ ...contentSettings, [k]: e.target.value })}
+                          className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        />
+                      </div>
+                    );
+                    return (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <F label={a.settings.heroTitle} k="heroTitle" />
+                        <F label={a.settings.heroSubtitle} k="heroSubtitle" />
+                        <F label={a.settings.heroCta1} k="heroCta1" />
+                        <F label={a.settings.heroCta2} k="heroCta2" />
+                        <F label={a.settings.footerText} k="footerText" />
+                        <F label={a.settings.about} k="about" />
+                      </div>
+                    );
+                  })()}
                 </div>
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
