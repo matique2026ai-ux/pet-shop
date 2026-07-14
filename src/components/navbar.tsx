@@ -90,12 +90,12 @@ export default function Navbar() {
             <span className="font-bold text-white hidden sm:block">Paws & Wings</span>
           </Link>
 
-          <div className="hidden lg:flex items-center gap-0.5">
+          <div className="hidden lg:flex items-center gap-0">
             {desktopLinks.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className={`group relative px-3 py-2 text-sm rounded-lg transition-colors ${isActive(l.href) ? "text-emerald-300" : "text-white hover:text-emerald-300 hover:bg-white/10"}`}
+                className={`group relative px-2 py-2 text-[13px] whitespace-nowrap rounded-lg transition-colors ${isActive(l.href) ? "text-emerald-300" : "text-white hover:text-emerald-300 hover:bg-white/10"}`}
               >
                 <span className="flex items-center gap-1.5">
                   {l.label}
@@ -106,7 +106,7 @@ export default function Navbar() {
                   )}
                 </span>
                 <span
-                  className={`absolute left-3 right-3 bottom-1 h-0.5 rounded-full bg-emerald-400 origin-${isRtl ? "right" : "left"} transition-transform duration-300 ${isActive(l.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}
+                  className={`absolute left-2 right-2 bottom-1 h-0.5 rounded-full bg-emerald-400 origin-${isRtl ? "right" : "left"} transition-transform duration-300 ${isActive(l.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}
                 />
               </Link>
             ))}
@@ -123,7 +123,7 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-2">
-            <div className={`${searchOpen ? "flex" : "hidden"} lg:flex items-center relative`}>
+            <div className={`${searchOpen ? "flex" : "hidden"} xl:flex items-center relative`}>
               <input
                 ref={searchRef}
                 type="text"
@@ -146,7 +146,7 @@ export default function Navbar() {
                 setSearchOpen(!searchOpen);
                 if (!searchOpen) setTimeout(() => searchRef.current?.focus(), 100);
               }}
-              className="lg:hidden p-2 text-white hover:text-emerald-300"
+              className="xl:hidden p-2 text-white hover:text-emerald-300"
             >
               <Search className="w-4 h-4" />
             </button>
@@ -168,7 +168,7 @@ export default function Navbar() {
               )}
             </div>
 
-            <a href="tel:+213555123456" className="hidden sm:flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">
+              <a href="tel:+213555123456" className="hidden xl:flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">
               <Phone className="w-4 h-4" />
               {t.nav.callNow}
             </a>
