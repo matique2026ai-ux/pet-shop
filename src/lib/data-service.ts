@@ -15,6 +15,7 @@ export interface ProductData {
   features: string[];
   in_stock: boolean;
   stock_quantity?: number;
+  sold_by?: string;
   created_at?: string;
 }
 

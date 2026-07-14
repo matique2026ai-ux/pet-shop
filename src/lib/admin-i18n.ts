@@ -19,6 +19,7 @@ type AdminTranslations = {
     allCategories: string; allStock: string; inStock: string; outOfStock: string;
     stockQuantity: string; stockHelp: string; noProducts: string; addFirst: string;
     filtersNoMatch: string; clearFilters: string; name: string; category: string; price: string; oldPrice: string; stock: string; badge: string; actions: string;
+    soldBy: string; soldByPiece: string; soldByWeight: string; weightHelp: string;
   };
   orders: {
     title: string; total: string; loading: string; noOrders: string;
@@ -31,11 +32,14 @@ type AdminTranslations = {
   };
   settings: {
     title: string; subtitle: string; quickActions: string;
-    store: string; content: string; translations: string;
+    store: string; content: string; translations: string; delivery: string;
     phone: string; email: string; whatsapp: string; address: string; facebook: string; instagram: string;
     currencyLabel: string; deliveryFee: string; freeThreshold: string; storeName: string;
     heroTitle: string; heroSubtitle: string; heroCta1: string; heroCta2: string; footerText: string; about: string;
     saved: string;
+    deliveryCity: string; deliveryWilaya: string; deliveryScope: string;
+    deliveryEta: string; deliveryNote: string; deliveryAreas: string;
+    scopeCommune: string; scopeWilaya: string; scopeNational: string; scopeInternational: string;
   };
   cats: {
     title: string; subtitle: string; addCategory: string; editCategory: string; addSub: string; editSub: string;
@@ -59,6 +63,7 @@ const en: AdminTranslations = {
     stockQuantity: "Stock Quantity", stockHelp: "0 = out of stock. Product is marked “In Stock” when quantity > 0.",
     noProducts: "No products yet", addFirst: "Add your first product to get started", filtersNoMatch: "No products match your filters", clearFilters: "Clear filters",
     name: "Name", category: "Category", price: "Price", oldPrice: "Old Price", stock: "Stock", badge: "Badge", actions: "Actions",
+    soldBy: "Sold By", soldByPiece: "Piece (each)", soldByWeight: "Weight (kg)", weightHelp: "Price is per kg. Customer chooses the weight (e.g. 0.5 kg).",
   },
   orders: {
     title: "All Orders", total: "orders total", loading: "Loading orders...", noOrders: "No orders yet",
@@ -71,11 +76,14 @@ const en: AdminTranslations = {
   },
   settings: {
     title: "Settings", subtitle: "Manage your store configuration", quickActions: "Quick Actions",
-    store: "Store Information", content: "Site Content", translations: "Translations",
+    store: "Store Information", content: "Site Content", translations: "Translations", delivery: "Delivery",
     phone: "Phone", email: "Email", whatsapp: "WhatsApp", address: "Address", facebook: "Facebook", instagram: "Instagram",
     currencyLabel: "Currency Label", deliveryFee: "Delivery Fee", freeThreshold: "Free Delivery Threshold", storeName: "Store Name",
     heroTitle: "Hero Title", heroSubtitle: "Hero Subtitle", heroCta1: "Hero Button 1", heroCta2: "Hero Button 2", footerText: "Footer Text", about: "About Snippet",
     saved: "Saved successfully",
+    deliveryCity: "City", deliveryWilaya: "Wilaya", deliveryScope: "Coverage Scope",
+    deliveryEta: "Delivery Time (ETA)", deliveryNote: "Public Note", deliveryAreas: "Covered Areas (comma-separated)",
+    scopeCommune: "Commune (e.g. Sétif)", scopeWilaya: "Wilaya", scopeNational: "National", scopeInternational: "International",
   },
   cats: {
     title: "Categories", subtitle: "Manage product categories and subcategories", addCategory: "Add Category", editCategory: "Edit Category",
@@ -100,6 +108,7 @@ const fr: AdminTranslations = {
     stockQuantity: "Quantité en stock", stockHelp: "0 = rupture de stock. Le produit est « En stock » si quantité > 0.",
     noProducts: "Aucun produit pour l'instant", addFirst: "Ajoutez votre premier produit", filtersNoMatch: "Aucun produit ne correspond à vos filtres", clearFilters: "Effacer les filtres",
     name: "Nom", category: "Catégorie", price: "Prix", oldPrice: "Ancien prix", stock: "Stock", badge: "Badge", actions: "Actions",
+    soldBy: "Vendu par", soldByPiece: "Pièce", soldByWeight: "Poids (kg)", weightHelp: "Le prix est au kg. Le client choisit le poids (ex. 0,5 kg).",
   },
   orders: {
     title: "Toutes les commandes", total: "commandes au total", loading: "Chargement des commandes...", noOrders: "Aucune commande pour l'instant",
@@ -112,11 +121,14 @@ const fr: AdminTranslations = {
   },
   settings: {
     title: "Paramètres", subtitle: "Gérez la configuration de votre boutique", quickActions: "Actions rapides",
-    store: "Informations du magasin", content: "Contenu du site", translations: "Traductions",
+    store: "Informations du magasin", content: "Contenu du site", translations: "Traductions", delivery: "Livraison",
     phone: "Téléphone", email: "E-mail", whatsapp: "WhatsApp", address: "Adresse", facebook: "Facebook", instagram: "Instagram",
     currencyLabel: "Libellé de la devise", deliveryFee: "Frais de livraison", freeThreshold: "Seuil de livraison gratuite", storeName: "Nom du magasin",
     heroTitle: "Titre de l'accueil", heroSubtitle: "Sous-titre de l'accueil", heroCta1: "Bouton 1", heroCta2: "Bouton 2", footerText: "Texte du pied de page", about: "À propos",
     saved: "Enregistré avec succès",
+    deliveryCity: "Ville", deliveryWilaya: "Wilaya", deliveryScope: "Zone de couverture",
+    deliveryEta: "Délai de livraison (ETA)", deliveryNote: "Note publique", deliveryAreas: "Zones couvertes (séparées par virgule)",
+    scopeCommune: "Commune (ex. Sétif)", scopeWilaya: "Wilaya", scopeNational: "National", scopeInternational: "International",
   },
   cats: {
     title: "Catégories", subtitle: "Gérez les catégories et sous-catégories", addCategory: "Ajouter une catégorie", editCategory: "Modifier la catégorie",
@@ -141,6 +153,7 @@ const ar: AdminTranslations = {
     stockQuantity: "كمية المخزون", stockHelp: "0 = غير متوفر. يُعتبر المنتج «متوفر» عندما تكون الكمية > 0.",
     noProducts: "لا توجد منتجات بعد", addFirst: "أضف أول منتج لتبدأ", filtersNoMatch: "لا توجد منتجات تطابق عوامل التصفية", clearFilters: "مسح عوامل التصفية",
     name: "الاسم", category: "الفئة", price: "السعر", oldPrice: "السعر القديم", stock: "المخزون", badge: "الشارة", actions: "الإجراءات",
+    soldBy: "يُباع بـ", soldByPiece: "قطعة", soldByWeight: "الوزن (كغ)", weightHelp: "السعر للكيلوغرام. يختار الزبون الوزن (مثلاً 0.5 كغ).",
   },
   orders: {
     title: "كل الطلبات", total: "طلبًا إجمالاً", loading: "جارٍ تحميل الطلبات...", noOrders: "لا توجد طلبات بعد",
@@ -153,11 +166,14 @@ const ar: AdminTranslations = {
   },
   settings: {
     title: "الإعدادات", subtitle: "إدارة إعدادات متجرك", quickActions: "إجراءات سريعة",
-    store: "معلومات المتجر", content: "محتوى الموقع", translations: "الترجمات",
+    store: "معلومات المتجر", content: "محتوى الموقع", translations: "الترجمات", delivery: "التوصيل",
     phone: "الهاتف", email: "البريد الإلكتروني", whatsapp: "واتساب", address: "العنوان", facebook: "فيسبوك", instagram: "إنستغرام",
     currencyLabel: "رمز العملة", deliveryFee: "رسوم التوصيل", freeThreshold: "حد التوصيل المجاني", storeName: "اسم المتجر",
     heroTitle: "عنوان الواجهة", heroSubtitle: "العنوان الفرعي للواجهة", heroCta1: "الزر الأول", heroCta2: "الزر الثاني", footerText: "نص التذييل", about: "نبذة عنا",
     saved: "تم الحفظ بنجاح",
+    deliveryCity: "المدينة", deliveryWilaya: "الولاية", deliveryScope: "نطاق التغطية",
+    deliveryEta: "مدة التوصيل (الوقت المقدر)", deliveryNote: "ملاحظة عامة", deliveryAreas: "المناطق المغطاة (مفصولة بفاصلة)",
+    scopeCommune: "بلدية (مثل سطيف)", scopeWilaya: "ولاية", scopeNational: "وطني", scopeInternational: "دولي",
   },
   cats: {
     title: "الفئات", subtitle: "إدارة فئات المنتجات والفئات الفرعية", addCategory: "إضافة فئة", editCategory: "تعديل الفئة",

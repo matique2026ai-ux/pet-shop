@@ -6,13 +6,37 @@ import { useI18n } from "@/lib/i18n-context";
 import Link from "next/link";
 import Image from "next/image";
 import AnimatedSection from "@/components/animated-section";
-import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, Lock } from "lucide-react";
+import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, Lock, Truck, MapPin } from "lucide-react";
+import { useSiteSettings } from "@/lib/site-settings";
+
+const DEFAULT_DELIVERY: Record<string, string> = {
+  scope: "commune",
+  city: "Sétif",
+  wilaya: "Sétif",
+  fee: "200",
+  freeThreshold: "5000",
+  eta: "24-48h",
+  areas: "Centre-ville,Aïn El Bey,Cité 1200 Logements,Stade 08 Mai,Zone industrielle",
+  note: "Livraison à domicile dans la commune de Sétif (moto).",
+};
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, clearCart } = useCart();
-  const { t, currency } = useI18n();
+  const { t, currency, lang } = useI18n();
+  const { delivery } = useSiteSettings();
   const [checkingOut, setCheckingOut] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [area, setArea] = useState("");
+
+  const d = { ...DEFAULT_DELIVERY, ...(delivery || {}) };
+  const feeNum = Number(d.fee) || 0;
+  const freeNum = Number(d.freeThreshold) || 0;
+  const subtotal = totalPrice;
+  const deliveryFee = subtotal > 0 && subtotal >= freeNum ? 0 : feeNum;
+  const grandTotal = subtotal + deliveryFee;
+  const areas = (d.areas || "").split(",").map((s) => s.trim()).filter(Boolean);
+  const selectedArea = area || areas[0] || "";
+  const remainingForFree = freeNum - subtotal;
 
   if (orderPlaced) {
     return (
@@ -82,26 +106,45 @@ export default function CartPage() {
 
                     <div className="flex-1 min-w-0">
                       <h3 className="font-semibold text-gray-900 truncate">{item.name}</h3>
-                      <p className="text-emerald-600 font-medium mt-0.5">{currency}{item.price.toFixed(2)}</p>
+                      <p className="text-emerald-600 font-medium mt-0.5">
+                        {currency}{item.price.toFixed(2)}
+                        {item.sold_by === "weight" && <span className="text-xs font-normal text-gray-400"> /{lang === "ar" ? "كغ" : "kg"}</span>}
+                      </p>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => updateQuantity(item.productId, item.quantity - 1)}
-                        disabled={item.quantity <= 1}
-                        className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                      >
-                        <Minus className="w-3.5 h-3.5" />
-                      </button>
-                      <span className="w-8 text-center font-medium text-gray-900 text-sm">
-                        {item.quantity}
-                      </span>
-                      <button
-                        onClick={() => updateQuantity(item.productId, item.quantity + 1)}
-                        className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors"
-                      >
-                        <Plus className="w-3.5 h-3.5" />
-                      </button>
+                      {item.sold_by === "weight" ? (
+                        <div className="flex items-center gap-1.5 bg-gray-100 rounded-lg px-2 py-1">
+                          <input
+                            type="number"
+                            min="0.1"
+                            step="0.1"
+                            value={item.quantity}
+                            onChange={(e) => updateQuantity(item.productId, Math.max(0.1, Number(e.target.value) || 0.1))}
+                            className="w-16 bg-transparent text-center font-medium text-gray-900 text-sm focus:outline-none"
+                          />
+                          <span className="text-xs text-gray-500">{lang === "ar" ? "كغ" : "kg"}</span>
+                        </div>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                            disabled={item.quantity <= 1}
+                            className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                          >
+                            <Minus className="w-3.5 h-3.5" />
+                          </button>
+                          <span className="w-8 text-center font-medium text-gray-900 text-sm">
+                            {item.quantity}
+                          </span>
+                          <button
+                            onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                            className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                          </button>
+                        </>
+                      )}
                     </div>
 
                     <div className="text-right min-w-[80px]">
@@ -126,7 +169,28 @@ export default function CartPage() {
 
                   <div className="flex items-center justify-between py-3 border-b border-gray-100">
                     <span className="text-gray-500">{t.cart.subtotal}</span>
-                    <span className="font-semibold text-gray-900">{currency}{totalPrice.toFixed(2)}</span>
+                    <span className="font-semibold text-gray-900">{currency}{subtotal.toFixed(2)}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                    <span className="text-gray-500 flex items-center gap-1.5">
+                      <Truck className="w-4 h-4" />
+                      {d.city} {deliveryFee === 0 ? "" : ""}
+                    </span>
+                    <span className="font-semibold text-gray-900">
+                      {deliveryFee === 0 ? t.cart.free : `${currency}${deliveryFee.toFixed(2)}`}
+                    </span>
+                  </div>
+
+                  {remainingForFree > 0 && (
+                    <p className="text-xs text-emerald-600 mt-2">
+                      {t.cart.freeHint.replace("{amount}", `${currency}${remainingForFree.toFixed(2)}`)}
+                    </p>
+                  )}
+
+                  <div className="flex items-center justify-between py-3 border-b border-gray-100 text-lg font-bold text-gray-900">
+                    <span>{t.cart.total}</span>
+                    <span>{currency}{grandTotal.toFixed(2)}</span>
                   </div>
 
                   <button
@@ -170,10 +234,23 @@ export default function CartPage() {
               ))}
             </div>
 
-            <div className="border-t border-gray-100 pt-4 mb-6">
-              <div className="flex items-center justify-between text-lg font-bold text-gray-900">
+            <div className="border-t border-gray-100 pt-4 mb-6 space-y-2">
+              <div className="flex items-center justify-between text-sm text-gray-500">
+                <span>{t.cart.subtotal}</span>
+                <span className="font-medium text-gray-900">{currency}{subtotal.toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm text-gray-500">
+                <span className="flex items-center gap-1.5"><Truck className="w-3.5 h-3.5" />{d.city}</span>
+                <span className="font-medium text-gray-900">
+                  {deliveryFee === 0 ? t.cart.free : `${currency}${deliveryFee.toFixed(2)}`}
+                </span>
+              </div>
+              {remainingForFree > 0 && (
+                <p className="text-xs text-emerald-600">{t.cart.freeHint.replace("{amount}", `${currency}${remainingForFree.toFixed(2)}`)}</p>
+              )}
+              <div className="flex items-center justify-between text-lg font-bold text-gray-900 pt-2 border-t border-gray-100">
                 <span>{t.cart.total}</span>
-                <span>{currency}{totalPrice.toFixed(2)}</span>
+                <span>{currency}{grandTotal.toFixed(2)}</span>
               </div>
             </div>
 
@@ -187,8 +264,12 @@ export default function CartPage() {
                   customer_email: fd.get("email") as string,
                   customer_phone: fd.get("phone") as string,
                   delivery_address: fd.get("address") as string,
-                  items: items.map((i) => ({ productId: i.productId, name: i.name, price: i.price, quantity: i.quantity })),
-                  total: totalPrice,
+                  city: d.city,
+                  delivery_area: (fd.get("delivery_area") as string) || selectedArea,
+                  delivery_fee: deliveryFee,
+                  delivery_eta: d.eta,
+                  items: items.map((i) => ({ productId: i.productId, name: i.name, price: i.price, quantity: i.quantity, sold_by: i.sold_by })),
+                  total: grandTotal,
                 };
                 try {
                   const res = await fetch("/api/orders", {
@@ -234,6 +315,26 @@ export default function CartPage() {
                 rows={3}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
               />
+              {areas.length > 0 && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1.5">
+                    <MapPin className="w-4 h-4" />{t.cart.deliveryArea}
+                  </label>
+                  <select
+                    value={selectedArea}
+                    onChange={(e) => setArea(e.target.value)}
+                    name="delivery_area"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  >
+                    {areas.map((a) => (
+                      <option key={a} value={a}>{a}</option>
+                    ))}
+                  </select>
+                  <p className="text-xs text-gray-400 mt-1">
+                    {d.city} • {d.eta}
+                  </p>
+                </div>
+              )}
               <button
                 type="submit"
                 className="w-full bg-emerald-600 text-white py-3 rounded-xl font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"

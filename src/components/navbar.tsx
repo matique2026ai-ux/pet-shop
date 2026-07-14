@@ -130,6 +130,11 @@ export default function Navbar() {
             {desktopLinks.map((l) => (
               <Link key={l.href} href={l.href} className="px-3 py-2 text-sm text-white hover:text-emerald-300 transition-colors rounded-lg hover:bg-white/10">
                 {l.label}
+                {l.href === "/vet" && (
+                  <span className="ml-1.5 align-middle text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-400 text-[#3a220a]">
+                    {lang === "ar" ? "قريبًا" : lang === "fr" ? "Bientôt" : "Soon"}
+                  </span>
+                )}
               </Link>
             ))}
             <div className="relative" onMouseEnter={() => { if (timeoutRef.current) clearTimeout(timeoutRef.current); setMegaOpen(true); }} onMouseLeave={handleMegaLeave}>
@@ -292,7 +297,12 @@ export default function Navbar() {
               ))}
             </div>
             <div className="border-t border-gray-100 pt-2 mt-2 space-y-1">
-              <Link href="/vet" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">{t.nav.vet}</Link>
+              <Link href="/vet" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">
+                {t.nav.vet}
+                <span className="ml-1.5 inline-block align-middle text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-400 text-[#3a220a]">
+                  {lang === "ar" ? "قريبًا" : lang === "fr" ? "Bientôt" : "Soon"}
+                </span>
+              </Link>
               <Link href="/faq" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">{t.nav.faq}</Link>
               <Link href="/shipping" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">{t.nav.shipping}</Link>
               <Link href="/about" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">{t.nav.about}</Link>

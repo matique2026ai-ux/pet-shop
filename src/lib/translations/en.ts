@@ -117,6 +117,9 @@ export const en = {
     addressPlaceholder: "Delivery Address",
     placeOrder: "Place Order",
     secureCheckout: "Secure checkout",
+    free: "Free",
+    freeHint: "Add {amount} more for free delivery",
+    deliveryArea: "Delivery Area",
   },
   vet: {
     title: "Veterinary Clinic",

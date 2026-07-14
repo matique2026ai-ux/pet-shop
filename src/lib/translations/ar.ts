@@ -117,6 +117,9 @@ export const ar = {
     addressPlaceholder: "عنوان التوصيل",
     placeOrder: "تأكيد الطلب",
     secureCheckout: "دفع آمن",
+    free: "مجاني",
+    freeHint: "أضف {amount} للحصول على توصيل مجاني",
+    deliveryArea: "منطقة التوصيل",
   },
   vet: {
     title: "العيادة البيطرية",

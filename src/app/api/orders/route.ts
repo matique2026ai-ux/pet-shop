@@ -42,7 +42,19 @@ export async function POST(request: Request) {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("orders")
-    .insert([{ customer_name: name, customer_phone: phone, customer_email: email || null, delivery_address: address, items: body.items, notes: str(body.notes).slice(0, MAX) || null, status: "pending" }])
+    .insert([{
+      customer_name: name,
+      customer_phone: phone,
+      customer_email: email || null,
+      delivery_address: address,
+      city: str(body.city) || null,
+      delivery_area: str(body.delivery_area) || null,
+      delivery_fee: Number(body.delivery_fee) || 0,
+      delivery_eta: str(body.delivery_eta) || null,
+      items: body.items,
+      notes: str(body.notes).slice(0, MAX) || null,
+      status: "pending",
+    }])
     .select()
     .single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

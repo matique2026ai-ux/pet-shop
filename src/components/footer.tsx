@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Heart, Globe, Camera, MessageCircle, Mail, CheckCircle } from "lucide-react";
+import { Heart, Globe, Camera, MessageCircle, Mail, CheckCircle, Truck } from "lucide-react";
 import { useI18n } from "@/lib/i18n-context";
 import { useSiteSettings } from "@/lib/site-settings";
 
@@ -11,8 +11,8 @@ export default function Footer() {
   const pathname = usePathname();
   if (pathname.startsWith("/admin")) return null;
 
-  const { t } = useI18n();
-  const { store, content } = useSiteSettings();
+  const { t, lang } = useI18n();
+  const { store, content, delivery } = useSiteSettings();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
@@ -24,6 +24,10 @@ export default function Footer() {
   const s = (k: string, fallback: string) => (store && store[k] ? store[k] : fallback);
   const addressLines = (s("address", t.contact.addressText || "123 Pet Street\nNew York, NY 10001")).split("\n");
   const phone = s("phone", t.contact.phoneText || "+1 (234) 567-890");
+  const deliveryPrefix = lang === "ar" ? "توصيل" : lang === "fr" ? "Livraison" : "Delivery";
+  const coverage = delivery
+    ? `${deliveryPrefix} ${delivery.city} • ${delivery.eta}`
+    : `${deliveryPrefix} Sétif • 24-48h`;
   const emailAddr = s("email", t.contact.emailText || "hello@pawsandwings.com");
   const whatsapp = s("whatsapp", "+1234567890");
   const instagram = s("instagram", "https://instagram.com");
@@ -72,6 +76,10 @@ export default function Footer() {
               <li><a href={`tel:${phone}`} className="hover:text-emerald-500 transition-colors">{phone}</a></li>
               <li><a href={`mailto:${emailAddr}`} className="hover:text-emerald-500 transition-colors">{emailAddr}</a></li>
             </ul>
+            <div className="mt-3 flex items-center gap-2 text-sm text-emerald-400">
+              <Truck className="w-4 h-4 shrink-0" />
+              <span>{coverage}</span>
+            </div>
           </div>
 
           <div>

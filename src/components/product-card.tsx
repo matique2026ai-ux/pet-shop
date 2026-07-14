@@ -15,7 +15,7 @@ interface ProductCardProps {
 export default function ProductCard({ product, variant = "default" }: ProductCardProps) {
   const isRelated = variant === "related";
   const { addItem } = useCart();
-  const { t, currency } = useI18n();
+  const { t, currency, lang } = useI18n();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -76,6 +76,7 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
             <div className="flex items-center gap-2">
               <span className={`font-bold text-gray-900 ${isRelated ? "text-sm" : "text-lg"}`}>
                 {currency}{product.price}
+                {product.sold_by === "weight" && <span className="text-xs font-normal text-gray-400"> /{lang === "ar" ? "كغ" : "kg"}</span>}
               </span>
               {product.originalPrice && (
                 <span className={`text-gray-400 line-through ${isRelated ? "text-xs" : "text-sm"}`}>

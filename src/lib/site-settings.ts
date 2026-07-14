@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 export interface SiteSettings {
   store?: Record<string, string>;
   content?: Record<string, string>;
+  delivery?: Record<string, string>;
   translations?: Record<string, Record<string, string>>;
 }
 

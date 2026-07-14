@@ -117,6 +117,9 @@ export const fr = {
     addressPlaceholder: "Adresse de Livraison",
     placeOrder: "Passer la Commande",
     secureCheckout: "Paiement sécurisé",
+    free: "Gratuit",
+    freeHint: "Ajoutez {amount} pour la livraison gratuite",
+    deliveryArea: "Zone de livraison",
   },
   vet: {
     title: "Clinique Vétérinaire",

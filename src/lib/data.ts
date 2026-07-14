@@ -12,6 +12,7 @@ export interface Product {
   description: string;
   features: string[];
   inStock: boolean;
+  sold_by?: string;
 }
 
 export interface Subcategory {

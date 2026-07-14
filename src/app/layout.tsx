@@ -33,6 +33,13 @@ export const metadata: Metadata = {
     default: "Paws & Wings | Pet Shop & Veterinary Clinic",
     template: "%s | Paws & Wings",
   },
+  alternates: {
+    languages: {
+      en: "/",
+      fr: "/",
+      ar: "/",
+    },
+  },
   description: "Premium pet products and veterinary care for cats, dogs, birds, fish, and small pets. Shop the best food, toys, accessories and book vet appointments online.",
   keywords: ["pet shop", "veterinary clinic", "pet supplies", "cat food", "dog food", "pet care", "animal clinic"],
   openGraph: {

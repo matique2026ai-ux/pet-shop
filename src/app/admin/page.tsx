@@ -176,6 +176,7 @@ type FormState = {
   description: string;
   features: string;
   stockQuantity: string;
+  soldBy: "piece" | "weight";
 };
 
 const emptyForm: FormState = {
@@ -191,6 +192,7 @@ const emptyForm: FormState = {
   description: "",
   features: "",
   stockQuantity: "0",
+  soldBy: "piece",
 };
 
 export default function AdminDashboard() {
@@ -415,9 +417,10 @@ export default function AdminDashboard() {
       rating: String(product.rating),
       reviews: String(product.reviews),
       description: product.description || "",
-      features: product.features?.join(", ") || "",
-      stockQuantity: product.stock_quantity != null ? String(product.stock_quantity) : (product.in_stock ? "1" : "0"),
-    });
+        features: product.features?.join(", ") || "",
+        stockQuantity: product.stock_quantity != null ? String(product.stock_quantity) : (product.in_stock ? "1" : "0"),
+        soldBy: (product.sold_by as "piece" | "weight") || "piece",
+      });
     setFormErrors({});
     setShowModal(true);
   };
@@ -457,6 +460,7 @@ export default function AdminDashboard() {
         features: form.features.split(",").map((f) => f.trim()).filter(Boolean),
         stock_quantity: Number(form.stockQuantity) || 0,
         in_stock: Number(form.stockQuantity) > 0,
+        sold_by: form.soldBy,
       };
       if (form.originalPrice) body.original_price = Number(form.originalPrice);
 
@@ -577,6 +581,7 @@ export default function AdminDashboard() {
   // ----- Site settings (store info + content) -----
   const [storeSettings, setStoreSettings] = useState<Record<string, string>>({});
   const [contentSettings, setContentSettings] = useState<Record<string, string>>({});
+  const [deliverySettings, setDeliverySettings] = useState<Record<string, string>>({});
   const [savingSettings, setSavingSettings] = useState(false);
 
   async function loadSettings() {
@@ -584,6 +589,7 @@ export default function AdminDashboard() {
       const data = await fetch("/api/settings").then((r) => r.json());
       if (data && data.store) setStoreSettings(data.store);
       if (data && data.content) setContentSettings(data.content);
+      if (data && data.delivery) setDeliverySettings(data.delivery);
     } catch {
       // ignore
     }
@@ -1015,7 +1021,10 @@ export default function AdminDashboard() {
                       {categories.find((c) => c.id === product.category)?.name || product.category}
                     </span>
                   </td>
-                  <td className="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap">{currency}{product.price.toFixed(2)}</td>
+                  <td className="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap">
+                    {currency}{product.price.toFixed(2)}
+                    {product.sold_by === "weight" && <span className="text-xs font-normal text-gray-400"> /kg</span>}
+                  </td>
                   <td className="px-4 py-3">
                     {product.original_price ? (
                       <span className="text-xs text-gray-400 line-through">{currency}{product.original_price.toFixed(2)}</span>
@@ -1544,6 +1553,66 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-bold text-gray-900">{a.settings.delivery}</h2>
+                    <button
+                      onClick={() => saveSettingsKey("delivery", deliverySettings)}
+                      disabled={savingSettings}
+                      className="px-4 py-2 rounded-xl text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 transition-colors disabled:opacity-50 inline-flex items-center gap-2"
+                    >
+                      {savingSettings && <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />}
+                      {a.common.save}
+                    </button>
+                  </div>
+                  {(() => {
+                    const F = ({ label, k, type = "text" }: { label: string; k: string; type?: string }) => (
+                      <div className={k === "areas" || k === "note" ? "sm:col-span-2" : ""}>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+                        {k === "areas" ? (
+                          <textarea
+                            value={deliverySettings[k] || ""}
+                            onChange={(e) => setDeliverySettings({ ...deliverySettings, [k]: e.target.value })}
+                            rows={2}
+                            className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+                          />
+                        ) : (
+                          <input
+                            type={type}
+                            value={deliverySettings[k] || ""}
+                            onChange={(e) => setDeliverySettings({ ...deliverySettings, [k]: e.target.value })}
+                            className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                          />
+                        )}
+                      </div>
+                    );
+                    return (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">{a.settings.deliveryScope}</label>
+                          <select
+                            value={deliverySettings.scope || "commune"}
+                            onChange={(e) => setDeliverySettings({ ...deliverySettings, scope: e.target.value })}
+                            className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                          >
+                            <option value="commune">{a.settings.scopeCommune}</option>
+                            <option value="wilaya">{a.settings.scopeWilaya}</option>
+                            <option value="national">{a.settings.scopeNational}</option>
+                            <option value="international">{a.settings.scopeInternational}</option>
+                          </select>
+                        </div>
+                        <F label={a.settings.deliveryCity} k="city" />
+                        <F label={a.settings.deliveryWilaya} k="wilaya" />
+                        <F label={a.settings.deliveryFee} k="fee" type="number" />
+                        <F label={a.settings.freeThreshold} k="freeThreshold" type="number" />
+                        <F label={a.settings.deliveryEta} k="eta" />
+                        <F label={a.settings.deliveryNote} k="note" />
+                        <F label={a.settings.deliveryAreas} k="areas" />
+                      </div>
+                    );
+                  })()}
+                </div>
+
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <h2 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <Link href="/" className="flex items-center gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 transition-colors">
@@ -1700,6 +1769,20 @@ export default function AdminDashboard() {
                     className={`w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${formErrors.price ? "border-red-300" : "border-gray-200"}`}
                   />
                   {formErrors.price && <p className="text-xs text-red-500 mt-1">{formErrors.price}</p>}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{a.products.soldBy}</label>
+                  <select
+                    value={form.soldBy}
+                    onChange={(e) => setForm({ ...form, soldBy: e.target.value as "piece" | "weight" })}
+                    className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  >
+                    <option value="piece">{a.products.soldByPiece}</option>
+                    <option value="weight">{a.products.soldByWeight}</option>
+                  </select>
+                  {form.soldBy === "weight" && (
+                    <p className="text-xs text-gray-400 mt-1">{a.products.weightHelp}</p>
+                  )}
                 </div>
               </div>
 

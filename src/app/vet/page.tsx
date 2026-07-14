@@ -19,8 +19,16 @@ const serviceImages: Record<string, string> = {
 };
 
 export default function VetPage() {
-  const { t, currency } = useI18n();
+  const { t, currency, lang } = useI18n();
   const { vetServices, team, testimonials } = useTranslatedData();
+
+  const prepNote =
+    lang === "ar"
+      ? "عيادة بيطرية قيد التجهيز — ستفتتح قريبًا. تابعونا!"
+      : lang === "fr"
+        ? "Clinique vétérinaire en préparation — ouvrira bientôt. Restez connectés !"
+        : "Veterinary clinic under preparation — opening soon. Stay tuned!";
+  const prepBadge = lang === "ar" ? "قيد التجهيز" : lang === "fr" ? "En préparation" : "Coming Soon";
 
   return (
     <div>
@@ -40,12 +48,15 @@ export default function VetPage() {
               <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-xl rounded-full text-sm text-emerald-200 border border-white/10 mb-5">
                 <Sparkles className="w-4 h-4" /> {t.vet.heroBadge}
               </span>
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-amber-400/90 text-[#3a220a] rounded-full text-sm font-bold ml-2 mb-5">
+                <Clock className="w-4 h-4" /> {prepBadge}
+              </span>
               <h1 className="text-5xl lg:text-7xl font-bold text-white mb-4 leading-tight">{t.vet.title}</h1>
               <p className="text-emerald-100/70 text-lg mb-8 max-w-md leading-relaxed">{t.vet.subtitle}</p>
               <div className="flex items-center gap-4">
                 <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-[#3a220a] px-7 py-3.5 rounded-2xl font-bold hover:bg-emerald-50 transition-all shadow-xl hover:-translate-y-0.5">
                   <Phone className="w-4 h-4" />
-                  {t.vet.bookNow}
+                  {lang === "ar" ? "أعلمني بالافتتاح" : lang === "fr" ? "Prévenez-moi" : "Notify Me"}
                 </Link>
                 <Link href="#services" className="inline-flex items-center gap-2 text-white px-6 py-3.5 rounded-2xl font-medium border border-white/20 hover:bg-white/10 transition-all hover:-translate-y-0.5">
                   {t.vet.viewServices}
@@ -53,6 +64,13 @@ export default function VetPage() {
               </div>
             </div>
           </AnimatedSection>
+        </div>
+      </section>
+
+      <section className="bg-amber-50 border-b border-amber-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center gap-3 text-amber-800 text-sm">
+          <Clock className="w-4 h-4 shrink-0" />
+          <span className="font-medium">{prepNote}</span>
         </div>
       </section>
 

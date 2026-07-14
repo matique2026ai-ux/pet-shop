@@ -13,7 +13,7 @@ import ProductCard from "@/components/product-card";
 import { Star, ChevronRight, Check, ShoppingCart, Plus, Minus, Share2, X, ZoomIn } from "lucide-react";
 
 export default function ProductDetailPage() {
-  const { t, currency } = useI18n();
+  const { t, currency, lang } = useI18n();
   const { products, categories } = useTranslatedData();
   const { addItem } = useCart();
   const { addId } = useRecentlyViewed();
@@ -87,7 +87,10 @@ export default function ProductDetailPage() {
                 <p className="text-gray-600 mb-6 leading-relaxed">{product.description}</p>
 
                 <div className="flex items-center gap-3 mb-6">
-                  <span className="text-3xl font-bold text-gray-900">{currency}{product.price}</span>
+                  <span className="text-3xl font-bold text-gray-900">
+                    {currency}{product.price}
+                    {product.sold_by === "weight" && <span className="text-base font-normal text-gray-400"> /{lang === "ar" ? "كغ" : "kg"}</span>}
+                  </span>
                   {product.originalPrice && (
                     <span className="text-lg text-gray-400 line-through">{currency}{product.originalPrice}</span>
                   )}
@@ -122,30 +125,53 @@ export default function ProductDetailPage() {
                 </div>
 
                 {product.inStock ? (
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2 bg-gray-100 rounded-xl">
+                  product.sold_by === "weight" ? (
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 bg-gray-100 rounded-xl px-3 py-2">
+                        <input
+                          type="number"
+                          min="0.1"
+                          step="0.1"
+                          value={qty}
+                          onChange={(e) => setQty(Math.max(0.1, Number(e.target.value) || 0.1))}
+                          className="w-20 bg-transparent text-center font-semibold text-gray-900 focus:outline-none"
+                        />
+                        <span className="text-sm text-gray-500">{lang === "ar" ? "كغ" : "kg"}</span>
+                      </div>
                       <button
-                        onClick={() => setQty(Math.max(1, qty - 1))}
-                        className="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors"
+                        onClick={() => { addItem(product, qty); setQty(1); }}
+                        className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-emerald-700 transition-colors"
                       >
-                        <Minus className="w-4 h-4" />
-                      </button>
-                      <span className="w-8 text-center font-semibold text-gray-900">{qty}</span>
-                      <button
-                        onClick={() => setQty(qty + 1)}
-                        className="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors"
-                      >
-                        <Plus className="w-4 h-4" />
+                        <ShoppingCart className="w-4 h-4" />
+                        {t.products.addToCart}
                       </button>
                     </div>
-                    <button
-                      onClick={() => { addItem(product, qty); setQty(1); }}
-                      className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-emerald-700 transition-colors"
-                    >
-                      <ShoppingCart className="w-4 h-4" />
-                      {t.products.addToCart}
-                    </button>
-                  </div>
+                  ) : (
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-2 bg-gray-100 rounded-xl">
+                        <button
+                          onClick={() => setQty(Math.max(1, qty - 1))}
+                          className="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors"
+                        >
+                          <Minus className="w-4 h-4" />
+                        </button>
+                        <span className="w-8 text-center font-semibold text-gray-900">{qty}</span>
+                        <button
+                          onClick={() => setQty(qty + 1)}
+                          className="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors"
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <button
+                        onClick={() => { addItem(product, qty); setQty(1); }}
+                        className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-emerald-700 transition-colors"
+                      >
+                        <ShoppingCart className="w-4 h-4" />
+                        {t.products.addToCart}
+                      </button>
+                    </div>
+                  )
                 ) : (
                   <span className="inline-block bg-gray-100 text-gray-500 px-6 py-3 rounded-xl font-semibold">
                     {t.products.outOfStock}

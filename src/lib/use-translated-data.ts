@@ -25,6 +25,7 @@ interface ApiProduct {
   description?: string;
   features: string[];
   in_stock: boolean;
+  sold_by?: string;
 }
 
 interface ApiCategory {
@@ -57,6 +58,7 @@ function mapApiProduct(p: ApiProduct): Product {
     description: p.description || "",
     features: Array.isArray(p.features) ? p.features : [],
     inStock: p.in_stock,
+    sold_by: p.sold_by,
   };
 }
 

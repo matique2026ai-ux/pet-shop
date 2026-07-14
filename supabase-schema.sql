@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS products (
   features JSONB DEFAULT '[]',
   in_stock BOOLEAN NOT NULL DEFAULT TRUE,
   stock_quantity INTEGER NOT NULL DEFAULT 0,
+  sold_by TEXT NOT NULL DEFAULT 'piece' CHECK (sold_by IN ('piece', 'weight')),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -44,8 +45,18 @@ CREATE TABLE IF NOT EXISTS orders (
   total DECIMAL(10,2) NOT NULL,
   status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled')),
   notes TEXT,
+  city TEXT,
+  delivery_area TEXT,
+  delivery_fee DECIMAL(10,2) NOT NULL DEFAULT 0,
+  delivery_eta TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Delivery zone model (expandable: commune -> wilaya -> national -> international).
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS city TEXT;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS delivery_area TEXT;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS delivery_fee DECIMAL(10,2) NOT NULL DEFAULT 0;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS delivery_eta TEXT;
 
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
@@ -104,3 +115,10 @@ CREATE TABLE IF NOT EXISTS site_settings (
   value JSONB NOT NULL,
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Seed default delivery config: Commune de Sétif (motorcycle). Expand later to wilayas then worldwide.
+INSERT INTO site_settings (key, value) VALUES (
+  'delivery',
+  '{"scope":"commune","city":"Sétif","wilaya":"Sétif","country":"Algeria","fee":"200","freeThreshold":"5000","eta":"24-48h","areas":"Centre-ville,Aïn El Bey,Cité 1200 Logements,Stade 08 Mai,Zone industrielle","note":"Livraison à domicile dans la commune de Sétif (moto)."}'::jsonb
+)
+ON CONFLICT (key) DO NOTHING;

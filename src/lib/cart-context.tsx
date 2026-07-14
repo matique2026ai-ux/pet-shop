@@ -9,6 +9,7 @@ export interface CartItem {
   price: number;
   image: string;
   quantity: number;
+  sold_by?: string;
 }
 
 interface CartState {
@@ -37,7 +38,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       return {
         items: [
           ...state.items,
-          { productId: product.id, name: product.name, price: product.price, image: product.image, quantity },
+          { productId: product.id, name: product.name, price: product.price, image: product.image, quantity, sold_by: product.sold_by },
         ],
       };
     }
