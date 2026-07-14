@@ -1019,26 +1019,32 @@ export default function AdminDashboard() {
                         </div>
                       )}
                       <div className="min-w-0">
-                        <p className="font-semibold text-gray-900 truncate max-w-[220px]">{product.name}</p>
+                        <p className="font-semibold text-gray-900 truncate max-w-[160px] sm:max-w-[220px]">{product.name}</p>
                         <p className="text-xs text-gray-400">{product.id}</p>
+                        <p className="sm:hidden mt-0.5 text-xs font-semibold text-gray-700">
+                          {currency}{product.price.toFixed(2)}
+                          <span className={`ms-2 font-medium ${product.in_stock ? "text-emerald-600" : "text-red-500"}`}>
+                            {product.in_stock ? `• ${product.stock_quantity ?? 0}` : "• Out"}
+                          </span>
+                        </p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 hidden md:table-cell">
                     <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-gray-100 text-gray-600 text-xs font-medium">
                       {categories.find((c) => c.id === product.category)?.name || product.category}
                     </span>
                   </td>
-                  <td className="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap">
+                  <td className="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap hidden sm:table-cell">
                     {currency}{product.price.toFixed(2)}
                     {product.sold_by === "weight" && <span className="text-xs font-normal text-gray-400"> /kg</span>}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 hidden lg:table-cell">
                     {product.original_price ? (
                       <span className="text-xs text-gray-400 line-through">{currency}{product.original_price.toFixed(2)}</span>
                     ) : <span className="text-xs text-gray-300">—</span>}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 hidden sm:table-cell">
                     <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${
                       product.in_stock ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"
                     }`}>
@@ -1046,9 +1052,9 @@ export default function AdminDashboard() {
                       {product.in_stock ? `In Stock (${product.stock_quantity ?? 0})` : "Out"}
                     </span>
                   </td>
-                  <td className="px-4 py-3"><ProductBadge badge={product.badge} /></td>
+                  <td className="px-4 py-3 hidden lg:table-cell"><ProductBadge badge={product.badge} /></td>
                   <td className="px-4 py-3 text-right">
-                    <div className="flex items-center justify-end gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center justify-end gap-1 opacity-100 sm:opacity-60 sm:group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => openEditModal(product)}
                         className="p-2 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors"
@@ -1220,11 +1226,11 @@ export default function AdminDashboard() {
                             <thead>
                               <tr className="bg-gray-50/40 text-gray-400">
                                 <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.name}</th>
-                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.category}</th>
-                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.price}</th>
-                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.oldPrice}</th>
-                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.stock}</th>
-                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.badge}</th>
+                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider hidden md:table-cell">{a.products.category}</th>
+                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider hidden sm:table-cell">{a.products.price}</th>
+                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider hidden lg:table-cell">{a.products.oldPrice}</th>
+                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider hidden sm:table-cell">{a.products.stock}</th>
+                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider hidden lg:table-cell">{a.products.badge}</th>
                                 <th className="text-right px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.actions}</th>
                               </tr>
                             </thead>
