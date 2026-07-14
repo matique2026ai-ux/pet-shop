@@ -151,7 +151,7 @@ export default function HomePage() {
         <section className="py-12 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-gray-900">Recently Viewed</h2>
+              <h2 className="text-2xl font-bold text-gray-900">{t.products.recentlyViewed}</h2>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 gap-y-8">
               {recentProducts.map((p) => (

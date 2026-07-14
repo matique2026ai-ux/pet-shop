@@ -87,10 +87,10 @@ function ProductsContent() {
               className="px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600"
             >
               <option value="default">{t.products.sortBy}</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-              <option value="rating">Top Rated</option>
-              <option value="name">Name A-Z</option>
+              <option value="price-asc">{t.products.sortPriceAsc}</option>
+              <option value="price-desc">{t.products.sortPriceDesc}</option>
+              <option value="rating">{t.products.sortRating}</option>
+              <option value="name">{t.products.sortName}</option>
             </select>
           </div>
         </div>
@@ -117,9 +117,14 @@ function ProductsContent() {
   );
 }
 
+function ProductsFallback() {
+  const { t } = useI18n();
+  return <div className="text-center py-20 text-gray-500">{t.products.loading}</div>;
+}
+
 export default function ProductsPage() {
   return (
-    <Suspense fallback={<div className="text-center py-20 text-gray-500">Loading products...</div>}>
+    <Suspense fallback={<ProductsFallback />}>
       <ProductsContent />
     </Suspense>
   );

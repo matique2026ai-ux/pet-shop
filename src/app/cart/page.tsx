@@ -350,7 +350,7 @@ export default function CartPage() {
                   });
                   if (!res.ok) throw new Error("Server error");
                 } catch (e) {
-                  alert("Failed to place order. Please try again.");
+                  alert(t.cart.orderFailed);
                   return;
                 }
                 setOrderPlaced(true);

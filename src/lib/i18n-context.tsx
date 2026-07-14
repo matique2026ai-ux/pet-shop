@@ -96,6 +96,11 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const dir = lang === "ar" ? "rtl" : "ltr";
   const currency = currencyMap[lang];
 
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    document.documentElement.dir = dir;
+  }, [lang, dir]);
+
   return (
     <I18nContext.Provider value={{ lang, setLang: setLangPersist, t, dir, currency, overrides, reloadOverrides: loadOverrides }}>
       <div dir={dir}>{children}</div>

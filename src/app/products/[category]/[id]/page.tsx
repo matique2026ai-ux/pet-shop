@@ -111,7 +111,7 @@ export default function ProductDetailPage() {
                         <button
                           onClick={() => setLightboxOpen(true)}
                           className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center"
-                          aria-label="Zoom"
+                          aria-label={t.products.zoom}
                         >
                           <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 rounded-full p-3 shadow-lg">
                             <ZoomIn className="w-5 h-5 text-gray-700" />
