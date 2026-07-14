@@ -31,6 +31,23 @@ const WILAYAS = [
   "Ghardaïa", "Relizane",
 ];
 
+const SOUTH_WILAYAS = new Set([
+  "Adrar", "Béchar", "Tindouf", "Tamanrasset", "Ouargla", "Illizi",
+  "El Oued", "Ghardaïa", "Biskra", "Laghouat", "El Bayadh", "Naâma",
+]);
+
+function regionForWilaya(w: string): "setif" | "north" | "south" {
+  if (w === "Sétif") return "setif";
+  if (SOUTH_WILAYAS.has(w)) return "south";
+  return "north";
+}
+
+const DELIVERY_BY_REGION = {
+  setif: { fee: 200, eta: { en: "24-48h", fr: "24-48h", ar: "24-48 ساعة" } },
+  north: { fee: 500, eta: { en: "3-5 days", fr: "3-5 jours", ar: "3-5 أيام" } },
+  south: { fee: 800, eta: { en: "5-7 days", fr: "5-7 jours", ar: "5-7 أيام" } },
+};
+
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, clearCart } = useCart();
   const { t, currency, lang } = useI18n();
@@ -43,13 +60,14 @@ export default function CartPage() {
   const [commune, setCommune] = useState("");
 
   const d = { ...DEFAULT_DELIVERY, ...(delivery || {}) };
-  const feeNum = Number(d.fee) || 0;
-  const freeNum = Number(d.freeThreshold) || 0;
+  const region = regionForWilaya(wilaya);
+  const deliv = DELIVERY_BY_REGION[region];
+  const feeNum = deliv.fee;
+  const etaText = deliv.eta[lang];
+  const freeNum = Number(d.freeThreshold) || 5000;
   const subtotal = totalPrice;
   const deliveryFee = subtotal > 0 && subtotal >= freeNum ? 0 : feeNum;
   const grandTotal = subtotal + deliveryFee;
-  const areas = (d.areas || "").split(",").map((s) => s.trim()).filter(Boolean);
-  const selectedArea = area || areas[0] || "";
   const remainingForFree = freeNum - subtotal;
 
   if (orderPlaced) {
@@ -189,7 +207,7 @@ export default function CartPage() {
                   <div className="flex items-center justify-between py-3 border-b border-gray-100">
                     <span className="text-gray-500 flex items-center gap-1.5">
                       <Truck className="w-4 h-4" />
-                      {d.city} {deliveryFee === 0 ? "" : ""}
+                      {wilaya} · {etaText}
                     </span>
                     <span className="font-semibold text-gray-900">
                       {deliveryFee === 0 ? t.cart.free : `${currency}${deliveryFee.toFixed(2)}`}
@@ -266,8 +284,8 @@ export default function CartPage() {
                 <span>{t.cart.subtotal}</span>
                 <span className="font-medium text-gray-900">{currency}{subtotal.toFixed(2)}</span>
               </div>
-              <div className="flex items-center justify-between text-sm text-gray-500">
-                <span className="flex items-center gap-1.5"><Truck className="w-3.5 h-3.5" />{d.city}</span>
+               <div className="flex items-center justify-between text-sm text-gray-500">
+                 <span className="flex items-center gap-1.5"><Truck className="w-3.5 h-3.5" />{wilaya} · {etaText}</span>
                 <span className="font-medium text-gray-900">
                   {deliveryFee === 0 ? t.cart.free : `${currency}${deliveryFee.toFixed(2)}`}
                 </span>
@@ -301,7 +319,7 @@ export default function CartPage() {
                   city: wilaya,
                   delivery_area: commune,
                   delivery_fee: deliveryFee,
-                  delivery_eta: d.eta,
+                  delivery_eta: etaText,
                   items: items.map((i) => ({ productId: i.productId, name: i.name, price: i.price, quantity: i.quantity, sold_by: i.sold_by })),
                   total: grandTotal,
                   user_id: user?.id || null,
