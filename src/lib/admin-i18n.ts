@@ -5,8 +5,8 @@ import { useState, useEffect } from "react";
 export type AdminLang = "en" | "fr" | "ar";
 
 type AdminTranslations = {
-  nav: { dashboard: string; products: string; orders: string; analytics: string; categories: string; settings: string; translations: string; viewStore: string };
-  title: { dashboard: string; products: string; orders: string; analytics: string; categories: string; settings: string; translations: string };
+  nav: { dashboard: string; products: string; orders: string; analytics: string; categories: string; reviews: string; settings: string; translations: string; viewStore: string };
+  title: { dashboard: string; products: string; orders: string; analytics: string; categories: string; reviews: string; settings: string; translations: string };
   lang: { label: string; en: string; fr: string; ar: string };
   common: { loading: string; save: string; cancel: string; create: string; update: string; delete: string; search: string; all: string; confirm: string; close: string; add: string; name: string; id: string; icon: string; order: string; required: string };
   dashboard: {
@@ -46,11 +46,17 @@ type AdminTranslations = {
     title: string; subtitle: string; addCategory: string; editCategory: string; addSub: string; editSub: string;
     idHelp: string; noCats: string; subOf: string; subcount: string; manage: string; deleteConfirm: string;
   };
+  reviews: {
+    title: string; subtitle: string; loading: string; noReviews: string;
+    pending: string; approved: string; rejected: string; all: string;
+    product: string; customer: string; rating: string; comment: string; status: string; date: string; actions: string;
+    approve: string; reject: string; delete: string; deleteConfirm: string;
+  };
 };
 
 const en: AdminTranslations = {
-  nav: { dashboard: "Dashboard", products: "Products", orders: "Orders", analytics: "Analytics", categories: "Categories", settings: "Settings", translations: "Translations", viewStore: "View Store" },
-  title: { dashboard: "Admin Dashboard", products: "Products", orders: "Orders", analytics: "Analytics", categories: "Categories", settings: "Settings", translations: "Translations" },
+  nav: { dashboard: "Dashboard", products: "Products", orders: "Orders", analytics: "Analytics", categories: "Categories", reviews: "Reviews", settings: "Settings", translations: "Translations", viewStore: "View Store" },
+  title: { dashboard: "Admin Dashboard", products: "Products", orders: "Orders", analytics: "Analytics", categories: "Categories", reviews: "Reviews", settings: "Settings", translations: "Translations" },
   lang: { label: "Language", en: "English", fr: "Français", ar: "العربية" },
   common: { loading: "Loading...", save: "Save", cancel: "Cancel", create: "Create", update: "Update", delete: "Delete", search: "Search", all: "All", confirm: "Confirm", close: "Close", add: "Add", name: "Name", id: "ID", icon: "Icon", order: "Order", required: "is required" },
   dashboard: {
@@ -92,11 +98,17 @@ const en: AdminTranslations = {
     addSub: "Add Subcategory", editSub: "Edit Subcategory", idHelp: "Unique ID (slug), e.g. cats", noCats: "No categories yet",
     subOf: "Subcategory of", subcount: "{n} subcategories", manage: "Manage", deleteConfirm: "Delete this category and all its subcategories?",
   },
+  reviews: {
+    title: "Customer Reviews", subtitle: "Approve or remove product reviews", loading: "Loading reviews...", noReviews: "No reviews yet",
+    pending: "Pending", approved: "Approved", rejected: "Rejected", all: "All",
+    product: "Product", customer: "Customer", rating: "Rating", comment: "Comment", status: "Status", date: "Date", actions: "Actions",
+    approve: "Approve", reject: "Reject", delete: "Delete", deleteConfirm: "Delete this review permanently?",
+  },
 };
 
 const fr: AdminTranslations = {
-  nav: { dashboard: "Tableau de bord", products: "Produits", orders: "Commandes", analytics: "Analytique", categories: "Catégories", settings: "Paramètres", translations: "Traductions", viewStore: "Voir la boutique" },
-  title: { dashboard: "Tableau de bord admin", products: "Produits", orders: "Commandes", analytics: "Analytique", categories: "Catégories", settings: "Paramètres", translations: "Traductions" },
+  nav: { dashboard: "Tableau de bord", products: "Produits", orders: "Commandes", analytics: "Analytique", categories: "Catégories", reviews: "Avis", settings: "Paramètres", translations: "Traductions", viewStore: "Voir la boutique" },
+  title: { dashboard: "Tableau de bord admin", products: "Produits", orders: "Commandes", analytics: "Analytique", categories: "Catégories", reviews: "Avis", settings: "Paramètres", translations: "Traductions" },
   lang: { label: "Langue", en: "English", fr: "Français", ar: "العربية" },
   common: { loading: "Chargement...", save: "Enregistrer", cancel: "Annuler", create: "Créer", update: "Mettre à jour", delete: "Supprimer", search: "Rechercher", all: "Tous", confirm: "Confirmer", close: "Fermer", add: "Ajouter", name: "Nom", id: "ID", icon: "Icône", order: "Ordre", required: "est requis" },
   dashboard: {
@@ -138,11 +150,17 @@ const fr: AdminTranslations = {
     addSub: "Ajouter une sous-catégorie", editSub: "Modifier la sous-catégorie", idHelp: "ID unique (slug), ex. cats", noCats: "Aucune catégorie pour l'instant",
     subOf: "Sous-catégorie de", subcount: "{n} sous-catégories", manage: "Gérer", deleteConfirm: "Supprimer cette catégorie et toutes ses sous-catégories ?",
   },
+  reviews: {
+    title: "Avis des clients", subtitle: "Approuver ou supprimer les avis produits", loading: "Chargement des avis...", noReviews: "Aucun avis pour l'instant",
+    pending: "En attente", approved: "Approuvé", rejected: "Rejeté", all: "Tous",
+    product: "Produit", customer: "Client", rating: "Note", comment: "Commentaire", status: "Statut", date: "Date", actions: "Actions",
+    approve: "Approuver", reject: "Rejeter", delete: "Supprimer", deleteConfirm: "Supprimer définitivement cet avis ?",
+  },
 };
 
 const ar: AdminTranslations = {
-  nav: { dashboard: "لوحة التحكم", products: "المنتجات", orders: "الطلبات", analytics: "التحليلات", categories: "الفئات", settings: "الإعدادات", translations: "الترجمات", viewStore: "عرض المتجر" },
-  title: { dashboard: "لوحة تحكم المدير", products: "المنتجات", orders: "الطلبات", analytics: "التحليلات", categories: "الفئات", settings: "الإعدادات", translations: "الترجمات" },
+  nav: { dashboard: "لوحة التحكم", products: "المنتجات", orders: "الطلبات", analytics: "التحليلات", categories: "الفئات", reviews: "التقييمات", settings: "الإعدادات", translations: "الترجمات", viewStore: "عرض المتجر" },
+  title: { dashboard: "لوحة تحكم المدير", products: "المنتجات", orders: "الطلبات", analytics: "التحليلات", categories: "الفئات", reviews: "التقييمات", settings: "الإعدادات", translations: "الترجمات" },
   lang: { label: "اللغة", en: "English", fr: "Français", ar: "العربية" },
   common: { loading: "جارٍ التحميل...", save: "حفظ", cancel: "إلغاء", create: "إنشاء", update: "تحديث", delete: "حذف", search: "بحث", all: "الكل", confirm: "تأكيد", close: "إغلاق", add: "إضافة", name: "الاسم", id: "المعرّف", icon: "الأيقونة", order: "الترتيب", required: "مطلوب" },
   dashboard: {
@@ -183,6 +201,12 @@ const ar: AdminTranslations = {
     title: "الفئات", subtitle: "إدارة فئات المنتجات والفئات الفرعية", addCategory: "إضافة فئة", editCategory: "تعديل الفئة",
     addSub: "إضافة فئة فرعية", editSub: "تعديل الفئة الفرعية", idHelp: "معرّف فريد (slug)، مثل cats", noCats: "لا توجد فئات بعد",
     subOf: "فئة فرعية من", subcount: "{n} فئات فرعية", manage: "إدارة", deleteConfirm: "حذف هذه الفئة وكل فئاتها الفرعية؟",
+  },
+  reviews: {
+    title: "آراء العملاء", subtitle: "الموافقة على تقييمات المنتجات أو حذفها", loading: "جارٍ تحميل التقييمات...", noReviews: "لا توجد تقييمات بعد",
+    pending: "قيد الانتظار", approved: "مقبول", rejected: "مرفوض", all: "الكل",
+    product: "المنتج", customer: "العميل", rating: "التقييم", comment: "التعليق", status: "الحالة", date: "التاريخ", actions: "الإجراءات",
+    approve: "قبول", reject: "رفض", delete: "حذف", deleteConfirm: "حذف هذا التقييم نهائياً؟",
   },
 };
 

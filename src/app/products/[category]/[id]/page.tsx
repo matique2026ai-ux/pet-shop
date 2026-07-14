@@ -10,6 +10,7 @@ import { useCart } from "@/lib/cart-context";
 import { useRecentlyViewed } from "@/lib/use-recently-viewed";
 import AnimatedSection from "@/components/animated-section";
 import ProductCard from "@/components/product-card";
+import ProductReviews from "@/components/product-reviews";
 import {
   Star, ChevronRight, Check, ShoppingCart, Plus, Minus, Share2, X, ZoomIn,
   Play, Truck, ShieldCheck, BadgeCheck, Leaf,
@@ -353,6 +354,10 @@ export default function ProductDetailPage() {
                 </div>
               </AnimatedSection>
             )}
+
+            <AnimatedSection>
+              <ProductReviews productId={product.id} />
+            </AnimatedSection>
           </div>
         </section>
 

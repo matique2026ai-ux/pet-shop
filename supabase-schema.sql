@@ -178,3 +178,40 @@ $$;
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
+-- ===========================================================================
+-- Product reviews. Registered users submit a rating (1-5) + comment. Reviews
+-- start as 'pending' and only appear publicly after an admin approves them.
+-- ===========================================================================
+
+CREATE TABLE IF NOT EXISTS reviews (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  product_id TEXT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  user_name TEXT NOT NULL,
+  rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  comment TEXT,
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS reviews_product_idx ON reviews (product_id);
+CREATE INDEX IF NOT EXISTS reviews_status_idx ON reviews (status);
+
+ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
+
+DO $$
+BEGIN
+  -- Anyone can read approved reviews.
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='reviews' AND policyname='reviews_select_approved') THEN
+    CREATE POLICY reviews_select_approved ON reviews FOR SELECT USING (status = 'approved');
+  END IF;
+  -- A signed-in user may read their own reviews (to see pending ones).
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='reviews' AND policyname='reviews_select_own') THEN
+    CREATE POLICY reviews_select_own ON reviews FOR SELECT USING (auth.uid() = user_id);
+  END IF;
+  -- A signed-in user may submit a review for themselves, always as 'pending'.
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='reviews' AND policyname='reviews_insert_own') THEN
+    CREATE POLICY reviews_insert_own ON reviews FOR INSERT WITH CHECK (auth.uid() = user_id AND status = 'pending');
+  END IF;
+END $$;
+

@@ -12,7 +12,7 @@ import {
 import {
   Users, ShoppingBag, DollarSign, Package, TrendingUp, TrendingDown,
   Edit, Trash2, ArrowUpRight, Calendar, Menu, X, Lock,
-  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Search, Filter, Tag, Languages, Video,
+  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Search, Filter, Tag, Languages, Video, Star, Check,
 } from "lucide-react";
 import HeroVideoManager from "@/components/hero-video-manager";
 import { en } from "@/lib/translations/en";
@@ -41,6 +41,7 @@ const sidebarTabs = [
   { label: "Orders", icon: ShoppingCart, key: "orders" },
   { label: "Analytics", icon: BarChart3, key: "analytics" },
    { label: "Categories", icon: Tag, key: "categories" },
+   { label: "Reviews", icon: Star, key: "reviews" },
    { label: "Settings", icon: Settings, key: "settings" },
    { label: "Translations", icon: Languages, key: "translations" },
 ];
@@ -49,6 +50,17 @@ interface Category {
   id: string;
   name: string;
   subcategories: { id: string; name: string }[];
+}
+
+interface Review {
+  id: string;
+  product_id: string;
+  user_name: string;
+  rating: number;
+  comment: string | null;
+  status: "pending" | "approved" | "rejected";
+  created_at: string;
+  products?: { name: string } | null;
 }
 
 interface Order {
@@ -269,6 +281,10 @@ export default function AdminDashboard() {
   const [deleteTarget, setDeleteTarget] = useState<ProductData | null>(null);
   const [deleting, setDeleting] = useState(false);
 
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loadingReviews, setLoadingReviews] = useState(false);
+  const [reviewFilter, setReviewFilter] = useState<"pending" | "approved" | "rejected" | "all">("pending");
+
   useEffect(() => {
     if (sessionStorage.getItem("admin_auth") === "1") setAuthed(true);
   }, []);
@@ -388,6 +404,37 @@ export default function AdminDashboard() {
     }
   }, [apiFetch]);
 
+  const loadReviews = useCallback(async () => {
+    setLoadingReviews(true);
+    try {
+      const data = await apiFetch("/api/reviews");
+      setReviews(data);
+    } catch {
+      setReviews([]);
+    } finally {
+      setLoadingReviews(false);
+    }
+  }, [apiFetch]);
+
+  const setReviewStatus = async (id: string, status: "approved" | "rejected" | "pending") => {
+    try {
+      await apiFetch(`/api/reviews/${id}`, { method: "PATCH", body: JSON.stringify({ status }) });
+      setReviews((prev) => prev.map((r) => (r.id === id ? { ...r, status } : r)));
+    } catch (e) {
+      alert("Failed: " + (e as Error).message);
+    }
+  };
+
+  const deleteReview = async (id: string) => {
+    if (!confirm(a.reviews.deleteConfirm)) return;
+    try {
+      await apiFetch(`/api/reviews/${id}`, { method: "DELETE" });
+      setReviews((prev) => prev.filter((r) => r.id !== id));
+    } catch (e) {
+      alert("Failed: " + (e as Error).message);
+    }
+  };
+
   const loadSettings = useCallback(async () => {
     try {
       const data = await fetch("/api/settings").then((r) => r.json());
@@ -410,7 +457,8 @@ export default function AdminDashboard() {
     if (activeTab === "products" || activeTab === "dashboard") loadProducts();
     if (activeTab === "settings") loadSettings();
     if (activeTab === "translations") loadTrans();
-  }, [authed, activeTab, loadOrders, loadProducts, loadSettings, loadTrans]);
+    if (activeTab === "reviews") loadReviews();
+  }, [authed, activeTab, loadOrders, loadProducts, loadSettings, loadTrans, loadReviews]);
 
   const openAddModal = () => {
     setEditingProduct(null);
@@ -1482,6 +1530,104 @@ export default function AdminDashboard() {
                       </div>
                     ))
                   )}
+                </div>
+              </div>
+            )}
+
+            {/* ===== REVIEWS ===== */}
+            {activeTab === "reviews" && (
+              <div className="space-y-6">
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                  <div className="mb-4">
+                    <h3 className="text-lg font-bold text-gray-900">{a.reviews.title}</h3>
+                    <p className="text-sm text-gray-500">{a.reviews.subtitle}</p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {(["pending", "approved", "rejected", "all"] as const).map((f) => {
+                      const cnt = f === "all" ? reviews.length : reviews.filter((r) => r.status === f).length;
+                      return (
+                        <button
+                          key={f}
+                          onClick={() => setReviewFilter(f)}
+                          className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                            reviewFilter === f
+                              ? "bg-emerald-500/20 text-emerald-700 border border-emerald-500/30"
+                              : "bg-gray-50 text-gray-500 hover:bg-gray-100 border border-transparent"
+                          }`}
+                        >
+                          {a.reviews[f]} ({cnt})
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {loadingReviews ? (
+                    <div className="text-gray-400 text-sm py-8 text-center">{a.reviews.loading}</div>
+                  ) : (() => {
+                    const list = reviews.filter((r) => reviewFilter === "all" || r.status === reviewFilter);
+                    if (list.length === 0) {
+                      return <div className="text-gray-400 text-sm py-8 text-center">{a.reviews.noReviews}</div>;
+                    }
+                    return (
+                      <div className="space-y-3">
+                        {list.map((r) => (
+                          <div key={r.id} className="border border-gray-100 rounded-xl p-4">
+                            <div className="flex flex-wrap items-start justify-between gap-3">
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <span className="font-semibold text-gray-900">{r.user_name}</span>
+                                  <span className="flex items-center gap-0.5">
+                                    {[1, 2, 3, 4, 5].map((i) => (
+                                      <Star key={i} className={`w-3.5 h-3.5 ${i <= r.rating ? "fill-[#E5B25A] text-[#E5B25A]" : "fill-gray-200 text-gray-200"}`} />
+                                    ))}
+                                  </span>
+                                  <span className={`px-2 py-0.5 rounded-full text-[11px] font-medium ${
+                                    r.status === "approved" ? "bg-emerald-100 text-emerald-700"
+                                    : r.status === "rejected" ? "bg-red-100 text-red-600"
+                                    : "bg-amber-100 text-amber-700"
+                                  }`}>
+                                    {a.reviews[r.status]}
+                                  </span>
+                                </div>
+                                <p className="text-xs text-gray-400 mb-1">
+                                  {r.products?.name ?? r.product_id} · {new Date(r.created_at).toLocaleDateString()}
+                                </p>
+                                {r.comment && <p className="text-sm text-gray-600 whitespace-pre-line">{r.comment}</p>}
+                              </div>
+                              <div className="flex items-center gap-2 shrink-0">
+                                {r.status !== "approved" && (
+                                  <button
+                                    onClick={() => setReviewStatus(r.id, "approved")}
+                                    title={a.reviews.approve}
+                                    className="p-2 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors"
+                                  >
+                                    <Check className="w-4 h-4" />
+                                  </button>
+                                )}
+                                {r.status !== "rejected" && (
+                                  <button
+                                    onClick={() => setReviewStatus(r.id, "rejected")}
+                                    title={a.reviews.reject}
+                                    className="p-2 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-100 transition-colors"
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </button>
+                                )}
+                                <button
+                                  onClick={() => deleteReview(r.id)}
+                                  title={a.reviews.delete}
+                                  className="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
             )}
