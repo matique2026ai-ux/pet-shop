@@ -46,8 +46,8 @@ export default function VetCard({ service }: VetCardProps) {
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition-all duration-700 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1a1512]/90 via-[#3a220a]/30 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#1a1512]/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#003333]/90 via-[#004d4d]/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#003333]/40" />
 
         <div className="absolute top-4 left-4">
           <span className="w-10 h-10 bg-white/20 backdrop-blur-xl rounded-xl flex items-center justify-center text-white border border-white/30 shadow-lg">
@@ -60,7 +60,7 @@ export default function VetCard({ service }: VetCardProps) {
             <h3 className="text-xl font-bold text-white drop-shadow-lg">{service.title}</h3>
             <span className="text-2xl font-bold text-white drop-shadow-lg">{currency}{service.price}</span>
           </div>
-          <p className="text-sm text-emerald-100/80 drop-shadow line-clamp-2">{service.description}</p>
+          <p className="text-sm text-white/80 drop-shadow line-clamp-2">{service.description}</p>
         </div>
       </div>
 
@@ -69,7 +69,7 @@ export default function VetCard({ service }: VetCardProps) {
           <Clock className="w-3.5 h-3.5" />
           {service.duration}
         </span>
-        <span className="flex items-center gap-1 text-xs font-semibold text-[#b87a30]">
+        <span className="flex items-center gap-1 text-xs font-semibold text-[#008080]">
           <Sparkles className="w-3 h-3" /> {t.vet.bookNow}
         </span>
       </div>

@@ -10,6 +10,7 @@ import { useSiteSettings } from "@/lib/site-settings";
 import AnimatedSection from "@/components/animated-section";
 import ProductCard from "@/components/product-card";
 import VetCard from "@/components/vet-card";
+import { SHIMMER_BLUR } from "@/lib/blur";
 import { ArrowRight, Star, Truck, Shield, RefreshCw, Clock, Stethoscope, ChevronLeft, ChevronRight, Heart } from "lucide-react";
 
 const categoryImages: Record<string, string> = {
@@ -115,7 +116,7 @@ export default function HomePage() {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {categories.map((cat) => (
                 <Link key={cat.id} href={`/products/${cat.id}`} className="group relative block rounded-2xl overflow-hidden aspect-[4/5] shadow-md hover:shadow-xl transition-all">
-                  <Image src={categoryImages[cat.id] || categoryImages.cats} alt={cat.name} fill sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw" className="object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <Image src={categoryImages[cat.id] || categoryImages.cats} alt={cat.name} fill placeholder="blur" blurDataURL={SHIMMER_BLUR} sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw" className="object-cover group-hover:scale-110 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                   <div className="absolute bottom-0 inset-x-0 p-4 text-center">
                     <span className="text-white font-bold text-sm lg:text-base leading-tight block drop-shadow-lg">

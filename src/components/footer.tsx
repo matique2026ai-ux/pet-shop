@@ -22,8 +22,8 @@ export default function Footer() {
   };
 
   const s = (k: string, fallback: string) => (store && store[k] ? store[k] : fallback);
-  const addressLines = (s("address", t.contact.addressText || "123 Pet Street\nNew York, NY 10001")).split("\n");
-  const phone = s("phone", t.contact.phoneText || "+1 (234) 567-890");
+  const addressLines = (s("address", t.contact.addressText || "Larbi Ben M'hidi Street\nSétif 19000, Algeria")).split("\n");
+  const phone = s("phone", t.contact.phoneText || "+213 661 234 567");
   const deliveryPrefix = lang === "ar" ? "توصيل" : lang === "fr" ? "Livraison" : "Delivery";
   const coverage = delivery
     ? `${deliveryPrefix} ${delivery.city} • ${delivery.eta}`
@@ -39,13 +39,13 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <span className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
+              <span className="w-8 h-8 bg-[#008080] rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">PW</span>
               </span>
               <span className="font-bold text-white">Paws & Wings</span>
             </div>
             <p className="text-sm text-stone-400 leading-relaxed">
-              {t.footer.madeWith} <Heart className="w-3 h-3 inline text-emerald-500 fill-emerald-500" />
+              {t.footer.madeWith} <Heart className="w-3 h-3 inline text-[#FF7F50] fill-[#FF7F50]" />
             </p>
           </div>
 
@@ -61,7 +61,7 @@ export default function Footer() {
                 { href: "/contact", label: t.nav.contact },
               ].map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="hover:text-emerald-500 transition-colors">{l.label}</Link>
+                  <Link href={l.href} className="hover:text-[#008080] transition-colors">{l.label}</Link>
                 </li>
               ))}
             </ul>
@@ -73,10 +73,10 @@ export default function Footer() {
               {addressLines.map((line, i) => (
                 <li key={i}>{line}</li>
               ))}
-              <li><a href={`tel:${phone}`} className="hover:text-emerald-500 transition-colors">{phone}</a></li>
-              <li><a href={`mailto:${emailAddr}`} className="hover:text-emerald-500 transition-colors">{emailAddr}</a></li>
+              <li><a href={`tel:${phone}`} className="hover:text-[#008080] transition-colors">{phone}</a></li>
+              <li><a href={`mailto:${emailAddr}`} className="hover:text-[#008080] transition-colors">{emailAddr}</a></li>
             </ul>
-            <div className="mt-3 flex items-center gap-2 text-sm text-emerald-400">
+            <div className="mt-3 inline-flex items-center gap-2 text-sm text-[#006666] bg-[#e6f5f5] border border-[#b3e0e0] rounded-full px-3 py-1.5">
               <Truck className="w-4 h-4 shrink-0" />
               <span>{coverage}</span>
             </div>
@@ -85,7 +85,7 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4">{t.footer.newsletter}</h3>
             {subscribed ? (
-              <div className="flex items-center gap-2 text-emerald-400 text-sm">
+              <div className="flex items-center gap-2 text-[#008080] text-sm">
                 <CheckCircle className="w-4 h-4" />
                 <span>{t.footer.subscribed}</span>
               </div>
@@ -97,24 +97,24 @@ export default function Footer() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t.footer.emailPlaceholder}
                   required
-                  className="flex-1 px-3 py-2 rounded-lg bg-stone-800 text-white text-sm placeholder-stone-500 border border-stone-700 focus:outline-none focus:border-emerald-600"
+                  className="flex-1 px-3 py-2 rounded-lg bg-stone-800 text-white text-sm placeholder-stone-500 border border-stone-700 focus:outline-none focus:border-[#008080]"
                 />
                 <button
                   type="submit"
-                  className="px-3 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                  className="px-3 py-2 bg-[#008080] text-white rounded-lg hover:bg-[#006666] transition-colors"
                 >
                   <Mail className="w-4 h-4" />
                 </button>
               </form>
             )}
             <div className="flex gap-3 mt-4">
-              <a href={instagram} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors" aria-label="Instagram">
+              <a href={instagram} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-[#008080] transition-colors" aria-label="Instagram">
                 <Camera className="w-4 h-4" />
               </a>
-              <a href={facebook} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors" aria-label="Facebook">
+              <a href={facebook} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-[#008080] transition-colors" aria-label="Facebook">
                 <Globe className="w-4 h-4" />
               </a>
-              <a href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, "")}`} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors" aria-label="WhatsApp">
+              <a href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, "")}`} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-[#008080] transition-colors" aria-label="WhatsApp">
                 <MessageCircle className="w-4 h-4" />
               </a>
             </div>
@@ -126,7 +126,7 @@ export default function Footer() {
           <button
             type="button"
             onClick={() => window.dispatchEvent(new Event("open-cookie-settings"))}
-            className="hover:text-emerald-500 transition-colors"
+            className="hover:text-[#008080] transition-colors"
           >
             {t.cookies.settings}
           </button>

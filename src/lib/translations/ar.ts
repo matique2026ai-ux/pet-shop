@@ -174,6 +174,7 @@ export const ar = {
     freeProgress: "أضف {amount} د.ج فقط للحصول على شحن مجاني!",
     wilaya: "الولاية",
     commune: "البلدية",
+    phoneInvalid: "يرجى إدخال رقم هاتف جزائري صحيح",
   },
   vet: {
     title: "العيادة البيطرية",

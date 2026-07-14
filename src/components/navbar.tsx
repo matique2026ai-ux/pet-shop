@@ -7,14 +7,13 @@ import { useSiteSettings } from "@/lib/site-settings";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, X, ShoppingCart, Phone, ChevronDown, Globe, Search, Truck, ChevronRight, User, LogIn, Loader2, Cat, Dog, Bird, Fish, Rabbit, PawPrint, Stethoscope } from "lucide-react";
+import { Menu, X, ShoppingCart, Phone, Search, Truck, ChevronRight, User, LogIn, Loader2, Cat, Dog, Bird, Fish, Rabbit, PawPrint, Stethoscope } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import AuthModal from "@/components/auth-modal";
 
-const languages = [
-  { code: "en" as const, label: "EN" },
+const langOptions = [
+  { code: "ar" as const, label: "ع" },
   { code: "fr" as const, label: "FR" },
-  { code: "ar" as const, label: "AR" },
 ];
 
 const catIcons: Record<string, React.ReactNode> = {
@@ -38,7 +37,6 @@ export default function Navbar() {
   const { user, profile, loading: authLoading, logout } = useAuth();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<"login" | "register">("login");
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -74,12 +72,10 @@ export default function Navbar() {
 
   const desktopLinks = [
     { href: "/", label: t.nav.home },
-    { href: "/products?filter=new", label: t.nav.newArrivals },
-    { href: "/products?filter=offers", label: t.nav.offers },
+    { href: "/products", label: t.nav.products },
     { href: "/vet", label: t.nav.vet, badge: true },
-    { href: "/faq", label: t.nav.faq },
+    { href: "/products?filter=offers", label: t.nav.offers },
     { href: "/shipping", label: t.nav.shipping },
-    { href: "/about", label: t.nav.about },
     { href: "/contact", label: t.nav.contact },
   ];
 
@@ -99,12 +95,12 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="bg-emerald-950/60 backdrop-blur-xl border-b border-emerald-800/20 sticky top-0 z-50">
+      <nav className="bg-[#008080] border-b border-[#006666] sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <span className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-              <PawPrint className="w-4 h-4 text-white" />
+            <span className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+              <PawPrint className="w-4 h-4 text-[#008080]" />
             </span>
             <span className="font-bold text-white hidden sm:block">Paws & Wings</span>
           </Link>
@@ -114,31 +110,21 @@ export default function Navbar() {
               <Link
                 key={l.href}
                 href={l.href}
-                className={`group relative px-2 py-2 text-[13px] whitespace-nowrap rounded-lg transition-colors ${isActive(l.href) ? "text-emerald-300" : "text-white hover:text-emerald-300 hover:bg-white/10"}`}
+                className={`group relative px-2 py-2 text-[13px] whitespace-nowrap rounded-lg transition-colors ${isActive(l.href) ? "text-white font-semibold" : "text-white/85 hover:text-white hover:bg-white/10"}`}
               >
                 <span className="flex items-center gap-1.5">
                   {l.label}
                   {l.badge && (
-                    <span className="align-middle text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-400 text-[#3a220a]">
+                      <span className="align-middle text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#FF7F50] text-white">
                       {lang === "ar" ? "قريبًا" : lang === "fr" ? "Bientôt" : "Soon"}
                     </span>
                   )}
                 </span>
                 <span
-                  className={`absolute left-2 right-2 bottom-1 h-0.5 rounded-full bg-emerald-400 origin-${isRtl ? "right" : "left"} transition-transform duration-300 ${isActive(l.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}
+                  className={`absolute left-2 right-2 bottom-1 h-0.5 rounded-full bg-[#FF7F50] origin-${isRtl ? "right" : "left"} transition-transform duration-300 ${isActive(l.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}
                 />
               </Link>
             ))}
-            <div className="relative" onMouseEnter={() => { if (timeoutRef.current) clearTimeout(timeoutRef.current); setMegaOpen(true); }} onMouseLeave={handleMegaLeave}>
-              <button
-                ref={catBtnRef}
-                onClick={() => setMegaOpen(!megaOpen)}
-                className={`flex items-center gap-1 px-3 py-2 text-sm rounded-lg transition-colors ${megaOpen ? "text-emerald-300 bg-white/10" : "text-white hover:text-emerald-300 hover:bg-white/10"}`}
-              >
-                {t.nav.categories}
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${megaOpen ? "rotate-180" : ""}`} />
-              </button>
-            </div>
           </div>
 
           <div className="flex items-center gap-3">
@@ -165,26 +151,17 @@ export default function Navbar() {
                 setSearchOpen(!searchOpen);
                 if (!searchOpen) setTimeout(() => searchRef.current?.focus(), 100);
               }}
-              className="xl:hidden p-2 text-white hover:text-emerald-300"
+              className="xl:hidden p-2 text-white hover:text-white hover:bg-white/10 rounded-lg transition-colors"
             >
               <Search className="w-4 h-4" />
             </button>
 
-            <div className="relative">
-              <button onClick={() => setLangOpen(!langOpen)} className="flex items-center gap-1 text-sm text-white hover:text-emerald-300 px-2 py-1.5 rounded-lg hover:bg-white/10">
-                <Globe className="w-4 h-4" />
-                <span className="hidden sm:inline">{languages.find((l) => l.code === lang)?.label}</span>
-                <ChevronDown className="w-3 h-3" />
-              </button>
-              {langOpen && (
-                <div className={`absolute ${isRtl ? "left-0" : "right-0"} mt-1 bg-white rounded-lg shadow-lg border border-gray-100 py-1 min-w-[80px]`}>
-                  {languages.map((l) => (
-                     <button key={l.code} onClick={() => { setLang(l.code); setLangOpen(false); }} className={`block w-full text-left px-3 py-1.5 text-sm hover:bg-gray-50 rtl:text-right ${lang === l.code ? "text-emerald-600 font-medium" : "text-gray-600"}`}>
-                      {l.label}
-                    </button>
-                  ))}
-                </div>
-              )}
+            <div dir="ltr" className="flex items-center rounded-full bg-white/15 p-0.5 text-xs font-semibold">
+              {langOptions.map((l) => (
+                <button key={l.code} onClick={() => setLang(l.code)} aria-label={l.label} className={`px-2.5 py-1 rounded-full transition-colors ${lang === l.code ? "bg-white text-[#008080]" : "text-white hover:text-white/80"}`}>
+                  {l.label}
+                </button>
+              ))}
             </div>
 
               {authLoading ? (
@@ -195,7 +172,7 @@ export default function Navbar() {
               <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-semibold text-sm hover:bg-emerald-500 transition-colors"
+                  className="w-9 h-9 rounded-full bg-white text-[#008080] flex items-center justify-center font-semibold text-sm hover:bg-white/90 transition-colors"
                   aria-label={t.auth.myAccount}
                 >
                   {(profile?.full_name?.[0] || user.email?.[0] || "U").toUpperCase()}
@@ -206,12 +183,12 @@ export default function Navbar() {
                       <p className="text-sm font-semibold text-gray-900 truncate">{profile?.full_name || user.email}</p>
                       <p className="text-xs text-gray-400 truncate">{user.email}</p>
                     </div>
-                    <Link href="/account" onClick={() => setUserMenuOpen(false)} className="block px-4 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-gray-50 transition-colors">
+                    <Link href="/account" onClick={() => setUserMenuOpen(false)} className="block px-4 py-2 text-sm text-gray-700 hover:text-[#008080] hover:bg-gray-50 transition-colors">
                       {t.auth.myAccount}
                     </Link>
                     <button
                       onClick={async () => { await logout(); setUserMenuOpen(false); }}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-gray-50 transition-colors"
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:text-[#008080] hover:bg-gray-50 transition-colors"
                     >
                       {t.auth.logout}
                     </button>
@@ -221,23 +198,23 @@ export default function Navbar() {
             ) : (
               <button
                 onClick={() => { setAuthTab("login"); setAuthOpen(true); }}
-                className="p-2 text-white hover:text-emerald-300 rounded-lg hover:bg-white/10 transition-colors"
-                aria-label={t.auth.login}
+                  className="p-2 text-white hover:text-white rounded-lg hover:bg-white/10 transition-colors"
+                  aria-label={t.auth.login}
                 title={t.auth.login}
               >
                 <User className="w-5 h-5" />
               </button>
             )}
 
-            <a href={telHref} className="hidden xl:flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">
+            <a href={telHref} className="hidden xl:flex items-center gap-2 bg-[#FF7F50] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#ff9472] transition-colors">
               <Phone className="w-4 h-4" />
               {t.nav.callNow}
             </a>
 
-            <Link href="/cart" className="relative p-2 text-white hover:text-emerald-300">
+            <Link href="/cart" className="relative p-2 text-white hover:text-white hover:bg-white/10 rounded-lg transition-colors">
               <ShoppingCart className="w-5 h-5" />
               {totalItems > 0 && (
-                <span className="absolute top-0 right-0 rounded-full bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center">
+                <span className="absolute top-0 right-0 rounded-full bg-[#FF7F50] text-white text-xs w-4 h-4 flex items-center justify-center">
                   {totalItems}
                 </span>
               )}
@@ -260,14 +237,14 @@ export default function Navbar() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
               <div className="lg:col-span-3">
-                <p className="text-[11px] font-semibold uppercase tracking-widest text-emerald-600 mb-4">{t.nav.categories}</p>
+                <p className="text-[11px] font-semibold uppercase tracking-widest text-[#008080] mb-4">{t.nav.categories}</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {categories.map((cat) => (
                     <Link
                       key={cat.id}
                       href={`/products/${cat.id}`}
                       onClick={() => setMegaOpen(false)}
-                      className="group flex items-center gap-3 p-3 rounded-xl hover:bg-emerald-50 transition-colors"
+                      className="group flex items-center gap-3 p-3 rounded-xl hover:bg-[#e6f5f5] transition-colors"
                     >
                       <span className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center bg-emerald-100 text-emerald-700 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
                         {catIcons[cat.icon] ?? <PawPrint className="w-5 h-5" />}
@@ -305,7 +282,7 @@ export default function Navbar() {
                       {lang === "ar" ? "كل ما يحتاجه حيوانك الأليف في مكان واحد." : lang === "fr" ? "Tout pour votre compagnon en un seul endroit." : "Everything your pet needs in one place."}
                     </p>
                   </div>
-                  <Link href="/products" onClick={() => setMegaOpen(false)} className="mt-4 inline-flex items-center justify-center gap-1.5 bg-white text-emerald-700 font-semibold text-sm rounded-xl px-4 py-2.5 hover:bg-emerald-50 transition-colors">
+                  <Link href="/products" onClick={() => setMegaOpen(false)} className="mt-4 inline-flex items-center justify-center gap-1.5 bg-white text-emerald-700 font-semibold text-sm rounded-xl px-4 py-2.5 hover:bg-[#e6f5f5] transition-colors">
                     {lang === "ar" ? "تسوّق الكل" : lang === "fr" ? "Tout voir" : "Shop All"} <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -321,25 +298,25 @@ export default function Navbar() {
             {user ? (
               <div className="flex items-center justify-between py-2 border-b border-gray-100 mb-1">
                 <span className="text-sm font-semibold text-gray-900 truncate">{profile?.full_name || user.email}</span>
-                <button onClick={async () => { await logout(); setMobileOpen(false); }} className="text-sm text-gray-500 hover:text-emerald-600">{t.auth.logout}</button>
+                <button onClick={async () => { await logout(); setMobileOpen(false); }} className="text-sm text-gray-500 hover:text-[#008080]">{t.auth.logout}</button>
               </div>
             ) : (
               <button
                 onClick={() => { setAuthTab("login"); setAuthOpen(true); setMobileOpen(false); }}
-                className="flex items-center gap-2 w-full py-2 text-emerald-600 font-semibold text-sm"
+                className="flex items-center gap-2 w-full py-2 text-[#008080] font-semibold text-sm"
               >
                 <LogIn className="w-4 h-4" /> {t.auth.login}
               </button>
             )}
-            <Link href="/account" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">{t.auth.myAccount}</Link>
-            <Link href="/" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">{t.nav.home}</Link>
-            <Link href="/products?filter=new" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">{t.nav.newArrivals}</Link>
-            <Link href="/products?filter=offers" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">{t.nav.offers}</Link>
+            <Link href="/account" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-[#008080] text-sm font-medium">{t.auth.myAccount}</Link>
+            <Link href="/" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-[#008080] text-sm font-medium">{t.nav.home}</Link>
+            <Link href="/products?filter=new" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-[#008080] text-sm font-medium">{t.nav.newArrivals}</Link>
+            <Link href="/products?filter=offers" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-[#008080] text-sm font-medium">{t.nav.offers}</Link>
             <div className="border-t border-gray-100 pt-2 mt-2">
               <p className="text-[11px] text-gray-400 font-medium uppercase tracking-wider mb-2 px-1">{t.nav.categories}</p>
               {categories.map((cat) => (
                 <div key={cat.id}>
-                  <Link href={`/products/${cat.id}`} onClick={() => setMobileOpen(false)} className="flex items-center gap-2 py-2 px-1 text-gray-700 hover:text-emerald-600 text-sm font-medium">
+                  <Link href={`/products/${cat.id}`} onClick={() => setMobileOpen(false)} className="flex items-center gap-2 py-2 px-1 text-gray-700 hover:text-[#008080] text-sm font-medium">
                     <span className="w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center text-gray-600">
                       {catIcons[cat.icon] ?? <PawPrint className="w-4 h-4" />}
                     </span>
@@ -347,7 +324,7 @@ export default function Navbar() {
                   </Link>
                   <div className="ms-9 mb-1 flex flex-wrap gap-1">
                     {cat.subcategories.map((sub) => (
-                      <Link key={sub.id} href={`/products/${cat.id}?sub=${sub.id}`} onClick={() => setMobileOpen(false)} className="text-xs text-gray-500 hover:text-emerald-600 px-2 py-1 bg-gray-50 rounded-md">
+                      <Link key={sub.id} href={`/products/${cat.id}?sub=${sub.id}`} onClick={() => setMobileOpen(false)} className="text-xs text-gray-500 hover:text-[#008080] px-2 py-1 bg-gray-50 rounded-md">
                         {sub.name}
                       </Link>
                     ))}
@@ -356,16 +333,16 @@ export default function Navbar() {
               ))}
             </div>
             <div className="border-t border-gray-100 pt-2 mt-2 space-y-1">
-              <Link href="/vet" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">
+              <Link href="/vet" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-[#008080] text-sm font-medium">
                 {t.nav.vet}
-                <span className="ml-1.5 inline-block align-middle text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-400 text-[#3a220a]">
+                <span className="ml-1.5 inline-block align-middle text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#FF7F50] text-white">
                   {lang === "ar" ? "قريبًا" : lang === "fr" ? "Bientôt" : "Soon"}
                 </span>
               </Link>
-              <Link href="/faq" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">{t.nav.faq}</Link>
-              <Link href="/shipping" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">{t.nav.shipping}</Link>
-              <Link href="/about" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">{t.nav.about}</Link>
-              <Link href="/contact" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">{t.nav.contact}</Link>
+              <Link href="/faq" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-[#008080] text-sm font-medium">{t.nav.faq}</Link>
+              <Link href="/shipping" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-[#008080] text-sm font-medium">{t.nav.shipping}</Link>
+              <Link href="/about" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-[#008080] text-sm font-medium">{t.nav.about}</Link>
+              <Link href="/contact" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-[#008080] text-sm font-medium">{t.nav.contact}</Link>
             </div>
           </div>
         </div>

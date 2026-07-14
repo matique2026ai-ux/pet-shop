@@ -16,16 +16,22 @@ export function OrganizationSchema() {
       description: "Premium pet products and veterinary care for cats, dogs, birds, fish, and small pets.",
       address: {
         "@type": "PostalAddress",
-        streetAddress: "123 Pet Street",
-        addressLocality: "New York",
-        addressRegion: "NY",
-        postalCode: "10001",
-        addressCountry: "US",
+        streetAddress: "حي الهضاب",
+        addressLocality: "Sétif",
+        addressRegion: "Sétif",
+        postalCode: "19000",
+        addressCountry: "DZ",
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: 36.1898,
+        longitude: 5.4123,
       },
       contactPoint: {
         "@type": "ContactPoint",
-        telephone: "+1-234-567-890",
+        telephone: "+21336123456",
         contactType: "customer service",
+        areaServed: ["Sétif", "Algérie"],
       },
       sameAs: [
         "https://facebook.com/pawsandwings",
@@ -34,6 +40,63 @@ export function OrganizationSchema() {
     });
     document.head.appendChild(script);
     return () => { const s = document.getElementById("organization-schema"); if (s) s.remove(); };
+  }, []);
+
+  return null;
+}
+
+export function LocalBusinessSchema() {
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.id = "localbusiness-schema";
+    script.innerHTML = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "PetStore",
+      "@id": "https://www.pawsandwings.com/#petstore",
+      name: "Paws & Wings",
+      image: "https://www.pawsandwings.com/placeholder.svg",
+      url: "https://www.pawsandwings.com",
+      telephone: "+21336123456",
+      priceRange: "د.ج",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "حي الهضاب",
+        addressLocality: "Sétif",
+        addressRegion: "Sétif",
+        postalCode: "19000",
+        addressCountry: "DZ",
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: 36.1898,
+        longitude: 5.4123,
+      },
+      areaServed: ["Sétif", "Algérie"],
+      openingHoursSpecification: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          opens: "08:00",
+          closes: "20:00",
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Saturday", "Sunday"],
+          opens: "09:00",
+          closes: "18:00",
+        },
+      ],
+      sameAs: [
+        "https://facebook.com/pawsandwings",
+        "https://instagram.com/pawsandwings",
+      ],
+    });
+    document.head.appendChild(script);
+    return () => {
+      const s = document.getElementById("localbusiness-schema");
+      if (s) s.remove();
+    };
   }, []);
 
   return null;

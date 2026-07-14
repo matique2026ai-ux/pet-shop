@@ -174,6 +174,7 @@ export const en = {
     freeProgress: "Add {amount} more to get free delivery!",
     wilaya: "Wilaya",
     commune: "Commune / Municipality",
+    phoneInvalid: "Please enter a valid Algerian phone number",
   },
   vet: {
     title: "Veterinary Clinic",

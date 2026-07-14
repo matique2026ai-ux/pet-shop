@@ -48,6 +48,17 @@ const DELIVERY_BY_REGION = {
   south: { fee: 800, eta: { en: "5-7 days", fr: "5-7 jours", ar: "5-7 أيام" } },
 };
 
+function isValidAlgerianPhone(raw: string): boolean {
+  let v = raw.replace(/[\s\-().]/g, "");
+  if (v.startsWith("+213")) v = v.slice(4);
+  else if (v.startsWith("00213")) v = v.slice(5);
+  else if (v.startsWith("213")) v = v.slice(3);
+  if (!/^\d{9,10}$/.test(v)) return false;
+  if (/^0[567]\d{8}$/.test(v)) return true; // mobile: 05/06/07 + 8 digits
+  if (/^0[0-3]\d{7,8}$/.test(v)) return true; // landline: 0 + area code (e.g. 036 Sétif)
+  return false;
+}
+
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, clearCart } = useCart();
   const { t, currency, lang } = useI18n();
@@ -58,6 +69,7 @@ export default function CartPage() {
   const [area, setArea] = useState("");
   const [wilaya, setWilaya] = useState("Sétif");
   const [commune, setCommune] = useState("");
+  const [phoneError, setPhoneError] = useState<string | null>(null);
 
   const d = { ...DEFAULT_DELIVERY, ...(delivery || {}) };
   const region = regionForWilaya(wilaya);
@@ -312,6 +324,12 @@ export default function CartPage() {
                 e.preventDefault();
                 const form = e.currentTarget;
                 const fd = new FormData(form);
+                const phone = (fd.get("phone") as string) || "";
+                if (!isValidAlgerianPhone(phone)) {
+                  setPhoneError(t.cart.phoneInvalid);
+                  return;
+                }
+                setPhoneError(null);
                 const order = {
                   customer_name: fd.get("name") as string,
                   customer_phone: fd.get("phone") as string,
@@ -351,9 +369,15 @@ export default function CartPage() {
                 type="tel"
                 name="phone"
                 placeholder={t.cart.phonePlaceholder}
+                inputMode="tel"
+                dir="auto"
                 required
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                onChange={() => phoneError && setPhoneError(null)}
+                className={`w-full px-4 py-3 rounded-xl border text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${phoneError ? "border-red-400 bg-red-50" : "border-gray-200"}`}
               />
+              {phoneError && (
+                <p className="text-xs text-red-500 mt-1">{phoneError}</p>
+              )}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t.cart.wilaya}</label>
                 <select

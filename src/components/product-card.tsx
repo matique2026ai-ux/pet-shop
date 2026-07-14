@@ -6,6 +6,7 @@ import { Star, ShoppingCart } from "lucide-react";
 import type { Product } from "@/lib/data";
 import { useCart } from "@/lib/cart-context";
 import { useI18n } from "@/lib/i18n-context";
+import { SHIMMER_BLUR } from "@/lib/blur";
 
 interface ProductCardProps {
   product: Product;
@@ -37,6 +38,8 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
               src={product.image || "/placeholder.svg"}
               alt={product.name}
               fill
+              placeholder="blur"
+              blurDataURL={SHIMMER_BLUR}
               className="object-cover transition-all duration-[800ms] ease-out group-hover:scale-110 group-hover:rotate-2"
               sizes={isRelated ? "(max-width: 640px) 50vw, 25vw" : "(max-width: 640px) 100vw, 25vw"}
             />
@@ -87,7 +90,7 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
 
             <button
               onClick={handleAddToCart}
-              className="mt-2 inline-flex items-center gap-1.5 bg-emerald-600 text-white rounded-xl px-3 py-1.5 text-xs font-medium hover:bg-emerald-700 transition-colors"
+              className="add-cart-btn mt-2 inline-flex items-center gap-1.5 bg-emerald-600 text-white rounded-xl px-3 py-1.5 text-xs font-medium hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-600/30"
             >
               <ShoppingCart className="w-3.5 h-3.5" />
               {t.products.addToCart}

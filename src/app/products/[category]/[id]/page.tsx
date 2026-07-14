@@ -211,7 +211,7 @@ export default function ProductDetailPage() {
                         </div>
                         <button
                           onClick={() => { addItem(product, qty); setQty(1); }}
-                          className="flex-1 inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-6 py-3.5 rounded-xl font-semibold hover:bg-emerald-700 transition-colors shadow-sm"
+                          className="add-cart-btn flex-1 inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-6 py-3.5 rounded-xl font-semibold hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-600/30 shadow-sm"
                         >
                           <ShoppingCart className="w-5 h-5" />
                           {t.products.addToCart}
@@ -236,7 +236,7 @@ export default function ProductDetailPage() {
                         </div>
                         <button
                           onClick={() => { addItem(product, qty); setQty(1); }}
-                          className="flex-1 inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-6 py-3.5 rounded-xl font-semibold hover:bg-emerald-700 transition-colors shadow-sm"
+                          className="add-cart-btn flex-1 inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-6 py-3.5 rounded-xl font-semibold hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-600/30 shadow-sm"
                         >
                           <ShoppingCart className="w-5 h-5" />
                           {t.products.addToCart}

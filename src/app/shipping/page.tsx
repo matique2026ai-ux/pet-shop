@@ -12,15 +12,14 @@ export default function ShippingPage() {
   return (
     <div>
       <section className="relative overflow-hidden py-16 lg:py-24 flex items-center min-h-[50vh]">
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-900 via-emerald-800 to-stone-900" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(16,185,129,0.15),transparent_60%)]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#e6f5f5] via-[#f5f5f5] to-white" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <AnimatedSection>
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-xl rounded-full text-sm text-emerald-200 border border-white/10 mb-4">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#008080]/10 rounded-full text-sm text-[#008080] border border-[#008080]/15 mb-4">
               <Sparkles className="w-4 h-4" /> {t.shipping.title}
             </span>
-            <h1 className="text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">{t.shipping.title}</h1>
-            <p className="text-emerald-100/70 text-lg max-w-lg">{t.shipping.subtitle}</p>
+            <h1 className="text-5xl lg:text-6xl font-bold text-[#008080] mb-4 leading-tight">{t.shipping.title}</h1>
+            <p className="text-gray-600 text-lg max-w-lg leading-relaxed">{t.shipping.subtitle}</p>
           </AnimatedSection>
         </div>
       </section>
@@ -28,12 +27,12 @@ export default function ShippingPage() {
       <section className="pb-16 lg:pb-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">{t.shipping.deliveryTableTitle}</h2>
+            <h2 className="text-2xl font-bold text-[#008080] mb-6 text-center">{t.shipping.deliveryTableTitle}</h2>
             <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden" style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.25)" }}>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm" dir={dir}>
                   <thead>
-                    <tr className="bg-emerald-50 text-emerald-800">
+                     <tr className="bg-[#e6f5f5] text-[#006666]">
                       <th className="text-right font-semibold py-3 px-4">{t.shipping.deliveryTableHeaders.region}</th>
                       <th className="text-right font-semibold py-3 px-4">{t.shipping.deliveryTableHeaders.eta}</th>
                       <th className="text-right font-semibold py-3 px-4">{t.shipping.deliveryTableHeaders.fee}</th>
@@ -46,7 +45,7 @@ export default function ShippingPage() {
                         <td className="py-3 px-4 font-medium text-gray-900">{row.region}</td>
                         <td className="py-3 px-4 text-gray-600">{row.eta}</td>
                         <td className="py-3 px-4 text-gray-600">{row.fee}</td>
-                        <td className="py-3 px-4 text-emerald-600 font-medium">{row.free}</td>
+                        <td className="py-3 px-4 text-[#008080] font-medium">{row.free}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -67,13 +66,17 @@ export default function ShippingPage() {
                   style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.25)" }}
                 >
                   <span className="w-12 h-12 shrink-0 rounded-xl flex items-center justify-center text-white"
-                    style={{ background: "linear-gradient(135deg, #b87a30, #d4943f)" }}
+                    style={{ background: "linear-gradient(135deg, #008080, #FF7F50)" }}
                   >
                     {icons[i] || icons[0]}
                   </span>
                   <div className="min-w-0">
-                    <h2 className="text-xl font-bold text-gray-900 mb-2">{s.title}</h2>
-                    <p className="text-gray-500 leading-relaxed">{s.text}</p>
+                    <h2 className="text-xl font-bold text-[#008080] mb-3">{s.title}</h2>
+                    <div className="text-gray-600 leading-loose text-[15px]">
+                      {s.text.split(". ").map((sentence: string, j: number) => (
+                        <p key={j} className="mb-3 last:mb-0">{sentence}.</p>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </AnimatedSection>
@@ -81,12 +84,12 @@ export default function ShippingPage() {
           </div>
 
           <AnimatedSection>
-            <div className="mt-12 bg-emerald-50 rounded-3xl p-8 lg:p-10 text-center border border-emerald-100">
-              <div className="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-7 h-7 text-emerald-600" />
+            <div className="mt-12 bg-[#e6f5f5] rounded-3xl p-8 lg:p-10 text-center border border-[#b3e0e0]">
+              <div className="w-14 h-14 bg-[#008080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="w-7 h-7 text-[#008080]" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">{t.shipping.title}</h2>
-              <p className="text-gray-500 max-w-md mx-auto">
+              <h2 className="text-2xl font-bold text-[#008080] mb-2">{t.shipping.title}</h2>
+              <p className="text-gray-600 max-w-md mx-auto leading-relaxed">
                 {t.shipping.subtitle}
               </p>
             </div>

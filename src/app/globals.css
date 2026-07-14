@@ -1,42 +1,45 @@
 @import "tailwindcss";
 
 @theme {
-  --font-outfit: "Outfit", sans-serif;
-  --font-playfair: "Playfair Display", serif;
-  --font-tajawal: "Tajawal", sans-serif;
+  --font-outfit: var(--font-cairo);
+  --font-playfair: var(--font-cairo);
+  --font-tajawal: var(--font-cairo);
 
-  --color-white: #f5efe6;
+  --color-white: #ffffff;
 
-  --color-gray-50: #f5efe6;
-  --color-gray-100: #ede4d8;
-  --color-gray-200: #ddd0c0;
-  --color-gray-300: #c8b8a0;
-  --color-gray-400: #a09070;
-  --color-gray-500: #706050;
-  --color-gray-600: #5a4a3a;
-  --color-gray-700: #4a3a2a;
-  --color-gray-800: #3a2a1a;
-  --color-gray-900: #2a1a0a;
+  --color-gray-50: #f5f5f5;
+  --color-gray-100: #eeeeee;
+  --color-gray-200: #e0e0e0;
+  --color-gray-300: #cccccc;
+  --color-gray-400: #a3a3a3;
+  --color-gray-500: #737373;
+  --color-gray-600: #595959;
+  --color-gray-700: #454545;
+  --color-gray-800: #2e2e2e;
+  --color-gray-900: #1a1a1a;
 
-  --color-emerald-50: #fef8e7;
-  --color-emerald-100: #fdf0c8;
-  --color-emerald-200: #fce0a0;
-  --color-emerald-300: #f5c76a;
-  --color-emerald-400: #e8a540;
-  --color-emerald-500: #d4943f;
-  --color-emerald-600: #b87a30;
-  --color-emerald-700: #9a6225;
-  --color-emerald-800: #7a4d1a;
-  --color-emerald-900: #5c3812;
-  --color-emerald-950: #3a220a;
+  --color-emerald-50: #e6f5f5;
+  --color-emerald-100: #ccebeb;
+  --color-emerald-200: #99d6d6;
+  --color-emerald-300: #4db8b8;
+  --color-emerald-400: #1aa0a0;
+  --color-emerald-500: #008080;
+  --color-emerald-600: #007373;
+  --color-emerald-700: #005f5f;
+  --color-emerald-800: #004d4d;
+  --color-emerald-900: #003939;
+  --color-emerald-950: #002424;
+
+  --color-coral: #FF7F50;
+  --color-coral-600: #ed6a3d;
 
   --color-amber: #c88b3f;
   --color-amber-light: #e8a540;
   --color-sage: #5a8f4a;
   --color-sage-light: #7aaf6a;
   --color-rust: #b86a38;
-  --color-card: #2d261f;
-  --color-surface: #1a1512;
+  --color-card: #002424;
+  --color-surface: #001a1a;
 }
 
 html {
@@ -62,10 +65,40 @@ html {
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, #f0e6d8 0%, #d4943f 25%, #f0e6d8 50%, #d4943f 75%, #f0e6d8 100%);
+  background: linear-gradient(90deg, #e6f5f5 0%, #FF7F50 25%, #e6f5f5 50%, #FF7F50 75%, #e6f5f5 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: shimmer 3s ease-in-out infinite;
+}
+
+/* ===== Micro-interactions: snappy, tactile feedback ===== */
+nav button,
+nav a {
+  transition: transform 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+nav button:active:not(:disabled),
+nav a:active {
+  transform: scale(0.94);
+}
+
+.add-cart-btn {
+  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+.add-cart-btn:active {
+  transform: scale(0.94);
+}
+
+.cta-btn {
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.15s ease;
+}
+.cta-btn:active {
+  transform: scale(0.97);
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
 }
