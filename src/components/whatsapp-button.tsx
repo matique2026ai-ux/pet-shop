@@ -2,16 +2,19 @@
 
 import { usePathname } from "next/navigation";
 import { MessageCircle } from "lucide-react";
+import { useSiteSettings } from "@/lib/site-settings";
 
-const PHONE_NUMBER = "+213555123456";
+const DEFAULT_PHONE = "+213555123456";
 const MESSAGE = encodeURIComponent("Hello! I have a question about your pet products.");
 
 export default function WhatsAppButton() {
   const pathname = usePathname();
   if (pathname.startsWith("/admin")) return null;
+  const { store } = useSiteSettings();
+  const phone = (store && store.whatsapp ? store.whatsapp : DEFAULT_PHONE).replace(/[^0-9]/g, "");
   const handleClick = () => {
     window.open(
-      `https://wa.me/${PHONE_NUMBER}?text=${MESSAGE}`,
+      `https://wa.me/${phone}?text=${MESSAGE}`,
       "_blank",
       "noopener,noreferrer"
     );

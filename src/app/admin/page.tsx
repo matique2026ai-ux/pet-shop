@@ -12,19 +12,37 @@ import {
 import {
   Users, ShoppingBag, DollarSign, Package, TrendingUp, TrendingDown,
   Edit, Trash2, ArrowUpRight, Calendar, Menu, X, Lock,
-  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Search, Filter, Tag,
+  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Search, Filter, Tag, Languages,
 } from "lucide-react";
 import HeroVideoManager from "@/components/hero-video-manager";
+import { en } from "@/lib/translations/en";
+import type { TranslationOverrides } from "@/lib/i18n-context";
 
 const COLORS = ["#059669", "#10B981", "#34D399", "#6EE7B7", "#A7F3D0"];
+
+function flattenKeys(obj: any, prefix = "", out: { path: string }[] = []): { path: string }[] {
+  for (const [k, v] of Object.entries(obj)) {
+    const path = prefix ? `${prefix}.${k}` : k;
+    if (v && typeof v === "object" && !Array.isArray(v)) flattenKeys(v, path, out);
+    else if (typeof v === "string") out.push({ path });
+  }
+  return out;
+}
+
+function getByPath(obj: any, path: string): string {
+  return path.split(".").reduce((o, k) => (o ? o[k] : ""), obj) ?? "";
+}
+
+const TRANS_KEYS = flattenKeys(en);
 
 const sidebarTabs = [
   { label: "Dashboard", icon: LayoutDashboard, key: "dashboard" },
   { label: "Products", icon: Package2, key: "products" },
   { label: "Orders", icon: ShoppingCart, key: "orders" },
   { label: "Analytics", icon: BarChart3, key: "analytics" },
-  { label: "Categories", icon: Tag, key: "categories" },
-  { label: "Settings", icon: Settings, key: "settings" },
+   { label: "Categories", icon: Tag, key: "categories" },
+   { label: "Settings", icon: Settings, key: "settings" },
+   { label: "Translations", icon: Languages, key: "translations" },
 ];
 
 interface Category {
@@ -176,7 +194,7 @@ const emptyForm: FormState = {
 };
 
 export default function AdminDashboard() {
-  const { t, currency } = useI18n();
+  const { t, currency, reloadOverrides } = useI18n();
   const { a, adminLang, setAdminLang, dir } = useAdminI18n();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [password, setPassword] = useState("");
@@ -290,6 +308,46 @@ export default function AdminDashboard() {
     return res.json();
   }, [getSecret]);
 
+  // ----- Translations editor -----
+  const [transOverride, setTransOverride] = useState<TranslationOverrides>({ en: {}, fr: {}, ar: {} });
+  const [transFilter, setTransFilter] = useState("");
+  const [savingTrans, setSavingTrans] = useState(false);
+
+  const loadTrans = useCallback(async () => {
+    try {
+      const data = await fetch("/api/settings?key=translations").then((r) => r.json());
+      if (data && data.value && typeof data.value === "object") {
+        setTransOverride({
+          en: data.value.en || {},
+          fr: data.value.fr || {},
+          ar: data.value.ar || {},
+        });
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  const setTrans = (lang: "en" | "fr" | "ar", path: string, value: string) => {
+    setTransOverride((prev) => ({
+      ...prev,
+      [lang]: { ...prev[lang], [path]: value },
+    }));
+  };
+
+  const saveTrans = async () => {
+    setSavingTrans(true);
+    try {
+      await apiFetch("/api/settings", { method: "PUT", body: JSON.stringify({ key: "translations", value: transOverride }) });
+      alert(a.settings.saved);
+      reloadOverrides();
+    } catch (e) {
+      alert("Failed to save: " + (e as Error).message);
+    } finally {
+      setSavingTrans(false);
+    }
+  };
+
   const loadProducts = useCallback(async () => {
     setLoadingProducts(true);
     setProductsError(false);
@@ -334,7 +392,8 @@ export default function AdminDashboard() {
     if (activeTab === "dashboard") loadOrders();
     if (activeTab === "products" || activeTab === "dashboard") loadProducts();
     if (activeTab === "settings") loadSettings();
-  }, [authed, activeTab, loadOrders, loadProducts, loadSettings]);
+    if (activeTab === "translations") loadTrans();
+  }, [authed, activeTab, loadOrders, loadProducts, loadSettings, loadTrans]);
 
   const openAddModal = () => {
     setEditingProduct(null);
@@ -1505,6 +1564,67 @@ export default function AdminDashboard() {
                 </div>
 
                 <HeroVideoManager />
+              </div>
+            )}
+
+            {/* ===== TRANSLATIONS ===== */}
+            {activeTab === "translations" && (
+              <div className="space-y-6">
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                  <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                    <div>
+                      <h2 className="text-lg font-bold text-gray-900">{a.settings.translations}</h2>
+                      <p className="text-sm text-gray-500 mt-0.5">{a.cats.manage}</p>
+                    </div>
+                    <button
+                      onClick={saveTrans}
+                      disabled={savingTrans}
+                      className="px-4 py-2 rounded-xl text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 transition-colors disabled:opacity-50 inline-flex items-center gap-2"
+                    >
+                      {savingTrans && <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />}
+                      {a.common.save}
+                    </button>
+                  </div>
+                  <div className="relative max-w-sm">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input
+                      value={transFilter}
+                      onChange={(e) => setTransFilter(e.target.value)}
+                      placeholder={a.common.search}
+                      className="w-full pl-10 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-500 transition-colors"
+                    />
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                  <div className="grid grid-cols-[minmax(180px,1fr)_1fr_1fr_1fr] gap-px bg-gray-100 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    <div className="bg-gray-50 px-4 py-3">Key</div>
+                    <div className="bg-gray-50 px-4 py-3">EN</div>
+                    <div className="bg-gray-50 px-4 py-3">FR</div>
+                    <div className="bg-gray-50 px-4 py-3">AR</div>
+                  </div>
+                  <div className="divide-y divide-gray-100 max-h-[70vh] overflow-y-auto">
+                    {TRANS_KEYS.filter((k) => k.path.toLowerCase().includes(transFilter.toLowerCase())).map((k) => {
+                      const def = getByPath(en, k.path);
+                      return (
+                        <div key={k.path} className="grid grid-cols-[minmax(180px,1fr)_1fr_1fr_1fr] gap-px bg-gray-100 items-start">
+                          <div className="bg-white px-4 py-3 text-sm font-mono text-gray-600 break-all">{k.path}</div>
+                          {(["en", "fr", "ar"] as const).map((lang) => (
+                            <div key={lang} className="bg-white px-2 py-2">
+                              <input
+                                value={transOverride[lang][k.path] || ""}
+                                onChange={(e) => setTrans(lang, k.path, e.target.value)}
+                                placeholder={def}
+                                dir={lang === "ar" ? "rtl" : "ltr"}
+                                className="w-full px-2 py-1.5 text-sm rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             )}
           </main>

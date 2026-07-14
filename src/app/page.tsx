@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useI18n } from "@/lib/i18n-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
 import { useRecentlyViewed } from "@/lib/use-recently-viewed";
+import { useSiteSettings } from "@/lib/site-settings";
 import AnimatedSection from "@/components/animated-section";
 import ProductCard from "@/components/product-card";
 import VetCard from "@/components/vet-card";
@@ -33,7 +34,13 @@ const DEFAULT_HERO_VIDEOS = [
 
 export default function HomePage() {
   const { t, dir } = useI18n();
+  const { content } = useSiteSettings();
   const { categories, products, vetServices, testimonials } = useTranslatedData();
+  const c = (k: string, fb: string) => (content && content[k] ? content[k] : fb);
+  const heroTitle = c("heroTitle", t.hero.title);
+  const heroSubtitle = c("heroSubtitle", t.hero.subtitle);
+  const heroCta1 = c("heroCta1", t.hero.cta1);
+  const heroCta2 = c("heroCta2", t.hero.cta2);
   const isRtl = dir === "rtl";
   const Arrow = isRtl ? ChevronLeft : ChevronRight;
   const bestsellers = products.filter((p) => p.rating >= 4.6).slice(0, 8);
@@ -71,19 +78,19 @@ export default function HomePage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
           <div className="text-center">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 animate-shimmer">
-              {t.hero.title}
+              {heroTitle}
             </h1>
             <p className="text-lg text-emerald-100/80 mb-8 max-w-xl mx-auto">
-              {t.hero.subtitle}
+              {heroSubtitle}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link href="/products" className="inline-flex items-center gap-2 bg-emerald-500 text-white px-8 py-3.5 rounded-xl font-bold text-lg hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-600/30">
-                {t.hero.cta1}
+                {heroCta1}
                 <Arrow className="w-5 h-5" />
               </Link>
               <Link href="/vet" className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-8 py-3.5 rounded-xl font-bold text-lg hover:bg-white/20 transition-all border-2 border-white/30">
                 <Stethoscope className="w-5 h-5" />
-                {t.hero.cta2}
+                {heroCta2}
               </Link>
             </div>
           </div>
@@ -236,7 +243,7 @@ export default function HomePage() {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link href="/products" className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-emerald-700 transition-colors">
-                {t.hero.cta1}
+                {heroCta1}
                 <Arrow className="w-4 h-4" />
               </Link>
               <Link href="/contact" className="inline-flex items-center gap-2 bg-gray-800 text-white px-6 py-3 rounded-xl font-bold hover:bg-gray-700 transition-colors border border-gray-700">

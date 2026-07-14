@@ -5,12 +5,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Heart, Globe, Camera, MessageCircle, Mail, CheckCircle } from "lucide-react";
 import { useI18n } from "@/lib/i18n-context";
+import { useSiteSettings } from "@/lib/site-settings";
 
 export default function Footer() {
   const pathname = usePathname();
   if (pathname.startsWith("/admin")) return null;
 
   const { t } = useI18n();
+  const { store, content } = useSiteSettings();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
@@ -18,6 +20,14 @@ export default function Footer() {
     e.preventDefault();
     if (email) setSubscribed(true);
   };
+
+  const s = (k: string, fallback: string) => (store && store[k] ? store[k] : fallback);
+  const addressLines = (s("address", t.contact.addressText || "123 Pet Street\nNew York, NY 10001")).split("\n");
+  const phone = s("phone", t.contact.phoneText || "+1 (234) 567-890");
+  const emailAddr = s("email", t.contact.emailText || "hello@pawsandwings.com");
+  const whatsapp = s("whatsapp", "+1234567890");
+  const instagram = s("instagram", "https://instagram.com");
+  const facebook = s("facebook", "https://facebook.com");
 
   return (
     <footer className="bg-stone-900 text-gray-300">
@@ -56,10 +66,11 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4">{t.footer.contactInfo}</h3>
             <ul className="space-y-2 text-sm text-stone-400">
-              <li>{t.contact.addressText?.split("\n")[0] || "123 Pet Street"}</li>
-              <li>{t.contact.addressText?.split("\n")[1] || "New York, NY 10001"}</li>
-              <li>{t.contact.phoneText || "+1 (234) 567-890"}</li>
-              <li>{t.contact.emailText || "hello@pawsandwings.com"}</li>
+              {addressLines.map((line, i) => (
+                <li key={i}>{line}</li>
+              ))}
+              <li><a href={`tel:${phone}`} className="hover:text-emerald-500 transition-colors">{phone}</a></li>
+              <li><a href={`mailto:${emailAddr}`} className="hover:text-emerald-500 transition-colors">{emailAddr}</a></li>
             </ul>
           </div>
 
@@ -89,13 +100,13 @@ export default function Footer() {
               </form>
             )}
             <div className="flex gap-3 mt-4">
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors" aria-label="Instagram">
+              <a href={instagram} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors" aria-label="Instagram">
                 <Camera className="w-4 h-4" />
               </a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors" aria-label="Facebook">
+              <a href={facebook} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors" aria-label="Facebook">
                 <Globe className="w-4 h-4" />
               </a>
-              <a href="https://wa.me/+1234567890" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors" aria-label="WhatsApp">
+              <a href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, "")}`} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors" aria-label="WhatsApp">
                 <MessageCircle className="w-4 h-4" />
               </a>
             </div>
@@ -103,7 +114,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-stone-800 mt-8 pt-8 text-center text-sm text-stone-500">
-          &copy; {new Date().getFullYear()} Paws & Wings. {t.footer.rights}
+          {content && content.footerText ? content.footerText : `© ${new Date().getFullYear()} Paws & Wings. ${t.footer.rights}`}
         </div>
       </div>
     </footer>
