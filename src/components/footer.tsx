@@ -121,8 +121,15 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-stone-800 mt-8 pt-8 text-center text-sm text-stone-500">
-          {content && content.footerText ? content.footerText : `© ${new Date().getFullYear()} Paws & Wings. ${t.footer.rights}`}
+        <div className="border-t border-stone-800 mt-8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-stone-500">
+          <span>{content && content.footerText ? content.footerText : `© ${new Date().getFullYear()} Paws & Wings. ${t.footer.rights}`}</span>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event("open-cookie-settings"))}
+            className="hover:text-emerald-500 transition-colors"
+          >
+            {t.cookies.settings}
+          </button>
         </div>
       </div>
     </footer>

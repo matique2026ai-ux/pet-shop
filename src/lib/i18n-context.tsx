@@ -4,6 +4,7 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from "
 import { en } from "./translations/en";
 import { fr } from "./translations/fr";
 import { ar } from "./translations/ar";
+import { setCookie } from "./cookies";
 
 type Language = "en" | "fr" | "ar";
 type DeepStringify<T> = { [K in keyof T]: T[K] extends string ? string : T[K] extends object ? DeepStringify<T[K]> : never };
@@ -88,6 +89,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const setLangPersist = (l: Language) => {
     setLang(l);
     localStorage.setItem("lang", l);
+    setCookie("lang", l, 365);
   };
 
   const t = applyOverrides(translations[lang], overrides[lang]);

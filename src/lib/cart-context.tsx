@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useReducer, useEffect, useCallback, type ReactNode } from "react";
 import type { Product } from "@/lib/data";
+import { setCookie, getCookie } from "@/lib/cookies";
 
 export interface CartItem {
   productId: string;
@@ -97,6 +98,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    if (getCookie("consent") === "accepted") {
+      setCookie("cart", JSON.stringify(state), 7);
+    }
   }, [state]);
 
   const addItem = useCallback((product: Product, quantity?: number) => dispatch({ type: "ADD_ITEM", payload: { product, quantity } }), []);

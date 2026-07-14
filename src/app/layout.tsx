@@ -7,6 +7,7 @@ import { AuthProvider } from "@/lib/auth-context";
 import WhatsAppButton from "@/components/whatsapp-button";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import CookieConsent from "@/components/cookie-consent";
 import { OrganizationSchema, WebSiteSchema, VeterinaryClinicSchema } from "@/components/schema-jsonld";
 import Script from "next/script";
 
@@ -80,6 +81,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className="min-h-screen">{children}</main>
             <Footer />
             <WhatsAppButton />
+            <CookieConsent />
             </AuthProvider>
           </CartProvider>
         </I18nProvider>

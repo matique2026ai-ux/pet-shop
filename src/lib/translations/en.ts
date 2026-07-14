@@ -142,6 +142,12 @@ export const en = {
     accountSince: "Member since",
     noOrders: "You have no orders yet.",
   },
+  cookies: {
+    desc: "We use cookies to remember your preferences (language, cart) and improve your experience. You can accept or refuse.",
+    accept: "Accept all",
+    refuse: "Refuse",
+    settings: "Cookie settings",
+  },
   cart: {
     title: "Shopping Cart",
     empty: "Your cart is empty",

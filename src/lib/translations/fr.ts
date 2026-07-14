@@ -142,6 +142,12 @@ export const fr = {
     accountSince: "Membre depuis",
     noOrders: "Vous n'avez aucune commande.",
   },
+  cookies: {
+    desc: "Nous utilisons des cookies pour mémoriser vos préférences (langue, panier) et améliorer votre expérience. Vous pouvez accepter ou refuser.",
+    accept: "Tout accepter",
+    refuse: "Refuser",
+    settings: "Paramètres des cookies",
+  },
   cart: {
     title: "Panier",
     empty: "Votre panier est vide",
