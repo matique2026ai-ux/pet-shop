@@ -384,6 +384,17 @@ export default function AdminDashboard() {
     }
   }, [apiFetch]);
 
+  const loadSettings = useCallback(async () => {
+    try {
+      const data = await fetch("/api/settings").then((r) => r.json());
+      if (data && data.store) setStoreSettings(data.store);
+      if (data && data.content) setContentSettings(data.content);
+      if (data && data.delivery) setDeliverySettings(data.delivery);
+    } catch {
+      // ignore
+    }
+  }, []);
+
   useEffect(() => {
     if (!authed) return;
     loadCategories();
@@ -583,17 +594,6 @@ export default function AdminDashboard() {
   const [contentSettings, setContentSettings] = useState<Record<string, string>>({});
   const [deliverySettings, setDeliverySettings] = useState<Record<string, string>>({});
   const [savingSettings, setSavingSettings] = useState(false);
-
-  async function loadSettings() {
-    try {
-      const data = await fetch("/api/settings").then((r) => r.json());
-      if (data && data.store) setStoreSettings(data.store);
-      if (data && data.content) setContentSettings(data.content);
-      if (data && data.delivery) setDeliverySettings(data.delivery);
-    } catch {
-      // ignore
-    }
-  }
 
   const saveSettingsKey = async (key: string, value: Record<string, any>) => {
     setSavingSettings(true);
