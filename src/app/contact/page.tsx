@@ -135,7 +135,7 @@ export default function ContactPage() {
           <AnimatedSection>
             <div className="mt-12 relative overflow-hidden rounded-3xl h-72">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127835.67076020296!2d3.005981227634014!3d36.75288711017331!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128e4b6e4b8b4b4b%3A0x8b4b4b8b4b4b4b4b!2sAlgiers%2C%20Algeria!5e0!3m2!1sen!2sdz!4v1"
+                src="https://www.google.com/maps?q=S%C3%A9tif%2C%20Alg%C3%A9rie&z=13&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
