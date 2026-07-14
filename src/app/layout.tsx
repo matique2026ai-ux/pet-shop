@@ -65,7 +65,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={cairo.variable} suppressHydrationWarning>
-      <body className="font-outfit bg-emerald-50 text-gray-900 antialiased">
+      <body className="font-outfit bg-white text-slate-800 antialiased">
         <I18nProvider>
           <CartProvider>
             <AuthProvider>

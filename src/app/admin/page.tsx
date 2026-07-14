@@ -622,7 +622,7 @@ export default function AdminDashboard() {
           <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Lock className="w-8 h-8 text-emerald-600" />
           </div>
-          <h1 className="text-xl font-bold text-gray-900 mb-2">Admin Access</h1>
+          <h1 className="text-xl font-bold text-[#1E3A8A] mb-2">Admin Access</h1>
           <p className="text-sm text-gray-500 mb-6">Enter password to access the dashboard</p>
           <form onSubmit={handleLogin} className="space-y-4">
             <input
@@ -676,7 +676,7 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-gray-50" dir={dir}>
       <div className="flex">
         <aside className={`
-          fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-[#1a1512] to-[#3a220a] text-white
+          fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-[#172554] to-[#1E3A8A] text-white
           transform transition-transform duration-300 ease-in-out
           lg:relative lg:translate-x-0
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
@@ -739,7 +739,7 @@ export default function AdminDashboard() {
                 <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-gray-600 hover:text-gray-900">
                   <Menu className="w-5 h-5" />
                 </button>
-                <h1 className="text-lg font-bold text-gray-900">
+                <h1 className="text-lg font-bold text-[#1E3A8A]">
                   {a.title[activeTab as keyof typeof a.title] ?? activeTab}
                 </h1>
               </div>
@@ -822,7 +822,7 @@ export default function AdminDashboard() {
                   <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                     <div className="flex items-center justify-between mb-6">
                       <div>
-                        <h2 className="text-lg font-bold text-gray-900">{a.dashboard.revenueOverview}</h2>
+                        <h2 className="text-lg font-bold text-[#1E3A8A]">{a.dashboard.revenueOverview}</h2>
                         <p className="text-sm text-gray-500 mt-0.5">{a.dashboard.revenueSub}</p>
                       </div>
                       <div className="flex items-center gap-2 text-xs text-gray-400">
@@ -852,7 +852,7 @@ export default function AdminDashboard() {
 
                   <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                     <div>
-                      <h2 className="text-lg font-bold text-gray-900">Category Sales</h2>
+                      <h2 className="text-lg font-bold text-[#1E3A8A]">Category Sales</h2>
                       <p className="text-sm text-gray-500 mt-0.5">Distribution by pet</p>
                     </div>
                     <div className="h-64 mt-2">
@@ -897,7 +897,7 @@ export default function AdminDashboard() {
                   <div className="p-6 pb-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h2 className="text-lg font-bold text-gray-900">{a.dashboard.recentOrders}</h2>
+                        <h2 className="text-lg font-bold text-[#1E3A8A]">{a.dashboard.recentOrders}</h2>
                         <p className="text-sm text-gray-500 mt-0.5">Latest transactions</p>
                       </div>
                       <button
@@ -941,7 +941,7 @@ export default function AdminDashboard() {
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <div className="flex items-center justify-between mb-5">
                     <div>
-                      <h2 className="text-lg font-bold text-gray-900">Top Products</h2>
+                      <h2 className="text-lg font-bold text-[#1E3A8A]">Top Products</h2>
                       <p className="text-sm text-gray-500 mt-0.5">Best performing products this month</p>
                     </div>
                     <button
@@ -1244,7 +1244,7 @@ export default function AdminDashboard() {
             {activeTab === "orders" && (
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div className="p-6 pb-4">
-                  <h2 className="text-lg font-bold text-gray-900">{a.orders.title}</h2>
+                  <h2 className="text-lg font-bold text-[#1E3A8A]">{a.orders.title}</h2>
                   <p className="text-sm text-gray-500 mt-0.5">
                     {loadingOrders ? a.common.loading : `${orders.length} ${a.orders.total}`}
                   </p>
@@ -1328,7 +1328,7 @@ export default function AdminDashboard() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <h2 className="text-lg font-bold text-gray-900 mb-4">{a.analytics.perCategory}</h2>
+                    <h2 className="text-lg font-bold text-[#1E3A8A] mb-4">{a.analytics.perCategory}</h2>
                     <div className="h-72">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={categories.map((c) => ({ name: c.name, count: products.filter((p) => p.category === c.id).length }))}>
@@ -1342,7 +1342,7 @@ export default function AdminDashboard() {
                   </div>
 
                   <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <h2 className="text-lg font-bold text-gray-900 mb-4">{a.analytics.priceDist}</h2>
+                    <h2 className="text-lg font-bold text-[#1E3A8A] mb-4">{a.analytics.priceDist}</h2>
                     <div className="space-y-3">
                       {[
                         { label: a.analytics.under20, range: [0, 20] },
@@ -1370,7 +1370,7 @@ export default function AdminDashboard() {
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                   <div className="p-6 pb-4">
-                    <h2 className="text-lg font-bold text-gray-900">{a.analytics.topRated}</h2>
+                    <h2 className="text-lg font-bold text-[#1E3A8A]">{a.analytics.topRated}</h2>
                     <p className="text-sm text-gray-500 mt-0.5">{a.analytics.topRatedSub}</p>
                   </div>
                   <div className="overflow-x-auto">
@@ -1413,7 +1413,7 @@ export default function AdminDashboard() {
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-lg font-bold text-gray-900">{a.cats.title}</h2>
+                    <h2 className="text-lg font-bold text-[#1E3A8A]">{a.cats.title}</h2>
                     <p className="text-sm text-gray-500 mt-0.5">{a.cats.subtitle}</p>
                   </div>
                   <button
@@ -1485,7 +1485,7 @@ export default function AdminDashboard() {
               <div className="space-y-6">
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-bold text-gray-900">{a.settings.store}</h2>
+                    <h2 className="text-lg font-bold text-[#1E3A8A]">{a.settings.store}</h2>
                     <button
                       onClick={() => saveSettingsKey("store", storeSettings)}
                       disabled={savingSettings}
@@ -1526,7 +1526,7 @@ export default function AdminDashboard() {
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-bold text-gray-900">{a.settings.content}</h2>
+                    <h2 className="text-lg font-bold text-[#1E3A8A]">{a.settings.content}</h2>
                     <button
                       onClick={() => saveSettingsKey("content", contentSettings)}
                       disabled={savingSettings}
@@ -1562,7 +1562,7 @@ export default function AdminDashboard() {
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-bold text-gray-900">{a.settings.delivery}</h2>
+                    <h2 className="text-lg font-bold text-[#1E3A8A]">{a.settings.delivery}</h2>
                     <button
                       onClick={() => saveSettingsKey("delivery", deliverySettings)}
                       disabled={savingSettings}
@@ -1621,7 +1621,7 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                  <h2 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h2>
+                  <h2 className="text-lg font-bold text-[#1E3A8A] mb-4">Quick Actions</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <Link href="/" className="flex items-center gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 transition-colors">
                       <ArrowUpRight className="w-5 h-5 text-emerald-600" />
@@ -1650,7 +1650,7 @@ export default function AdminDashboard() {
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                     <div>
-                      <h2 className="text-lg font-bold text-gray-900">{a.settings.translations}</h2>
+                      <h2 className="text-lg font-bold text-[#1E3A8A]">{a.settings.translations}</h2>
                       <p className="text-sm text-gray-500 mt-0.5">{a.cats.manage}</p>
                     </div>
                     <button
@@ -1714,7 +1714,7 @@ export default function AdminDashboard() {
           <div className="absolute inset-0 bg-black/50" onClick={closeModal} />
           <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between z-10">
-              <h2 className="text-lg font-bold text-gray-900">
+              <h2 className="text-lg font-bold text-[#1E3A8A]">
                 {editingProduct ? a.products.editProduct : a.products.addProduct}
               </h2>
               <button onClick={closeModal} className="text-gray-400 hover:text-gray-600">
@@ -2021,7 +2021,7 @@ export default function AdminDashboard() {
         <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
           <div className="absolute inset-0 bg-black/50" onClick={closeCatModal} />
           <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-4">
-            <h2 className="text-lg font-bold text-gray-900">{catModal.editingId ? a.cats.editCategory : a.cats.addCategory}</h2>
+            <h2 className="text-lg font-bold text-[#1E3A8A]">{catModal.editingId ? a.cats.editCategory : a.cats.addCategory}</h2>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{a.common.id}</label>
               <input
@@ -2073,7 +2073,7 @@ export default function AdminDashboard() {
         <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
           <div className="absolute inset-0 bg-black/50" onClick={closeSubModal} />
           <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-4">
-            <h2 className="text-lg font-bold text-gray-900">{subModal.editingId ? a.cats.editSub : a.cats.addSub}</h2>
+            <h2 className="text-lg font-bold text-[#1E3A8A]">{subModal.editingId ? a.cats.editSub : a.cats.addSub}</h2>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{a.cats.subOf}</label>
               <input

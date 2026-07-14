@@ -34,18 +34,18 @@ export default function Footer() {
   const facebook = s("facebook", "https://facebook.com");
 
   return (
-    <footer className="bg-stone-900 text-gray-300">
+    <footer className="bg-[#0F172A] text-slate-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <span className="w-8 h-8 bg-[#008080] rounded-lg flex items-center justify-center">
+              <span className="w-8 h-8 bg-[#1E3A8A] rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">PW</span>
               </span>
               <span className="font-bold text-white">Paws & Wings</span>
             </div>
-            <p className="text-sm text-stone-400 leading-relaxed">
-              {t.footer.madeWith} <Heart className="w-3 h-3 inline text-[#FF7F50] fill-[#FF7F50]" />
+            <p className="text-sm text-slate-400 leading-relaxed">
+              {t.footer.madeWith} <Heart className="w-3 h-3 inline text-[#F97316] fill-[#F97316]" />
             </p>
           </div>
 
@@ -61,7 +61,7 @@ export default function Footer() {
                 { href: "/contact", label: t.nav.contact },
               ].map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="hover:text-[#008080] transition-colors">{l.label}</Link>
+                  <Link href={l.href} className="hover:text-[#1E3A8A] transition-colors">{l.label}</Link>
                 </li>
               ))}
             </ul>
@@ -69,14 +69,14 @@ export default function Footer() {
 
           <div>
             <h3 className="font-semibold text-white mb-4">{t.footer.contactInfo}</h3>
-            <ul className="space-y-2 text-sm text-stone-400">
+            <ul className="space-y-2 text-sm text-slate-400">
               {addressLines.map((line, i) => (
                 <li key={i}>{line}</li>
               ))}
-              <li><a href={`tel:${phone}`} className="hover:text-[#008080] transition-colors">{phone}</a></li>
-              <li><a href={`mailto:${emailAddr}`} className="hover:text-[#008080] transition-colors">{emailAddr}</a></li>
+              <li><a href={`tel:${phone}`} className="hover:text-[#1E3A8A] transition-colors">{phone}</a></li>
+              <li><a href={`mailto:${emailAddr}`} className="hover:text-[#1E3A8A] transition-colors">{emailAddr}</a></li>
             </ul>
-            <div className="mt-3 inline-flex items-center gap-2 text-sm text-[#006666] bg-[#e6f5f5] border border-[#b3e0e0] rounded-full px-3 py-1.5">
+            <div className="mt-3 inline-flex items-center gap-2 text-sm text-[#1E40AF] bg-[#F8FAFC] border border-[#E2E8F0] rounded-full px-3 py-1.5">
               <Truck className="w-4 h-4 shrink-0" />
               <span>{coverage}</span>
             </div>
@@ -85,7 +85,7 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4">{t.footer.newsletter}</h3>
             {subscribed ? (
-              <div className="flex items-center gap-2 text-[#008080] text-sm">
+              <div className="flex items-center gap-2 text-[#1E3A8A] text-sm">
                 <CheckCircle className="w-4 h-4" />
                 <span>{t.footer.subscribed}</span>
               </div>
@@ -97,36 +97,36 @@ export default function Footer() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t.footer.emailPlaceholder}
                   required
-                  className="flex-1 px-3 py-2 rounded-lg bg-stone-800 text-white text-sm placeholder-stone-500 border border-stone-700 focus:outline-none focus:border-[#008080]"
+                  className="flex-1 px-3 py-2 rounded-lg bg-slate-800 text-white text-sm placeholder-slate-500 border border-slate-700 focus:outline-none focus:border-[#1E3A8A]"
                 />
                 <button
                   type="submit"
-                  className="px-3 py-2 bg-[#008080] text-white rounded-lg hover:bg-[#006666] transition-colors"
+                  className="px-3 py-2 bg-[#1E3A8A] text-white rounded-lg hover:bg-[#1E40AF] transition-colors"
                 >
                   <Mail className="w-4 h-4" />
                 </button>
               </form>
             )}
             <div className="flex gap-3 mt-4">
-              <a href={instagram} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-[#008080] transition-colors" aria-label="Instagram">
+              <a href={instagram} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-[#1E3A8A] transition-colors" aria-label="Instagram">
                 <Camera className="w-4 h-4" />
               </a>
-              <a href={facebook} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-[#008080] transition-colors" aria-label="Facebook">
+              <a href={facebook} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-[#1E3A8A] transition-colors" aria-label="Facebook">
                 <Globe className="w-4 h-4" />
               </a>
-              <a href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, "")}`} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-stone-800 rounded-lg flex items-center justify-center hover:bg-[#008080] transition-colors" aria-label="WhatsApp">
+              <a href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, "")}`} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-[#1E3A8A] transition-colors" aria-label="WhatsApp">
                 <MessageCircle className="w-4 h-4" />
               </a>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-stone-800 mt-8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-stone-500">
+        <div className="border-t border-slate-800 mt-8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-slate-400">
           <span>{content && content.footerText ? content.footerText : `© ${new Date().getFullYear()} Paws & Wings. ${t.footer.rights}`}</span>
           <button
             type="button"
             onClick={() => window.dispatchEvent(new Event("open-cookie-settings"))}
-            className="hover:text-[#008080] transition-colors"
+            className="hover:text-[#1E3A8A] transition-colors"
           >
             {t.cookies.settings}
           </button>

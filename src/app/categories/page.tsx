@@ -28,7 +28,7 @@ export default function CategoriesPage() {
   return (
     <div>
       <section className="relative overflow-hidden py-16 lg:py-24">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1a1512] via-[#3a220a] to-[#1a1512]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#172554] via-[#1E3A8A] to-[#172554]" />
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-[120px]" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-400/5 rounded-full blur-[100px]" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -77,7 +77,7 @@ export default function CategoriesPage() {
                         {cat.subcategories.map((sub) => (
                           <span
                             key={sub.id}
-                            className="px-3 py-1 bg-gray-50 text-gray-500 text-xs rounded-full border border-gray-100 transition-colors group-hover:bg-[#fef8e7] group-hover:text-[#b87a30] group-hover:border-[#fdf0c8]"
+                            className="px-3 py-1 bg-gray-50 text-gray-500 text-xs rounded-full border border-gray-100 transition-colors group-hover:bg-[#EFF6FF] group-hover:text-[#F97316] group-hover:border-[#DBEAFE]"
                           >
                             {sub.name}
                           </span>
@@ -86,7 +86,7 @@ export default function CategoriesPage() {
 
                       <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                         <span className="text-xs text-gray-400">{t.nav.subcategoryCount.replace("{n}", String(cat.subcategories.length))}</span>
-                        <span className="flex items-center gap-1 text-sm font-semibold text-[#b87a30] group-hover:gap-2 transition-all">
+                        <span className="flex items-center gap-1 text-sm font-semibold text-[#F97316] group-hover:gap-2 transition-all">
                           {t.categories.browseAll} <ChevronRight className="w-3.5 h-3.5" />
                         </span>
                       </div>
@@ -99,14 +99,14 @@ export default function CategoriesPage() {
         </div>
       </section>
 
-      <section className="py-16 relative overflow-hidden" style={{ background: "#F8F6F3" }}>
+      <section className="py-16 relative overflow-hidden" style={{ background: "#F8FAFC" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <AnimatedSection>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">{t.categories.notSure}</h2>
+            <h2 className="text-3xl font-bold text-[#1E3A8A] mb-4">{t.categories.notSure}</h2>
             <p className="text-gray-500 mb-6 max-w-md mx-auto">{t.categories.notSureDesc}</p>
             <div className="flex items-center justify-center gap-4">
               <Link href="/products" className="inline-flex items-center gap-2 bg-white text-gray-900 px-7 py-3 rounded-2xl font-bold border border-gray-200 hover:border-gray-300 hover:-translate-y-0.5 transition-all shadow-sm">{t.categories.allProductsLink}</Link>
-              <Link href="/vet" className="inline-flex items-center gap-2 bg-[#b87a30] text-white px-7 py-3 rounded-2xl font-bold hover:bg-[#9a6225] hover:-translate-y-0.5 transition-all shadow-lg shadow-[#b87a30]/20">{t.categories.visitVet}</Link>
+              <Link href="/vet" className="inline-flex items-center gap-2 bg-[#F97316] text-white px-7 py-3 rounded-2xl font-bold hover:bg-[#EA580C] hover:-translate-y-0.5 transition-all shadow-lg shadow-[#F97316]/20">{t.categories.visitVet}</Link>
             </div>
           </AnimatedSection>
         </div>

@@ -31,9 +31,9 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
     >
       <div className="relative transition-all duration-500 ease-out group-hover:-translate-y-1.5">
         <div
-          className="relative overflow-hidden rounded-2xl transition-all duration-[600ms] ease-out bg-white border border-gray-100/80 shadow-sm shadow-emerald-500/10 group-hover:shadow-xl group-hover:shadow-emerald-500/20 group-hover:border-emerald-200/60"
+          className="relative overflow-hidden rounded-2xl transition-all duration-[600ms] ease-out bg-white border border-gray-100/80 shadow-sm shadow-blue-500/10 group-hover:shadow-md group-hover:shadow-blue-500/20 group-hover:border-blue-200/60"
         >
-          <div className={`relative ${isRelated ? "aspect-square" : "aspect-square"} bg-gray-50 overflow-hidden`}>
+          <div className="relative aspect-square bg-gray-50 overflow-hidden">
             <Image
               src={product.image || "/placeholder.svg"}
               alt={product.name}
@@ -49,7 +49,7 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
               <span className={`absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold backdrop-blur-md border border-white/30 shadow-lg ${
                 product.badge === "NEW"
                   ? "bg-emerald-600/90 text-white"
-                  : "bg-gray-900/80 text-white"
+                  : "bg-[#F97316] text-white"
               }`}>
                 {product.badge === "NEW" ? t.products?.new || "NEW" : t.products?.sale || "SALE"}
               </span>
@@ -70,7 +70,7 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
 
             {!isRelated && (
               <div className="flex items-center gap-1 mb-2">
-                <Star className="w-3 h-3 fill-emerald-500 text-emerald-500" />
+                <Star className="w-3 h-3 fill-[#E5B25A] text-[#E5B25A]" />
                 <span className="text-xs text-gray-500">{product.rating}</span>
                 <span className="text-xs text-gray-400">({product.reviews})</span>
               </div>
@@ -88,10 +88,10 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
               )}
             </div>
 
-            <button
-              onClick={handleAddToCart}
-              className="add-cart-btn mt-2 inline-flex items-center gap-1.5 bg-emerald-600 text-white rounded-xl px-3 py-1.5 text-xs font-medium hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-600/30"
-            >
+              <button
+                onClick={handleAddToCart}
+                className="add-cart-pill mt-2 inline-flex items-center justify-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold"
+              >
               <ShoppingCart className="w-3.5 h-3.5" />
               {t.products.addToCart}
             </button>

@@ -120,7 +120,7 @@ export default function ProductDetailPage() {
                       </>
                     )}
                     {product.badge && activeMedia !== "video" && (
-                      <span className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold ${product.badge === "NEW" ? "bg-emerald-600 text-white" : "bg-gray-900 text-white"}`}>
+                      <span className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold ${product.badge === "NEW" ? "bg-emerald-600 text-white" : "bg-[#F97316] text-white"}`}>
                         {product.badge === "NEW" ? t.products.new : t.products.sale}
                       </span>
                     )}
@@ -153,12 +153,12 @@ export default function ProductDetailPage() {
                   <div className="mb-3">
                     <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">{catName}</span>
                   </div>
-                  <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight mb-4">{product.name}</h1>
+                  <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1E3A8A] leading-tight mb-4">{product.name}</h1>
 
                   <div className="flex items-center gap-2 mb-5">
                     <div className="flex items-center gap-0.5">
                       {[1, 2, 3, 4, 5].map((i) => (
-                        <Star key={i} className={`w-4 h-4 ${i <= Math.round(product.rating) ? "fill-amber-400 text-amber-400" : "fill-gray-200 text-gray-200"}`} />
+                        <Star key={i} className={`w-4 h-4 ${i <= Math.round(product.rating) ? "fill-[#E5B25A] text-[#E5B25A]" : "fill-gray-200 text-gray-200"}`} />
                       ))}
                     </div>
                     <span className="font-semibold text-gray-900">{product.rating}</span>
@@ -211,7 +211,7 @@ export default function ProductDetailPage() {
                         </div>
                         <button
                           onClick={() => { addItem(product, qty); setQty(1); }}
-                          className="add-cart-btn flex-1 inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-6 py-3.5 rounded-xl font-semibold hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-600/30 shadow-sm"
+                          className="add-cart-btn flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold shadow-sm"
                         >
                           <ShoppingCart className="w-5 h-5" />
                           {t.products.addToCart}
@@ -236,7 +236,7 @@ export default function ProductDetailPage() {
                         </div>
                         <button
                           onClick={() => { addItem(product, qty); setQty(1); }}
-                          className="add-cart-btn flex-1 inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-6 py-3.5 rounded-xl font-semibold hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-600/30 shadow-sm"
+                          className="add-cart-btn flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold shadow-sm"
                         >
                           <ShoppingCart className="w-5 h-5" />
                           {t.products.addToCart}
