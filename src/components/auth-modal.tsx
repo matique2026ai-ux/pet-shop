@@ -136,6 +136,18 @@ export default function AuthModal({
             {tab === "login" ? t.auth.submitLogin : t.auth.submitRegister}
           </button>
         </form>
+
+        <p className="mt-4 text-center text-sm text-gray-500">
+          {tab === "login" ? (
+            <button type="button" onClick={() => switchTab("register")} className="text-emerald-600 font-medium hover:underline">
+              {t.auth.orRegister}
+            </button>
+          ) : (
+            <button type="button" onClick={() => switchTab("login")} className="text-emerald-600 font-medium hover:underline">
+              {t.auth.orLogin}
+            </button>
+          )}
+        </p>
       </div>
     </div>
   );

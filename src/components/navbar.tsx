@@ -216,10 +216,11 @@ export default function Navbar() {
             ) : (
               <button
                 onClick={() => { setAuthTab("login"); setAuthOpen(true); }}
-                className="flex items-center gap-1.5 text-sm text-white hover:text-emerald-300 px-2 py-1.5 rounded-lg hover:bg-white/10 transition-colors"
+                className="p-2 text-white hover:text-emerald-300 rounded-lg hover:bg-white/10 transition-colors"
+                aria-label={t.auth.login}
+                title={t.auth.login}
               >
-                <LogIn className="w-4 h-4" />
-                <span className="hidden sm:inline">{t.auth.login}</span>
+                <User className="w-5 h-5" />
               </button>
             )}
 
