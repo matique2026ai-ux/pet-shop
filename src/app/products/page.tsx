@@ -44,7 +44,7 @@ function ProductsContent() {
       case "name": return [...list].sort((a, b) => a.name.localeCompare(b.name));
       default: return list;
     }
-  }, [search, category, initialFilter, sort]);
+  }, [products, search, category, initialFilter, sort]);
 
   return (
     <div>
