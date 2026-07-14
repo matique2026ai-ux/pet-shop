@@ -6,9 +6,10 @@ import { useRef, type ReactNode } from "react";
 interface Props {
   children: ReactNode;
   className?: string;
+  delay?: number;
 }
 
-export default function AnimatedSection({ children, className = "" }: Props) {
+export default function AnimatedSection({ children, className = "", delay = 0 }: Props) {
   const ref = useRef(null);
 
   return (
@@ -17,7 +18,7 @@ export default function AnimatedSection({ children, className = "" }: Props) {
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.5, delay }}
       className={className}
     >
       {children}

@@ -141,3 +141,42 @@ button,
 a {
   -webkit-tap-highlight-color: transparent;
 }
+
+/* ===== Shipping page animations ===== */
+@keyframes shipTruck {
+  0% { left: 6%; transform: translateY(0) scaleX(1); }
+  48% { transform: translateY(-10px) scaleX(1); }
+  52% { transform: translateY(-10px) scaleX(-1); }
+  100% { left: 88%; transform: translateY(0) scaleX(-1); }
+}
+@keyframes shipTruckRTL {
+  0% { right: 6%; transform: translateY(0) scaleX(1); }
+  48% { transform: translateY(-10px) scaleX(1); }
+  52% { transform: translateY(-10px) scaleX(-1); }
+  100% { right: 88%; transform: translateY(0) scaleX(-1); }
+}
+@keyframes shipPin {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(-6px); opacity: 0.7; }
+}
+@keyframes shipDash {
+  from { stroke-dashoffset: 240; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes shipFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes shipScaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.ship-truck { animation: shipTruck 6s ease-in-out infinite; }
+[dir="rtl"] .ship-truck { animation: shipTruckRTL 6s ease-in-out infinite; }
+.ship-pin { animation: shipPin 2.4s ease-in-out infinite; }
+.ship-pin-2 { animation: shipPin 2.4s ease-in-out infinite 0.6s; }
+.ship-dash { stroke-dasharray: 6 8; animation: shipDash 3s linear infinite; }
+.ship-float { animation: shipFloat 5s ease-in-out infinite; }
+.ship-scale-in { animation: shipScaleIn 0.6s ease-out both; }
+
