@@ -170,6 +170,10 @@ export const en = {
     free: "Free",
     freeHint: "Add {amount} more for free delivery",
     deliveryArea: "Delivery Area",
+    codBadge: "Cash on Delivery — pay comfortably when your order arrives",
+    freeProgress: "Add {amount} more to get free delivery!",
+    wilaya: "Wilaya",
+    commune: "Commune / Municipality",
   },
   vet: {
     title: "Veterinary Clinic",
@@ -258,9 +262,16 @@ export const en = {
     title: "Shipping & Returns",
     subtitle: "Delivery and return policies",
     sections: [
-      { title: "Delivery Information", text: "We deliver to all wilayas across Algeria. Orders are processed within 24 hours and delivered within 2-5 business days. Delivery is free for orders over 5,000 DZD. Standard delivery fee is 500 DZD." },
+      { title: "Delivery Information", text: "We deliver across Algeria. Sétif enjoys express delivery within 24–48 hours. Delivery is free for orders over 5,000 DZD; standard rates per region are shown in the table below." },
       { title: "Return Policy", text: "You may return unused and unopened products within 7 days of delivery. To initiate a return, contact our customer service team. Return shipping costs are the responsibility of the customer unless the product is defective." },
       { title: "Payment Methods", text: "We accept cash on delivery (COD) for all orders. Bank transfers are also accepted for orders over 10,000 DZD. All prices are in Algerian Dinar (DZD) and include applicable taxes." },
+    ],
+    deliveryTableTitle: "Delivery Rates by Region",
+    deliveryTableHeaders: { region: "Region", eta: "Delivery Time", fee: "Fee", free: "Free Delivery" },
+    deliveryTable: [
+      { region: "Sétif (Express)", eta: "24–48 hours", fee: "200 DZD", free: "Free over 5,000 DZD" },
+      { region: "Northern Wilayas", eta: "3–5 days", fee: "500 DZD", free: "Free over 5,000 DZD" },
+      { region: "Southern Wilayas", eta: "5–7 days", fee: "800 DZD", free: "Free over 5,000 DZD" },
     ],
   },
   contact: {

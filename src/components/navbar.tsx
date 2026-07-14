@@ -3,6 +3,7 @@
 import { useI18n } from "@/lib/i18n-context";
 import { useCart } from "@/lib/cart-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
+import { useSiteSettings } from "@/lib/site-settings";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
@@ -31,6 +32,9 @@ export default function Navbar() {
   const { t, lang, setLang, dir } = useI18n();
   const { totalItems } = useCart();
   const { categories } = useTranslatedData();
+  const { store } = useSiteSettings();
+  const storePhone = store?.phone || "+213555123456";
+  const telHref = "tel:" + storePhone.replace(/[^0-9+]/g, "");
   const { user, profile, loading: authLoading, logout } = useAuth();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -152,9 +156,9 @@ export default function Navbar() {
                   }
                 }}
                 placeholder={t.nav.searchPlaceholder}
-                className="w-32 lg:w-40 pl-8 pr-3 py-1.5 rounded-lg bg-white/10 text-white text-sm placeholder-white/50 border border-white/20 focus:outline-none focus:bg-white/20 transition-colors"
+                className="w-32 lg:w-40 pl-8 pr-3 py-1.5 rounded-lg bg-white/10 text-white text-sm placeholder-white/50 border border-white/20 focus:outline-none focus:bg-white/20 transition-colors rtl:pr-8 rtl:pl-3"
               />
-              <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 pointer-events-none" />
+              <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 pointer-events-none rtl:right-2 rtl:left-auto" />
             </div>
             <button
               onClick={() => {
@@ -175,7 +179,7 @@ export default function Navbar() {
               {langOpen && (
                 <div className={`absolute ${isRtl ? "left-0" : "right-0"} mt-1 bg-white rounded-lg shadow-lg border border-gray-100 py-1 min-w-[80px]`}>
                   {languages.map((l) => (
-                    <button key={l.code} onClick={() => { setLang(l.code); setLangOpen(false); }} className={`block w-full text-left px-3 py-1.5 text-sm hover:bg-gray-50 ${lang === l.code ? "text-emerald-600 font-medium" : "text-gray-600"}`}>
+                     <button key={l.code} onClick={() => { setLang(l.code); setLangOpen(false); }} className={`block w-full text-left px-3 py-1.5 text-sm hover:bg-gray-50 rtl:text-right ${lang === l.code ? "text-emerald-600 font-medium" : "text-gray-600"}`}>
                       {l.label}
                     </button>
                   ))}
@@ -225,7 +229,7 @@ export default function Navbar() {
               </button>
             )}
 
-            <a href="tel:+213555123456" className="hidden xl:flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">
+            <a href={telHref} className="hidden xl:flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">
               <Phone className="w-4 h-4" />
               {t.nav.callNow}
             </a>

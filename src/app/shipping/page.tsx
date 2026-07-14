@@ -7,7 +7,7 @@ import { Truck, RotateCcw, CreditCard, Sparkles, CheckCircle } from "lucide-reac
 const icons = [<Truck className="w-6 h-6" />, <RotateCcw className="w-6 h-6" />, <CreditCard className="w-6 h-6" />];
 
 export default function ShippingPage() {
-  const { t } = useI18n();
+  const { t, dir } = useI18n();
 
   return (
     <div>
@@ -21,6 +21,38 @@ export default function ShippingPage() {
             </span>
             <h1 className="text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">{t.shipping.title}</h1>
             <p className="text-emerald-100/70 text-lg max-w-lg">{t.shipping.subtitle}</p>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      <section className="pb-16 lg:pb-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">{t.shipping.deliveryTableTitle}</h2>
+            <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden" style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.25)" }}>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm" dir={dir}>
+                  <thead>
+                    <tr className="bg-emerald-50 text-emerald-800">
+                      <th className="text-right font-semibold py-3 px-4">{t.shipping.deliveryTableHeaders.region}</th>
+                      <th className="text-right font-semibold py-3 px-4">{t.shipping.deliveryTableHeaders.eta}</th>
+                      <th className="text-right font-semibold py-3 px-4">{t.shipping.deliveryTableHeaders.fee}</th>
+                      <th className="text-right font-semibold py-3 px-4">{t.shipping.deliveryTableHeaders.free}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(t.shipping.deliveryTable as unknown as { region: string; eta: string; fee: string; free: string }[]).map((row, i) => (
+                      <tr key={i} className={i % 2 === 1 ? "bg-gray-50/60" : ""}>
+                        <td className="py-3 px-4 font-medium text-gray-900">{row.region}</td>
+                        <td className="py-3 px-4 text-gray-600">{row.eta}</td>
+                        <td className="py-3 px-4 text-gray-600">{row.fee}</td>
+                        <td className="py-3 px-4 text-emerald-600 font-medium">{row.free}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </AnimatedSection>
         </div>
       </section>

@@ -168,8 +168,12 @@ export const fr = {
     placeOrder: "Passer la Commande",
     secureCheckout: "Paiement sécurisé",
     free: "Gratuit",
-    freeHint: "Ajoutez {amount} pour la livraison gratuite",
+    freeHint: "Ajoutez {amount} de plus pour la livraison gratuite",
     deliveryArea: "Zone de livraison",
+    codBadge: "Paiement à la livraison — payez tranquillement à la réception",
+    freeProgress: "Ajoutez {amount} de plus pour la livraison gratuite !",
+    wilaya: "Wilaya",
+    commune: "Commune",
   },
   vet: {
     title: "Clinique Vétérinaire",
@@ -258,9 +262,16 @@ export const fr = {
     title: "Livraison et Retours",
     subtitle: "Politiques de livraison et de retour",
     sections: [
-      { title: "Informations de Livraison", text: "Nous livrons dans toutes les wilayas d'Algérie. Les commandes sont traitées sous 24 heures et livrées sous 2 à 5 jours ouvrables. La livraison est gratuite pour les commandes de plus de 5 000 DZD. Les frais de livraison standard sont de 500 DZD." },
+      { title: "Informations de Livraison", text: "Nous livrons dans toute l'Algérie. Sétif bénéficie d'une livraison express sous 24 à 48 heures. La livraison est gratuite dès 5 000 DZD ; les tarifs par région sont indiqués dans le tableau ci-dessous." },
       { title: "Politique de Retour", text: "Vous pouvez retourner les produits non utilisés et non ouverts dans les 7 jours suivant la livraison. Pour initier un retour, contactez notre service client. Les frais de retour sont à la charge du client sauf si le produit est défectueux." },
       { title: "Moyens de Paiement", text: "Nous acceptons le paiement à la livraison pour toutes les commandes. Les virements bancaires sont également acceptés pour les commandes de plus de 10 000 DZD. Tous les prix sont en Dinar Algérien (DZD) et incluent les taxes applicables." },
+    ],
+    deliveryTableTitle: "Tarifs de livraison par région",
+    deliveryTableHeaders: { region: "Région", eta: "Délai", fee: "Frais", free: "Livraison gratuite" },
+    deliveryTable: [
+      { region: "Sétif (Express)", eta: "24 à 48 heures", fee: "200 DZD", free: "Gratuit dès 5 000 DZD" },
+      { region: "Wilayas du Nord", eta: "3 à 5 jours", fee: "500 DZD", free: "Gratuit dès 5 000 DZD" },
+      { region: "Wilayas du Sud", eta: "5 à 7 jours", fee: "800 DZD", free: "Gratuit dès 5 000 DZD" },
     ],
   },
   contact: {

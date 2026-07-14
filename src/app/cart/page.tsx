@@ -6,7 +6,7 @@ import { useI18n } from "@/lib/i18n-context";
 import Link from "next/link";
 import Image from "next/image";
 import AnimatedSection from "@/components/animated-section";
-import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, Lock, Truck, MapPin } from "lucide-react";
+import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, Truck } from "lucide-react";
 import { useSiteSettings } from "@/lib/site-settings";
 import { useAuth } from "@/lib/auth-context";
 
@@ -21,6 +21,16 @@ const DEFAULT_DELIVERY: Record<string, string> = {
   note: "Livraison à domicile dans la commune de Sétif (moto).",
 };
 
+const WILAYAS = [
+  "Adrar", "Chlef", "Laghouat", "Oum El Bouaghi", "Batna", "Béjaïa", "Biskra", "Béchar",
+  "Blida", "Bouira", "Tamanrasset", "Tébessa", "Tlemcen", "Tiaret", "Tizi Ouzou", "Alger",
+  "Djelfa", "Jijel", "Sétif", "Saïda", "Skikda", "Sidi Bel Abbès", "Annaba", "Guelma",
+  "Constantine", "Médéa", "Mostaganem", "M'Sila", "Mascara", "Ouargla", "Oran", "El Bayadh",
+  "Illizi", "Bordj Bou Arréridj", "Boumerdès", "El Tarf", "Tindouf", "Tissemsilt", "El Oued",
+  "Khenchela", "Souk Ahras", "Tipaza", "Mila", "Aïn Defla", "Naâma", "Aïn Témouchent",
+  "Ghardaïa", "Relizane",
+];
+
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, clearCart } = useCart();
   const { t, currency, lang } = useI18n();
@@ -29,6 +39,8 @@ export default function CartPage() {
   const [checkingOut, setCheckingOut] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [area, setArea] = useState("");
+  const [wilaya, setWilaya] = useState("Sétif");
+  const [commune, setCommune] = useState("");
 
   const d = { ...DEFAULT_DELIVERY, ...(delivery || {}) };
   const feeNum = Number(d.fee) || 0;
@@ -185,9 +197,17 @@ export default function CartPage() {
                   </div>
 
                   {remainingForFree > 0 && (
-                    <p className="text-xs text-emerald-600 mt-2">
-                      {t.cart.freeHint.replace("{amount}", `${currency}${remainingForFree.toFixed(2)}`)}
-                    </p>
+                    <div className="mt-3">
+                      <div className="h-2 rounded-full bg-emerald-100 overflow-hidden">
+                        <div
+                          className="h-full bg-emerald-500 rounded-full transition-all duration-500"
+                          style={{ width: `${Math.min(100, (subtotal / freeNum) * 100)}%` }}
+                        />
+                      </div>
+                      <p className="text-xs text-emerald-600 mt-1.5">
+                        {t.cart.freeProgress.replace("{amount}", `${currency}${remainingForFree.toFixed(2)}`)}
+                      </p>
+                    </div>
                   )}
 
                   <div className="flex items-center justify-between py-3 border-b border-gray-100 text-lg font-bold text-gray-900">
@@ -195,9 +215,14 @@ export default function CartPage() {
                     <span>{currency}{grandTotal.toFixed(2)}</span>
                   </div>
 
+                  <div className="mt-5 flex items-start gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium rounded-xl px-3 py-2.5 leading-relaxed">
+                    <Truck className="w-4 h-4 shrink-0 mt-0.5" />
+                    <span>{t.cart.codBadge}</span>
+                  </div>
+
                   <button
                     onClick={() => setCheckingOut(true)}
-                    className="w-full mt-6 bg-emerald-600 text-white py-3 rounded-xl font-medium hover:bg-emerald-700 transition-colors"
+                    className="w-full mt-4 bg-emerald-600 text-white py-3 rounded-xl font-medium hover:bg-emerald-700 transition-colors"
                   >
                     {t.cart.checkout}
                   </button>
@@ -247,9 +272,17 @@ export default function CartPage() {
                   {deliveryFee === 0 ? t.cart.free : `${currency}${deliveryFee.toFixed(2)}`}
                 </span>
               </div>
-              {remainingForFree > 0 && (
-                <p className="text-xs text-emerald-600">{t.cart.freeHint.replace("{amount}", `${currency}${remainingForFree.toFixed(2)}`)}</p>
-              )}
+               {remainingForFree > 0 && (
+                 <div className="mt-2">
+                   <div className="h-2 rounded-full bg-emerald-100 overflow-hidden">
+                     <div
+                       className="h-full bg-emerald-500 rounded-full transition-all duration-500"
+                       style={{ width: `${Math.min(100, (subtotal / freeNum) * 100)}%` }}
+                     />
+                   </div>
+                   <p className="text-xs text-emerald-600 mt-1.5">{t.cart.freeProgress.replace("{amount}", `${currency}${remainingForFree.toFixed(2)}`)}</p>
+                 </div>
+               )}
               <div className="flex items-center justify-between text-lg font-bold text-gray-900 pt-2 border-t border-gray-100">
                 <span>{t.cart.total}</span>
                 <span>{currency}{grandTotal.toFixed(2)}</span>
@@ -263,11 +296,10 @@ export default function CartPage() {
                 const fd = new FormData(form);
                 const order = {
                   customer_name: fd.get("name") as string,
-                  customer_email: fd.get("email") as string,
                   customer_phone: fd.get("phone") as string,
-                  delivery_address: fd.get("address") as string,
-                  city: d.city,
-                  delivery_area: (fd.get("delivery_area") as string) || selectedArea,
+                  delivery_address: `${commune}, ${wilaya}`,
+                  city: wilaya,
+                  delivery_area: commune,
                   delivery_fee: deliveryFee,
                   delivery_eta: d.eta,
                   items: items.map((i) => ({ productId: i.productId, name: i.name, price: i.price, quantity: i.quantity, sold_by: i.sold_by })),
@@ -298,46 +330,34 @@ export default function CartPage() {
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
               <input
-                type="email"
-                name="email"
-                placeholder={t.cart.emailPlaceholder}
-                required
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-              <input
                 type="tel"
                 name="phone"
                 placeholder={t.cart.phonePlaceholder}
                 required
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
-              <textarea
-                name="address"
-                placeholder={t.cart.addressPlaceholder}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t.cart.wilaya}</label>
+                <select
+                  value={wilaya}
+                  onChange={(e) => setWilaya(e.target.value)}
+                  name="wilaya"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                >
+                  {WILAYAS.map((w) => (
+                    <option key={w} value={w}>{w}</option>
+                  ))}
+                </select>
+              </div>
+              <input
+                type="text"
+                name="commune"
+                value={commune}
+                onChange={(e) => setCommune(e.target.value)}
+                placeholder={t.cart.commune}
                 required
-                rows={3}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
-              {areas.length > 0 && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1.5">
-                    <MapPin className="w-4 h-4" />{t.cart.deliveryArea}
-                  </label>
-                  <select
-                    value={selectedArea}
-                    onChange={(e) => setArea(e.target.value)}
-                    name="delivery_area"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  >
-                    {areas.map((a) => (
-                      <option key={a} value={a}>{a}</option>
-                    ))}
-                  </select>
-                  <p className="text-xs text-gray-400 mt-1">
-                    {d.city} • {d.eta}
-                  </p>
-                </div>
-              )}
               <button
                 type="submit"
                 className="w-full bg-emerald-600 text-white py-3 rounded-xl font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"
@@ -345,15 +365,9 @@ export default function CartPage() {
                 <CreditCard className="w-4 h-4" />
                 {t.cart.placeOrder}
               </button>
-              <div className="flex items-center justify-center gap-3 text-xs text-gray-400 pt-2">
-                <Lock className="w-3 h-3" />
-                <span>{t.cart.secureCheckout}</span>
-                <span className="w-px h-3 bg-gray-200" />
-                <span>Visa</span>
-                <span className="w-px h-3 bg-gray-200" />
-                <span>Mastercard</span>
-                <span className="w-px h-3 bg-gray-200" />
-                <span>CCP</span>
+              <div className="flex items-center justify-center gap-2 text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2.5">
+                <Truck className="w-4 h-4 shrink-0" />
+                <span className="font-medium">{t.cart.codBadge}</span>
               </div>
             </form>
           </div>
