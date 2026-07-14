@@ -70,6 +70,14 @@ export default function Navbar() {
     timeoutRef.current = setTimeout(() => setMegaOpen(false), 150);
   };
 
+  const doSearch = () => {
+    if (searchVal.trim()) {
+      router.push(`/products?q=${encodeURIComponent(searchVal.trim())}`);
+      setSearchVal("");
+      setSearchOpen(false);
+    }
+  };
+
   const desktopLinks = [
     { href: "/", label: t.nav.home },
     { href: "/products", label: t.nav.products },
@@ -135,22 +143,30 @@ export default function Navbar() {
                 value={searchVal}
                 onChange={(e) => setSearchVal(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" && searchVal.trim()) {
-                    router.push(`/products?q=${encodeURIComponent(searchVal.trim())}`);
-                    setSearchVal("");
-                    setSearchOpen(false);
-                  }
+                  if (e.key === "Enter") doSearch();
                 }}
                 placeholder={t.nav.searchPlaceholder}
                 className="w-32 lg:w-40 pl-8 pr-3 py-1.5 rounded-lg bg-white/10 text-white text-sm placeholder-white/50 border border-white/20 focus:outline-none focus:bg-white/20 transition-colors rtl:pr-8 rtl:pl-3"
               />
-              <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 pointer-events-none rtl:right-2 rtl:left-auto" />
+              <button
+                type="button"
+                onClick={doSearch}
+                aria-label={t.nav.search}
+                className="absolute left-2 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors rtl:right-2 rtl:left-auto"
+              >
+                <Search className="w-4 h-4" />
+              </button>
             </div>
             <button
               onClick={() => {
+                if (searchOpen && searchVal.trim()) {
+                  doSearch();
+                  return;
+                }
                 setSearchOpen(!searchOpen);
                 if (!searchOpen) setTimeout(() => searchRef.current?.focus(), 100);
               }}
+              aria-label={t.nav.search}
               className="xl:hidden p-2 text-white hover:text-white hover:bg-white/10 rounded-lg transition-colors"
             >
               <Search className="w-4 h-4" />
