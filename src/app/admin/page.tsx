@@ -13,6 +13,7 @@ import {
   Edit, Trash2, ArrowUpRight, Calendar, Menu, X, Lock,
   LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Database,
 } from "lucide-react";
+import HeroVideoManager from "@/components/hero-video-manager";
 
 const COLORS = ["#059669", "#10B981", "#34D399", "#6EE7B7", "#A7F3D0"];
 
@@ -1172,6 +1173,8 @@ export default function AdminDashboard() {
                     </Link>
                   </div>
                 </div>
+
+                <HeroVideoManager />
               </div>
             )}
           </main>

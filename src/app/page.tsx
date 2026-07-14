@@ -25,7 +25,7 @@ const benefitIcons = [
   <Heart className="w-6 h-6" />,
 ];
 
-const heroVideos = [
+const DEFAULT_HERO_VIDEOS = [
   "https://cdn.pixabay.com/video/2021/05/12/73981-549736333_large.mp4",
   "https://cdn.pixabay.com/video/2023/05/05/161726-824133858_large.mp4",
   "https://cdn.pixabay.com/video/2022/12/03/141480-777708175_large.mp4",
@@ -40,7 +40,17 @@ export default function HomePage() {
   const { ids: recentIds } = useRecentlyViewed();
   const recentProducts = products.filter((p) => recentIds.includes(p.id)).slice(0, 4);
   const [videoIdx, setVideoIdx] = useState(0);
+  const [heroVideos, setHeroVideos] = useState<string[]>(DEFAULT_HERO_VIDEOS);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    fetch("/api/hero-videos")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.videos && d.videos.length > 0) setHeroVideos(d.videos);
+      })
+      .catch(() => {});
+  }, []);
 
   const handleVideoEnd = () => {
     const next = (videoIdx + 1) % heroVideos.length;
