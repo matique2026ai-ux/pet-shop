@@ -11,7 +11,7 @@ import {
 import {
   Users, ShoppingBag, DollarSign, Package, TrendingUp, TrendingDown,
   Edit, Trash2, ArrowUpRight, Calendar, Menu, X, Lock,
-  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Database, Search, Filter,
+  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Search, Filter,
 } from "lucide-react";
 import HeroVideoManager from "@/components/hero-video-manager";
 
@@ -196,7 +196,7 @@ export default function AdminDashboard() {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [useUrlInput, setUseUrlInput] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [seeding, setSeeding] = useState(false);
+
   const [sortBy, setSortBy] = useState<"name" | "category" | "price" | "stock">("name");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 
@@ -442,26 +442,6 @@ export default function AdminDashboard() {
       alert("Upload failed: " + (e as Error).message);
     } finally {
       setUploadingImage(false);
-    }
-  };
-
-  const handleSeed = async () => {
-    if (!confirm("Import all demo products into the database?")) return;
-    setSeeding(true);
-    try {
-      const secret = getSecret();
-      const res = await fetch("/api/seed", {
-        method: "POST",
-        headers: secret ? { "x-admin-secret": secret } : {},
-      });
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
-      alert(`Imported ${data.inserted} products successfully!`);
-      await loadProducts();
-    } catch (e) {
-      alert("Seed failed: " + (e as Error).message);
-    } finally {
-      setSeeding(false);
     }
   };
 
@@ -955,19 +935,6 @@ export default function AdminDashboard() {
                       </select>
 
                       <button
-                        onClick={handleSeed}
-                        disabled={seeding}
-                        className="inline-flex items-center gap-2 px-3.5 py-2.5 bg-amber-50 text-amber-700 rounded-xl text-sm font-medium hover:bg-amber-100 transition-colors disabled:opacity-50"
-                      >
-                        {seeding ? (
-                          <div className="animate-spin w-4 h-4 border-2 border-amber-600 border-t-transparent rounded-full" />
-                        ) : (
-                          <Database className="w-4 h-4" />
-                        )}
-                        Seed
-                      </button>
-
-                      <button
                         onClick={openAddModal}
                         className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 transition-colors shadow-sm shadow-emerald-600/20"
                       >
@@ -996,18 +963,6 @@ export default function AdminDashboard() {
                           >
                             <Plus className="w-4 h-4 inline-block mr-1" />
                             Add Product
-                          </button>
-                          <button
-                            onClick={handleSeed}
-                            disabled={seeding}
-                            className="px-4 py-2.5 bg-amber-50 text-amber-700 rounded-xl text-sm font-medium hover:bg-amber-100 transition-colors disabled:opacity-50 inline-flex items-center gap-2"
-                          >
-                            {seeding ? (
-                              <div className="animate-spin w-4 h-4 border-2 border-amber-600 border-t-transparent rounded-full" />
-                            ) : (
-                              <Database className="w-4 h-4" />
-                            )}
-                            Seed Demo Data
                           </button>
                         </div>
                       </div>
@@ -1281,15 +1236,8 @@ export default function AdminDashboard() {
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <h2 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <button onClick={handleSeed} disabled={seeding} className="flex items-center gap-3 p-4 rounded-xl bg-amber-50 border border-amber-100 hover:bg-amber-100 transition-colors text-left disabled:opacity-50 w-full">
-                      <Database className="w-5 h-5 text-amber-600 shrink-0" />
-                      <div>
-                        <p className="text-sm font-semibold text-amber-900">Re-seed Database</p>
-                        <p className="text-xs text-amber-700">{seeding ? "Importing..." : "Import all demo products"}</p>
-                      </div>
-                    </button>
-                    <Link href="/" className="flex items-center gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 transition-colors">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <Link href="/" className="flex items-center gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 transition-colors">
                       <ArrowUpRight className="w-5 h-5 text-emerald-600" />
                       <div>
                         <p className="text-sm font-semibold text-emerald-900">View Store</p>

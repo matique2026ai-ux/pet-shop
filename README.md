@@ -1,9 +1,9 @@
 # Paws & Wings — Pet Shop & Veterinary Clinic
 
 A multilingual (EN / FR / AR) e-commerce site for a pet shop serving the **Algerian market**, built with Next.js (App Router) + Supabase + Vercel. Includes a full storefront, a password-protected admin dashboard, image uploads, and a real PostgreSQL backend.
+> **Live site:** https://pet-cat.vercel.app
 
-> **Live site:** https://pet-shop-mu-roan.vercel.app
-> **Admin:** https://pet-shop-mu-roan.vercel.app/admin  (password: `admin123`)
+> **Admin:** https://pet-cat.vercel.app/admin  (password: `admin123`)
 > **Repo:** https://github.com/matique2026ai-ux/pet-shop
 
 ---
