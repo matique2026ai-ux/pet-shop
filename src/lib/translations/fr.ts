@@ -36,7 +36,7 @@ export const fr = {
     whatsappMessage: "Bonjour ! J'ai une question sur vos produits pour animaux.",
   },
   hero: {
-    title: "Votre Mérite le Meilleur",
+    title: "Votre Compagnon Mérite le Meilleur",
     subtitle: "Produits premium et soins vétérinaires sous un même toit",
     cta1: "Acheter",
     cta2: "Prendre RDV",
