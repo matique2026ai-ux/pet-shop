@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Too many items" }, { status: 400 });
   }
 
-  const supabase = createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("orders")
     .insert([{
@@ -51,10 +51,11 @@ export async function POST(request: Request) {
       delivery_area: str(body.delivery_area) || null,
       delivery_fee: Number(body.delivery_fee) || 0,
       delivery_eta: str(body.delivery_eta) || null,
-       items: body.items,
-       notes: str(body.notes).slice(0, MAX) || null,
-       user_id: body.user_id || null,
-       status: "pending",
+      items: body.items,
+      total: Number(body.total) || 0,
+      notes: str(body.notes).slice(0, MAX) || null,
+      user_id: body.user_id || null,
+      status: "pending",
     }])
     .select()
     .single();

@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS products (
 CREATE TABLE IF NOT EXISTS orders (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   customer_name TEXT NOT NULL,
-  customer_email TEXT NOT NULL,
+  customer_email TEXT, -- nullable: guests can check out without an email
   customer_phone TEXT NOT NULL,
   delivery_address TEXT NOT NULL,
   items JSONB NOT NULL DEFAULT '[]',
