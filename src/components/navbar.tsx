@@ -281,7 +281,7 @@ export default function Navbar() {
                     </span>
                     {cat.name}
                   </Link>
-                  <div className="mr-9 mb-1 flex flex-wrap gap-1">
+                  <div className="ms-9 mb-1 flex flex-wrap gap-1">
                     {cat.subcategories.map((sub) => (
                       <Link key={sub.id} href={`/products/${cat.id}?sub=${sub.id}`} onClick={() => setMobileOpen(false)} className="text-xs text-gray-500 hover:text-emerald-600 px-2 py-1 bg-gray-50 rounded-md">
                         {sub.name}

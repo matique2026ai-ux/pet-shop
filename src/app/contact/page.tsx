@@ -46,6 +46,7 @@ export default function ContactPage() {
           src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1400&h=600&fit=crop"
           alt={t.contact.title}
           fill
+          sizes="100vw"
           className="object-cover"
           priority
         />

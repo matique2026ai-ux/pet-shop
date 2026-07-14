@@ -56,6 +56,7 @@ export default function CategoryPage() {
             src={catHeroImages[cat.id] || catHeroImages.cats}
             alt={cat.name}
             fill
+            sizes="100vw"
             className="object-cover"
             priority
           />

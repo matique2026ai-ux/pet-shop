@@ -71,7 +71,7 @@ export default function HomePage() {
   return (
     <>
       <section className="relative overflow-hidden">
-        <video ref={videoRef} key={videoIdx} autoPlay muted playsInline onEnded={handleVideoEnd} className="absolute inset-0 w-full h-full object-cover">
+        <video ref={videoRef} key={videoIdx} autoPlay muted playsInline preload="metadata" onEnded={handleVideoEnd} className="absolute inset-0 w-full h-full object-cover">
           <source src={heroVideos[videoIdx]} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/40" />
@@ -114,7 +114,7 @@ export default function HomePage() {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {categories.map((cat) => (
                 <Link key={cat.id} href={`/products/${cat.id}`} className="group relative block rounded-2xl overflow-hidden aspect-[4/5] shadow-md hover:shadow-xl transition-all">
-                  <Image src={categoryImages[cat.id] || categoryImages.cats} alt={cat.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <Image src={categoryImages[cat.id] || categoryImages.cats} alt={cat.name} fill sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw" className="object-cover group-hover:scale-110 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                   <div className="absolute bottom-0 inset-x-0 p-4 text-center">
                     <span className="text-white font-bold text-sm lg:text-base leading-tight block drop-shadow-lg">

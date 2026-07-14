@@ -61,7 +61,7 @@ export default function ProductDetailPage() {
           <AnimatedSection>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               <div className="relative aspect-square bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 cursor-pointer group" onClick={() => setLightboxOpen(true)}>
-                <Image src={product.image || "/placeholder.svg"} alt={product.name} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
+                <Image src={product.image || "/placeholder.svg"} alt={product.name} fill priority sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
                   <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 rounded-full p-2 shadow-lg">
                     <ZoomIn className="w-5 h-5 text-gray-700" />
@@ -179,7 +179,7 @@ export default function ProductDetailPage() {
             <X className="w-8 h-8" />
           </button>
           <div className="relative max-w-4xl max-h-[90vh] w-full h-full" onClick={(e) => e.stopPropagation()}>
-            <Image src={product.image || "/placeholder.svg"} alt={product.name} fill className="object-contain" />
+            <Image src={product.image || "/placeholder.svg"} alt={product.name} fill sizes="(max-width: 768px) 100vw, 56rem" className="object-contain" />
           </div>
         </div>
       )}

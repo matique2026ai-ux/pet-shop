@@ -33,6 +33,7 @@ export default function AboutPage() {
             src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=1400&h=800&fit=crop"
             alt={t.about.title}
             fill
+            sizes="100vw"
             className="object-cover"
             priority
           />
@@ -89,6 +90,7 @@ export default function AboutPage() {
                     src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600&h=450&fit=crop"
                     alt={t.about.title}
                     fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
                     className="object-cover"
                   />
                 </div>

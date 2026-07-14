@@ -29,6 +29,7 @@ export default function VetPage() {
           src="https://picsum.photos/seed/vet-hero/1400/900"
           alt={t.vet.title}
           fill
+          sizes="100vw"
           className="object-cover"
           priority
         />
@@ -96,6 +97,7 @@ export default function VetPage() {
                       src={serviceImages[s.id] || serviceImages["vet-1"]}
                       alt={s.title}
                       fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       className="object-cover transition-all duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
@@ -145,6 +147,7 @@ export default function VetPage() {
                       src={`https://picsum.photos/seed/vet-team${i + 1}/400/500`}
                       alt={m.name}
                       fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
                       className="object-cover transition-all duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
@@ -197,6 +200,7 @@ export default function VetPage() {
           src="https://picsum.photos/seed/vet-cta/1400/600"
           alt={t.vet.subtitle}
           fill
+          sizes="100vw"
           className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#1a1512]/90 via-[#3a220a]/70 to-[#1a1512]/80" />

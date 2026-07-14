@@ -43,6 +43,7 @@ export default function VetCard({ service }: VetCardProps) {
           src={serviceImages[service.id] || serviceImages["vet-1"]}
           alt={service.title}
           fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition-all duration-700 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#1a1512]/90 via-[#3a220a]/30 to-transparent" />
