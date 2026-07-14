@@ -12,7 +12,7 @@ import {
 import {
   Users, ShoppingBag, DollarSign, Package, TrendingUp, TrendingDown,
   Edit, Trash2, ArrowUpRight, Calendar, Menu, X, Lock,
-  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Search, Filter, Tag, Languages,
+  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Search, Filter, Tag, Languages, Video,
 } from "lucide-react";
 import HeroVideoManager from "@/components/hero-video-manager";
 import { en } from "@/lib/translations/en";
@@ -177,6 +177,8 @@ type FormState = {
   features: string;
   stockQuantity: string;
   soldBy: "piece" | "weight";
+  video: string;
+  ingredients: string;
 };
 
 const emptyForm: FormState = {
@@ -193,6 +195,8 @@ const emptyForm: FormState = {
   features: "",
   stockQuantity: "0",
   soldBy: "piece",
+  video: "",
+  ingredients: "",
 };
 
 export default function AdminDashboard() {
@@ -431,6 +435,8 @@ export default function AdminDashboard() {
         features: product.features?.join(", ") || "",
         stockQuantity: product.stock_quantity != null ? String(product.stock_quantity) : (product.in_stock ? "1" : "0"),
         soldBy: (product.sold_by as "piece" | "weight") || "piece",
+        video: product.video || "",
+        ingredients: product.ingredients || "",
       });
     setFormErrors({});
     setShowModal(true);
@@ -472,6 +478,8 @@ export default function AdminDashboard() {
         stock_quantity: Number(form.stockQuantity) || 0,
         in_stock: Number(form.stockQuantity) > 0,
         sold_by: form.soldBy,
+        video: form.video || undefined,
+        ingredients: form.ingredients || undefined,
       };
       if (form.originalPrice) body.original_price = Number(form.originalPrice);
 
@@ -1858,6 +1866,21 @@ export default function AdminDashboard() {
                 )}
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{a.products.video}</label>
+                <div className="flex items-center gap-3">
+                  <Video className="w-4 h-4 text-gray-400 shrink-0" />
+                  <input
+                    type="text"
+                    value={form.video}
+                    onChange={(e) => setForm({ ...form, video: e.target.value })}
+                    placeholder="https://youtube.com/... أو https://....mp4"
+                    className="flex-1 px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+                <p className="text-xs text-gray-400 mt-1">{a.products.videoHelp}</p>
+              </div>
+
               <button
                 type="button"
                 onClick={() => setShowAdvanced(!showAdvanced)}
@@ -1942,6 +1965,18 @@ export default function AdminDashboard() {
                       placeholder="Feature 1, Feature 2, Feature 3"
                       className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{a.products.ingredients}</label>
+                    <textarea
+                      rows={4}
+                      value={form.ingredients}
+                      onChange={(e) => setForm({ ...form, ingredients: e.target.value })}
+                      placeholder={"• Chicken 40%\n• Rice 20%\n• ..."}
+                      className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+                    />
+                    <p className="text-xs text-gray-400 mt-1">{a.products.ingredientsHelp}</p>
                   </div>
                 </div>
               )}

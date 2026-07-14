@@ -13,6 +13,8 @@ export interface Product {
   features: string[];
   inStock: boolean;
   sold_by?: string;
+  video?: string;
+  ingredients?: string;
 }
 
 export interface Subcategory {

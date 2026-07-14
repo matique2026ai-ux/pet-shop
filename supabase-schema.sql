@@ -61,6 +61,10 @@ ALTER TABLE orders ADD COLUMN IF NOT EXISTS delivery_eta TEXT;
 -- Sold-by model (piece | weight). Add if table predates this column.
 ALTER TABLE products ADD COLUMN IF NOT EXISTS sold_by TEXT NOT NULL DEFAULT 'piece' CHECK (sold_by IN ('piece', 'weight'));
 
+-- Rich product page: short video + ingredients / composition.
+ALTER TABLE products ADD COLUMN IF NOT EXISTS video TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS ingredients TEXT;
+
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE categories ENABLE ROW LEVEL SECURITY;

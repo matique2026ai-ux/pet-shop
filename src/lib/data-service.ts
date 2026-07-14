@@ -16,6 +16,8 @@ export interface ProductData {
   in_stock: boolean;
   stock_quantity?: number;
   sold_by?: string;
+  video?: string;
+  ingredients?: string;
   created_at?: string;
 }
 

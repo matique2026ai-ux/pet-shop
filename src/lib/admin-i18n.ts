@@ -20,6 +20,7 @@ type AdminTranslations = {
     stockQuantity: string; stockHelp: string; noProducts: string; addFirst: string;
     filtersNoMatch: string; clearFilters: string; name: string; category: string; price: string; oldPrice: string; stock: string; badge: string; actions: string;
     soldBy: string; soldByPiece: string; soldByWeight: string; weightHelp: string;
+    video: string; videoHelp: string; ingredients: string; ingredientsHelp: string;
   };
   orders: {
     title: string; total: string; loading: string; noOrders: string;
@@ -64,6 +65,7 @@ const en: AdminTranslations = {
     noProducts: "No products yet", addFirst: "Add your first product to get started", filtersNoMatch: "No products match your filters", clearFilters: "Clear filters",
     name: "Name", category: "Category", price: "Price", oldPrice: "Old Price", stock: "Stock", badge: "Badge", actions: "Actions",
     soldBy: "Sold By", soldByPiece: "Piece (each)", soldByWeight: "Weight (kg)", weightHelp: "Price is per kg. Customer chooses the weight (e.g. 0.5 kg).",
+    video: "Product Video URL", videoHelp: "Optional. YouTube, Vimeo, or a direct .mp4 link. Shown on the product page.", ingredients: "Ingredients & Composition", ingredientsHelp: "Optional. List the ingredients / composition (supports multiple lines).",
   },
   orders: {
     title: "All Orders", total: "orders total", loading: "Loading orders...", noOrders: "No orders yet",
@@ -109,6 +111,7 @@ const fr: AdminTranslations = {
     noProducts: "Aucun produit pour l'instant", addFirst: "Ajoutez votre premier produit", filtersNoMatch: "Aucun produit ne correspond à vos filtres", clearFilters: "Effacer les filtres",
     name: "Nom", category: "Catégorie", price: "Prix", oldPrice: "Ancien prix", stock: "Stock", badge: "Badge", actions: "Actions",
     soldBy: "Vendu par", soldByPiece: "Pièce", soldByWeight: "Poids (kg)", weightHelp: "Le prix est au kg. Le client choisit le poids (ex. 0,5 kg).",
+    video: "URL de la vidéo produit", videoHelp: "Facultatif. YouTube, Vimeo ou un lien .mp4 direct. Affiché sur la page produit.", ingredients: "Ingrédients & Composition", ingredientsHelp: "Facultatif. Listez les ingrédients / la composition (plusieurs lignes possibles).",
   },
   orders: {
     title: "Toutes les commandes", total: "commandes au total", loading: "Chargement des commandes...", noOrders: "Aucune commande pour l'instant",
@@ -154,6 +157,7 @@ const ar: AdminTranslations = {
     noProducts: "لا توجد منتجات بعد", addFirst: "أضف أول منتج لتبدأ", filtersNoMatch: "لا توجد منتجات تطابق عوامل التصفية", clearFilters: "مسح عوامل التصفية",
     name: "الاسم", category: "الفئة", price: "السعر", oldPrice: "السعر القديم", stock: "المخزون", badge: "الشارة", actions: "الإجراءات",
     soldBy: "يُباع بـ", soldByPiece: "قطعة", soldByWeight: "الوزن (كغ)", weightHelp: "السعر للكيلوغرام. يختار الزبون الوزن (مثلاً 0.5 كغ).",
+    video: "رابط فيديو المنتج", videoHelp: "اختياري. YouTube أو Vimeo أو رابط .mp4 مباشر. يُعرض في صفحة المنتج.", ingredients: "المكوّنات والتركيبة", ingredientsHelp: "اختياري. اذكر المكوّنات/التركيبة (أسطر متعددة).",
   },
   orders: {
     title: "كل الطلبات", total: "طلبًا إجمالاً", loading: "جارٍ تحميل الطلبات...", noOrders: "لا توجد طلبات بعد",
