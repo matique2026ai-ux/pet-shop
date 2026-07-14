@@ -14,6 +14,7 @@ export interface ProductData {
   description?: string;
   features: string[];
   in_stock: boolean;
+  stock_quantity?: number;
   created_at?: string;
 }
 

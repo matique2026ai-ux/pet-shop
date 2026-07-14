@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS products (
   description TEXT,
   features JSONB DEFAULT '[]',
   in_stock BOOLEAN NOT NULL DEFAULT TRUE,
+  stock_quantity INTEGER NOT NULL DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -96,3 +97,10 @@ INSERT INTO subcategories (id, category_id, name) VALUES
   ('smallpets-food', 'small-pets', 'Food'),
   ('smallpets-cages', 'small-pets', 'Cages')
 ON CONFLICT (id) DO NOTHING;
+
+-- Key/value store for admin-managed site settings, content and translations.
+CREATE TABLE IF NOT EXISTS site_settings (
+  key TEXT PRIMARY KEY,
+  value JSONB NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);

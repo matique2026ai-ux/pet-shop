@@ -29,7 +29,14 @@ type AdminTranslations = {
     perCategory: string; priceDist: string; topRated: string; topRatedSub: string;
     name: string; rating: string; reviews: string; under20: string; b2050: string; b50100: string; b100: string;
   };
-  settings: { title: string; subtitle: string; quickActions: string };
+  settings: {
+    title: string; subtitle: string; quickActions: string;
+    store: string; content: string; translations: string;
+    phone: string; email: string; whatsapp: string; address: string; facebook: string; instagram: string;
+    currencyLabel: string; deliveryFee: string; freeThreshold: string; storeName: string;
+    heroTitle: string; heroSubtitle: string; heroCta1: string; heroCta2: string; footerText: string; about: string;
+    saved: string;
+  };
   cats: {
     title: string; subtitle: string; addCategory: string; editCategory: string; addSub: string; editSub: string;
     idHelp: string; noCats: string; subOf: string; subcount: string; manage: string; deleteConfirm: string;
@@ -62,7 +69,14 @@ const en: AdminTranslations = {
     perCategory: "Products per Category", priceDist: "Price Distribution", topRated: "Top Rated Products", topRatedSub: "Products with highest ratings",
     name: "Name", rating: "Rating", reviews: "Reviews", under20: "Under 20", b2050: "20 - 50", b50100: "50 - 100", b100: "100+",
   },
-  settings: { title: "Settings", subtitle: "Manage your store configuration", quickActions: "Quick Actions" },
+  settings: {
+    title: "Settings", subtitle: "Manage your store configuration", quickActions: "Quick Actions",
+    store: "Store Information", content: "Site Content", translations: "Translations",
+    phone: "Phone", email: "Email", whatsapp: "WhatsApp", address: "Address", facebook: "Facebook", instagram: "Instagram",
+    currencyLabel: "Currency Label", deliveryFee: "Delivery Fee", freeThreshold: "Free Delivery Threshold", storeName: "Store Name",
+    heroTitle: "Hero Title", heroSubtitle: "Hero Subtitle", heroCta1: "Hero Button 1", heroCta2: "Hero Button 2", footerText: "Footer Text", about: "About Snippet",
+    saved: "Saved successfully",
+  },
   cats: {
     title: "Categories", subtitle: "Manage product categories and subcategories", addCategory: "Add Category", editCategory: "Edit Category",
     addSub: "Add Subcategory", editSub: "Edit Subcategory", idHelp: "Unique ID (slug), e.g. cats", noCats: "No categories yet",
@@ -96,7 +110,14 @@ const fr: AdminTranslations = {
     perCategory: "Produits par catégorie", priceDist: "Répartition des prix", topRated: "Produits les mieux notés", topRatedSub: "Produits avec les meilleures notes",
     name: "Nom", rating: "Note", reviews: "Avis", under20: "Moins de 20", b2050: "20 - 50", b50100: "50 - 100", b100: "100+",
   },
-  settings: { title: "Paramètres", subtitle: "Gérez la configuration de votre boutique", quickActions: "Actions rapides" },
+  settings: {
+    title: "Paramètres", subtitle: "Gérez la configuration de votre boutique", quickActions: "Actions rapides",
+    store: "Informations du magasin", content: "Contenu du site", translations: "Traductions",
+    phone: "Téléphone", email: "E-mail", whatsapp: "WhatsApp", address: "Adresse", facebook: "Facebook", instagram: "Instagram",
+    currencyLabel: "Libellé de la devise", deliveryFee: "Frais de livraison", freeThreshold: "Seuil de livraison gratuite", storeName: "Nom du magasin",
+    heroTitle: "Titre de l'accueil", heroSubtitle: "Sous-titre de l'accueil", heroCta1: "Bouton 1", heroCta2: "Bouton 2", footerText: "Texte du pied de page", about: "À propos",
+    saved: "Enregistré avec succès",
+  },
   cats: {
     title: "Catégories", subtitle: "Gérez les catégories et sous-catégories", addCategory: "Ajouter une catégorie", editCategory: "Modifier la catégorie",
     addSub: "Ajouter une sous-catégorie", editSub: "Modifier la sous-catégorie", idHelp: "ID unique (slug), ex. cats", noCats: "Aucune catégorie pour l'instant",
@@ -130,7 +151,14 @@ const ar: AdminTranslations = {
     perCategory: "المنتجات حسب الفئة", priceDist: "توزيع الأسعار", topRated: "المنتجات الأعلى تقييمًا", topRatedSub: "المنتجات ذات التقييمات الأعلى",
     name: "الاسم", rating: "التقييم", reviews: "التقييمات", under20: "أقل من 20", b2050: "20 - 50", b50100: "50 - 100", b100: "100+",
   },
-  settings: { title: "الإعدادات", subtitle: "إدارة إعدادات متجرك", quickActions: "إجراءات سريعة" },
+  settings: {
+    title: "الإعدادات", subtitle: "إدارة إعدادات متجرك", quickActions: "إجراءات سريعة",
+    store: "معلومات المتجر", content: "محتوى الموقع", translations: "الترجمات",
+    phone: "الهاتف", email: "البريد الإلكتروني", whatsapp: "واتساب", address: "العنوان", facebook: "فيسبوك", instagram: "إنستغرام",
+    currencyLabel: "رمز العملة", deliveryFee: "رسوم التوصيل", freeThreshold: "حد التوصيل المجاني", storeName: "اسم المتجر",
+    heroTitle: "عنوان الواجهة", heroSubtitle: "العنوان الفرعي للواجهة", heroCta1: "الزر الأول", heroCta2: "الزر الثاني", footerText: "نص التذييل", about: "نبذة عنا",
+    saved: "تم الحفظ بنجاح",
+  },
   cats: {
     title: "الفئات", subtitle: "إدارة فئات المنتجات والفئات الفرعية", addCategory: "إضافة فئة", editCategory: "تعديل الفئة",
     addSub: "إضافة فئة فرعية", editSub: "تعديل الفئة الفرعية", idHelp: "معرّف فريد (slug)، مثل cats", noCats: "لا توجد فئات بعد",
