@@ -137,7 +137,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <div className={`${searchOpen ? "flex" : "hidden"} xl:flex items-center relative`}>
               <input
                 ref={searchRef}

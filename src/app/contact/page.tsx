@@ -3,13 +3,20 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useI18n } from "@/lib/i18n-context";
+import { useSiteSettings } from "@/lib/site-settings";
 import AnimatedSection from "@/components/animated-section";
 import { MapPin, Phone, Mail, Clock, Send, Sparkles, ChevronRight, CheckCircle, Loader2 } from "lucide-react";
 
 export default function ContactPage() {
   const { t } = useI18n();
+  const { store } = useSiteSettings();
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
+
+  const storeVal = (k: string, fb: string) => (store && store[k] ? store[k] : fb);
+  const address = storeVal("address", t.contact.addressText);
+  const phone = storeVal("phone", t.contact.phoneText);
+  const email = storeVal("email", t.contact.emailText);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,9 +40,9 @@ export default function ContactPage() {
   };
 
   const info = [
-    { icon: <MapPin className="w-5 h-5" />, title: t.contact.address, text: t.contact.addressText },
-    { icon: <Phone className="w-5 h-5" />, title: t.contact.phone, text: t.contact.phoneText },
-    { icon: <Mail className="w-5 h-5" />, title: t.contact.email, text: t.contact.emailText },
+    { icon: <MapPin className="w-5 h-5" />, title: t.contact.address, text: address },
+    { icon: <Phone className="w-5 h-5" />, title: t.contact.phone, text: phone },
+    { icon: <Mail className="w-5 h-5" />, title: t.contact.email, text: email },
     { icon: <Clock className="w-5 h-5" />, title: t.contact.hours, text: `${t.contact.weekday}\n${t.contact.weekend}` },
   ];
 
@@ -68,19 +75,19 @@ export default function ContactPage() {
             <div className="lg:col-span-2">
               <AnimatedSection>
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">{t.contact.infoTitle}</h2>
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {info.map((item) => (
-                    <div key={item.title} className="bg-white rounded-2xl p-5 flex items-start gap-4 transition-all duration-300 hover:-translate-x-1"
+                    <div key={item.title} className="bg-white rounded-2xl p-4 flex items-start gap-3 transition-all duration-300 hover:-translate-x-1"
                       style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.25)" }}
                     >
-                      <span className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center text-white"
+                      <span className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center text-white"
                         style={{ background: "linear-gradient(135deg, #b87a30, #d4943f)" }}
                       >
                         {item.icon}
                       </span>
-                      <div>
+                      <div className="min-w-0">
                         <h3 className="font-bold text-gray-900 text-sm">{item.title}</h3>
-                        <p className="text-sm text-gray-500 whitespace-pre-line mt-0.5">{item.text}</p>
+                        <p dir="auto" className="text-sm text-gray-500 whitespace-pre-line mt-0.5 break-words">{item.text}</p>
                       </div>
                     </div>
                   ))}
@@ -90,7 +97,7 @@ export default function ContactPage() {
 
             <div className="lg:col-span-3">
               <AnimatedSection>
-                <div className="bg-white rounded-3xl p-8 lg:p-10"
+                <div className="bg-white rounded-3xl p-6 lg:p-8"
                   style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.3)" }}
                 >
                   <h2 className="text-2xl font-bold text-gray-900 mb-1">{t.contact.formTitle}</h2>
@@ -109,21 +116,21 @@ export default function ContactPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.contact.formName}</label>
-                        <input type="text" name="name" required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#b87a30]/20 focus:border-[#b87a30] focus:bg-white transition-all" placeholder={t.contact.formNamePlaceholder} />
+                        <input type="text" name="name" required dir="auto" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#b87a30]/20 focus:border-[#b87a30] focus:bg-white transition-all" placeholder={t.contact.formNamePlaceholder} />
                       </div>
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.contact.formEmail}</label>
-                        <input type="email" name="email" required className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#b87a30]/20 focus:border-[#b87a30] focus:bg-white transition-all" placeholder={t.contact.formEmailPlaceholder} />
+                        <input type="email" name="email" required dir="auto" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#b87a30]/20 focus:border-[#b87a30] focus:bg-white transition-all" placeholder={t.contact.formEmailPlaceholder} />
                       </div>
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.contact.formMessage}</label>
-                      <textarea name="message" required rows={5} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#b87a30]/20 focus:border-[#b87a30] focus:bg-white transition-all resize-none" placeholder={t.contact.formMessagePlaceholder} />
+                      <textarea name="message" required rows={5} dir="auto" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#b87a30]/20 focus:border-[#b87a30] focus:bg-white transition-all resize-none" placeholder={t.contact.formMessagePlaceholder} />
                     </div>
-                    <button type="submit" disabled={sending} className="inline-flex items-center gap-2 bg-[#b87a30] text-white px-8 py-3.5 rounded-2xl font-bold hover:bg-[#9a6225] transition-all shadow-lg shadow-[#b87a30]/20 hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-60">
+                    <button type="submit" disabled={sending} className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#b87a30] text-white px-8 py-3.5 rounded-2xl text-base font-bold hover:bg-[#9a6225] transition-all shadow-lg shadow-[#b87a30]/20 hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-60">
                       {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                       {t.contact.formSubmit}
-                      <ChevronRight className="w-4 h-4" />
+                      <ChevronRight className="w-4 h-4 rtl:rotate-180" />
                     </button>
                   </form>
                   )}
@@ -135,7 +142,7 @@ export default function ContactPage() {
           <AnimatedSection>
             <div className="mt-12 relative overflow-hidden rounded-3xl h-72">
               <iframe
-                src="https://www.google.com/maps?q=S%C3%A9tif%2C%20Alg%C3%A9rie&z=13&output=embed"
+                src="https://www.google.com/maps?q=36.1898,5.4123&z=14&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -145,12 +152,12 @@ export default function ContactPage() {
                 className="rounded-3xl"
                 title={t.contact.storeName}
               />
-              <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-xl rounded-2xl px-5 py-3 border border-white/40 shadow-lg">
+              <div className="absolute bottom-6 left-6 rtl:left-auto rtl:right-6 bg-white/90 backdrop-blur-xl rounded-2xl px-5 py-3 border border-white/40 shadow-lg">
                 <div className="flex items-center gap-3">
                   <MapPin className="w-5 h-5 text-[#b87a30]" />
                   <div>
-                    <p className="font-bold text-gray-900 text-sm">{t.contact.storeName}</p>
-                    <p className="text-xs text-gray-500">{t.contact.storeAddress}</p>
+                    <p className="font-bold text-gray-900 text-sm">{store?.name || t.contact.storeName}</p>
+                    <p dir="auto" className="text-xs text-gray-500">{address}</p>
                   </div>
                 </div>
               </div>

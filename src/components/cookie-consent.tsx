@@ -35,25 +35,23 @@ export default function CookieConsent() {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-0 inset-x-0 z-[70] bg-stone-900/95 backdrop-blur border-t border-stone-800 shadow-2xl">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-        <p className="text-sm text-stone-200 flex-1 leading-relaxed">{t.cookies.desc}</p>
-        <div className="flex gap-2 shrink-0">
-          <button
-            type="button"
-            onClick={() => choose("refused")}
-            className="px-4 py-2 rounded-lg border border-stone-600 text-stone-200 text-sm hover:bg-stone-800 transition-colors"
-          >
-            {t.cookies.refuse}
-          </button>
-          <button
-            type="button"
-            onClick={() => choose("accepted")}
-            className="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors"
-          >
-            {t.cookies.accept}
-          </button>
-        </div>
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[70] w-[calc(100%-2rem)] max-w-lg bg-stone-900/95 backdrop-blur rounded-2xl border border-stone-700 shadow-2xl p-5">
+      <p className="text-sm text-stone-200 leading-relaxed">{t.cookies.desc}</p>
+      <div className="flex gap-2 mt-4">
+        <button
+          type="button"
+          onClick={() => choose("refused")}
+          className="flex-1 px-4 py-2.5 rounded-xl border border-stone-600 text-stone-200 text-sm hover:bg-stone-800 transition-colors"
+        >
+          {t.cookies.refuse}
+        </button>
+        <button
+          type="button"
+          onClick={() => choose("accepted")}
+          className="flex-1 px-4 py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors"
+        >
+          {t.cookies.accept}
+        </button>
       </div>
     </div>
   );

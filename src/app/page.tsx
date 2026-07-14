@@ -74,13 +74,14 @@ export default function HomePage() {
         <video ref={videoRef} key={videoIdx} autoPlay muted playsInline preload="metadata" onEnded={handleVideoEnd} className="absolute inset-0 w-full h-full object-cover">
           <source src={heroVideos[videoIdx]} type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
           <div className="text-center">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 animate-shimmer">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 animate-shimmer drop-shadow-md">
               {heroTitle}
             </h1>
-            <p className="text-lg text-emerald-100/80 mb-8 max-w-xl mx-auto">
+            <p className="text-lg text-emerald-50 font-medium mb-8 max-w-xl mx-auto drop-shadow">
               {heroSubtitle}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -130,12 +131,12 @@ export default function HomePage() {
 
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold text-gray-900">{t.home.bestsellers}</h2>
-            <Link href="/products" className="flex items-center gap-1 text-emerald-600 font-medium text-sm hover:text-emerald-700">
-              {t.home.viewAll} <Arrow className="w-4 h-4" />
-            </Link>
-          </div>
+            <div className="flex items-center justify-between gap-2 mb-8 flex-wrap">
+              <h2 className="text-2xl font-bold text-gray-900 min-w-0">{t.home.bestsellers}</h2>
+              <Link href="/products" className="flex items-center gap-1 text-emerald-600 font-medium text-sm hover:text-emerald-700 shrink-0">
+                {t.home.viewAll} <Arrow className="w-4 h-4" />
+              </Link>
+            </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 gap-y-8">
             {bestsellers.map((p) => (
