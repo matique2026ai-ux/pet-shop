@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useI18n } from "@/lib/i18n-context";
+import { useAdminI18n } from "@/lib/admin-i18n";
 import type { ProductData } from "@/lib/data-service";
 import {
   BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip,
@@ -127,14 +128,14 @@ function ProductBadge({ badge }: { badge?: string | null }) {
   );
 }
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, label, currency }: any) => {
   if (active && payload?.length) {
     return (
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4">
         <p className="text-sm font-semibold text-gray-900 mb-2">{label}</p>
         {payload.map((p: any, i: number) => (
           <p key={i} className="text-sm" style={{ color: p.color }}>
-            {p.name}: {p.name === "Revenue" ? `$${p.value.toLocaleString()}` : p.value}
+            {p.name}: {p.name === "Revenue" ? `${p.value.toLocaleString()} ${currency}` : p.value}
           </p>
         ))}
       </div>
@@ -155,7 +156,7 @@ type FormState = {
   reviews: string;
   description: string;
   features: string;
-  inStock: boolean;
+  stockQuantity: string;
 };
 
 const emptyForm: FormState = {
@@ -170,11 +171,12 @@ const emptyForm: FormState = {
   reviews: "0",
   description: "",
   features: "",
-  inStock: true,
+  stockQuantity: "0",
 };
 
 export default function AdminDashboard() {
   const { t, currency } = useI18n();
+  const { a, adminLang, setAdminLang, dir } = useAdminI18n();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
@@ -353,7 +355,7 @@ export default function AdminDashboard() {
       reviews: String(product.reviews),
       description: product.description || "",
       features: product.features?.join(", ") || "",
-      inStock: product.in_stock,
+      stockQuantity: product.stock_quantity != null ? String(product.stock_quantity) : (product.in_stock ? "1" : "0"),
     });
     setFormErrors({});
     setShowModal(true);
@@ -392,7 +394,8 @@ export default function AdminDashboard() {
         reviews: Number(form.reviews),
         description: form.description || undefined,
         features: form.features.split(",").map((f) => f.trim()).filter(Boolean),
-        in_stock: form.inStock,
+        stock_quantity: Number(form.stockQuantity) || 0,
+        in_stock: Number(form.stockQuantity) > 0,
       };
       if (form.originalPrice) body.original_price = Number(form.originalPrice);
 
@@ -477,13 +480,33 @@ export default function AdminDashboard() {
 
   const productCount = products.length;
   const inventoryValue = products.reduce((s, p) => s + p.price, 0);
+
+  const orderTotalRevenue = orders.reduce((s: number, o: any) => s + (Number(o.total) || 0), 0);
+  const customerCount = orders.length
+    ? new Set(orders.map((o: any) => o.customer_email || o.customer_phone || o.customer_name)).size
+    : 0;
+  const monthlyRevenue = (() => {
+    if (!orders.length) return sampleRevenue;
+    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const map: Record<string, { month: string; revenue: number; orders: number }> = {};
+    for (const o of orders) {
+      if (!o.created_at) continue;
+      const d = new Date(o.created_at);
+      if (isNaN(d.getTime())) continue;
+      const key = `${d.getFullYear()}-${d.getMonth()}`;
+      if (!map[key]) map[key] = { month: months[d.getMonth()], revenue: 0, orders: 0 };
+      map[key].revenue += Number(o.total) || 0;
+      map[key].orders += 1;
+    }
+    return Object.values(map).sort((a, b) => months.indexOf(a.month) - months.indexOf(b.month));
+  })();
   const catDist = categories.map((c) => ({
     name: c.name,
     value: products.filter((p) => p.category === c.id).length,
   }));
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" dir={dir}>
       <div className="flex">
         <aside className={`
           fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-[#1a1512] to-[#3a220a] text-white
@@ -525,7 +548,7 @@ export default function AdminDashboard() {
                   }`}
                 >
                   <Icon className="w-5 h-5" />
-                  <span>{tab.label}</span>
+                  <span>{a.nav[tab.key as keyof typeof a.nav]}</span>
                 </button>
               );
             })}
@@ -533,7 +556,7 @@ export default function AdminDashboard() {
           <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10">
             <Link href="/" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-white/40 hover:text-white/60 hover:bg-white/5 transition-all">
               <ArrowUpRight className="w-4 h-4" />
-              <span>View Store</span>
+              <span>{a.nav.viewStore}</span>
             </Link>
           </div>
         </aside>
@@ -550,11 +573,7 @@ export default function AdminDashboard() {
                   <Menu className="w-5 h-5" />
                 </button>
                 <h1 className="text-lg font-bold text-gray-900">
-                  {activeTab === "dashboard" && "Admin Dashboard"}
-                  {activeTab === "products" && "Products"}
-                  {activeTab === "orders" && "Orders"}
-                  {activeTab === "analytics" && "Analytics"}
-                  {activeTab === "settings" && "Settings"}
+                  {a.title[activeTab as keyof typeof a.title] ?? activeTab}
                 </h1>
               </div>
               <div className="flex items-center gap-3">
@@ -562,6 +581,16 @@ export default function AdminDashboard() {
                   <Calendar className="w-4 h-4" />
                   <span>Dec 1 - Dec 31, 2024</span>
                 </div>
+                <select
+                  value={adminLang}
+                  onChange={(e) => setAdminLang(e.target.value as typeof adminLang)}
+                  title={a.lang.label}
+                  className="px-2.5 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-600/20 cursor-pointer"
+                >
+                  <option value="en">{a.lang.en}</option>
+                  <option value="fr">{a.lang.fr}</option>
+                  <option value="ar">{a.lang.ar}</option>
+                </select>
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white text-xs font-bold">
                   A
                 </div>
@@ -590,7 +619,7 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   <StatCard
                     icon={DollarSign}
-                    label="Inventory Value"
+                    label={a.dashboard.inventoryValue}
                     value={productsError ? "$124,500" : `$${inventoryValue.toLocaleString()}`}
                     trend="+12.5% from last month"
                     trendUp
@@ -598,23 +627,23 @@ export default function AdminDashboard() {
                   />
                   <StatCard
                     icon={ShoppingBag}
-                    label="Total Orders"
-                    value={loadingOrders ? "..." : String(orders.length || "1,893")}
+                    label={a.dashboard.totalOrders}
+                    value={loadingOrders ? "..." : String(orders.length)}
                     trend="+8.2% from last month"
                     trendUp
                     color="bg-blue-100 text-blue-600"
                   />
                   <StatCard
                     icon={Users}
-                    label="Total Customers"
-                    value={productsError ? "1,247" : "1,247"}
+                    label={a.dashboard.totalCustomers}
+                    value={String(customerCount)}
                     trend="+5.4% from last month"
                     trendUp
                     color="bg-purple-100 text-purple-600"
                   />
                   <StatCard
                     icon={Package}
-                    label="Total Products"
+                    label={a.dashboard.totalProducts}
                     value={loadingProducts ? "..." : String(productCount || "168")}
                     trend="+3 new this month"
                     trendUp
@@ -626,8 +655,8 @@ export default function AdminDashboard() {
                   <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                     <div className="flex items-center justify-between mb-6">
                       <div>
-                        <h2 className="text-lg font-bold text-gray-900">Revenue Overview</h2>
-                        <p className="text-sm text-gray-500 mt-0.5">Monthly revenue & order trends</p>
+                        <h2 className="text-lg font-bold text-gray-900">{a.dashboard.revenueOverview}</h2>
+                        <p className="text-sm text-gray-500 mt-0.5">{a.dashboard.revenueSub}</p>
                       </div>
                       <div className="flex items-center gap-2 text-xs text-gray-400">
                         <div className="flex items-center gap-1">
@@ -642,12 +671,12 @@ export default function AdminDashboard() {
                     </div>
                     <div className="h-72">
                       <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={sampleRevenue} barGap={2}>
+                        <BarChart data={monthlyRevenue} barGap={2}>
                           <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
                           <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
                           <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
-                          <Tooltip content={<CustomTooltip />} />
-                          <Bar yAxisId="left" dataKey="revenue" name="Revenue" fill="#059669" radius={[4, 4, 0, 0]} maxBarSize={24} />
+                           <Tooltip content={(props: any) => <CustomTooltip {...props} currency={currency} />} />
+                           <Bar yAxisId="left" dataKey="revenue" name="Revenue" fill="#059669" radius={[4, 4, 0, 0]} maxBarSize={24} />
                           <Bar yAxisId="right" dataKey="orders" name="Orders" fill="#6EE7B7" radius={[4, 4, 0, 0]} maxBarSize={24} />
                         </BarChart>
                       </ResponsiveContainer>
@@ -675,7 +704,7 @@ export default function AdminDashboard() {
                               <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
                             ))}
                           </Pie>
-                          <Tooltip content={<CustomTooltip />} />
+                          <Tooltip content={(props: any) => <CustomTooltip {...props} currency={currency} />} />
                         </PieChart>
                       </ResponsiveContainer>
                     </div>
@@ -701,7 +730,7 @@ export default function AdminDashboard() {
                   <div className="p-6 pb-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h2 className="text-lg font-bold text-gray-900">Recent Orders</h2>
+                        <h2 className="text-lg font-bold text-gray-900">{a.dashboard.recentOrders}</h2>
                         <p className="text-sm text-gray-500 mt-0.5">Latest transactions</p>
                       </div>
                       <button
@@ -716,23 +745,25 @@ export default function AdminDashboard() {
                     <table className="w-full text-sm">
                       <thead>
                         <tr className="border-y border-gray-100 bg-gray-50/50">
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Order</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Customer</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Product</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Amount</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.order}</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.customer}</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.product}</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.amount}</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.status}</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.date}</th>
                         </tr>
                       </thead>
                       <tbody>
                         {(orders.length ? orders.slice(0, 5) : sampleRecentOrders).map((order: any, i: number) => (
                           <tr key={order.id || i} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                             <td className="px-6 py-4 font-semibold text-gray-900">{order.id || `#ORD-${i + 1}`}</td>
-                            <td className="px-6 py-4 text-gray-700">{order.customer || order.customer_name || "-"}</td>
-                            <td className="px-6 py-4 text-gray-700 max-w-[200px] truncate">{order.product || order.product_name || "-"}</td>
-                            <td className="px-6 py-4 font-semibold text-gray-900">${(order.amount || order.total || 0).toFixed(2)}</td>
+                            <td className="px-6 py-4 text-gray-700">{order.customer_name || "-"}</td>
+                            <td className="px-6 py-4 text-gray-700 max-w-[200px] truncate">
+                              {Array.isArray(order.items) ? `${order.items.length} item${order.items.length === 1 ? "" : "s"}` : "-"}
+                            </td>
+                            <td className="px-6 py-4 font-semibold text-gray-900">{(Number(order.total) || 0).toLocaleString()} {currency}</td>
                             <td className="px-6 py-4"><StatusBadge status={order.status || "Pending"} /></td>
-                            <td className="px-6 py-4 text-gray-500">{order.date || order.created_at?.slice(0, 10) || "-"}</td>
+                            <td className="px-6 py-4 text-gray-500">{order.created_at?.slice(0, 10) || "-"}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -842,7 +873,7 @@ export default function AdminDashboard() {
                       product.in_stock ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"
                     }`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${product.in_stock ? "bg-emerald-500" : "bg-red-500"}`} />
-                      {product.in_stock ? "In Stock" : "Out"}
+                      {product.in_stock ? `In Stock (${product.stock_quantity ?? 0})` : "Out"}
                     </span>
                   </td>
                   <td className="px-4 py-3"><ProductBadge badge={product.badge} /></td>
@@ -897,7 +928,7 @@ export default function AdminDashboard() {
                         <input
                           value={prodSearch}
                           onChange={(e) => setProdSearch(e.target.value)}
-                          placeholder="Search products by name…"
+                          placeholder={a.products.searchPlaceholder}
                           className="w-full pl-10 pr-9 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-500 transition-colors"
                         />
                         {prodSearch && (
@@ -917,7 +948,7 @@ export default function AdminDashboard() {
                           onChange={(e) => setProdCat(e.target.value)}
                           className="pl-9 pr-8 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-500 transition-colors appearance-none cursor-pointer"
                         >
-                          <option value="all">All Categories</option>
+                          <option value="all">{a.products.allCategories}</option>
                           {categories.map((c) => (
                             <option key={c.id} value={c.id}>{c.name}</option>
                           ))}
@@ -929,9 +960,9 @@ export default function AdminDashboard() {
                         onChange={(e) => setProdStock(e.target.value as "all" | "in" | "out")}
                         className="px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-500 transition-colors appearance-none cursor-pointer"
                       >
-                        <option value="all">All Stock</option>
-                        <option value="in">In Stock</option>
-                        <option value="out">Out of Stock</option>
+                          <option value="all">{a.products.allStock}</option>
+                          <option value="in">{a.products.inStock}</option>
+                          <option value="out">{a.products.outOfStock}</option>
                       </select>
 
                       <button
@@ -939,7 +970,7 @@ export default function AdminDashboard() {
                         className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 transition-colors shadow-sm shadow-emerald-600/20"
                       >
                         <Plus className="w-4 h-4" />
-                        Add Product
+                        {a.products.addProduct}
                       </button>
                     </div>
                   </div>
@@ -954,27 +985,27 @@ export default function AdminDashboard() {
                     ) : products.length === 0 ? (
                       <div className="flex flex-col items-center justify-center py-16 text-gray-400">
                         <Package2 className="w-12 h-12 mb-3 text-gray-300" />
-                        <p className="text-sm font-medium text-gray-500">No products yet</p>
-                        <p className="text-xs text-gray-400 mt-1">Add your first product to get started</p>
+                        <p className="text-sm font-medium text-gray-500">{a.products.noProducts}</p>
+                        <p className="text-xs text-gray-400 mt-1">{a.products.addFirst}</p>
                         <div className="mt-4 flex items-center gap-3">
                           <button
                             onClick={openAddModal}
                             className="px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 transition-colors"
                           >
                             <Plus className="w-4 h-4 inline-block mr-1" />
-                            Add Product
+                            {a.products.addProduct}
                           </button>
                         </div>
                       </div>
                     ) : filtered.length === 0 ? (
                       <div className="flex flex-col items-center justify-center py-16 text-gray-400">
                         <Search className="w-10 h-10 mb-3 text-gray-300" />
-                        <p className="text-sm font-medium text-gray-500">No products match your filters</p>
+                        <p className="text-sm font-medium text-gray-500">{a.products.filtersNoMatch}</p>
                         <button
                           onClick={() => { setProdSearch(""); setProdCat("all"); setProdStock("all"); }}
                           className="mt-3 text-sm text-emerald-600 hover:underline"
                         >
-                          Clear filters
+                          {a.products.clearFilters}
                         </button>
                       </div>
                     ) : !hasFilter ? (
@@ -1018,13 +1049,13 @@ export default function AdminDashboard() {
                           <table className="w-full text-sm">
                             <thead>
                               <tr className="bg-gray-50/40 text-gray-400">
-                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">Product</th>
-                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">Category</th>
-                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">Price</th>
-                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">Old</th>
-                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">Stock</th>
-                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">Badge</th>
-                                <th className="text-right px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">Actions</th>
+                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.name}</th>
+                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.category}</th>
+                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.price}</th>
+                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.oldPrice}</th>
+                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.stock}</th>
+                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.badge}</th>
+                                <th className="text-right px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.actions}</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -1043,9 +1074,9 @@ export default function AdminDashboard() {
             {activeTab === "orders" && (
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div className="p-6 pb-4">
-                  <h2 className="text-lg font-bold text-gray-900">All Orders</h2>
+                  <h2 className="text-lg font-bold text-gray-900">{a.orders.title}</h2>
                   <p className="text-sm text-gray-500 mt-0.5">
-                    {loadingOrders ? "Loading..." : `${orders.length} orders total`}
+                    {loadingOrders ? a.common.loading : `${orders.length} ${a.orders.total}`}
                   </p>
                 </div>
                 <div className="overflow-x-auto">
@@ -1055,20 +1086,20 @@ export default function AdminDashboard() {
                       Loading orders...
                     </div>
                   ) : orders.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-16 text-gray-400">
-                      <ShoppingCart className="w-12 h-12 mb-3 text-gray-300" />
-                      <p className="text-sm font-medium text-gray-500">No orders yet</p>
-                    </div>
+                  <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+                    <ShoppingCart className="w-12 h-12 mb-3 text-gray-300" />
+                    <p className="text-sm font-medium text-gray-500">{a.orders.noOrders}</p>
+                  </div>
                   ) : (
                     <table className="w-full text-sm">
                       <thead>
                         <tr className="border-y border-gray-100 bg-gray-50/50">
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Order</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Customer</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Product</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Amount</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.order}</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.customer}</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.product}</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.amount}</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.status}</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.date}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1076,8 +1107,10 @@ export default function AdminDashboard() {
                           <tr key={order.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                             <td className="px-6 py-4 font-semibold text-gray-900">{order.id}</td>
                             <td className="px-6 py-4 text-gray-700">{order.customer_name || "-"}</td>
-                            <td className="px-6 py-4 text-gray-700 max-w-[200px] truncate">{order.product_name || "-"}</td>
-                            <td className="px-6 py-4 font-semibold text-gray-900">${(order.total || 0).toFixed(2)}</td>
+                            <td className="px-6 py-4 text-gray-700 max-w-[200px] truncate">
+                              {Array.isArray(order.items) ? `${order.items.length} item${order.items.length === 1 ? "" : "s"}` : "-"}
+                            </td>
+                            <td className="px-6 py-4 font-semibold text-gray-900">{(Number(order.total) || 0).toLocaleString()} {currency}</td>
                             <td className="px-6 py-4"><StatusBadge status={order.status || "Pending"} /></td>
                             <td className="px-6 py-4 text-gray-500">{order.created_at?.slice(0, 10) || "-"}</td>
                           </tr>
@@ -1098,34 +1131,34 @@ export default function AdminDashboard() {
                       <Package className="w-5 h-5 text-emerald-600" />
                     </div>
                     <p className="text-2xl font-bold text-gray-900">{products.length}</p>
-                    <p className="text-sm text-gray-500">Total Products</p>
+                    <p className="text-sm text-gray-500">{a.analytics.totalProducts}</p>
                   </div>
                   <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                     <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center mb-3">
                       <Package className="w-5 h-5 text-green-600" />
                     </div>
                     <p className="text-2xl font-bold text-gray-900">{products.filter((p) => p.in_stock).length}</p>
-                    <p className="text-sm text-gray-500">In Stock</p>
+                    <p className="text-sm text-gray-500">{a.analytics.inStock}</p>
                   </div>
                   <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                     <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center mb-3">
                       <Package className="w-5 h-5 text-red-600" />
                     </div>
                     <p className="text-2xl font-bold text-gray-900">{products.filter((p) => !p.in_stock).length}</p>
-                    <p className="text-sm text-gray-500">Out of Stock</p>
+                    <p className="text-sm text-gray-500">{a.analytics.outOfStock}</p>
                   </div>
                   <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                     <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center mb-3">
                       <LayoutDashboard className="w-5 h-5 text-purple-600" />
                     </div>
                     <p className="text-2xl font-bold text-gray-900">{categories.length}</p>
-                    <p className="text-sm text-gray-500">Categories</p>
+                    <p className="text-sm text-gray-500">{a.analytics.categories}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <h2 className="text-lg font-bold text-gray-900 mb-4">Products per Category</h2>
+                    <h2 className="text-lg font-bold text-gray-900 mb-4">{a.analytics.perCategory}</h2>
                     <div className="h-72">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={categories.map((c) => ({ name: c.name, count: products.filter((p) => p.category === c.id).length }))}>
@@ -1139,13 +1172,13 @@ export default function AdminDashboard() {
                   </div>
 
                   <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <h2 className="text-lg font-bold text-gray-900 mb-4">Price Distribution</h2>
+                    <h2 className="text-lg font-bold text-gray-900 mb-4">{a.analytics.priceDist}</h2>
                     <div className="space-y-3">
                       {[
-                        { label: "Under $20", range: [0, 20] },
-                        { label: "$20 - $50", range: [20, 50] },
-                        { label: "$50 - $100", range: [50, 100] },
-                        { label: "$100+", range: [100, Infinity] },
+                        { label: a.analytics.under20, range: [0, 20] },
+                        { label: a.analytics.b2050, range: [20, 50] },
+                        { label: a.analytics.b50100, range: [50, 100] },
+                        { label: a.analytics.b100, range: [100, Infinity] },
                       ].map((b) => {
                         const count = products.filter((p) => p.price >= b.range[0] && p.price < b.range[1]).length;
                         const pct = products.length ? (count / products.length) * 100 : 0;
@@ -1167,18 +1200,18 @@ export default function AdminDashboard() {
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                   <div className="p-6 pb-4">
-                    <h2 className="text-lg font-bold text-gray-900">Top Rated Products</h2>
-                    <p className="text-sm text-gray-500 mt-0.5">Products with highest ratings</p>
+                    <h2 className="text-lg font-bold text-gray-900">{a.analytics.topRated}</h2>
+                    <p className="text-sm text-gray-500 mt-0.5">{a.analytics.topRatedSub}</p>
                   </div>
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
                         <tr className="border-y border-gray-100 bg-gray-50/50">
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Name</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Category</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Rating</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Reviews</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Price</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.analytics.name}</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.products.category}</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.analytics.rating}</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.analytics.reviews}</th>
+                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.products.price}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1194,7 +1227,7 @@ export default function AdminDashboard() {
                                 </span>
                               </td>
                               <td className="px-6 py-4 text-gray-700">{product.reviews}</td>
-                              <td className="px-6 py-4 font-semibold text-gray-900">${product.price.toFixed(2)}</td>
+                              <td className="px-6 py-4 font-semibold text-gray-900">{product.price.toLocaleString()} {currency}</td>
                             </tr>
                           );
                         })}
@@ -1268,7 +1301,7 @@ export default function AdminDashboard() {
           <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between z-10">
               <h2 className="text-lg font-bold text-gray-900">
-                {editingProduct ? "Edit Product" : "Add Product"}
+                {editingProduct ? a.products.editProduct : a.products.addProduct}
               </h2>
               <button onClick={closeModal} className="text-gray-400 hover:text-gray-600">
                 <X className="w-5 h-5" />
@@ -1493,15 +1526,20 @@ export default function AdminDashboard() {
                 </div>
               )}
 
-              <label className="flex items-center gap-2 cursor-pointer">
+              <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {a.products.stockQuantity}
+                      </label>
                 <input
-                  type="checkbox"
-                  checked={form.inStock}
-                  onChange={(e) => setForm({ ...form, inStock: e.target.checked })}
-                  className="w-4 h-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                  type="number"
+                  min="0"
+                  value={form.stockQuantity}
+                  onChange={(e) => setForm({ ...form, stockQuantity: e.target.value })}
+                  className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  placeholder="0"
                 />
-                <span className="text-sm font-medium text-gray-700">In Stock</span>
-              </label>
+                <p className="text-xs text-gray-400 mt-1">{a.products.stockHelp}</p>
+              </div>
             </div>
             <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 py-4 flex items-center justify-end gap-3">
               <button
@@ -1516,7 +1554,7 @@ export default function AdminDashboard() {
                 className="px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 transition-colors disabled:opacity-50 inline-flex items-center gap-2"
               >
                 {saving && <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />}
-                {editingProduct ? "Update" : "Create"}
+                {editingProduct ? a.common.update : a.common.create}
               </button>
             </div>
           </div>
