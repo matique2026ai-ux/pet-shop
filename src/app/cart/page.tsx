@@ -8,6 +8,7 @@ import Image from "next/image";
 import AnimatedSection from "@/components/animated-section";
 import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, Lock, Truck, MapPin } from "lucide-react";
 import { useSiteSettings } from "@/lib/site-settings";
+import { useAuth } from "@/lib/auth-context";
 
 const DEFAULT_DELIVERY: Record<string, string> = {
   scope: "commune",
@@ -23,6 +24,7 @@ const DEFAULT_DELIVERY: Record<string, string> = {
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, clearCart } = useCart();
   const { t, currency, lang } = useI18n();
+  const { user } = useAuth();
   const { delivery } = useSiteSettings();
   const [checkingOut, setCheckingOut] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
@@ -270,6 +272,7 @@ export default function CartPage() {
                   delivery_eta: d.eta,
                   items: items.map((i) => ({ productId: i.productId, name: i.name, price: i.price, quantity: i.quantity, sold_by: i.sold_by })),
                   total: grandTotal,
+                  user_id: user?.id || null,
                 };
                 try {
                   const res = await fetch("/api/orders", {

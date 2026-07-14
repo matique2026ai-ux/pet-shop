@@ -129,3 +129,52 @@ INSERT INTO site_settings (key, value) VALUES (
   '{"scope":"commune","city":"Sétif","wilaya":"Sétif","country":"Algeria","fee":"200","freeThreshold":"5000","eta":"24-48h","areas":"Centre-ville,Aïn El Bey,Cité 1200 Logements,Stade 08 Mai,Zone industrielle","note":"Livraison à domicile dans la commune de Sétif (moto)."}'::jsonb
 )
 ON CONFLICT (key) DO NOTHING;
+
+-- ===========================================================================
+-- Customer accounts (Supabase Auth). Optional: shoppers can sign up to follow
+-- shop news (newsletter) and track their order history.
+-- ===========================================================================
+
+CREATE TABLE IF NOT EXISTS profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  email TEXT,
+  full_name TEXT,
+  newsletter BOOLEAN NOT NULL DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Link orders to the signed-in customer (nullable: guest checkout stays allowed).
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL;
+
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='profiles' AND policyname='profiles_select_self') THEN
+    CREATE POLICY profiles_select_self ON profiles FOR SELECT USING (auth.uid() = id);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='profiles' AND policyname='profiles_insert_self') THEN
+    CREATE POLICY profiles_insert_self ON profiles FOR INSERT WITH CHECK (auth.uid() = id);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='profiles' AND policyname='profiles_update_self') THEN
+    CREATE POLICY profiles_update_self ON profiles FOR UPDATE USING (auth.uid() = id);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='orders' AND policyname='orders_select_self') THEN
+    CREATE POLICY orders_select_self ON orders FOR SELECT USING (auth.uid() = user_id);
+  END IF;
+END $$;
+
+-- Auto-create a profile row when a new auth user signs up.
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+BEGIN
+  INSERT INTO public.profiles (id, email, full_name)
+  VALUES (new.id, new.email, new.raw_user_meta_data->>'full_name')
+  ON CONFLICT (id) DO NOTHING;
+  RETURN new;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+

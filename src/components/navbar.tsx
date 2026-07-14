@@ -6,7 +6,9 @@ import { useTranslatedData } from "@/lib/use-translated-data";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, X, ShoppingCart, Phone, ChevronDown, Globe, Search, Truck, ChevronRight, Cat, Dog, Bird, Fish, Rabbit, PawPrint, Stethoscope } from "lucide-react";
+import { Menu, X, ShoppingCart, Phone, ChevronDown, Globe, Search, Truck, ChevronRight, User, LogIn, Loader2, Cat, Dog, Bird, Fish, Rabbit, PawPrint, Stethoscope } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import AuthModal from "@/components/auth-modal";
 
 const languages = [
   { code: "en" as const, label: "EN" },
@@ -29,9 +31,14 @@ export default function Navbar() {
   const { t, lang, setLang, dir } = useI18n();
   const { totalItems } = useCart();
   const { categories } = useTranslatedData();
+  const { user, profile, loading: authLoading, logout } = useAuth();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [authTab, setAuthTab] = useState<"login" | "register">("login");
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
   const [megaOpen, setMegaOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
@@ -77,6 +84,14 @@ export default function Navbar() {
     if (base === "/") return pathname === "/";
     return pathname === base || pathname.startsWith(base + "/");
   };
+
+  useEffect(() => {
+    const handle = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) setUserMenuOpen(false);
+    };
+    document.addEventListener("mousedown", handle);
+    return () => document.removeEventListener("mousedown", handle);
+  }, []);
 
   return (
     <nav className="bg-emerald-950/60 backdrop-blur-xl border-b border-emerald-800/20 sticky top-0 z-50">
@@ -167,7 +182,48 @@ export default function Navbar() {
               )}
             </div>
 
-              <a href="tel:+213555123456" className="hidden xl:flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">
+              {authLoading ? (
+              <div className="w-9 h-9 flex items-center justify-center">
+                <Loader2 className="w-4 h-4 text-white animate-spin" />
+              </div>
+            ) : user ? (
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-semibold text-sm hover:bg-emerald-500 transition-colors"
+                  aria-label={t.auth.myAccount}
+                >
+                  {(profile?.full_name?.[0] || user.email?.[0] || "U").toUpperCase()}
+                </button>
+                {userMenuOpen && (
+                  <div className={`absolute ${isRtl ? "left-0" : "right-0"} mt-2 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50`}>
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-sm font-semibold text-gray-900 truncate">{profile?.full_name || user.email}</p>
+                      <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                    </div>
+                    <Link href="/account" onClick={() => setUserMenuOpen(false)} className="block px-4 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-gray-50 transition-colors">
+                      {t.auth.myAccount}
+                    </Link>
+                    <button
+                      onClick={async () => { await logout(); setUserMenuOpen(false); }}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:text-emerald-600 hover:bg-gray-50 transition-colors"
+                    >
+                      {t.auth.logout}
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button
+                onClick={() => { setAuthTab("login"); setAuthOpen(true); }}
+                className="flex items-center gap-1.5 text-sm text-white hover:text-emerald-300 px-2 py-1.5 rounded-lg hover:bg-white/10 transition-colors"
+              >
+                <LogIn className="w-4 h-4" />
+                <span className="hidden sm:inline">{t.auth.login}</span>
+              </button>
+            )}
+
+            <a href="tel:+213555123456" className="hidden xl:flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">
               <Phone className="w-4 h-4" />
               {t.nav.callNow}
             </a>
@@ -256,6 +312,20 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="lg:hidden border-t border-gray-100 bg-white max-h-[80vh] overflow-y-auto">
           <div className="px-4 py-3 space-y-1">
+            {user ? (
+              <div className="flex items-center justify-between py-2 border-b border-gray-100 mb-1">
+                <span className="text-sm font-semibold text-gray-900 truncate">{profile?.full_name || user.email}</span>
+                <button onClick={async () => { await logout(); setMobileOpen(false); }} className="text-sm text-gray-500 hover:text-emerald-600">{t.auth.logout}</button>
+              </div>
+            ) : (
+              <button
+                onClick={() => { setAuthTab("login"); setAuthOpen(true); setMobileOpen(false); }}
+                className="flex items-center gap-2 w-full py-2 text-emerald-600 font-semibold text-sm"
+              >
+                <LogIn className="w-4 h-4" /> {t.auth.login}
+              </button>
+            )}
+            <Link href="/account" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">{t.auth.myAccount}</Link>
             <Link href="/" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">{t.nav.home}</Link>
             <Link href="/products?filter=new" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">{t.nav.newArrivals}</Link>
             <Link href="/products?filter=offers" onClick={() => setMobileOpen(false)} className="block py-2 text-gray-700 hover:text-emerald-600 text-sm font-medium">{t.nav.offers}</Link>
@@ -294,6 +364,8 @@ export default function Navbar() {
           </div>
         </div>
       )}
+
+      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} initialTab={authTab} />
     </nav>
   );
 }

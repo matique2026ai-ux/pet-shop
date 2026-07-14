@@ -3,6 +3,7 @@ import { Playfair_Display, Outfit, Tajawal } from "next/font/google";
 import "./globals.css";
 import { I18nProvider } from "@/lib/i18n-context";
 import { CartProvider } from "@/lib/cart-context";
+import { AuthProvider } from "@/lib/auth-context";
 import WhatsAppButton from "@/components/whatsapp-button";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
@@ -71,6 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-outfit bg-emerald-50 text-gray-900 antialiased">
         <I18nProvider>
           <CartProvider>
+            <AuthProvider>
             <OrganizationSchema />
             <WebSiteSchema />
             <VeterinaryClinicSchema />
@@ -78,6 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className="min-h-screen">{children}</main>
             <Footer />
             <WhatsAppButton />
+            </AuthProvider>
           </CartProvider>
         </I18nProvider>
             <Script
