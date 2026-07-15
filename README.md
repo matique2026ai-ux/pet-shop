@@ -149,6 +149,33 @@ Edit the corresponding `*.ts` file. Keep key structure identical across all thre
 
 ---
 
+## Dynamic Theme & Media Management (July 2026 Updates)
+
+We have modernized the platform's visual identity, moving from the old orange-blue accent palette to a **Premium Navy Blue and Gold** design system matching the new brand logo components.
+
+### 1. Logo Components Integration
+The brand system exposes four isolated logo components (`LogoC1` through `LogoC4` and a combination component `LogoFullStack`) defined in [brand-logo.tsx](file:///c:/Users/PCIB/Desktop/pet-shop/src/components/brand-logo.tsx):
+- **`LogoC1`**: Icon-only logo (Horse + Falcon), used as the public site favicon (`public/favicon.svg`) and dashboard/admin panel header icon.
+- **`LogoC4`**: Responsive horizontal logo (Icon + Text), used in the public Navbar and the main sidebar in the Admin Panel.
+- **`LogoFullStack`**: Complete stacked logo badge, used inside the product details card.
+
+### 2. Dynamic Hero Backgrounds
+All page heroes now load their background media dynamically from the **Admin settings** database, rather than being hardcoded:
+- **Homepage Hero**: Managed via `heroBackground` key in settings. Supports both high-quality video URLs (direct `.mp4` links) and image URLs.
+- **Contact Page Hero**: Managed via `contactHeroImage` key.
+- **Veterinary Clinic Page Hero**: Managed via `vetHeroImage` key.
+- **About Page Hero**: Managed via `aboutHeroImage` key.
+
+*To change these, log in to `/admin` -> Go to **Settings** -> **Site Content**.*
+
+### 3. Dynamic Category & Section Images
+The database schema now supports dynamic category images:
+- The `categories` table has a new column: `image_url` (added to [supabase-schema.sql](file:///c:/Users/PCIB/Desktop/pet-shop/supabase-schema.sql)).
+- **Admin Dashboard**: Under the **Categories** tab, admins can now add or edit the Image URL for each category (e.g., Cats, Dogs).
+- **Storefront**: Both the Homepage Categories Grid and the main `/categories` catalog page dynamically load these database-defined URLs, falling back automatically to the default presets if not specified.
+
+---
+
 ## Common Tasks
 
 ### Run locally
