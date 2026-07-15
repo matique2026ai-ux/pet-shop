@@ -993,7 +993,7 @@ export default function AdminDashboard() {
                   <StatCard
                     icon={DollarSign}
                     label={a.dashboard.inventoryValue}
-                    value={productsError ? "$124,500" : `$${inventoryValue.toLocaleString()}`}
+                    value={productsError ? `124,500 ${currency}` : `${inventoryValue.toLocaleString()} ${currency}`}
                     trend="+12.5% from last month"
                     trendUp
                     color="bg-emerald-100 text-emerald-600"

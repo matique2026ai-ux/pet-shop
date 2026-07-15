@@ -5,7 +5,7 @@ import { createClient, createAdminClient } from "@/lib/supabase";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const key = searchParams.get("key");
-  const supabase = createClient();
+  const supabase = createAdminClient();
   if (key) {
     const { data, error } = await supabase.from("site_settings").select("value").eq("key", key).single();
     if (error) return NextResponse.json({ value: null });
