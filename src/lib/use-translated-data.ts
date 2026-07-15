@@ -28,6 +28,7 @@ interface ApiProduct {
   sold_by?: string;
   video?: string;
   ingredients?: string;
+  images?: string[];
 }
 
 interface ApiCategory {
@@ -63,6 +64,7 @@ function mapApiProduct(p: ApiProduct): Product {
     sold_by: p.sold_by,
     video: p.video,
     ingredients: p.ingredients,
+    images: Array.isArray(p.images) ? p.images : [],
   };
 }
 

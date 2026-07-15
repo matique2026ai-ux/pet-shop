@@ -15,6 +15,7 @@ export interface Product {
   sold_by?: string;
   video?: string;
   ingredients?: string;
+  images?: string[];
 }
 
 export interface Subcategory {

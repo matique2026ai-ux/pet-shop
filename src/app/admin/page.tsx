@@ -195,6 +195,7 @@ type FormState = {
   price: string;
   originalPrice: string;
   image: string;
+  images: string[];
   badge: "" | "NEW" | "SALE";
   rating: string;
   reviews: string;
@@ -213,6 +214,7 @@ const emptyForm: FormState = {
   price: "",
   originalPrice: "",
   image: "",
+  images: [],
   badge: "",
   rating: "4.5",
   reviews: "0",
@@ -365,6 +367,9 @@ export default function AdminDashboard() {
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [useUrlInput, setUseUrlInput] = useState(false);
+  const [uploadingAdditional, setUploadingAdditional] = useState(false);
+  const [uploadingVideo, setUploadingVideo] = useState(false);
+  const [useVideoUrlInput, setUseVideoUrlInput] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   const [sortBy, setSortBy] = useState<"name" | "category" | "price" | "stock">("name");
@@ -635,6 +640,7 @@ export default function AdminDashboard() {
       price: String(product.price),
       originalPrice: product.original_price ? String(product.original_price) : "",
       image: product.image || "",
+      images: product.images || [],
       badge: (product.badge as "" | "NEW" | "SALE") || "",
       rating: String(product.rating),
       reviews: String(product.reviews),
@@ -677,6 +683,7 @@ export default function AdminDashboard() {
         subcategory: form.subcategory,
         price: Number(form.price),
         image: form.image || undefined,
+        images: form.images,
         badge: form.badge || null,
         rating: Number(form.rating),
         reviews: Number(form.reviews),
@@ -801,6 +808,48 @@ export default function AdminDashboard() {
       alert("Upload failed: " + (e as Error).message);
     } finally {
       setUploadingImage(false);
+    }
+  };
+
+  const handleAdditionalImageUpload = async (file: File) => {
+    setUploadingAdditional(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const secret = getSecret();
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        headers: secret ? { "x-admin-secret": secret } : {},
+        body: formData,
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      setForm((prev) => ({ ...prev, images: [...prev.images, data.url] }));
+    } catch (e) {
+      alert("Upload failed: " + (e as Error).message);
+    } finally {
+      setUploadingAdditional(false);
+    }
+  };
+
+  const handleVideoUpload = async (file: File) => {
+    setUploadingVideo(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const secret = getSecret();
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        headers: secret ? { "x-admin-secret": secret } : {},
+        body: formData,
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      setForm((prev) => ({ ...prev, video: data.url }));
+    } catch (e) {
+      alert("Upload failed: " + (e as Error).message);
+    } finally {
+      setUploadingVideo(false);
     }
   };
 
@@ -2241,19 +2290,126 @@ export default function AdminDashboard() {
                 )}
               </div>
 
+              {/* Additional Images (Gallery) */}
+              <div className="border-t border-gray-100 pt-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Additional Images (Gallery)</label>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <label className={`px-4 py-2 rounded-xl text-xs font-medium cursor-pointer transition-colors ${uploadingAdditional ? "bg-gray-100 text-gray-400" : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"}`}>
+                      {uploadingAdditional ? (
+                        <span className="inline-flex items-center gap-1.5">
+                          <div className="animate-spin w-3 h-3 border-2 border-emerald-600 border-t-transparent rounded-full" />
+                          Uploading...
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1.5">
+                          <Upload className="w-3.5 h-3.5" />
+                          Add Gallery Image
+                        </span>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        disabled={uploadingAdditional}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleAdditionalImageUpload(file);
+                        }}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  {form.images && form.images.length > 0 && (
+                    <div className="flex flex-wrap gap-2 p-2 bg-gray-50 rounded-xl border border-gray-100">
+                      {form.images.map((imgUrl, index) => (
+                        <div key={index} className="relative group w-16 h-16 rounded-lg border border-gray-200 bg-white overflow-hidden">
+                          <img src={imgUrl} alt="gallery-preview" className="w-full h-full object-cover" />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newImages = [...form.images];
+                              newImages.splice(index, 1);
+                              setForm({ ...form, images: newImages });
+                            }}
+                            className="absolute inset-0 bg-red-600/80 text-white flex items-center justify-center text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{a.products.video}</label>
-                <div className="flex items-center gap-3">
-                  <Video className="w-4 h-4 text-gray-400 shrink-0" />
-                  <input
-                    type="text"
-                    value={form.video}
-                    onChange={(e) => setForm({ ...form, video: e.target.value })}
-                    placeholder="https://youtube.com/... أو https://....mp4"
-                    className="flex-1 px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  />
-                </div>
-                <p className="text-xs text-gray-400 mt-1">{a.products.videoHelp}</p>
+                {!useVideoUrlInput ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3">
+                      <label className={`px-4 py-2.5 rounded-xl text-sm font-medium cursor-pointer transition-colors ${uploadingVideo ? "bg-gray-100 text-gray-400" : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"}`}>
+                        {uploadingVideo ? (
+                          <span className="inline-flex items-center gap-2">
+                            <div className="animate-spin w-4 h-4 border-2 border-emerald-600 border-t-transparent rounded-full" />
+                            Uploading...
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-2">
+                            <Video className="w-4 h-4" />
+                            Upload Video File
+                          </span>
+                        )}
+                        <input
+                          type="file"
+                          accept="video/*"
+                          disabled={uploadingVideo}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) handleVideoUpload(file);
+                          }}
+                          className="hidden"
+                        />
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setUseVideoUrlInput(true)}
+                        className="text-xs text-gray-400 hover:text-gray-600 underline"
+                      >
+                        Or paste URL
+                      </button>
+                    </div>
+                    {form.video && (
+                      <div className="flex items-center gap-3 bg-gray-50 p-2 rounded-xl border border-gray-100">
+                        <Video className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <span className="text-xs text-gray-600 truncate flex-1">{form.video}</span>
+                        <button
+                          type="button"
+                          onClick={() => setForm({ ...form, video: "" })}
+                          className="text-xs text-red-500 hover:text-red-700 font-medium"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="text"
+                      value={form.video}
+                      onChange={(e) => setForm({ ...form, video: e.target.value })}
+                      placeholder="https://..."
+                      className="flex-1 px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setUseVideoUrlInput(false)}
+                      className="text-xs text-gray-400 hover:text-gray-600 underline whitespace-nowrap"
+                    >
+                      Upload instead
+                    </button>
+                  </div>
+                )}
               </div>
 
               <button

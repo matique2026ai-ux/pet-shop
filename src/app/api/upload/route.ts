@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase";
 
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"];
-const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+const ALLOWED_TYPES = [
+  "image/jpeg", "image/png", "image/webp", "image/gif", "image/avif",
+  "video/mp4", "video/webm", "video/quicktime"
+];
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_VIDEO_SIZE = 30 * 1024 * 1024; // 30MB
 
-// Magic-byte (file signature) prefixes for each allowed type.
+// Magic-byte (file signature) prefixes for each allowed image type.
 const SIGNATURES: Record<string, number[][]> = {
   "image/jpeg": [[0xff, 0xd8, 0xff]],
   "image/png": [[0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]],
@@ -13,7 +17,22 @@ const SIGNATURES: Record<string, number[][]> = {
   "image/avif": [[0x00, 0x00, 0x00, 0x18, 0x66, 0x74, 0x79, 0x70, 0x61, 0x76, 0x69, 0x66]], // ftypavif
 };
 
-function matchesSignature(bytes: Buffer, sig: number[][]): boolean {
+function matchesSignature(bytes: Buffer, sig: number[][] | undefined, mime: string): boolean {
+  if (mime.startsWith("video/")) {
+    if (mime === "video/mp4") {
+      const ftypStr = bytes.slice(4, 8).toString("ascii");
+      return ftypStr === "ftyp";
+    }
+    if (mime === "video/webm") {
+      return bytes[0] === 0x1a && bytes[1] === 0x45 && bytes[2] === 0xdf && bytes[3] === 0xa3;
+    }
+    if (mime === "video/quicktime") {
+      const ftypStr = bytes.slice(4, 8).toString("ascii");
+      return ["ftyp", "free", "mdat", "wide"].includes(ftypStr);
+    }
+    return true;
+  }
+  if (!sig) return false;
   return sig.some((prefix) => prefix.every((b, i) => bytes[i] === b));
 }
 
@@ -27,30 +46,30 @@ export async function POST(request: Request) {
   if (!file) return NextResponse.json({ error: "No file provided" }, { status: 400 });
 
   if (!ALLOWED_TYPES.includes(file.type)) {
-    return NextResponse.json({ error: "Only image files (JPEG, PNG, WebP, GIF, AVIF) are allowed" }, { status: 400 });
+    return NextResponse.json({ error: "Only image files (JPEG, PNG, WebP, GIF, AVIF) and video files (MP4, WebM, MOV) are allowed" }, { status: 400 });
   }
 
-  if (file.size > MAX_SIZE) {
-    return NextResponse.json({ error: "File too large. Maximum size is 5MB" }, { status: 400 });
+  const isVideo = file.type.startsWith("video/");
+  const maxSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
+
+  if (file.size > maxSize) {
+    return NextResponse.json({ error: `File too large. Maximum size is ${isVideo ? "30MB" : "5MB"}` }, { status: 400 });
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
 
-  // Verify the actual file content matches the declared image type (defeats
-  // MIME spoofing where an attacker uploads HTML/JS with a fake image type).
-  if (!matchesSignature(buffer, SIGNATURES[file.type])) {
-    return NextResponse.json({ error: "File content does not match the declared image type" }, { status: 400 });
+  // Verify the actual file content matches the declared type
+  if (!matchesSignature(buffer, SIGNATURES[file.type], file.type)) {
+    return NextResponse.json({ error: "File content does not match the declared type" }, { status: 400 });
   }
 
-  // Sanitize the filename: strip any path separators / directory traversal
-  // characters, keep only safe characters, and derive the extension from the
-  // validated MIME type (never from the user-supplied name).
+  // Sanitize the filename
   const ext = file.type.split("/")[1].replace(/[^a-z0-9]/gi, "");
   const safeBase = (file.name || "upload")
     .replace(/\.[^.]+$/, "")
     .replace(/[^a-zA-Z0-9-_]/g, "")
     .slice(0, 40);
-  const fileName = `${Date.now()}-${safeBase || "img"}.${ext}`;
+  const fileName = `${Date.now()}-${safeBase || "upload"}.${ext}`;
 
   const supabase = createAdminClient();
   const { data, error } = await supabase.storage.from("products").upload(fileName, buffer, {

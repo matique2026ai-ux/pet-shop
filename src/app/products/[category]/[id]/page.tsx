@@ -24,7 +24,7 @@ function videoEmbed(url: string) {
   if (m) return { kind: "iframe" as const, src: `https://www.youtube.com/embed/${m[1]}` };
   m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
   if (m) return { kind: "iframe" as const, src: `https://player.vimeo.com/video/${m[1]}` };
-  if (/\.mp4(\?.*)?$/i.test(url)) return { kind: "mp4" as const, src: url };
+  if (/\.(mp4|webm|mov|ogg)(\?.*)?$/i.test(url)) return { kind: "mp4" as const, src: url };
   return { kind: "iframe" as const, src: url };
 }
 
@@ -98,6 +98,7 @@ export default function ProductDetailPage() {
   const [qty, setQty] = useState(1);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [activeMedia, setActiveMedia] = useState<"image" | "video">("image");
+  const [activeImage, setActiveImage] = useState("");
   const [tab, setTab] = useState<"overview" | "features" | "ingredients" | "video">("overview");
 
   useEffect(() => {
@@ -108,6 +109,7 @@ export default function ProductDetailPage() {
     setActiveMedia("image");
     setTab("overview");
     setQty(1);
+    setActiveImage(product?.image || "");
   }, [product?.id]);
 
   if (!product) {
@@ -179,7 +181,7 @@ export default function ProductDetailPage() {
                       ) : (
                         <>
                           <Image
-                            src={product.image || "/placeholder.svg"}
+                            src={activeImage || "/placeholder.svg"}
                             alt={product.name}
                             fill
                             priority
@@ -200,21 +202,60 @@ export default function ProductDetailPage() {
                     </div>
 
                     {/* Gallery Thumbnails */}
-                    {hasVideo && (
-                      <div className="flex gap-2">
+                    {((product.images && product.images.length > 0) || hasVideo) && (
+                      <div className="flex flex-wrap items-center justify-center gap-2 mt-2 max-w-full">
+                        {/* Main Cover Image Thumbnail */}
                         <button
-                          onClick={() => setActiveMedia("image")}
-                          className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-colors ${activeMedia === "image" ? "border-emerald-600 bg-emerald-50 text-emerald-800" : "border-gray-200 text-gray-600 hover:bg-gray-50"}`}
+                          onClick={() => {
+                            setActiveMedia("image");
+                            setActiveImage(product.image);
+                          }}
+                          className={`relative w-12 h-12 rounded-lg border bg-white overflow-hidden p-1 transition-all ${
+                            activeMedia === "image" && activeImage === product.image
+                              ? "border-emerald-600 ring-2 ring-emerald-600/20"
+                              : "border-gray-200 hover:border-emerald-600"
+                          }`}
                         >
-                          🖼️ {lang === "ar" ? "الصورة" : "Image"}
+                          <div className="relative w-full h-full">
+                            <Image src={product.image} alt={product.name} fill className="object-contain" />
+                          </div>
                         </button>
-                        <button
-                          onClick={() => setActiveMedia("video")}
-                          className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-colors flex items-center gap-1 ${activeMedia === "video" ? "border-emerald-600 bg-emerald-50 text-emerald-800" : "border-gray-200 text-gray-600 hover:bg-gray-50"}`}
-                        >
-                          <Play className="w-3 h-3 fill-current shrink-0" />
-                          {lang === "ar" ? "فيديو" : "Vidéo"}
-                        </button>
+
+                        {/* Additional Images Thumbnails */}
+                        {product.images?.map((imgUrl, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => {
+                              setActiveMedia("image");
+                              setActiveImage(imgUrl);
+                            }}
+                            className={`relative w-12 h-12 rounded-lg border bg-white overflow-hidden p-1 transition-all ${
+                              activeMedia === "image" && activeImage === imgUrl
+                                ? "border-emerald-600 ring-2 ring-emerald-600/20"
+                                : "border-gray-200 hover:border-emerald-600"
+                            }`}
+                          >
+                            <div className="relative w-full h-full">
+                              <Image src={imgUrl} alt={`${product.name} - gallery ${idx + 1}`} fill className="object-contain" />
+                            </div>
+                          </button>
+                        ))}
+
+                        {/* Video Thumbnail */}
+                        {hasVideo && (
+                          <button
+                            onClick={() => {
+                              setActiveMedia("video");
+                            }}
+                            className={`relative w-12 h-12 rounded-lg border bg-gray-900 overflow-hidden flex items-center justify-center transition-all ${
+                              activeMedia === "video"
+                                ? "border-emerald-600 ring-2 ring-emerald-600/20"
+                                : "border-gray-200 hover:border-emerald-600"
+                            }`}
+                          >
+                            <Play className="w-5 h-5 text-white fill-white/20" />
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
@@ -430,7 +471,7 @@ export default function ProductDetailPage() {
             <X className="w-8 h-8" />
           </button>
           <div className="relative max-w-4xl max-h-[90vh] w-full h-full" onClick={(e) => e.stopPropagation()}>
-            <Image src={product.image || "/placeholder.svg"} alt={product.name} fill sizes="(max-width: 768px) 100vw, 56rem" className="object-contain" />
+            <Image src={activeImage || "/placeholder.svg"} alt={product.name} fill sizes="(max-width: 768px) 100vw, 56rem" className="object-contain" />
           </div>
         </div>
       )}

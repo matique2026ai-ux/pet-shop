@@ -19,6 +19,7 @@ export interface ProductData {
   video?: string;
   ingredients?: string;
   created_at?: string;
+  images?: string[];
 }
 
 function isSupabaseConfigured(): boolean {
