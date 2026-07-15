@@ -26,6 +26,55 @@ function videoEmbed(url: string) {
   return { kind: "iframe" as const, src: url };
 }
 
+/* ─── Gold Eagle+Horse SVG Logo ─── */
+function GoldLogo({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 64 64"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      <path
+        d="M14 44 C14 44 16 36 22 33 C25 31 28 32 30 30 C32 28 32 24 34 22 C36 20 40 20 42 22 C44 24 43 28 41 30 C39 32 36 32 35 34 C33 36 34 40 34 44"
+        stroke="url(#goldGradProduct)" strokeWidth="2" strokeLinecap="round" fill="none"
+      />
+      <path
+        d="M40 22 C41 19 43 17 45 18 C47 19 47 22 46 24 C45 25 43 25 42 24"
+        stroke="url(#goldGradProduct)" strokeWidth="1.8" strokeLinecap="round" fill="none"
+      />
+      <line x1="22" y1="44" x2="20" y2="52" stroke="url(#goldGradProduct)" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="28" y1="44" x2="27" y2="52" stroke="url(#goldGradProduct)" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="34" y1="44" x2="35" y2="52" stroke="url(#goldGradProduct)" strokeWidth="2" strokeLinecap="round"/>
+      <path
+        d="M8 28 C10 22 16 20 22 22 C24 23 26 25 26 27"
+        stroke="url(#goldGradProduct)" strokeWidth="2" strokeLinecap="round" fill="none"
+      />
+      <path
+        d="M56 22 C54 18 48 17 42 20 C40 21 38 24 38 27"
+        stroke="url(#goldGradProduct)" strokeWidth="2" strokeLinecap="round" fill="none"
+      />
+      <ellipse cx="32" cy="26" rx="5" ry="4" fill="url(#goldGradProduct)" opacity="0.9"/>
+      <circle cx="32" cy="20" r="3.5" fill="url(#goldGradProduct)"/>
+      <path d="M34 19 L37 21 L34 21 Z" fill="url(#goldGradProduct2)"/>
+      <path d="M10 26 L6 20 M13 24 L9 18 M16 23 L13 17" stroke="url(#goldGradProduct)" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M54 20 L58 14 M51 19 L55 13 M48 19 L51 13" stroke="url(#goldGradProduct)" strokeWidth="1.2" strokeLinecap="round"/>
+      <defs>
+        <linearGradient id="goldGradProduct" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stopColor="#DFB96A"/>
+          <stop offset="50%"  stopColor="#C4933F"/>
+          <stop offset="100%" stopColor="#8A6022"/>
+        </linearGradient>
+        <linearGradient id="goldGradProduct2" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%"   stopColor="#F5EDD6"/>
+          <stop offset="100%" stopColor="#C4933F"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
 export default function ProductDetailPage() {
   const { t, currency, lang } = useI18n();
   const { products, categories } = useTranslatedData();
@@ -62,6 +111,11 @@ export default function ProductDetailPage() {
   const embed = product.video ? videoEmbed(product.video) : null;
   const hasIngredients = !!product.ingredients && product.ingredients.trim().length > 0;
   const hasVideo = !!embed;
+  const storeName = lang === "ar"
+    ? "طيور الجمال والجواد"
+    : lang === "fr"
+    ? "Paws & Wings"
+    : "Paws & Wings";
 
   return (
     <>
@@ -80,196 +134,177 @@ export default function ProductDetailPage() {
           </div>
         </section>
 
-        <section className="py-10 lg:py-14">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-10 lg:py-14 bg-gray-50/50">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <AnimatedSection>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start">
-                {/* Media gallery */}
-                <div className="max-w-md mx-auto w-full">
-                  <div className="relative aspect-square bg-gray-50 rounded-3xl overflow-hidden border border-gray-100 group shadow-sm">
-                    {activeMedia === "video" && embed ? (
-                      embed.kind === "iframe" ? (
-                        <iframe
-                          src={embed.src}
-                          title={product.name}
-                          className="absolute inset-0 w-full h-full"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        />
-                      ) : (
-                        <video src={embed.src} controls autoPlay className="absolute inset-0 w-full h-full object-contain bg-black" />
-                      )
-                    ) : (
-                      <>
-                        <Image
-                          src={product.image || "/placeholder.svg"}
-                          alt={product.name}
-                          fill
-                          priority
-                          sizes="(max-width: 1024px) 100vw, 50vw"
-                          className="object-contain transition-transform duration-500 group-hover:scale-105"
-                        />
-                        <button
-                          onClick={() => setLightboxOpen(true)}
-                          className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center"
-                          aria-label={t.products.zoom}
-                        >
-                          <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 rounded-full p-3 shadow-lg">
-                            <ZoomIn className="w-5 h-5 text-gray-700" />
-                          </span>
-                        </button>
-                      </>
-                    )}
-                    {product.badge && activeMedia !== "video" && (
-                      <span className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold ${product.badge === "NEW" ? "bg-emerald-600 text-white" : "bg-[#F97316] text-white"}`}>
-                        {product.badge === "NEW" ? t.products.new : t.products.sale}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Thumbnails */}
-                  <div className="flex gap-3 mt-4">
-                    <button
-                      onClick={() => setActiveMedia("image")}
-                      className={`relative w-20 h-20 rounded-2xl overflow-hidden border-2 transition-colors ${activeMedia === "image" ? "border-emerald-600" : "border-gray-200 hover:border-gray-300"}`}
-                    >
-                      <Image src={product.image || "/placeholder.svg"} alt={product.name} fill sizes="80px" className="object-cover" />
-                    </button>
-                    {hasVideo && (
-                      <button
-                        onClick={() => setActiveMedia("video")}
-                        className={`relative w-20 h-20 rounded-2xl overflow-hidden border-2 transition-colors bg-gray-900 ${activeMedia === "video" ? "border-emerald-600" : "border-gray-200 hover:border-gray-300"}`}
-                      >
-                        <Image src={product.image || "/placeholder.svg"} alt={product.name} fill sizes="80px" className="object-cover opacity-50" />
-                        <span className="absolute inset-0 flex items-center justify-center">
-                          <Play className="w-6 h-6 text-white fill-white" />
-                        </span>
-                      </button>
-                    )}
-                  </div>
+              <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden p-6 sm:p-10 space-y-8">
+                
+                {/* Brand Header inside Card */}
+                <div className="flex flex-col items-center justify-center border-b border-gray-100 pb-6 text-center">
+                  <GoldLogo className="w-16 h-16 mb-2" />
+                  <h2 className="text-xl font-bold text-gray-900">{storeName}</h2>
+                  <p className="text-xs text-gray-400 mt-1">
+                    {lang === "ar" ? "متجر إلكتروني للحيوانات الأليفة" : lang === "fr" ? "Boutique en ligne pour animaux de compagnie" : "Online Pet Shop"}
+                  </p>
                 </div>
 
-                {/* Info panel */}
-                <div className="lg:sticky lg:top-24">
-                  <div className="mb-3">
-                    <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">{catName}</span>
-                  </div>
-                  <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1E3A8A] leading-tight mb-4">{product.name}</h1>
-
-                  <div className="flex items-center gap-2 mb-5">
-                    <div className="flex items-center gap-0.5">
-                      {[1, 2, 3, 4, 5].map((i) => (
-                        <Star key={i} className={`w-4 h-4 ${i <= Math.round(product.rating) ? "fill-[#E5B25A] text-[#E5B25A]" : "fill-gray-200 text-gray-200"}`} />
-                      ))}
-                    </div>
-                    <span className="font-semibold text-gray-900">{product.rating}</span>
-                    <span className="text-gray-500 text-sm">({product.reviews} {t.products.reviews})</span>
-                  </div>
-
-                  <div className="flex items-end gap-3 mb-6">
-                    <span className="text-4xl font-extrabold text-gray-900">
-                      {currency}{product.price}
-                      {product.sold_by === "weight" && <span className="text-lg font-normal text-gray-400"> /{lang === "ar" ? "كغ" : "kg"}</span>}
-                    </span>
-                    {product.originalPrice && (
-                      <span className="text-xl text-gray-400 line-through mb-1">{currency}{product.originalPrice}</span>
-                    )}
-                  </div>
-
-                  <p className="text-gray-600 mb-6 leading-relaxed">{product.description}</p>
-
-                  {/* Trust badges */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-7">
-                    <div className="flex items-center gap-2 bg-emerald-50/60 rounded-xl px-3 py-2.5">
-                      <Truck className="w-5 h-5 text-emerald-600 shrink-0" />
-                      <span className="text-xs font-medium text-gray-700">{t.products.trustDelivery}</span>
-                    </div>
-                    <div className="flex items-center gap-2 bg-emerald-50/60 rounded-xl px-3 py-2.5">
-                      <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
-                      <span className="text-xs font-medium text-gray-700">{t.products.trustSecure}</span>
-                    </div>
-                    <div className="flex items-center gap-2 bg-emerald-50/60 rounded-xl px-3 py-2.5">
-                      <BadgeCheck className="w-5 h-5 text-emerald-600 shrink-0" />
-                      <span className="text-xs font-medium text-gray-700">{t.products.trustQuality}</span>
-                    </div>
-                  </div>
-
-                  <div className="h-px bg-gray-100 mb-6" />
-
-                  {product.inStock ? (
-                    product.sold_by === "weight" ? (
-                      <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-2 bg-gray-100 rounded-xl px-3 py-2">
-                          <input
-                            type="number"
-                            min="0.1"
-                            step="0.1"
-                            value={qty}
-                            onChange={(e) => setQty(Math.max(0.1, Number(e.target.value) || 0.1))}
-                            className="w-20 bg-transparent text-center font-semibold text-gray-900 focus:outline-none"
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                  {/* Left Side: Product Image & Video Trigger */}
+                  <div className="md:col-span-5 flex flex-col items-center gap-4">
+                    <div className="relative w-64 h-64 sm:w-72 sm:h-72 bg-gray-50/50 rounded-2xl p-4 flex items-center justify-center border border-gray-100 shadow-inner group">
+                      {activeMedia === "video" && embed ? (
+                        embed.kind === "iframe" ? (
+                          <iframe
+                            src={embed.src}
+                            title={product.name}
+                            className="absolute inset-0 w-full h-full rounded-2xl"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
                           />
-                          <span className="text-sm text-gray-500">{lang === "ar" ? "كغ" : "kg"}</span>
-                        </div>
+                        ) : (
+                          <video src={embed.src} controls autoPlay className="absolute inset-0 w-full h-full object-contain bg-black rounded-2xl" />
+                        )
+                      ) : (
+                        <>
+                          <Image
+                            src={product.image || "/placeholder.svg"}
+                            alt={product.name}
+                            fill
+                            priority
+                            className="object-contain p-2 transition-transform duration-550 group-hover:scale-105"
+                            sizes="(max-width: 768px) 100vw, 30vw"
+                          />
+                          <button
+                            onClick={() => setLightboxOpen(true)}
+                            className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors flex items-center justify-center rounded-2xl"
+                            aria-label={t.products.zoom}
+                          >
+                            <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 rounded-full p-2.5 shadow-md">
+                              <ZoomIn className="w-4 h-4 text-gray-600" />
+                            </span>
+                          </button>
+                        </>
+                      )}
+                    </div>
+
+                    {/* Gallery Thumbnails */}
+                    {hasVideo && (
+                      <div className="flex gap-2">
                         <button
-                          onClick={() => { addItem(product, qty); setQty(1); }}
-                          className="add-cart-btn flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold shadow-sm"
+                          onClick={() => setActiveMedia("image")}
+                          className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-colors ${activeMedia === "image" ? "border-emerald-600 bg-emerald-50 text-emerald-800" : "border-gray-200 text-gray-600 hover:bg-gray-50"}`}
                         >
-                          <ShoppingCart className="w-5 h-5" />
-                          {t.products.addToCart}
+                          🖼️ {lang === "ar" ? "الصورة" : "Image"}
                         </button>
+                        <button
+                          onClick={() => setActiveMedia("video")}
+                          className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-colors flex items-center gap-1 ${activeMedia === "video" ? "border-emerald-600 bg-emerald-50 text-emerald-800" : "border-gray-200 text-gray-600 hover:bg-gray-50"}`}
+                        >
+                          <Play className="w-3 h-3 fill-current shrink-0" />
+                          {lang === "ar" ? "فيديو" : "Vidéo"}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Right Side: Product Details */}
+                  <div className="md:col-span-7 space-y-4 text-right" dir={lang === "ar" ? "rtl" : "ltr"}>
+                    <div>
+                      <span className="text-xs font-bold text-emerald-600 uppercase bg-emerald-50 px-2.5 py-1 rounded-lg">
+                        {catName}
+                      </span>
+                    </div>
+                    
+                    <h1 className="text-xl sm:text-2xl font-extrabold text-gray-900 leading-tight">
+                      {product.name}
+                    </h1>
+
+                    {/* Features List with custom bullet shapes */}
+                    {product.features && product.features.length > 0 && (
+                      <div className="space-y-2.5 pt-2">
+                        {product.features.map((f, i) => (
+                          <div key={i} className={`flex items-start gap-2.5 ${lang === "ar" ? "flex-row" : "flex-row-reverse justify-end"}`}>
+                            <span className="text-sm text-gray-600 font-medium leading-relaxed">{f}</span>
+                            <div className="w-5 h-5 rounded-full bg-orange-100 text-[#EA580C] flex items-center justify-center text-xs shrink-0 font-bold mt-0.5">
+                              ✓
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Ratings */}
+                    <div className={`flex items-center gap-2 pt-2 ${lang === "ar" ? "justify-start" : "justify-start flex-row-reverse"}`}>
+                      <div className="flex items-center gap-0.5">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                          <Star key={i} className={`w-3.5 h-3.5 ${i <= Math.round(product.rating) ? "fill-orange-400 text-orange-400" : "fill-gray-200 text-gray-200"}`} />
+                        ))}
+                      </div>
+                      <span className="text-xs font-semibold text-gray-500">
+                        ({product.reviews} {t.products.reviews})
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer Section inside Card: Price + Action Button */}
+                <div className="border-t border-gray-100 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  {/* Price info */}
+                  <div className="text-center sm:text-left">
+                    <p className="text-xs text-gray-400 uppercase font-semibold">{lang === "ar" ? "السعر" : "Prix"}</p>
+                    <p className="text-3xl font-extrabold text-gray-900 mt-1">
+                      {product.price.toLocaleString()} {currency}
+                      {product.sold_by === "weight" && <span className="text-sm font-normal text-gray-400"> /{lang === "ar" ? "كغ" : "kg"}</span>}
+                    </p>
+                    {product.originalPrice && (
+                      <p className="text-sm text-gray-400 line-through mt-0.5">{product.originalPrice.toLocaleString()} {currency}</p>
+                    )}
+                  </div>
+
+                  {/* Quantity and Add to Cart action */}
+                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                    {/* Quantity selectors */}
+                    {product.sold_by === "weight" ? (
+                      <div className="flex items-center gap-1.5 bg-gray-100 rounded-xl px-3 py-2 shrink-0">
+                        <input
+                          type="number"
+                          min="0.1"
+                          step="0.1"
+                          value={qty}
+                          onChange={(e) => setQty(Math.max(0.1, Number(e.target.value) || 0.1))}
+                          className="w-16 bg-transparent text-center font-bold text-gray-900 text-sm focus:outline-none"
+                        />
+                        <span className="text-xs text-gray-500 font-semibold">{lang === "ar" ? "كغ" : "kg"}</span>
                       </div>
                     ) : (
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2 bg-gray-100 rounded-xl">
-                          <button
-                            onClick={() => setQty(Math.max(1, qty - 1))}
-                            className="w-12 h-12 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors"
-                          >
-                            <Minus className="w-4 h-4" />
-                          </button>
-                          <span className="w-8 text-center font-semibold text-gray-900">{qty}</span>
-                          <button
-                            onClick={() => setQty(qty + 1)}
-                            className="w-12 h-12 flex items-center justify-center text-gray-600 hover:text-gray-900 transition-colors"
-                          >
-                            <Plus className="w-4 h-4" />
-                          </button>
-                        </div>
+                      <div className="flex items-center bg-gray-100 rounded-xl shrink-0">
                         <button
-                          onClick={() => { addItem(product, qty); setQty(1); }}
-                          className="add-cart-btn flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold shadow-sm"
+                          onClick={() => setQty(Math.max(1, qty - 1))}
+                          className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
                         >
-                          <ShoppingCart className="w-5 h-5" />
-                          {t.products.addToCart}
+                          <Minus className="w-3.5 h-3.5" />
+                        </button>
+                        <span className="w-8 text-center font-bold text-gray-900 text-sm">{qty}</span>
+                        <button
+                          onClick={() => setQty(qty + 1)}
+                          className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
                         </button>
                       </div>
-                    )
-                  ) : (
-                    <span className="inline-block bg-gray-100 text-gray-500 px-6 py-3.5 rounded-xl font-semibold">
-                      {t.products.outOfStock}
-                    </span>
-                  )}
+                    )}
 
-                  <div className="flex items-center gap-3 mt-4">
-                    <span className="inline-flex items-center gap-1.5 text-sm text-emerald-600">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                      {t.products.inStockLabel}
-                    </span>
+                    {/* Add to Cart button */}
                     <button
-                      onClick={() => {
-                        if (navigator.share) {
-                          navigator.share({ title: product.name, url: window.location.href });
-                        } else {
-                          navigator.clipboard.writeText(window.location.href);
-                        }
-                      }}
-                      className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-emerald-600 transition-colors ms-auto"
+                      onClick={() => { addItem(product, qty); setQty(1); }}
+                      className="flex-1 sm:flex-none bg-gradient-to-r from-orange-500 to-[#EA580C] hover:from-orange-600 hover:to-[#D97706] text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md flex items-center justify-center gap-2 text-sm uppercase tracking-wide min-w-[160px]"
                     >
-                      <Share2 className="w-4 h-4" />
-                      {t.products.share}
+                      <ShoppingCart className="w-4 h-4 shrink-0" />
+                      {t.products.addToCart}
                     </button>
                   </div>
                 </div>
+
               </div>
             </AnimatedSection>
 
