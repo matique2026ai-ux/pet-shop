@@ -344,6 +344,76 @@ function OrderDetailRow({
   );
 }
 
+interface StoreSettingsFieldProps {
+  label: string;
+  k: string;
+  type?: string;
+  storeSettings: Record<string, string>;
+  setStoreSettings: React.Dispatch<React.SetStateAction<Record<string, string>>>;
+}
+function StoreSettingsField({ label, k, type = "text", storeSettings, setStoreSettings }: StoreSettingsFieldProps) {
+  return (
+    <div className={k === "address" ? "sm:col-span-2" : ""}>
+      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+      <input
+        type={type}
+        value={storeSettings[k] || ""}
+        onChange={(e) => setStoreSettings((prev) => ({ ...prev, [k]: e.target.value }))}
+        className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+      />
+    </div>
+  );
+}
+
+interface ContentSettingsFieldProps {
+  label: string;
+  k: string;
+  contentSettings: Record<string, string>;
+  setContentSettings: React.Dispatch<React.SetStateAction<Record<string, string>>>;
+}
+function ContentSettingsField({ label, k, contentSettings, setContentSettings }: ContentSettingsFieldProps) {
+  return (
+    <div className="sm:col-span-2">
+      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+      <input
+        value={contentSettings[k] || ""}
+        onChange={(e) => setContentSettings((prev) => ({ ...prev, [k]: e.target.value }))}
+        className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+      />
+    </div>
+  );
+}
+
+interface DeliverySettingsFieldProps {
+  label: string;
+  k: string;
+  type?: string;
+  deliverySettings: Record<string, string>;
+  setDeliverySettings: React.Dispatch<React.SetStateAction<Record<string, string>>>;
+}
+function DeliverySettingsField({ label, k, type = "text", deliverySettings, setDeliverySettings }: DeliverySettingsFieldProps) {
+  return (
+    <div className={k === "areas" || k === "note" ? "sm:col-span-2" : ""}>
+      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+      {k === "areas" ? (
+        <textarea
+          value={deliverySettings[k] || ""}
+          onChange={(e) => setDeliverySettings((prev) => ({ ...prev, [k]: e.target.value }))}
+          rows={2}
+          className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+        />
+      ) : (
+        <input
+          type={type}
+          value={deliverySettings[k] || ""}
+          onChange={(e) => setDeliverySettings((prev) => ({ ...prev, [k]: e.target.value }))}
+          className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        />
+      )}
+    </div>
+  );
+}
+
 export default function AdminDashboard() {
   const { t, currency, reloadOverrides } = useI18n();
   const { a, adminLang, setAdminLang, dir } = useAdminI18n();
@@ -1914,34 +1984,19 @@ export default function AdminDashboard() {
                       {a.common.save}
                     </button>
                   </div>
-                  {(() => {
-                    const F = ({ label, k, type = "text" }: { label: string; k: string; type?: string }) => (
-                      <div className={k === "address" ? "sm:col-span-2" : ""}>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-                        <input
-                          type={type}
-                          value={storeSettings[k] || ""}
-                          onChange={(e) => setStoreSettings({ ...storeSettings, [k]: e.target.value })}
-                          className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        />
-                      </div>
-                    );
-                    return (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <F label={a.settings.storeName} k="storeName" />
-                        <F label={a.settings.phone} k="phone" />
-                        <F label={a.settings.email} k="email" type="email" />
-                        <F label={a.settings.whatsapp} k="whatsapp" />
-                        <F label={a.settings.facebook} k="facebook" />
-                        <F label={a.settings.instagram} k="instagram" />
-                        <F label={a.settings.tiktok} k="tiktok" />
-                        <F label={a.settings.currencyLabel} k="currencyLabel" />
-                        <F label={a.settings.deliveryFee} k="deliveryFee" />
-                        <F label={a.settings.freeThreshold} k="freeThreshold" />
-                        <F label={a.settings.address} k="address" />
-                      </div>
-                    );
-                  })()}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <StoreSettingsField label={a.settings.storeName} k="storeName" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
+                    <StoreSettingsField label={a.settings.phone} k="phone" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
+                    <StoreSettingsField label={a.settings.email} k="email" type="email" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
+                    <StoreSettingsField label={a.settings.whatsapp} k="whatsapp" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
+                    <StoreSettingsField label={a.settings.facebook} k="facebook" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
+                    <StoreSettingsField label={a.settings.instagram} k="instagram" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
+                    <StoreSettingsField label={a.settings.tiktok} k="tiktok" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
+                    <StoreSettingsField label={a.settings.currencyLabel} k="currencyLabel" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
+                    <StoreSettingsField label={a.settings.deliveryFee} k="deliveryFee" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
+                    <StoreSettingsField label={a.settings.freeThreshold} k="freeThreshold" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
+                    <StoreSettingsField label={a.settings.address} k="address" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
+                  </div>
                 </div>
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
@@ -1956,32 +2011,18 @@ export default function AdminDashboard() {
                       {a.common.save}
                     </button>
                   </div>
-                  {(() => {
-                    const F = ({ label, k }: { label: string; k: string }) => (
-                      <div className="sm:col-span-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-                        <input
-                          value={contentSettings[k] || ""}
-                          onChange={(e) => setContentSettings({ ...contentSettings, [k]: e.target.value })}
-                          className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        />
-                      </div>
-                    );
-                    return (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <F label={a.settings.heroTitle} k="heroTitle" />
-                        <F label={a.settings.heroSubtitle} k="heroSubtitle" />
-                        <F label={a.settings.heroCta1} k="heroCta1" />
-                        <F label={a.settings.heroCta2} k="heroCta2" />
-                        <F label={a.settings.footerText} k="footerText" />
-                        <F label={a.settings.about} k="about" />
-                        <F label="Homepage Hero Background (Video/Image URL)" k="heroBackground" />
-                        <F label="Contact Page Hero Background URL" k="contactHeroImage" />
-                        <F label="Veterinary Page Hero Background URL" k="vetHeroImage" />
-                        <F label="About Page Hero Background URL" k="aboutHeroImage" />
-                      </div>
-                    );
-                  })()}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <ContentSettingsField label={a.settings.heroTitle} k="heroTitle" contentSettings={contentSettings} setContentSettings={setContentSettings} />
+                    <ContentSettingsField label={a.settings.heroSubtitle} k="heroSubtitle" contentSettings={contentSettings} setContentSettings={setContentSettings} />
+                    <ContentSettingsField label={a.settings.heroCta1} k="heroCta1" contentSettings={contentSettings} setContentSettings={setContentSettings} />
+                    <ContentSettingsField label={a.settings.heroCta2} k="heroCta2" contentSettings={contentSettings} setContentSettings={setContentSettings} />
+                    <ContentSettingsField label={a.settings.footerText} k="footerText" contentSettings={contentSettings} setContentSettings={setContentSettings} />
+                    <ContentSettingsField label={a.settings.about} k="about" contentSettings={contentSettings} setContentSettings={setContentSettings} />
+                    <ContentSettingsField label="Homepage Hero Background (Video/Image URL)" k="heroBackground" contentSettings={contentSettings} setContentSettings={setContentSettings} />
+                    <ContentSettingsField label="Contact Page Hero Background URL" k="contactHeroImage" contentSettings={contentSettings} setContentSettings={setContentSettings} />
+                    <ContentSettingsField label="Veterinary Page Hero Background URL" k="vetHeroImage" contentSettings={contentSettings} setContentSettings={setContentSettings} />
+                    <ContentSettingsField label="About Page Hero Background URL" k="aboutHeroImage" contentSettings={contentSettings} setContentSettings={setContentSettings} />
+                  </div>
                 </div>
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
@@ -1996,52 +2037,28 @@ export default function AdminDashboard() {
                       {a.common.save}
                     </button>
                   </div>
-                  {(() => {
-                    const F = ({ label, k, type = "text" }: { label: string; k: string; type?: string }) => (
-                      <div className={k === "areas" || k === "note" ? "sm:col-span-2" : ""}>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-                        {k === "areas" ? (
-                          <textarea
-                            value={deliverySettings[k] || ""}
-                            onChange={(e) => setDeliverySettings({ ...deliverySettings, [k]: e.target.value })}
-                            rows={2}
-                            className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
-                          />
-                        ) : (
-                          <input
-                            type={type}
-                            value={deliverySettings[k] || ""}
-                            onChange={(e) => setDeliverySettings({ ...deliverySettings, [k]: e.target.value })}
-                            className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                          />
-                        )}
-                      </div>
-                    );
-                    return (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">{a.settings.deliveryScope}</label>
-                          <select
-                            value={deliverySettings.scope || "commune"}
-                            onChange={(e) => setDeliverySettings({ ...deliverySettings, scope: e.target.value })}
-                            className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                          >
-                            <option value="commune">{a.settings.scopeCommune}</option>
-                            <option value="wilaya">{a.settings.scopeWilaya}</option>
-                            <option value="national">{a.settings.scopeNational}</option>
-                            <option value="international">{a.settings.scopeInternational}</option>
-                          </select>
-                        </div>
-                        <F label={a.settings.deliveryCity} k="city" />
-                        <F label={a.settings.deliveryWilaya} k="wilaya" />
-                        <F label={a.settings.deliveryFee} k="fee" type="number" />
-                        <F label={a.settings.freeThreshold} k="freeThreshold" type="number" />
-                        <F label={a.settings.deliveryEta} k="eta" />
-                        <F label={a.settings.deliveryNote} k="note" />
-                        <F label={a.settings.deliveryAreas} k="areas" />
-                      </div>
-                    );
-                  })()}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">{a.settings.deliveryScope}</label>
+                      <select
+                        value={deliverySettings.scope || "commune"}
+                        onChange={(e) => setDeliverySettings({ ...deliverySettings, scope: e.target.value })}
+                        className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      >
+                        <option value="commune">{a.settings.scopeCommune}</option>
+                        <option value="wilaya">{a.settings.scopeWilaya}</option>
+                        <option value="national">{a.settings.scopeNational}</option>
+                        <option value="international">{a.settings.scopeInternational}</option>
+                      </select>
+                    </div>
+                    <DeliverySettingsField label={a.settings.deliveryCity} k="city" deliverySettings={deliverySettings} setDeliverySettings={setDeliverySettings} />
+                    <DeliverySettingsField label={a.settings.deliveryWilaya} k="wilaya" deliverySettings={deliverySettings} setDeliverySettings={setDeliverySettings} />
+                    <DeliverySettingsField label={a.settings.deliveryFee} k="fee" type="number" deliverySettings={deliverySettings} setDeliverySettings={setDeliverySettings} />
+                    <DeliverySettingsField label={a.settings.freeThreshold} k="freeThreshold" type="number" deliverySettings={deliverySettings} setDeliverySettings={setDeliverySettings} />
+                    <DeliverySettingsField label={a.settings.deliveryEta} k="eta" deliverySettings={deliverySettings} setDeliverySettings={setDeliverySettings} />
+                    <DeliverySettingsField label={a.settings.deliveryNote} k="note" deliverySettings={deliverySettings} setDeliverySettings={setDeliverySettings} />
+                    <DeliverySettingsField label={a.settings.deliveryAreas} k="areas" deliverySettings={deliverySettings} setDeliverySettings={setDeliverySettings} />
+                  </div>
                 </div>
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
