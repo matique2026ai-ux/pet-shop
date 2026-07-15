@@ -272,7 +272,19 @@ function OrderDetailRow({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div>
               <p className="text-gray-400 text-xs uppercase mb-1">Phone</p>
-              <p className="font-medium text-gray-900">{order.customer_phone}</p>
+              <div className="flex flex-wrap items-center gap-2">
+                <a href={`tel:${order.customer_phone}`} className="font-semibold text-emerald-750 hover:underline">
+                  📞 {order.customer_phone}
+                </a>
+                <a
+                  href={`https://wa.me/${order.customer_phone.replace(/[^0-9]/g, "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-[#25D366] text-white px-2 py-0.5 rounded-lg text-[10px] font-bold flex items-center gap-1 hover:bg-[#20ba56] transition-colors"
+                >
+                  WhatsApp
+                </a>
+              </div>
             </div>
             {order.customer_email && (
               <div>
@@ -886,6 +898,8 @@ export default function AdminDashboard() {
             {sidebarTabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.key;
+              const isOrdersTab = tab.key === "orders";
+              const pendingCount = isOrdersTab ? orders.filter((o) => o.status === "pending").length : 0;
               return (
                 <button
                   key={tab.key}
@@ -893,14 +907,21 @@ export default function AdminDashboard() {
                     setActiveTab(tab.key);
                     setSidebarOpen(false);
                   }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                     isActive
                       ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
                       : "text-white/60 hover:text-white hover:bg-white/5"
                   }`}
                 >
-                  <Icon className="w-5 h-5" />
-                  <span>{a.nav[tab.key as keyof typeof a.nav]}</span>
+                  <div className="flex items-center gap-3">
+                    <Icon className="w-5 h-5" />
+                    <span>{a.nav[tab.key as keyof typeof a.nav]}</span>
+                  </div>
+                  {isOrdersTab && pendingCount > 0 && (
+                    <span className="bg-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0">
+                      {pendingCount}
+                    </span>
+                  )}
                 </button>
               );
             })}

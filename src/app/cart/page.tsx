@@ -6,7 +6,7 @@ import { useI18n } from "@/lib/i18n-context";
 import Link from "next/link";
 import Image from "next/image";
 import AnimatedSection from "@/components/animated-section";
-import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, Truck } from "lucide-react";
+import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, Truck, MessageCircle } from "lucide-react";
 import { useSiteSettings } from "@/lib/site-settings";
 import { useAuth } from "@/lib/auth-context";
 
@@ -42,10 +42,22 @@ function regionForWilaya(w: string): "setif" | "north" | "south" {
   return "north";
 }
 
-const DELIVERY_BY_REGION = {
-  setif: { fee: 200, eta: { en: "24-48h", fr: "24-48h", ar: "24-48 ساعة" } },
-  north: { fee: 500, eta: { en: "3-5 days", fr: "3-5 jours", ar: "3-5 أيام" } },
-  south: { fee: 800, eta: { en: "5-7 days", fr: "5-7 jours", ar: "5-7 أيام" } },
+const DELIVERY_CONFIG = {
+  setif: {
+    home: 200,
+    stopdesk: 150,
+    eta: { en: "24-48h", fr: "24-48h", ar: "24-48 ساعة" }
+  },
+  north: {
+    home: 600,
+    stopdesk: 400,
+    eta: { en: "3-5 days", fr: "3-5 jours", ar: "3-5 أيام" }
+  },
+  south: {
+    home: 900,
+    stopdesk: 700,
+    eta: { en: "5-7 days", fr: "5-7 jours", ar: "5-7 أيام" }
+  }
 };
 
 function isValidAlgerianPhone(raw: string): boolean {
@@ -65,16 +77,17 @@ export default function CartPage() {
   const { user } = useAuth();
   const { delivery } = useSiteSettings();
   const [checkingOut, setCheckingOut] = useState(false);
-  const [orderPlaced, setOrderPlaced] = useState(false);
+  const [orderPlaced, setOrderPlaced] = useState<{ id: string } | null>(null);
   const [area, setArea] = useState("");
   const [wilaya, setWilaya] = useState("Sétif");
   const [commune, setCommune] = useState("");
+  const [deliveryType, setDeliveryType] = useState<"home" | "stopdesk">("home");
   const [phoneError, setPhoneError] = useState<string | null>(null);
 
   const d = { ...DEFAULT_DELIVERY, ...(delivery || {}) };
   const region = regionForWilaya(wilaya);
-  const deliv = DELIVERY_BY_REGION[region];
-  const feeNum = deliv.fee;
+  const deliv = DELIVERY_CONFIG[region];
+  const feeNum = deliveryType === "home" ? deliv.home : deliv.stopdesk;
   const etaText = deliv.eta[lang];
   const freeNum = Number(d.freeThreshold) || 5000;
   const subtotal = totalPrice;
@@ -83,20 +96,64 @@ export default function CartPage() {
   const remainingForFree = freeNum - subtotal;
 
   if (orderPlaced) {
+    const orderRef = orderPlaced.id.slice(-6).toUpperCase();
+    const whatsappNum = (delivery?.whatsapp || "213555123456").replace(/[^0-9]/g, "");
+    const message = encodeURIComponent(
+      lang === "ar"
+        ? `مرحباً، لقد قمت بطلب رقم #${orderRef} من موقع Paws & Wings. أود تأكيد الطلب من فضلك.`
+        : `Bonjour, je viens de passer la commande #${orderRef} sur Paws & Wings. Je souhaite confirmer ma commande s'il vous plaît.`
+    );
+    const waUrl = `https://wa.me/${whatsappNum}?text=${message}`;
+
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
+      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4 max-w-lg mx-auto py-12">
         <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mb-6">
           <CheckCircle className="w-10 h-10 text-emerald-600" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">{t.cart.orderConfirmed}</h2>
-        <p className="text-gray-500 mb-8 max-w-md">{t.cart.orderConfirmedDesc}</p>
-        <Link
-          href="/products"
-          className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-emerald-700 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          {t.cart.continueShopping}
-        </Link>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          {lang === "ar" ? "تم تسجيل طلبك بنجاح!" : lang === "fr" ? "Commande enregistrée !" : "Order Placed Successfully!"}
+        </h2>
+        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 w-full my-6 text-left" dir={lang === "ar" ? "rtl" : "ltr"}>
+          <p className="text-sm text-gray-600 mb-2 font-medium">
+            {lang === "ar" ? "رقم الطلب الخاص بك:" : lang === "fr" ? "Référence de votre commande :" : "Your Order Reference:"}
+            <span className="font-mono font-bold text-lg text-emerald-800 ml-2 bg-white px-2.5 py-1 rounded-lg border border-emerald-100 shadow-sm inline-block">
+              #{orderRef}
+            </span>
+          </p>
+          <p className="text-xs text-gray-500 mt-4 leading-relaxed">
+            {lang === "ar"
+              ? "طريقة الدفع: الدفع عند الاستلام (COD) فور وصول طلبك."
+              : lang === "fr"
+              ? "Mode de paiement : espèces à la livraison (COD) dès réception de votre colis."
+              : "Payment method: Cash on Delivery (COD) upon receiving your package."}
+          </p>
+        </div>
+        <p className="text-gray-500 mb-6 text-sm">
+          {lang === "ar"
+            ? "يرجى الضغط على الزر أدناه لتأكيد طلبك مباشرة عبر الواتساب معنا للتسليم السريع."
+            : lang === "fr"
+            ? "Veuillez cliquer ci-dessous pour confirmer votre commande directement via WhatsApp pour une livraison plus rapide."
+            : "Please click below to confirm your order via WhatsApp for faster delivery."}
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-3 w-full justify-center">
+          <a
+            href={waUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#20ba56] transition-colors shadow-md text-sm"
+          >
+            <MessageCircle className="w-5 h-5 shrink-0" />
+            {lang === "ar" ? "تأكيد عبر واتساب" : lang === "fr" ? "Confirmer via WhatsApp" : "Confirm via WhatsApp"}
+          </a>
+          <Link
+            href="/products"
+            className="inline-flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-medium hover:bg-gray-200 transition-colors text-sm"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            {t.cart.continueShopping}
+          </Link>
+        </div>
       </div>
     );
   }
@@ -330,10 +387,16 @@ export default function CartPage() {
                   return;
                 }
                 setPhoneError(null);
+                
+                const addressDetails = fd.get("address_details") as string || "";
+                const fullAddress = deliveryType === "stopdesk"
+                  ? `[Stop Desk Yalidine] Commune: ${commune}, Wilaya: ${wilaya}`
+                  : `[À Domicile] Adresse: ${addressDetails}, Commune: ${commune}, Wilaya: ${wilaya}`;
+
                 const order = {
                   customer_name: fd.get("name") as string,
-                  customer_phone: fd.get("phone") as string,
-                  delivery_address: `${commune}, ${wilaya}`,
+                  customer_phone: phone,
+                  delivery_address: fullAddress,
                   city: wilaya,
                   delivery_area: commune,
                   delivery_fee: deliveryFee,
@@ -349,12 +412,13 @@ export default function CartPage() {
                     body: JSON.stringify(order),
                   });
                   if (!res.ok) throw new Error("Server error");
+                  const createdOrder = await res.json();
+                  setOrderPlaced(createdOrder);
+                  clearCart();
                 } catch (e) {
                   alert(t.cart.orderFailed);
                   return;
                 }
-                setOrderPlaced(true);
-                clearCart();
               }}
               className="space-y-4"
             >
@@ -400,6 +464,55 @@ export default function CartPage() {
                 required
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
+
+              {/* Delivery Type Selection */}
+              <div className="space-y-1">
+                <label className="block text-sm font-medium text-gray-700">
+                  {lang === "ar" ? "نوع التوصيل" : lang === "fr" ? "Type de livraison" : "Delivery Type"}
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setDeliveryType("home")}
+                    className={`px-4 py-3 rounded-xl border text-sm font-bold transition-all ${deliveryType === "home" ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
+                  >
+                    🏠 {lang === "ar" ? "توصيل للمنزل" : lang === "fr" ? "À domicile" : "Home Delivery"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDeliveryType("stopdesk")}
+                    className={`px-4 py-3 rounded-xl border text-sm font-bold transition-all ${deliveryType === "stopdesk" ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
+                  >
+                    🏢 {lang === "ar" ? "مكتب ياليدين (Stop)" : lang === "fr" ? "Bureau (Stop)" : "Stop Desk"}
+                  </button>
+                </div>
+              </div>
+
+              {/* Detailed Address field (shown for home delivery) */}
+              {deliveryType === "home" && (
+                <input
+                  type="text"
+                  name="address_details"
+                  placeholder={lang === "ar" ? "العنوان بالتفصيل (الحي، الشارع، رقم الشقة...)" : lang === "fr" ? "Adresse détaillée (Quartier, Rue, N°...)" : "Detailed Address (Neighborhood, Street, N°...)"}
+                  required
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              )}
+
+              {/* Payment info box */}
+              <div className="bg-gray-50 border border-gray-150 rounded-xl p-3 text-xs space-y-1">
+                <p className="font-bold text-gray-700">
+                  💵 {lang === "ar" ? "طريقة الدفع المتاحة:" : lang === "fr" ? "Mode de paiement disponible :" : "Available payment method:"}
+                </p>
+                <p className="text-gray-500 leading-relaxed">
+                  {lang === "ar"
+                    ? "الدفع عند الاستلام (COD) — الدفع نقداً عند استلام طلبيتك."
+                    : lang === "fr"
+                    ? "Paiement à la livraison (COD) — payez en espèces à la réception de votre colis."
+                    : "Cash on Delivery (COD) — pay cash only when your order is delivered."}
+                </p>
+              </div>
+
               <button
                 type="submit"
                 className="w-full bg-emerald-600 text-white py-3 rounded-xl font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"
