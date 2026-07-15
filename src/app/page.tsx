@@ -28,9 +28,9 @@ const benefitIconComponents = [
 ];
 
 const benefitColors = [
-  { icon: "from-[#C4933F] to-[#DFB96A]", bg: "bg-[#FBF7EE]", border: "border-[#ECD8A6]" },
-  { icon: "from-[#F5851F] to-[#E06A0A]", bg: "bg-[#FFF7ED]", border: "border-[#FED7AA]" },
-  { icon: "from-[#C4933F] to-[#A87A2E]", bg: "bg-[#FBF7EE]", border: "border-[#ECD8A6]" },
+  { icon: "from-[#C4933F] to-[#DFB96A]", bg: "bg-[#FBF8F3]", border: "border-[#ECDCAE]" },
+  { icon: "from-[#A87A2E] to-[#C4933F]", bg: "bg-[#F7EFE0]", border: "border-[#DFB96A]" },
+  { icon: "from-[#C4933F] to-[#8A6022]", bg: "bg-[#FBF8F3]", border: "border-[#ECDCAE]" },
 ];
 
 const DEFAULT_HERO_VIDEOS = [
@@ -57,6 +57,9 @@ export default function HomePage() {
   const [heroVideos, setHeroVideos] = useState<string[]>(DEFAULT_HERO_VIDEOS);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  const customBg = content?.heroBackground;
+  const isCustomVideo = customBg ? /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(customBg) : false;
+
   useEffect(() => {
     fetch("/api/hero-videos")
       .then((r) => r.json())
@@ -74,15 +77,35 @@ export default function HomePage() {
           HERO SECTION
       ══════════════════════════════════ */}
       <section className="relative overflow-hidden min-h-[560px] flex items-center">
-        <video
-          ref={videoRef}
-          key={videoIdx}
-          autoPlay muted playsInline preload="metadata"
-          onEnded={handleVideoEnd}
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src={heroVideos[videoIdx]} type="video/mp4" />
-        </video>
+        {customBg ? (
+          isCustomVideo ? (
+            <video
+              autoPlay muted loop playsInline preload="metadata"
+              className="absolute inset-0 w-full h-full object-cover"
+            >
+              <source src={customBg} type="video/mp4" />
+            </video>
+          ) : (
+            <Image
+              src={customBg}
+              alt={heroTitle}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
+            />
+          )
+        ) : (
+          <video
+            ref={videoRef}
+            key={videoIdx}
+            autoPlay muted playsInline preload="metadata"
+            onEnded={handleVideoEnd}
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src={heroVideos[videoIdx]} type="video/mp4" />
+          </video>
+        )}
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
         {/* Gold shimmer overlay at bottom */}
@@ -168,7 +191,7 @@ export default function HomePage() {
                   className="group relative block rounded-2xl overflow-hidden aspect-[4/5] shadow-md hover:shadow-xl transition-all"
                 >
                   <Image
-                    src={categoryImages[cat.id] || categoryImages.cats}
+                    src={cat.image_url || categoryImages[cat.id] || categoryImages.cats}
                     alt={cat.name}
                     fill
                     placeholder="blur"

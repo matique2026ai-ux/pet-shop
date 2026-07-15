@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useI18n } from "@/lib/i18n-context";
+import { useSiteSettings } from "@/lib/site-settings";
 import AnimatedSection from "@/components/animated-section";
 import { Heart, Shield, Users, Award, Leaf, Smile, Sparkles, ChevronRight, PawPrint, Phone, MapPin, Clock } from "lucide-react";
 
@@ -24,21 +25,24 @@ const statValues = [
 
 export default function AboutPage() {
   const { t } = useI18n();
+  const { content } = useSiteSettings();
+
+  const heroBg = content?.aboutHeroImage || "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=1400&h=800&fit=crop";
 
   return (
     <div>
       <section className="relative overflow-hidden py-16 lg:py-28">
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=1400&h=800&fit=crop"
+            src={heroBg}
             alt={t.about.title}
             fill
             sizes="100vw"
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#172554]/90 via-[#172554]/70 to-[#172554]/60" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#172554] via-transparent to-transparent opacity-60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#050D1A]/90 via-[#050D1A]/70 to-[#050D1A]/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050D1A] via-transparent to-transparent opacity-60" />
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -111,7 +115,7 @@ export default function AboutPage() {
               <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#EFF6FF] rounded-full text-sm text-[#F97316] font-medium mb-4">
                 <Sparkles className="w-4 h-4" /> {t.about.story}
               </span>
-              <h2 className="text-4xl font-bold text-[#1E3A8A] mb-5 leading-tight">{t.about.storyTitle}</h2>
+              <h2 className="text-4xl font-bold text-[#0B1E36] mb-5 leading-tight">{t.about.storyTitle}</h2>
               <p className="text-gray-600 leading-relaxed text-lg">{t.about.storyText}</p>
               <div className="mt-6 flex items-center gap-6">
                 <div className="flex items-center gap-2 text-sm text-gray-500">
@@ -138,13 +142,13 @@ export default function AboutPage() {
               <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full text-sm text-[#F97316] border border-emerald-200/50 shadow-sm mb-3">
                 <Heart className="w-4 h-4" /> {t.about.purpose}
               </span>
-              <h2 className="text-4xl font-bold text-[#1E3A8A] mb-4">{t.about.mission}</h2>
+              <h2 className="text-4xl font-bold text-[#0B1E36] mb-4">{t.about.mission}</h2>
               <p className="text-gray-600 text-lg leading-relaxed">{t.about.missionText}</p>
             </div>
           </AnimatedSection>
 
           <AnimatedSection>
-            <h2 className="text-3xl font-bold text-[#1E3A8A] mb-10 text-center">{t.about.values}</h2>
+            <h2 className="text-3xl font-bold text-[#0B1E36] mb-10 text-center">{t.about.values}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {t.about.valueItems.map((v: { title: string; text: string }, i: number) => (
                 <div
@@ -174,7 +178,7 @@ export default function AboutPage() {
       </section>
 
       <section className="relative overflow-hidden py-16 lg:py-20"
-        style={{ background: "linear-gradient(135deg, #172554 0%, #1E3A8A 50%, #172554 100%)" }}
+        style={{ background: "linear-gradient(135deg, #050D1A 0%, #0B1E36 50%, #050D1A 100%)" }}
       >
         <div className="absolute top-10 right-20 w-72 h-72 bg-emerald-500/10 rounded-full blur-[100px]" />
         <div className="absolute bottom-10 left-20 w-96 h-96 bg-emerald-400/8 rounded-full blur-[120px]" />

@@ -9,7 +9,7 @@ import { MapPin, Phone, Mail, Clock, Send, Sparkles, ChevronRight, CheckCircle, 
 
 export default function ContactPage() {
   const { t } = useI18n();
-  const { store } = useSiteSettings();
+  const { store, content } = useSiteSettings();
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
 
@@ -17,6 +17,8 @@ export default function ContactPage() {
   const address = storeVal("address", t.contact.addressText);
   const phone = storeVal("phone", t.contact.phoneText);
   const email = storeVal("email", t.contact.emailText);
+  
+  const heroBg = content?.contactHeroImage || "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1400&h=600&fit=crop";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,14 +52,14 @@ export default function ContactPage() {
     <div>
       <section className="relative overflow-hidden py-16 lg:py-24 flex items-center min-h-[50vh]">
         <Image
-          src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1400&h=600&fit=crop"
+          src={heroBg}
           alt={t.contact.title}
           fill
           sizes="100vw"
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#172554]/85 via-[#172554]/60 to-[#172554]/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050D1A]/85 via-[#050D1A]/60 to-[#050D1A]/40" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <AnimatedSection>
             <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-xl rounded-full text-sm text-emerald-200 border border-white/10 mb-4">
@@ -74,7 +76,7 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
             <div className="lg:col-span-2">
               <AnimatedSection>
-                <h2 className="text-2xl font-bold text-[#1E3A8A] mb-6">{t.contact.infoTitle}</h2>
+                <h2 className="text-2xl font-bold text-[#0B1E36] mb-6">{t.contact.infoTitle}</h2>
                 <div className="space-y-3">
                   {info.map((item) => (
                     <div key={item.title} className="bg-white rounded-2xl p-4 flex items-start gap-3 transition-all duration-300 hover:-translate-x-1"

@@ -20,8 +20,8 @@ const cairo = Cairo({
 
 export const metadata: Metadata = {
   title: {
-    default: "Paws & Wings | Pet Shop & Veterinary Clinic",
-    template: "%s | Paws & Wings",
+    default: "طيور الجمال والجواد | Tawra Al-Jamal Wa Al-Jawad",
+    template: "%s | طيور الجمال والجواد",
   },
   alternates: {
     languages: {
@@ -30,35 +30,35 @@ export const metadata: Metadata = {
       ar: "/",
     },
   },
-  description: "Paws & Wings — أفضل محل مستلزمات الحيوانات الأليفة وعيادة بيطرية في سطيف والجزائر. أغذية، ألعاب، إكسسوارات للقطط والكلاب والطيور والأسماك، مع توصيل سريع.",
-  keywords: ["محل حيوانات أليفة سطيف", "عيادة بيطرية سطيف", "pet shop Sétif", "veterinary clinic Algeria", "Paws & Wings", "مستلزمات القطط والكلاب", "animalerie Sétif Algérie", "توصيل حيوانات أليفة", "pet supplies Algeria"],
+  description: "طيور الجمال والجواد — المتجر الإلكتروني الرائد في الجزائر لكل ما يخص الحيوانات الأليفة والخيول. أغذية، إكسسوارات، ورعاية بيطرية متكاملة.",
+  keywords: ["طيور الجمال والجواد", "متجر حيوانات أليفة سطيف", "عيادة بيطرية سطيف", "Tawra Al-Jamal Wa Al-Jawad", "مستلزمات الخيول والحيوانات الأليفة", "توصيل سريع سطيف", "pet shop horses Algeria"],
   other: {
     "geo.region": "DZ-19",
     "geo.placename": "Sétif",
     "geo.position": "36.1898;5.4123",
     "ICBM": "36.1898, 5.4123",
-    "language": "fr, ar, en",
+    "language": "ar, fr, en",
   },
   openGraph: {
-    title: "Paws & Wings | Pet Shop & Veterinary Clinic",
-    description: "Premium pet products and veterinary care for cats, dogs, birds, fish, and small pets.",
-    url: "https://www.pawsandwings.com",
-    siteName: "Paws & Wings",
-    locale: "en_US",
+    title: "طيور الجمال والجواد | Tawra Al-Jamal Wa Al-Jawad",
+    description: "متجر إلكتروني متكامل للحيوانات الأليفة والخيول في الجزائر. جودة، مصداقية، وتوصيل سريع.",
+    url: "https://www.tawra-aljamal.com",
+    siteName: "طيور الجمال والجواد",
+    locale: "ar_DZ",
     type: "website",
-    images: [{ url: "https://www.pawsandwings.com/placeholder.svg", width: 1200, height: 630 }],
+    images: [{ url: "https://www.tawra-aljamal.com/favicon.svg", width: 512, height: 512 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Paws & Wings | Pet Shop & Veterinary Clinic",
-    description: "Premium pet products and veterinary care for your beloved pets.",
+    title: "طيور الجمال والجواد | Tawra Al-Jamal Wa Al-Jawad",
+    description: "متجر إلكتروني متكامل للحيوانات الأليفة والخيول في الجزائر.",
   },
   robots: {
     index: true,
     follow: true,
   },
   icons: {
-    icon: "/placeholder.svg",
+    icon: "/favicon.svg",
   },
 };
 

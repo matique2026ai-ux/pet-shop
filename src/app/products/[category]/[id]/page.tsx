@@ -11,6 +11,7 @@ import { useRecentlyViewed } from "@/lib/use-recently-viewed";
 import AnimatedSection from "@/components/animated-section";
 import ProductCard from "@/components/product-card";
 import ProductReviews from "@/components/product-reviews";
+import { LogoFullStack } from "@/components/brand-logo";
 import {
   Star, ChevronRight, Check, ShoppingCart, Plus, Minus, Share2, X, ZoomIn,
   Play, Truck, ShieldCheck, BadgeCheck, Leaf,
@@ -26,54 +27,7 @@ function videoEmbed(url: string) {
   return { kind: "iframe" as const, src: url };
 }
 
-/* ─── Gold Eagle+Horse SVG Logo ─── */
-function GoldLogo({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 64 64"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      aria-hidden="true"
-    >
-      <path
-        d="M14 44 C14 44 16 36 22 33 C25 31 28 32 30 30 C32 28 32 24 34 22 C36 20 40 20 42 22 C44 24 43 28 41 30 C39 32 36 32 35 34 C33 36 34 40 34 44"
-        stroke="url(#goldGradProduct)" strokeWidth="2" strokeLinecap="round" fill="none"
-      />
-      <path
-        d="M40 22 C41 19 43 17 45 18 C47 19 47 22 46 24 C45 25 43 25 42 24"
-        stroke="url(#goldGradProduct)" strokeWidth="1.8" strokeLinecap="round" fill="none"
-      />
-      <line x1="22" y1="44" x2="20" y2="52" stroke="url(#goldGradProduct)" strokeWidth="2" strokeLinecap="round"/>
-      <line x1="28" y1="44" x2="27" y2="52" stroke="url(#goldGradProduct)" strokeWidth="2" strokeLinecap="round"/>
-      <line x1="34" y1="44" x2="35" y2="52" stroke="url(#goldGradProduct)" strokeWidth="2" strokeLinecap="round"/>
-      <path
-        d="M8 28 C10 22 16 20 22 22 C24 23 26 25 26 27"
-        stroke="url(#goldGradProduct)" strokeWidth="2" strokeLinecap="round" fill="none"
-      />
-      <path
-        d="M56 22 C54 18 48 17 42 20 C40 21 38 24 38 27"
-        stroke="url(#goldGradProduct)" strokeWidth="2" strokeLinecap="round" fill="none"
-      />
-      <ellipse cx="32" cy="26" rx="5" ry="4" fill="url(#goldGradProduct)" opacity="0.9"/>
-      <circle cx="32" cy="20" r="3.5" fill="url(#goldGradProduct)"/>
-      <path d="M34 19 L37 21 L34 21 Z" fill="url(#goldGradProduct2)"/>
-      <path d="M10 26 L6 20 M13 24 L9 18 M16 23 L13 17" stroke="url(#goldGradProduct)" strokeWidth="1.2" strokeLinecap="round"/>
-      <path d="M54 20 L58 14 M51 19 L55 13 M48 19 L51 13" stroke="url(#goldGradProduct)" strokeWidth="1.2" strokeLinecap="round"/>
-      <defs>
-        <linearGradient id="goldGradProduct" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-          <stop offset="0%"   stopColor="#DFB96A"/>
-          <stop offset="50%"  stopColor="#C4933F"/>
-          <stop offset="100%" stopColor="#8A6022"/>
-        </linearGradient>
-        <linearGradient id="goldGradProduct2" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%"   stopColor="#F5EDD6"/>
-          <stop offset="100%" stopColor="#C4933F"/>
-        </linearGradient>
-      </defs>
-    </svg>
-  );
-}
+
 
 function PawIcon({ className }: { className?: string }) {
   return (
@@ -201,11 +155,7 @@ export default function ProductDetailPage() {
 
                 {/* Brand Header inside Card */}
                 <div className="flex flex-col items-center justify-center border-b border-gray-100 pb-6 text-center">
-                  <GoldLogo className="w-16 h-16 mb-2" />
-                  <h2 className="text-xl font-bold text-gray-900">{storeName}</h2>
-                  <p className="text-xs text-gray-400 mt-1">
-                    {lang === "ar" ? "متجر إلكتروني للحيوانات الأليفة" : lang === "fr" ? "Boutique en ligne pour animaux de compagnie" : "Online Pet Shop"}
-                  </p>
+                  <LogoFullStack />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">

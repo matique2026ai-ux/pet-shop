@@ -10,6 +10,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { Menu, X, ShoppingCart, Phone, Search, Truck, ChevronRight, User, LogIn, Loader2, Cat, Dog, Bird, Fish, Rabbit, PawPrint, Stethoscope } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import AuthModal from "@/components/auth-modal";
+import { LogoC4 } from "@/components/brand-logo";
 
 const langOptions = [
   { code: "ar" as const, label: "ع" },
@@ -25,62 +26,7 @@ const catIcons: Record<string, React.ReactNode> = {
   rabbit: <Rabbit className="w-5 h-5" />,
 };
 
-/* ─── Gold Eagle+Horse SVG Logo ─── */
-function GoldLogo({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 64 64"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      aria-hidden="true"
-    >
-      {/* Horse body silhouette */}
-      <path
-        d="M14 44 C14 44 16 36 22 33 C25 31 28 32 30 30 C32 28 32 24 34 22 C36 20 40 20 42 22 C44 24 43 28 41 30 C39 32 36 32 35 34 C33 36 34 40 34 44"
-        stroke="url(#goldGrad)" strokeWidth="2" strokeLinecap="round" fill="none"
-      />
-      {/* Horse head */}
-      <path
-        d="M40 22 C41 19 43 17 45 18 C47 19 47 22 46 24 C45 25 43 25 42 24"
-        stroke="url(#goldGrad)" strokeWidth="1.8" strokeLinecap="round" fill="none"
-      />
-      {/* Horse legs */}
-      <line x1="22" y1="44" x2="20" y2="52" stroke="url(#goldGrad)" strokeWidth="2" strokeLinecap="round"/>
-      <line x1="28" y1="44" x2="27" y2="52" stroke="url(#goldGrad)" strokeWidth="2" strokeLinecap="round"/>
-      <line x1="34" y1="44" x2="35" y2="52" stroke="url(#goldGrad)" strokeWidth="2" strokeLinecap="round"/>
-      {/* Eagle wings spread */}
-      <path
-        d="M8 28 C10 22 16 20 22 22 C24 23 26 25 26 27"
-        stroke="url(#goldGrad)" strokeWidth="2" strokeLinecap="round" fill="none"
-      />
-      <path
-        d="M56 22 C54 18 48 17 42 20 C40 21 38 24 38 27"
-        stroke="url(#goldGrad)" strokeWidth="2" strokeLinecap="round" fill="none"
-      />
-      {/* Eagle body center */}
-      <ellipse cx="32" cy="26" rx="5" ry="4" fill="url(#goldGrad)" opacity="0.9"/>
-      {/* Eagle head */}
-      <circle cx="32" cy="20" r="3.5" fill="url(#goldGrad)"/>
-      {/* Eagle beak */}
-      <path d="M34 19 L37 21 L34 21 Z" fill="url(#goldGrad2)"/>
-      {/* Small wing feathers */}
-      <path d="M10 26 L6 20 M13 24 L9 18 M16 23 L13 17" stroke="url(#goldGrad)" strokeWidth="1.2" strokeLinecap="round"/>
-      <path d="M54 20 L58 14 M51 19 L55 13 M48 19 L51 13" stroke="url(#goldGrad)" strokeWidth="1.2" strokeLinecap="round"/>
-      <defs>
-        <linearGradient id="goldGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-          <stop offset="0%"   stopColor="#DFB96A"/>
-          <stop offset="50%"  stopColor="#C4933F"/>
-          <stop offset="100%" stopColor="#8A6022"/>
-        </linearGradient>
-        <linearGradient id="goldGrad2" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%"   stopColor="#F5EDD6"/>
-          <stop offset="100%" stopColor="#C4933F"/>
-        </linearGradient>
-      </defs>
-    </svg>
-  );
-}
+
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -183,15 +129,9 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
 
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-              <GoldLogo className="w-12 h-12 logo-gold-pulse" />
-              <div className="hidden sm:flex flex-col leading-none">
-                <span className="font-bold text-[#1A1A2E] text-sm leading-tight">{storeName}</span>
-                <span className="text-[10px] text-[#9E9282]">
-                  {lang === "ar" ? "متجر إلكتروني للحيوانات الأليفة" : lang === "fr" ? "Animalerie en ligne" : "Online Pet Shop"}
-                </span>
-              </div>
+            {/* Logo Component C4 */}
+            <Link href="/" className="flex items-center gap-1.5 shrink-0 group logo-gold-pulse">
+              <LogoC4 />
             </Link>
 
             {/* Desktop Nav Links */}

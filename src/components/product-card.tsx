@@ -65,7 +65,7 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
               <span className={`absolute top-3 ${lang === "ar" ? "right-3" : "left-3"} px-3 py-1 rounded-full text-xs font-bold shadow-lg ${
                 product.badge === "NEW"
                   ? "bg-gradient-to-r from-[#C4933F] to-[#DFB96A] text-white"
-                  : "bg-gradient-to-r from-[#F5851F] to-[#E06A0A] text-white"
+                  : "bg-gradient-to-r from-[#C4933F] to-[#8A6022] text-white"
               }`}>
                 {product.badge === "NEW" ? (t.products?.new || "NEW") : (t.products?.sale || "SALE")}
               </span>
@@ -118,7 +118,7 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
 
               {/* Discount badge */}
               {product.originalPrice && product.originalPrice > product.price && (
-                <span className="text-[10px] font-bold bg-[#FFF7ED] text-[#F5851F] px-1.5 py-0.5 rounded-full border border-[#FED7AA] shrink-0">
+                <span className="text-[10px] font-bold bg-[#FBF8F3] text-[#C4933F] px-1.5 py-0.5 rounded-full border border-[#ECDCAE] shrink-0">
                   -{Math.round((1 - product.price / product.originalPrice) * 100)}%
                 </span>
               )}

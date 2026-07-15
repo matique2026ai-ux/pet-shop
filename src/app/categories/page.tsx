@@ -28,7 +28,7 @@ export default function CategoriesPage() {
   return (
     <div>
       <section className="relative overflow-hidden py-16 lg:py-24">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#172554] via-[#1E3A8A] to-[#172554]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#050D1A] via-[#0B1E36] to-[#050D1A]" />
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-[120px]" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-400/5 rounded-full blur-[100px]" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -53,7 +53,7 @@ export default function CategoriesPage() {
                   >
                     <div className="relative aspect-[4/3] overflow-hidden bg-gray-50">
                       <Image
-                        src={catBgImages[cat.id] || catBgImages.cats}
+                        src={cat.image_url || catBgImages[cat.id] || catBgImages.cats}
                         alt={cat.name}
                         fill
                         className="object-cover transition-all duration-700 group-hover:scale-105"
@@ -102,7 +102,7 @@ export default function CategoriesPage() {
       <section className="py-16 relative overflow-hidden" style={{ background: "#F8FAFC" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <AnimatedSection>
-            <h2 className="text-3xl font-bold text-[#1E3A8A] mb-4">{t.categories.notSure}</h2>
+            <h2 className="text-3xl font-bold text-[#0B1E36] mb-4">{t.categories.notSure}</h2>
             <p className="text-gray-500 mb-6 max-w-md mx-auto">{t.categories.notSureDesc}</p>
             <div className="flex items-center justify-center gap-4">
               <Link href="/products" className="inline-flex items-center gap-2 bg-white text-gray-900 px-7 py-3 rounded-2xl font-bold border border-gray-200 hover:border-gray-300 hover:-translate-y-0.5 transition-all shadow-sm">{t.categories.allProductsLink}</Link>

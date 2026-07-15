@@ -23,7 +23,7 @@ export default function ShippingPage() {
     <div className="bg-[#0B1220]">
       {/* ===== HERO ===== */}
       <section className="relative overflow-hidden pt-20 pb-24 lg:pt-28 lg:pb-32">
-        <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_80%_-10%,#1E3A8A_0%,#0F1B3D_45%,#0B1220_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_80%_-10%,#0B1E36_0%,#0F1B3D_45%,#0B1220_100%)]" />
         <div
           className="absolute inset-0 opacity-[0.07]"
           style={{
@@ -62,7 +62,7 @@ export default function ShippingPage() {
             <AnimatedSection>
               <div className="relative ship-scale-in mx-auto max-w-md">
                 <div className="relative rounded-3xl border border-white/10 bg-white/[0.04] backdrop-blur-sm p-8 overflow-hidden">
-                  <div className="absolute -top-10 -end-10 w-40 h-40 rounded-full bg-[#1E3A8A]/40 blur-3xl" />
+                  <div className="absolute -top-10 -end-10 w-40 h-40 rounded-full bg-[#0B1E36]/40 blur-3xl" />
                     <svg viewBox="0 0 400 160" className="w-full h-40">
                     <path
                       d="M40 120 C 120 40, 280 40, 360 120"
@@ -72,13 +72,13 @@ export default function ShippingPage() {
                       strokeWidth="3"
                       className="ship-dash"
                     />
-                    <circle cx="40" cy="120" r="9" fill="#1E3A8A" stroke="#fff" strokeWidth="2" className="ship-pin" />
+                    <circle cx="40" cy="120" r="9" fill="#0B1E36" stroke="#fff" strokeWidth="2" className="ship-pin" />
                     <circle cx="360" cy="120" r="9" fill="#F97316" stroke="#fff" strokeWidth="2" className="ship-pin-2" />
                     <g className="ship-truck">
                       <circle cx="14" cy="34" r="5" fill="#0B1220" stroke="#fff" strokeWidth="1.5" />
                       <circle cx="34" cy="34" r="5" fill="#0B1220" stroke="#fff" strokeWidth="1.5" />
                       <rect x="2" y="14" width="44" height="20" rx="3" fill="#ffffff" />
-                      <rect x="8" y="18" width="14" height="12" rx="2" fill="#1E3A8A" />
+                      <rect x="8" y="18" width="14" height="12" rx="2" fill="#0B1E36" />
                       <path d="M22 18 H40 V30 H22 Z" fill="#F97316" />
                     </g>
                   </svg>
@@ -119,7 +119,7 @@ export default function ShippingPage() {
                     <span className="absolute -top-3 -start-3 w-9 h-9 rounded-full bg-[#F97316] text-white text-sm font-bold flex items-center justify-center shadow-lg shadow-[#F97316]/30">
                       {i + 1}
                     </span>
-                    <span className="w-12 h-12 rounded-xl flex items-center justify-center text-white mb-4 bg-gradient-to-br from-[#1E3A8A] to-[#F97316]">
+                    <span className="w-12 h-12 rounded-xl flex items-center justify-center text-white mb-4 bg-gradient-to-br from-[#0B1E36] to-[#F97316]">
                       <Icon className="w-6 h-6" />
                     </span>
                     <h3 className="text-lg font-bold text-white mb-2">{s.title}</h3>
@@ -149,7 +149,7 @@ export default function ShippingPage() {
                   <div
                     className={`relative h-full rounded-3xl p-7 border transition-transform duration-300 hover:-translate-y-1.5 ${
                       featured
-                        ? "bg-gradient-to-b from-[#1E3A8A] to-[#15275c] border-[#F97316]/40 shadow-2xl shadow-[#1E3A8A]/30"
+                        ? "bg-gradient-to-b from-[#0B1E36] to-[#15275c] border-[#F97316]/40 shadow-2xl shadow-[#0B1E36]/30"
                         : "bg-white/[0.04] border-white/10"
                     }`}
                   >
@@ -197,7 +197,7 @@ export default function ShippingPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-6">
           <AnimatedSection>
             <div className="h-full rounded-3xl bg-white/[0.04] border border-white/10 p-8 ship-float">
-              <span className="w-14 h-14 rounded-2xl flex items-center justify-center text-white bg-gradient-to-br from-[#1E3A8A] to-[#F97316] mb-5">
+              <span className="w-14 h-14 rounded-2xl flex items-center justify-center text-white bg-gradient-to-br from-[#0B1E36] to-[#F97316] mb-5">
                 <CreditCard className="w-7 h-7" />
               </span>
               <h3 className="text-xl font-bold text-white mb-3">{t.shipping.codTitle}</h3>
@@ -206,7 +206,7 @@ export default function ShippingPage() {
           </AnimatedSection>
           <AnimatedSection delay={100}>
             <div className="h-full rounded-3xl bg-white/[0.04] border border-white/10 p-8 ship-float" style={{ animationDelay: "1.2s" }}>
-              <span className="w-14 h-14 rounded-2xl flex items-center justify-center text-white bg-gradient-to-br from-[#1E3A8A] to-[#F97316] mb-5">
+              <span className="w-14 h-14 rounded-2xl flex items-center justify-center text-white bg-gradient-to-br from-[#0B1E36] to-[#F97316] mb-5">
                 <RotateCcw className="w-7 h-7" />
               </span>
               <h3 className="text-xl font-bold text-white mb-3">{t.shipping.returnsTitle}</h3>
@@ -229,13 +229,13 @@ export default function ShippingPage() {
       <section className="pb-28 lg:pb-32">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#1E3A8A] to-[#F97316] p-10 lg:p-14 text-center">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0B1E36] to-[#F97316] p-10 lg:p-14 text-center">
               <div className="absolute inset-0 opacity-10 bg-[radial-gradient(60%_120%_at_50%_0%,#fff_0%,transparent_70%)]" />
               <h2 className="relative text-2xl lg:text-3xl font-bold text-white mb-3">{t.shipping.ctaTitle}</h2>
               <p className="relative text-white/80 max-w-md mx-auto mb-7">{t.shipping.ctaDesc}</p>
               <Link
                 href="/products"
-                className="relative inline-flex items-center gap-2 bg-white text-[#1E3A8A] px-7 py-3.5 rounded-xl font-semibold hover:bg-white/90 transition-colors"
+                className="relative inline-flex items-center gap-2 bg-white text-[#0B1E36] px-7 py-3.5 rounded-xl font-semibold hover:bg-white/90 transition-colors"
               >
                 {t.shipping.ctaButton}
                 <ArrowRight className="w-4 h-4 rtl:-scale-x-100" />

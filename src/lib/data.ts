@@ -28,6 +28,7 @@ export interface Category {
   name: string;
   description: string;
   icon: string;
+  image_url?: string;
   subcategories: Subcategory[];
 }
 

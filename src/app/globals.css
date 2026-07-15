@@ -16,13 +16,13 @@
   --color-gray-500: #7A6F61;
   --color-gray-600: #5C5348;
   --color-gray-700: #3D3730;
-  --color-gray-800: #1A1A2E;
-  --color-gray-900: #0D0D1A;
+  --color-gray-800: #0B1E36;
+  --color-gray-900: #050D1A;
 
   /* Gold/Copper primary palette */
-  --color-emerald-50:  #FBF7EE;
-  --color-emerald-100: #F5EDD6;
-  --color-emerald-200: #ECD8A6;
+  --color-emerald-50:  #FBF8F3;
+  --color-emerald-100: #F7EFE0;
+  --color-emerald-200: #ECDCAE;
   --color-emerald-300: #DFB96A;
   --color-emerald-400: #D4A042;
   --color-emerald-500: #C4933F;
@@ -32,18 +32,18 @@
   --color-emerald-900: #4A3210;
   --color-emerald-950: #2A1C08;
 
-  /* Orange accent (CTA) */
-  --color-amber-50:  #FFF7ED;
-  --color-amber-100: #FFEDD5;
-  --color-amber-200: #FED7AA;
-  --color-amber-300: #FDBA74;
-  --color-amber-400: #FB923C;
-  --color-amber-500: #F5851F;
-  --color-amber-600: #E06A0A;
-  --color-amber-700: #C2540A;
+  /* Orange/Gold accent (CTA) */
+  --color-amber-50:  #FBF8F3;
+  --color-amber-100: #F7EFE0;
+  --color-amber-200: #ECDCAE;
+  --color-amber-300: #DFB96A;
+  --color-amber-400: #D4A042;
+  --color-amber-500: #C4933F;
+  --color-amber-600: #A87A2E;
+  --color-amber-700: #8A6022;
 
-  --color-coral:     #F5851F;
-  --color-coral-600: #E06A0A;
+  --color-coral:     #C4933F;
+  --color-coral-600: #A87A2E;
 
   --color-card:    #FFFFFF;
   --color-surface: #F8F7F4;
@@ -51,10 +51,11 @@
 
 html {
   scroll-behavior: smooth;
+  font-family: var(--font-cairo), sans-serif;
 }
 
 [dir="rtl"] {
-  font-family: var(--font-tajawal), sans-serif;
+  font-family: var(--font-cairo), sans-serif;
 }
 
 /* ===== Gold shimmer for hero title ===== */
@@ -67,11 +68,11 @@ html {
   background: linear-gradient(
     90deg,
     #FFFFFF 0%,
-    #F5EDD6 20%,
+    #F7EFE0 20%,
     #DFB96A 40%,
     #FFFFFF 55%,
     #DFB96A 70%,
-    #F5EDD6 85%,
+    #F7EFE0 85%,
     #FFFFFF 100%
   );
   background-size: 200% auto;
@@ -110,33 +111,36 @@ nav a:active {
   transform: scale(0.94);
 }
 
-/* ===== Add to Cart — filled orange ===== */
+/* ===== Add to Cart — Premium Gold Gradient ===== */
 .add-cart-btn {
-  background: linear-gradient(135deg, #F5851F 0%, #E06A0A 100%);
-  color: #ffffff;
-  box-shadow: 0 4px 14px rgba(245, 133, 31, 0.35);
+  background: linear-gradient(135deg, #DFB96A 0%, #C4933F 100%);
+  color: #050D1A;
+  box-shadow: 0 4px 14px rgba(196, 147, 63, 0.35);
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
   border-radius: 9999px;
 }
 .add-cart-btn:hover {
-  background: linear-gradient(135deg, #E06A0A 0%, #C2540A 100%);
-  box-shadow: 0 6px 20px rgba(224, 106, 10, 0.45);
+  background: linear-gradient(135deg, #C4933F 0%, #8A6022 100%);
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(196, 147, 63, 0.45);
   transform: translateY(-1px);
 }
 .add-cart-btn:active {
   transform: scale(0.95) translateY(0);
 }
 
-/* ===== CTA button ===== */
+/* ===== CTA button — Navy with Gold Accent ===== */
 .cta-btn {
-  background: linear-gradient(135deg, #F5851F 0%, #E06A0A 100%);
-  color: #ffffff;
-  box-shadow: 0 6px 18px rgba(245, 133, 31, 0.30);
+  background: linear-gradient(135deg, #0B1E36 0%, #050D1A 100%);
+  border: 1.5px solid #C4933F;
+  color: #DFB96A;
+  box-shadow: 0 6px 18px rgba(11, 30, 54, 0.30);
   transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.15s ease;
 }
 .cta-btn:hover {
-  background: linear-gradient(135deg, #E06A0A 0%, #C2540A 100%);
-  box-shadow: 0 8px 24px rgba(224, 106, 10, 0.40);
+  background: linear-gradient(135deg, #DFB96A 0%, #C4933F 100%);
+  color: #050D1A;
+  box-shadow: 0 8px 24px rgba(196, 147, 63, 0.40);
   transform: translateY(-2px);
 }
 .cta-btn:active {

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useI18n } from "@/lib/i18n-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
+import { useSiteSettings } from "@/lib/site-settings";
 import AnimatedSection from "@/components/animated-section";
 import { ArrowRight, Star, Phone, Stethoscope, Sparkles, Clock, ChevronRight } from "lucide-react";
 
@@ -21,6 +22,7 @@ const serviceImages: Record<string, string> = {
 export default function VetPage() {
   const { t, currency, lang } = useI18n();
   const { vetServices, team, testimonials } = useTranslatedData();
+  const { content } = useSiteSettings();
 
   const prepNote =
     lang === "ar"
@@ -30,18 +32,20 @@ export default function VetPage() {
         : "Veterinary clinic under preparation — opening soon. Stay tuned!";
   const prepBadge = lang === "ar" ? "قيد التجهيز" : lang === "fr" ? "En préparation" : "Coming Soon";
 
+  const heroBg = content?.vetHeroImage || "https://picsum.photos/seed/vet-hero/1400/900";
+
   return (
     <div>
       <section className="relative overflow-hidden min-h-[70vh] flex items-center">
         <Image
-          src="https://picsum.photos/seed/vet-hero/1400/900"
+          src={heroBg}
           alt={t.vet.title}
           fill
           sizes="100vw"
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#172554]/85 via-[#172554]/60 to-[#172554]/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050D1A]/85 via-[#050D1A]/60 to-[#050D1A]/40" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <AnimatedSection>
             <div className="max-w-xl">
@@ -103,7 +107,7 @@ export default function VetPage() {
               <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#EFF6FF] rounded-full text-sm text-[#F97316] border border-[#DBEAFE] mb-3">
                 <Stethoscope className="w-4 h-4" /> {t.vet.servicesTitle}
               </span>
-              <h2 className="text-3xl lg:text-4xl font-bold text-[#1E3A8A]">{t.vet.servicesTitle}</h2>
+              <h2 className="text-3xl lg:text-4xl font-bold text-[#0B1E36]">{t.vet.servicesTitle}</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {vetServices.map((s) => (
@@ -153,7 +157,7 @@ export default function VetPage() {
           <AnimatedSection>
             <div className="text-center mb-12">
               <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full text-sm text-[#F97316] border border-[#DBEAFE] mb-3">{t.vet.teamBadge}</span>
-              <h2 className="text-3xl lg:text-4xl font-bold text-[#1E3A8A]">{t.vet.teamTitle}</h2>
+              <h2 className="text-3xl lg:text-4xl font-bold text-[#0B1E36]">{t.vet.teamTitle}</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
               {team.map((m, i) => (
@@ -189,7 +193,7 @@ export default function VetPage() {
           <AnimatedSection>
             <div className="text-center mb-12">
               <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#EFF6FF] rounded-full text-sm text-[#F97316] border border-[#DBEAFE] mb-3">{t.vet.testimonialsBadge}</span>
-              <h2 className="text-3xl lg:text-4xl font-bold text-[#1E3A8A]">{t.vet.testimonialsTitle}</h2>
+              <h2 className="text-3xl lg:text-4xl font-bold text-[#0B1E36]">{t.vet.testimonialsTitle}</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               {testimonials.slice(0, 3).map((rev) => (
@@ -221,7 +225,7 @@ export default function VetPage() {
           sizes="100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#172554]/90 via-[#172554]/70 to-[#172554]/80" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050D1A]/90 via-[#050D1A]/70 to-[#050D1A]/80" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative w-full">
           <AnimatedSection>
             <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-xl rounded-full text-sm text-emerald-200 border border-white/10 mb-4">

@@ -46,8 +46,8 @@ export default function VetCard({ service }: VetCardProps) {
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition-all duration-700 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#172554]/90 via-[#172554]/30 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#172554]/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050D1A]/90 via-[#050D1A]/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#050D1A]/40" />
 
         <div className="absolute top-4 left-4">
           <span className="w-10 h-10 bg-white/20 backdrop-blur-xl rounded-xl flex items-center justify-center text-white border border-white/30 shadow-lg">
@@ -69,7 +69,7 @@ export default function VetCard({ service }: VetCardProps) {
           <Clock className="w-3.5 h-3.5" />
           {service.duration}
         </span>
-        <span className="flex items-center gap-1 text-xs font-semibold text-[#1E3A8A]">
+        <span className="flex items-center gap-1 text-xs font-semibold text-[#0B1E36]">
           <Sparkles className="w-3 h-3" /> {t.vet.bookNow}
         </span>
       </div>

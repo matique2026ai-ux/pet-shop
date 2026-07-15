@@ -26,7 +26,13 @@ export async function POST(request: Request) {
   if (!body.id || !body.name) return NextResponse.json({ error: "id and name are required" }, { status: 400 });
   const { data, error } = await supabase
     .from("categories")
-    .insert([{ id: String(body.id), name: String(body.name), icon: body.icon || "paw-print", order: Number(body.order) || 0 }])
+    .insert([{
+      id: String(body.id),
+      name: String(body.name),
+      icon: body.icon || "paw-print",
+      order: Number(body.order) || 0,
+      image_url: body.image_url || ""
+    }])
     .select()
     .single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -40,7 +46,7 @@ export async function PUT(request: Request) {
   if (!body.id) return NextResponse.json({ error: "id is required" }, { status: 400 });
   const { data, error } = await supabase
     .from("categories")
-    .update({ name: body.name, icon: body.icon, order: Number(body.order) || 0 })
+    .update({ name: body.name, icon: body.icon, order: Number(body.order) || 0, image_url: body.image_url })
     .eq("id", body.id)
     .select()
     .single();

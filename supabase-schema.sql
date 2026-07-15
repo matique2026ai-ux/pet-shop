@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS categories (
   name TEXT NOT NULL,
   icon TEXT NOT NULL DEFAULT 'paw-print',
   "order" INTEGER NOT NULL DEFAULT 0,
+  image_url TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -64,6 +65,9 @@ ALTER TABLE products ADD COLUMN IF NOT EXISTS sold_by TEXT NOT NULL DEFAULT 'pie
 -- Rich product page: short video + ingredients / composition.
 ALTER TABLE products ADD COLUMN IF NOT EXISTS video TEXT;
 ALTER TABLE products ADD COLUMN IF NOT EXISTS ingredients TEXT;
+
+-- Categories image URL
+ALTER TABLE categories ADD COLUMN IF NOT EXISTS image_url TEXT;
 
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;

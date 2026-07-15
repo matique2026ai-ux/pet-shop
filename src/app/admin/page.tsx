@@ -17,6 +17,7 @@ import {
 import HeroVideoManager from "@/components/hero-video-manager";
 import { en } from "@/lib/translations/en";
 import type { TranslationOverrides } from "@/lib/i18n-context";
+import { LogoC1, LogoC4 } from "@/components/brand-logo";
 
 const COLORS = ["#059669", "#10B981", "#34D399", "#6EE7B7", "#A7F3D0"];
 
@@ -49,6 +50,9 @@ const sidebarTabs = [
 interface Category {
   id: string;
   name: string;
+  icon?: string;
+  order?: number;
+  image_url?: string;
   subcategories: { id: string; name: string }[];
 }
 
@@ -709,27 +713,27 @@ export default function AdminDashboard() {
   };
 
   // ----- Category & Subcategory management -----
-  const [catModal, setCatModal] = useState<{ id: string; name: string; icon: string; order: string; editingId: string | null; open: boolean }>({ id: "", name: "", icon: "paw-print", order: "0", editingId: null, open: false });
+  const [catModal, setCatModal] = useState<{ id: string; name: string; icon: string; order: string; imageUrl: string; editingId: string | null; open: boolean }>({ id: "", name: "", icon: "paw-print", order: "0", imageUrl: "", editingId: null, open: false });
   const [subModal, setSubModal] = useState<{ id: string; name: string; category_id: string; editingId: string | null; open: boolean }>({ id: "", name: "", category_id: "", editingId: null, open: false });
 
   const openCatModal = (cat?: any) => {
-    if (cat) setCatModal({ id: cat.id, name: cat.name, icon: cat.icon || "paw-print", order: String(cat.order ?? 0), editingId: cat.id, open: true });
-    else setCatModal({ id: "", name: "", icon: "paw-print", order: "0", editingId: null, open: true });
+    if (cat) setCatModal({ id: cat.id, name: cat.name, icon: cat.icon || "paw-print", order: String(cat.order ?? 0), imageUrl: cat.image_url || "", editingId: cat.id, open: true });
+    else setCatModal({ id: "", name: "", icon: "paw-print", order: "0", imageUrl: "", editingId: null, open: true });
   };
   const openSubModal = (categoryId: string, sub?: any) => {
     if (sub) setSubModal({ id: sub.id, name: sub.name, category_id: categoryId, editingId: sub.id, open: true });
     else setSubModal({ id: "", name: "", category_id: categoryId, editingId: null, open: true });
   };
-  const closeCatModal = () => setCatModal({ id: "", name: "", icon: "paw-print", order: "0", editingId: null, open: false });
+  const closeCatModal = () => setCatModal({ id: "", name: "", icon: "paw-print", order: "0", imageUrl: "", editingId: null, open: false });
   const closeSubModal = () => setSubModal({ id: "", name: "", category_id: "", editingId: null, open: false });
 
   const saveCategory = async () => {
     if (!catModal.id.trim() || !catModal.name.trim()) return alert(a.common.name + " / " + a.common.id + " " + a.common.required);
     try {
       if (catModal.editingId) {
-        await apiFetch("/api/categories", { method: "PUT", body: JSON.stringify({ id: catModal.editingId, name: catModal.name, icon: catModal.icon, order: Number(catModal.order) }) });
+        await apiFetch("/api/categories", { method: "PUT", body: JSON.stringify({ id: catModal.editingId, name: catModal.name, icon: catModal.icon, order: Number(catModal.order), image_url: catModal.imageUrl }) });
       } else {
-        await apiFetch("/api/categories", { method: "POST", body: JSON.stringify({ id: catModal.id.trim(), name: catModal.name, icon: catModal.icon, order: Number(catModal.order) }) });
+        await apiFetch("/api/categories", { method: "POST", body: JSON.stringify({ id: catModal.id.trim(), name: catModal.name, icon: catModal.icon, order: Number(catModal.order), image_url: catModal.imageUrl }) });
       }
       closeCatModal();
       await loadCategories();
@@ -819,7 +823,7 @@ export default function AdminDashboard() {
           <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Lock className="w-8 h-8 text-emerald-600" />
           </div>
-          <h1 className="text-xl font-bold text-[#1E3A8A] mb-2">Admin Access</h1>
+          <h1 className="text-xl font-bold text-[#0B1E36] mb-2">Admin Access</h1>
           <p className="text-sm text-gray-500 mb-6">Enter password to access the dashboard</p>
           <form onSubmit={handleLogin} className="space-y-4">
             <input
@@ -873,21 +877,15 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-gray-50" dir={dir}>
       <div className="flex">
         <aside className={`
-          fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-[#172554] to-[#1E3A8A] text-white
+          fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-[#050D1A] to-[#0B1E36] text-white
           transform transition-transform duration-300 ease-in-out
           lg:relative lg:translate-x-0
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}>
           <div className="p-6 border-b border-white/10">
             <div className="flex items-center justify-between">
-              <Link href="/" className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center text-white font-bold text-lg">
-                  P
-                </div>
-                <div>
-                  <p className="font-bold text-white text-lg leading-tight">Paws & Wings</p>
-                  <p className="text-xs text-emerald-300/60">Admin Panel</p>
-                </div>
+              <Link href="/" className="flex items-center gap-2">
+                <LogoC4 light={true} />
               </Link>
               <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-white/60 hover:text-white">
                 <X className="w-5 h-5" />
@@ -945,7 +943,7 @@ export default function AdminDashboard() {
                 <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-gray-600 hover:text-gray-900">
                   <Menu className="w-5 h-5" />
                 </button>
-                <h1 className="text-lg font-bold text-[#1E3A8A]">
+                <h1 className="text-lg font-bold text-[#0B1E36]">
                   {a.title[activeTab as keyof typeof a.title] ?? activeTab}
                 </h1>
               </div>
@@ -964,8 +962,8 @@ export default function AdminDashboard() {
                   <option value="fr">{a.lang.fr}</option>
                   <option value="ar">{a.lang.ar}</option>
                 </select>
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white text-xs font-bold">
-                  A
+                <div className="w-9 h-9 rounded-full bg-[#0B1E36] flex items-center justify-center border border-white/20 overflow-hidden shrink-0">
+                  <LogoC1 className="w-6 h-6" />
                 </div>
               </div>
             </div>
@@ -1028,7 +1026,7 @@ export default function AdminDashboard() {
                   <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                     <div className="flex items-center justify-between mb-6">
                       <div>
-                        <h2 className="text-lg font-bold text-[#1E3A8A]">{a.dashboard.revenueOverview}</h2>
+                        <h2 className="text-lg font-bold text-[#0B1E36]">{a.dashboard.revenueOverview}</h2>
                         <p className="text-sm text-gray-500 mt-0.5">{a.dashboard.revenueSub}</p>
                       </div>
                       <div className="flex items-center gap-2 text-xs text-gray-400">
@@ -1058,7 +1056,7 @@ export default function AdminDashboard() {
 
                   <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                     <div>
-                      <h2 className="text-lg font-bold text-[#1E3A8A]">Category Sales</h2>
+                      <h2 className="text-lg font-bold text-[#0B1E36]">Category Sales</h2>
                       <p className="text-sm text-gray-500 mt-0.5">Distribution by pet</p>
                     </div>
                     <div className="h-64 mt-2">
@@ -1103,7 +1101,7 @@ export default function AdminDashboard() {
                   <div className="p-6 pb-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h2 className="text-lg font-bold text-[#1E3A8A]">{a.dashboard.recentOrders}</h2>
+                        <h2 className="text-lg font-bold text-[#0B1E36]">{a.dashboard.recentOrders}</h2>
                         <p className="text-sm text-gray-500 mt-0.5">Latest transactions</p>
                       </div>
                       <button
@@ -1147,7 +1145,7 @@ export default function AdminDashboard() {
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <div className="flex items-center justify-between mb-5">
                     <div>
-                      <h2 className="text-lg font-bold text-[#1E3A8A]">Top Products</h2>
+                      <h2 className="text-lg font-bold text-[#0B1E36]">Top Products</h2>
                       <p className="text-sm text-gray-500 mt-0.5">Best performing products this month</p>
                     </div>
                     <button
@@ -1588,7 +1586,7 @@ export default function AdminDashboard() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <h2 className="text-lg font-bold text-[#1E3A8A] mb-4">{a.analytics.perCategory}</h2>
+                    <h2 className="text-lg font-bold text-[#0B1E36] mb-4">{a.analytics.perCategory}</h2>
                     <div className="h-72">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={categories.map((c) => ({ name: c.name, count: products.filter((p) => p.category === c.id).length }))}>
@@ -1602,7 +1600,7 @@ export default function AdminDashboard() {
                   </div>
 
                   <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <h2 className="text-lg font-bold text-[#1E3A8A] mb-4">{a.analytics.priceDist}</h2>
+                    <h2 className="text-lg font-bold text-[#0B1E36] mb-4">{a.analytics.priceDist}</h2>
                     <div className="space-y-3">
                       {[
                         { label: a.analytics.under20, range: [0, 20] },
@@ -1630,7 +1628,7 @@ export default function AdminDashboard() {
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                   <div className="p-6 pb-4">
-                    <h2 className="text-lg font-bold text-[#1E3A8A]">{a.analytics.topRated}</h2>
+                    <h2 className="text-lg font-bold text-[#0B1E36]">{a.analytics.topRated}</h2>
                     <p className="text-sm text-gray-500 mt-0.5">{a.analytics.topRatedSub}</p>
                   </div>
                   <div className="overflow-x-auto">
@@ -1673,7 +1671,7 @@ export default function AdminDashboard() {
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-lg font-bold text-[#1E3A8A]">{a.cats.title}</h2>
+                    <h2 className="text-lg font-bold text-[#0B1E36]">{a.cats.title}</h2>
                     <p className="text-sm text-gray-500 mt-0.5">{a.cats.subtitle}</p>
                   </div>
                   <button
@@ -1843,7 +1841,7 @@ export default function AdminDashboard() {
               <div className="space-y-6">
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-bold text-[#1E3A8A]">{a.settings.store}</h2>
+                    <h2 className="text-lg font-bold text-[#0B1E36]">{a.settings.store}</h2>
                     <button
                       onClick={() => saveSettingsKey("store", storeSettings)}
                       disabled={savingSettings}
@@ -1885,7 +1883,7 @@ export default function AdminDashboard() {
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-bold text-[#1E3A8A]">{a.settings.content}</h2>
+                    <h2 className="text-lg font-bold text-[#0B1E36]">{a.settings.content}</h2>
                     <button
                       onClick={() => saveSettingsKey("content", contentSettings)}
                       disabled={savingSettings}
@@ -1914,6 +1912,10 @@ export default function AdminDashboard() {
                         <F label={a.settings.heroCta2} k="heroCta2" />
                         <F label={a.settings.footerText} k="footerText" />
                         <F label={a.settings.about} k="about" />
+                        <F label="Homepage Hero Background (Video/Image URL)" k="heroBackground" />
+                        <F label="Contact Page Hero Background URL" k="contactHeroImage" />
+                        <F label="Veterinary Page Hero Background URL" k="vetHeroImage" />
+                        <F label="About Page Hero Background URL" k="aboutHeroImage" />
                       </div>
                     );
                   })()}
@@ -1921,7 +1923,7 @@ export default function AdminDashboard() {
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-bold text-[#1E3A8A]">{a.settings.delivery}</h2>
+                    <h2 className="text-lg font-bold text-[#0B1E36]">{a.settings.delivery}</h2>
                     <button
                       onClick={() => saveSettingsKey("delivery", deliverySettings)}
                       disabled={savingSettings}
@@ -1980,7 +1982,7 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                  <h2 className="text-lg font-bold text-[#1E3A8A] mb-4">Quick Actions</h2>
+                  <h2 className="text-lg font-bold text-[#0B1E36] mb-4">Quick Actions</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <Link href="/" className="flex items-center gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 transition-colors">
                       <ArrowUpRight className="w-5 h-5 text-emerald-600" />
@@ -2009,7 +2011,7 @@ export default function AdminDashboard() {
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                     <div>
-                      <h2 className="text-lg font-bold text-[#1E3A8A]">{a.settings.translations}</h2>
+                      <h2 className="text-lg font-bold text-[#0B1E36]">{a.settings.translations}</h2>
                       <p className="text-sm text-gray-500 mt-0.5">{a.cats.manage}</p>
                     </div>
                     <button
@@ -2073,7 +2075,7 @@ export default function AdminDashboard() {
           <div className="absolute inset-0 bg-black/50" onClick={closeModal} />
           <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between z-10">
-              <h2 className="text-lg font-bold text-[#1E3A8A]">
+              <h2 className="text-lg font-bold text-[#0B1E36]">
                 {editingProduct ? a.products.editProduct : a.products.addProduct}
               </h2>
               <button onClick={closeModal} className="text-gray-400 hover:text-gray-600">
@@ -2380,7 +2382,7 @@ export default function AdminDashboard() {
         <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
           <div className="absolute inset-0 bg-black/50" onClick={closeCatModal} />
           <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-4">
-            <h2 className="text-lg font-bold text-[#1E3A8A]">{catModal.editingId ? a.cats.editCategory : a.cats.addCategory}</h2>
+            <h2 className="text-lg font-bold text-[#0B1E36]">{catModal.editingId ? a.cats.editCategory : a.cats.addCategory}</h2>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{a.common.id}</label>
               <input
@@ -2397,6 +2399,15 @@ export default function AdminDashboard() {
               <input
                 value={catModal.name}
                 onChange={(e) => setCatModal({ ...catModal, name: e.target.value })}
+                className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">صورة القسم (Category Image URL)</label>
+              <input
+                value={catModal.imageUrl}
+                onChange={(e) => setCatModal({ ...catModal, imageUrl: e.target.value })}
+                placeholder="https://images.unsplash.com/..."
                 className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
@@ -2432,7 +2443,7 @@ export default function AdminDashboard() {
         <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
           <div className="absolute inset-0 bg-black/50" onClick={closeSubModal} />
           <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-4">
-            <h2 className="text-lg font-bold text-[#1E3A8A]">{subModal.editingId ? a.cats.editSub : a.cats.addSub}</h2>
+            <h2 className="text-lg font-bold text-[#0B1E36]">{subModal.editingId ? a.cats.editSub : a.cats.addSub}</h2>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{a.cats.subOf}</label>
               <input
