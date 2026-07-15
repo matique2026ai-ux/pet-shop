@@ -6,7 +6,7 @@ import { useI18n } from "@/lib/i18n-context";
 import Link from "next/link";
 import Image from "next/image";
 import AnimatedSection from "@/components/animated-section";
-import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, Truck, MessageCircle } from "lucide-react";
+import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, Truck, MessageCircle, Home, Building2, Banknote } from "lucide-react";
 import { useSiteSettings } from "@/lib/site-settings";
 import { useAuth } from "@/lib/auth-context";
 
@@ -474,16 +474,18 @@ export default function CartPage() {
                   <button
                     type="button"
                     onClick={() => setDeliveryType("home")}
-                    className={`px-4 py-3 rounded-xl border text-sm font-bold transition-all ${deliveryType === "home" ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
+                    className={`px-4 py-3 rounded-xl border text-sm font-bold transition-all flex items-center justify-center gap-2 ${deliveryType === "home" ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
                   >
-                    🏠 {lang === "ar" ? "توصيل للمنزل" : lang === "fr" ? "À domicile" : "Home Delivery"}
+                    <Home className="w-4 h-4" />
+                    {lang === "ar" ? "توصيل للمنزل" : lang === "fr" ? "À domicile" : "Home Delivery"}
                   </button>
                   <button
                     type="button"
                     onClick={() => setDeliveryType("stopdesk")}
-                    className={`px-4 py-3 rounded-xl border text-sm font-bold transition-all ${deliveryType === "stopdesk" ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
+                    className={`px-4 py-3 rounded-xl border text-sm font-bold transition-all flex items-center justify-center gap-2 ${deliveryType === "stopdesk" ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
                   >
-                    🏢 {lang === "ar" ? "مكتب ياليدين (Stop)" : lang === "fr" ? "Bureau (Stop)" : "Stop Desk"}
+                    <Building2 className="w-4 h-4" />
+                    {lang === "ar" ? "مكتب ياليدين (Stop)" : lang === "fr" ? "Bureau (Stop)" : "Stop Desk"}
                   </button>
                 </div>
               </div>
@@ -501,8 +503,9 @@ export default function CartPage() {
 
               {/* Payment info box */}
               <div className="bg-gray-50 border border-gray-150 rounded-xl p-3 text-xs space-y-1">
-                <p className="font-bold text-gray-700">
-                  💵 {lang === "ar" ? "طريقة الدفع المتاحة:" : lang === "fr" ? "Mode de paiement disponible :" : "Available payment method:"}
+                <p className="font-bold text-gray-700 flex items-center gap-1.5">
+                  <Banknote className="w-4 h-4 text-emerald-600 shrink-0" />
+                  {lang === "ar" ? "طريقة الدفع المتاحة:" : lang === "fr" ? "Mode de paiement disponible :" : "Available payment method:"}
                 </p>
                 <p className="text-gray-500 leading-relaxed">
                   {lang === "ar"

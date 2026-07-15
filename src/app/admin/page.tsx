@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import {
   Users, ShoppingBag, DollarSign, Package, TrendingUp, TrendingDown,
-  Edit, Trash2, ArrowUpRight, Calendar, Menu, X, Lock,
+  Edit, Trash2, ArrowUpRight, Calendar, Menu, X, Lock, Phone,
   LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Search, Filter, Tag, Languages, Video, Star, Check, ChevronRight,
 } from "lucide-react";
 import HeroVideoManager from "@/components/hero-video-manager";
@@ -281,8 +281,8 @@ function OrderDetailRow({
             <div>
               <p className="text-gray-400 text-xs uppercase mb-1">{a.orders.phone}</p>
               <div className="flex flex-wrap items-center gap-2">
-                <a href={`tel:${order.customer_phone}`} className="font-semibold text-emerald-750 hover:underline">
-                  📞 {order.customer_phone}
+                <a href={`tel:${order.customer_phone}`} className="font-semibold text-emerald-750 hover:underline flex items-center gap-1.5">
+                  <Phone className="w-3.5 h-3.5 text-emerald-600" /> {order.customer_phone}
                 </a>
                 <a
                   href={`https://wa.me/${order.customer_phone.replace(/[^0-9]/g, "")}`}

@@ -7,7 +7,7 @@ import { useSiteSettings } from "@/lib/site-settings";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, X, ShoppingCart, Phone, Search, Truck, ChevronRight, User, LogIn, Loader2, Cat, Dog, Bird, Fish, Rabbit, PawPrint, Stethoscope } from "lucide-react";
+import { Menu, X, ShoppingCart, Phone, Search, Truck, ChevronRight, User, LogIn, Loader2, Cat, Dog, Bird, Fish, Rabbit, PawPrint, Stethoscope, Zap } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import AuthModal from "@/components/auth-modal";
 import { LogoC4 } from "@/components/brand-logo";
@@ -115,12 +115,13 @@ export default function Navbar() {
       {/* ── Announcement Bar ── */}
       <div className="announcement-bar hidden sm:block">
         <span className="inline-flex items-center gap-2">
-          <Truck className="w-3.5 h-3.5 inline" />
+          <Zap className="w-3.5 h-3.5 fill-current" />
+          <Truck className="w-3.5 h-3.5" />
           {lang === "ar"
-            ? "🎉 توصيل سريع لسطيف خلال 24-48 ساعة — اطلب الآن!"
+            ? "توصيل سريع لسطيف خلال 24-48 ساعة — اطلب الآن!"
             : lang === "fr"
-            ? "🎉 Livraison rapide à Sétif en 24-48h — Commandez maintenant!"
-            : "🎉 Fast delivery to Sétif in 24-48h — Order now!"}
+            ? "Livraison rapide à Sétif en 24-48h — Commandez maintenant!"
+            : "Fast delivery to Sétif in 24-48h — Order now!"}
         </span>
       </div>
 
