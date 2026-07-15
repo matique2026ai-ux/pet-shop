@@ -83,13 +83,17 @@ export function useTranslatedData() {
   const { t } = useI18n();
   const [apiProducts, setApiProducts] = useState<Product[] | null>(null);
   const [apiCategories, setApiCategories] = useState<Category[] | null>(null);
+  // true = fetch completed (even if result is empty array), false = still loading
+  const [productsLoaded, setProductsLoaded] = useState(false);
 
   useEffect(() => {
     fetch("/api/products").then((r) => r.ok ? r.json() : null).then((data) => {
-      if (data && Array.isArray(data) && data.length > 0) {
+      if (data && Array.isArray(data)) {
+        // Respect the DB result even if it's empty — do NOT fall back to demo data
         setApiProducts(data.map(mapApiProduct));
       }
-    }).catch(() => {});
+      setProductsLoaded(true);
+    }).catch(() => { setProductsLoaded(true); });
     fetch("/api/categories").then((r) => r.ok ? r.json() : null).then((data) => {
       if (data && Array.isArray(data) && data.length > 0) {
         setApiCategories(data.map(mapApiCategory));
@@ -107,7 +111,12 @@ export function useTranslatedData() {
     })),
   }));
 
-  const raw = apiProducts || rawProducts;
+  // If the DB fetch is still in progress, use demo data to avoid a blank flash.
+  // Once the fetch finishes (productsLoaded=true), use the DB result (even if empty).
+  const raw = productsLoaded
+    ? (apiProducts ?? [])          // DB answered → use its result (may be [])
+    : (apiProducts ?? rawProducts); // Still loading → show demo data temporarily
+
   const products: Product[] = raw.map((p: Product) => ({
     ...p,
     name: getEntity(t, "products", p.id, "name", p.name),
@@ -133,5 +142,6 @@ export function useTranslatedData() {
     text: getEntity(t, "testimonials", rev.id, "text", rev.text),
   }));
 
-  return { categories, products, vetServices, team, testimonials };
+  return { categories, products, vetServices, team, testimonials, productsLoaded };
 }
+
