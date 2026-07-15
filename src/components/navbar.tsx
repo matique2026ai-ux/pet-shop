@@ -14,6 +14,7 @@ import AuthModal from "@/components/auth-modal";
 const langOptions = [
   { code: "ar" as const, label: "ع" },
   { code: "fr" as const, label: "FR" },
+  { code: "en" as const, label: "EN" },
 ];
 
 const catIcons: Record<string, React.ReactNode> = {
