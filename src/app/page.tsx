@@ -11,20 +11,26 @@ import AnimatedSection from "@/components/animated-section";
 import ProductCard from "@/components/product-card";
 import VetCard from "@/components/vet-card";
 import { SHIMMER_BLUR } from "@/lib/blur";
-import { ArrowRight, Star, Truck, Shield, RefreshCw, Clock, Stethoscope, ChevronLeft, ChevronRight, Heart } from "lucide-react";
+import { ArrowRight, Star, Truck, Shield, RefreshCw, Stethoscope, ChevronLeft, ChevronRight, Heart, Sparkles, Award } from "lucide-react";
 
 const categoryImages: Record<string, string> = {
-  cats: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&h=400&fit=crop",
-  dogs: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400&h=400&fit=crop",
-  birds: "https://images.unsplash.com/photo-1480044965905-02098d419e96?w=400&h=400&fit=crop",
-  fish: "https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=400&h=400&fit=crop",
-  "small-pets": "https://images.unsplash.com/photo-1535241749838-299277b6305f?w=400&h=400&fit=crop",
+  cats:        "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&h=400&fit=crop",
+  dogs:        "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400&h=400&fit=crop",
+  birds:       "https://images.unsplash.com/photo-1480044965905-02098d419e96?w=400&h=400&fit=crop",
+  fish:        "https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=400&h=400&fit=crop",
+  "small-pets":"https://images.unsplash.com/photo-1535241749838-299277b6305f?w=400&h=400&fit=crop",
 };
 
-const benefitIcons = [
-  <Truck className="w-6 h-6" />,
-  <Shield className="w-6 h-6" />,
-  <Heart className="w-6 h-6" />,
+const benefitIconComponents = [
+  <Truck    className="w-6 h-6" key="truck" />,
+  <Shield   className="w-6 h-6" key="shield" />,
+  <Heart    className="w-6 h-6" key="heart" />,
+];
+
+const benefitColors = [
+  { icon: "from-[#C4933F] to-[#DFB96A]", bg: "bg-[#FBF7EE]", border: "border-[#ECD8A6]" },
+  { icon: "from-[#F5851F] to-[#E06A0A]", bg: "bg-[#FFF7ED]", border: "border-[#FED7AA]" },
+  { icon: "from-[#C4933F] to-[#A87A2E]", bg: "bg-[#FBF7EE]", border: "border-[#ECD8A6]" },
 ];
 
 const DEFAULT_HERO_VIDEOS = [
@@ -38,86 +44,139 @@ export default function HomePage() {
   const { content } = useSiteSettings();
   const { categories, products, vetServices, testimonials } = useTranslatedData();
   const c = (k: string, fb: string) => (content && content[k] ? content[k] : fb);
-  const heroTitle = c("heroTitle", t.hero.title);
+  const heroTitle    = c("heroTitle",    t.hero.title);
   const heroSubtitle = c("heroSubtitle", t.hero.subtitle);
-  const heroCta1 = c("heroCta1", t.hero.cta1);
-  const heroCta2 = c("heroCta2", t.hero.cta2);
-  const isRtl = dir === "rtl";
-  const Arrow = isRtl ? ChevronLeft : ChevronRight;
-  const bestsellers = products.filter((p) => p.rating >= 4.6).slice(0, 8);
+  const heroCta1     = c("heroCta1",    t.hero.cta1);
+  const heroCta2     = c("heroCta2",    t.hero.cta2);
+  const isRtl        = dir === "rtl";
+  const Arrow        = isRtl ? ChevronLeft : ChevronRight;
+  const bestsellers  = products.filter((p) => p.rating >= 4.6).slice(0, 8);
   const { ids: recentIds } = useRecentlyViewed();
   const recentProducts = products.filter((p) => recentIds.includes(p.id)).slice(0, 4);
-  const [videoIdx, setVideoIdx] = useState(0);
+  const [videoIdx, setVideoIdx]     = useState(0);
   const [heroVideos, setHeroVideos] = useState<string[]>(DEFAULT_HERO_VIDEOS);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     fetch("/api/hero-videos")
       .then((r) => r.json())
-      .then((d) => {
-        if (d.videos && d.videos.length > 0) setHeroVideos(d.videos);
-      })
+      .then((d) => { if (d.videos && d.videos.length > 0) setHeroVideos(d.videos); })
       .catch(() => {});
   }, []);
 
-  const handleVideoEnd = () => {
-    const next = (videoIdx + 1) % heroVideos.length;
-    setVideoIdx(next);
-  };
+  const handleVideoEnd = () => setVideoIdx((videoIdx + 1) % heroVideos.length);
 
-  useEffect(() => {
-    videoRef.current?.load();
-  }, [videoIdx]);
+  useEffect(() => { videoRef.current?.load(); }, [videoIdx]);
 
   return (
     <>
-      <section className="relative overflow-hidden">
-        <video ref={videoRef} key={videoIdx} autoPlay muted playsInline preload="metadata" onEnded={handleVideoEnd} className="absolute inset-0 w-full h-full object-cover">
+      {/* ══════════════════════════════════
+          HERO SECTION
+      ══════════════════════════════════ */}
+      <section className="relative overflow-hidden min-h-[560px] flex items-center">
+        <video
+          ref={videoRef}
+          key={videoIdx}
+          autoPlay muted playsInline preload="metadata"
+          onEnded={handleVideoEnd}
+          className="absolute inset-0 w-full h-full object-cover"
+        >
           <source src={heroVideos[videoIdx]} type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-          <div className="text-center">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 animate-shimmer drop-shadow-md">
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
+        {/* Gold shimmer overlay at bottom */}
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#C4933F]/20 to-transparent" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-36 w-full">
+          <div className="text-center max-w-3xl mx-auto">
+            {/* Premium badge */}
+            <div className="inline-flex items-center gap-2 bg-[#C4933F]/20 backdrop-blur-sm border border-[#C4933F]/40 text-[#DFB96A] rounded-full px-4 py-1.5 text-sm font-medium mb-6">
+              <Sparkles className="w-4 h-4" />
+              {dir === "rtl" ? "متجر الحيوانات الأليفة الأول في سطيف" : "Premier Pet Shop in Sétif"}
+            </div>
+
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-5 animate-shimmer drop-shadow-lg">
               {heroTitle}
             </h1>
-            <p className="text-lg text-emerald-50 font-medium mb-8 max-w-xl mx-auto drop-shadow">
+            <p className="text-lg text-white/85 font-medium mb-8 max-w-xl mx-auto drop-shadow">
               {heroSubtitle}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link href="/products" className="inline-flex items-center gap-2 bg-emerald-500 text-white px-8 py-3.5 rounded-xl font-bold text-lg hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-600/30">
+              <Link
+                href="/products"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#F5851F] to-[#E06A0A] text-white px-8 py-3.5 rounded-full font-bold text-base hover:opacity-90 transition-all shadow-lg shadow-[#F5851F]/40 hover:-translate-y-0.5"
+              >
                 {heroCta1}
                 <Arrow className="w-5 h-5" />
               </Link>
-              <Link href="/vet" className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-8 py-3.5 rounded-xl font-bold text-lg hover:bg-white/20 transition-all border-2 border-white/30">
+              <Link
+                href="/vet"
+                className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-8 py-3.5 rounded-full font-bold text-base hover:bg-white/20 transition-all border-2 border-white/30"
+              >
                 <Stethoscope className="w-5 h-5" />
                 {heroCta2}
               </Link>
+            </div>
+
+            {/* Trust badges */}
+            <div className="flex items-center justify-center gap-6 mt-10 flex-wrap">
+              {[
+                { icon: <Truck className="w-4 h-4" />, label: dir === "rtl" ? "توصيل سريع" : "Fast Delivery" },
+                { icon: <Award className="w-4 h-4" />, label: dir === "rtl" ? "جودة مضمونة" : "Quality Guaranteed" },
+                { icon: <Shield className="w-4 h-4" />, label: dir === "rtl" ? "دفع آمن" : "Secure Payment" },
+              ].map((b, i) => (
+                <div key={i} className="flex items-center gap-1.5 text-white/75 text-xs font-medium">
+                  <span className="text-[#DFB96A]">{b.icon}</span>
+                  {b.label}
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-10 bg-white border-t border-gray-100">
+      {/* ══════════════════════════════════
+          TAGLINE BAR
+      ══════════════════════════════════ */}
+      <section className="py-8 bg-white border-b border-[#F0EDE6]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
-            <div className="text-center mb-2">
-              <p className="text-lg text-emerald-600 font-medium">{t.home.tagline}</p>
-              <p className="text-gray-500 text-sm mt-1">{t.home.taglineSub}</p>
+            <div className="text-center">
+              <p className="text-lg font-semibold text-[#C4933F]">{t.home.tagline}</p>
+              <p className="text-[#9E9282] text-sm mt-1">{t.home.taglineSub}</p>
             </div>
           </AnimatedSection>
         </div>
       </section>
 
-      <section className="pb-12 bg-white">
+      {/* ══════════════════════════════════
+          CATEGORIES GRID
+      ══════════════════════════════════ */}
+      <section className="py-12 bg-[#F8F7F4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-[#1A1A2E]">{t.nav.categories}</h2>
+              <div className="mt-2 mx-auto w-16 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A]" />
+            </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {categories.map((cat) => (
-                <Link key={cat.id} href={`/products/${cat.id}`} className="group relative block rounded-2xl overflow-hidden aspect-[4/5] shadow-md hover:shadow-xl transition-all">
-                  <Image src={categoryImages[cat.id] || categoryImages.cats} alt={cat.name} fill placeholder="blur" blurDataURL={SHIMMER_BLUR} sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw" className="object-cover group-hover:scale-110 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                <Link
+                  key={cat.id}
+                  href={`/products/${cat.id}`}
+                  className="group relative block rounded-2xl overflow-hidden aspect-[4/5] shadow-md hover:shadow-xl transition-all"
+                >
+                  <Image
+                    src={categoryImages[cat.id] || categoryImages.cats}
+                    alt={cat.name}
+                    fill
+                    placeholder="blur"
+                    blurDataURL={SHIMMER_BLUR}
+                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent group-hover:from-[#C4933F]/80 transition-all duration-400" />
                   <div className="absolute bottom-0 inset-x-0 p-4 text-center">
                     <span className="text-white font-bold text-sm lg:text-base leading-tight block drop-shadow-lg">
                       {cat.name}
@@ -130,16 +189,24 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-12">
+      {/* ══════════════════════════════════
+          BESTSELLERS
+      ══════════════════════════════════ */}
+      <section className="py-14 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between gap-2 mb-8 flex-wrap">
-              <h2 className="text-2xl font-bold text-gray-900 min-w-0">{t.home.bestsellers}</h2>
-              <Link href="/products" className="flex items-center gap-1 text-emerald-600 font-medium text-sm hover:text-emerald-700 shrink-0">
-                {t.home.viewAll} <Arrow className="w-4 h-4" />
-              </Link>
+          <div className="flex items-center justify-between gap-2 mb-8 flex-wrap">
+            <div>
+              <h2 className="text-2xl font-bold text-[#1A1A2E]">{t.home.bestsellers}</h2>
+              <div className="mt-1.5 w-14 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A]" />
             </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 gap-y-8">
+            <Link
+              href="/products"
+              className="flex items-center gap-1 text-[#C4933F] font-semibold text-sm hover:text-[#A87A2E] shrink-0 transition-colors"
+            >
+              {t.home.viewAll} <Arrow className="w-4 h-4" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 gap-y-7">
             {bestsellers.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
@@ -147,13 +214,19 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ══════════════════════════════════
+          RECENTLY VIEWED
+      ══════════════════════════════════ */}
       {recentProducts.length > 0 && (
-        <section className="py-12 bg-white">
+        <section className="py-12 bg-[#F8F7F4]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-gray-900">{t.products.recentlyViewed}</h2>
+              <div>
+                <h2 className="text-2xl font-bold text-[#1A1A2E]">{t.products.recentlyViewed}</h2>
+                <div className="mt-1.5 w-14 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A]" />
+              </div>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 gap-y-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 gap-y-7">
               {recentProducts.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
@@ -162,18 +235,24 @@ export default function HomePage() {
         </section>
       )}
 
-      <section className="py-12 bg-white">
+      {/* ══════════════════════════════════
+          BENEFITS
+      ══════════════════════════════════ */}
+      <section className="py-14 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
-            <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">{t.home.benefitsTitle}</h2>
+            <div className="text-center mb-10">
+              <h2 className="text-2xl font-bold text-[#1A1A2E]">{t.home.benefitsTitle}</h2>
+              <div className="mt-2 mx-auto w-16 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A]" />
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {t.home.benefits.map((b: { title: string; text: string }, i: number) => (
-                <div key={i} className="bg-emerald-50 rounded-2xl p-6 text-center border border-emerald-100">
-                  <div className="w-14 h-14 bg-emerald-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-4">
-                    {benefitIcons[i]}
+                <div key={i} className={`${benefitColors[i].bg} rounded-2xl p-7 text-center border ${benefitColors[i].border} hover:shadow-lg hover:-translate-y-1 transition-all duration-300`}>
+                  <div className={`w-14 h-14 bg-gradient-to-br ${benefitColors[i].icon} rounded-2xl flex items-center justify-center text-white mx-auto mb-4 shadow-md`}>
+                    {benefitIconComponents[i]}
                   </div>
-                  <h3 className="font-bold text-gray-900 mb-1">{b.title}</h3>
-                  <p className="text-sm text-gray-500">{b.text}</p>
+                  <h3 className="font-bold text-[#1A1A2E] mb-2 text-lg">{b.title}</h3>
+                  <p className="text-sm text-[#7A6F61] leading-relaxed">{b.text}</p>
                 </div>
               ))}
             </div>
@@ -181,23 +260,31 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-12 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-emerald-50/30 to-white pointer-events-none" />
+      {/* ══════════════════════════════════
+          VET SERVICES
+      ══════════════════════════════════ */}
+      <section className="py-14 bg-[#F8F7F4] relative overflow-hidden">
+        <div className="absolute inset-0 opacity-5 pointer-events-none"
+          style={{ backgroundImage: "radial-gradient(circle at 20% 50%, #C4933F 1px, transparent 1px), radial-gradient(circle at 80% 50%, #C4933F 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <AnimatedSection>
             <div className="text-center mb-10">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full text-sm text-emerald-700 border border-emerald-200/50 shadow-sm mb-3">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full text-sm text-[#C4933F] border border-[#ECD8A6] shadow-sm mb-3">
                 <Stethoscope className="w-4 h-4" /> {t.vet.subtitle}
               </span>
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">{t.vet.servicesTitle}</h2>
+              <h2 className="text-3xl lg:text-4xl font-bold text-[#1A1A2E]">{t.vet.servicesTitle}</h2>
+              <div className="mt-3 mx-auto w-20 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A]" />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {vetServices.slice(0, 4).map((s) => (
                 <VetCard key={s.id} service={s} />
               ))}
             </div>
-            <div className="text-center mt-8">
-              <Link href="/vet" className="inline-flex items-center gap-2 bg-emerald-600 text-white px-7 py-3 rounded-2xl font-bold text-sm hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20 hover:shadow-xl hover:shadow-emerald-600/30 hover:-translate-y-0.5">
+            <div className="text-center mt-10">
+              <Link
+                href="/vet"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#C4933F] to-[#A87A2E] text-white px-8 py-3.5 rounded-full font-bold text-sm hover:opacity-90 transition-all shadow-lg shadow-[#C4933F]/30 hover:-translate-y-0.5"
+              >
                 {t.vet.bookNow}
                 <Arrow className="w-4 h-4" />
               </Link>
@@ -206,26 +293,30 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-12 bg-white">
+      {/* ══════════════════════════════════
+          TESTIMONIALS
+      ══════════════════════════════════ */}
+      <section className="py-14 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">{t.vet.testimonialsTitle}</h2>
+            <div className="text-center mb-10">
+              <h2 className="text-2xl font-bold text-[#1A1A2E] mb-2">{t.vet.testimonialsTitle}</h2>
+              <div className="mt-1.5 mx-auto w-16 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A]" />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
               {testimonials.map((rev) => (
-                <div key={rev.id} className="bg-gray-50 rounded-2xl p-6">
-                  <div className="flex items-center gap-1 mb-3">
+                <div key={rev.id} className="bg-[#FBF7EE] rounded-2xl p-6 border border-[#ECD8A6] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+                  <div className="flex items-center gap-0.5 mb-3">
                     {Array.from({ length: rev.rating }).map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-emerald-500 text-emerald-500" />
+                      <Star key={i} className="w-4 h-4 fill-[#F5A623] text-[#F5A623]" />
                     ))}
                   </div>
-                  <p className="text-sm text-gray-600 mb-4 leading-relaxed">&ldquo;{rev.text}&rdquo;</p>
+                  <p className="text-sm text-[#5C5348] mb-4 leading-relaxed">&ldquo;{rev.text}&rdquo;</p>
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-emerald-200 rounded-full flex items-center justify-center text-xs font-bold text-emerald-700">
+                    <div className="w-9 h-9 bg-gradient-to-br from-[#DFB96A] to-[#C4933F] rounded-full flex items-center justify-center text-xs font-bold text-white shadow-sm">
                       {rev.initials}
                     </div>
-                    <span className="text-sm font-medium text-gray-900">{rev.name}</span>
+                    <span className="text-sm font-semibold text-[#1A1A2E]">{rev.name}</span>
                   </div>
                 </div>
               ))}
@@ -234,21 +325,34 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-12 bg-gray-900 text-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ══════════════════════════════════
+          CTA SECTION
+      ══════════════════════════════════ */}
+      <section className="py-16 bg-gradient-to-br from-[#1A1A2E] via-[#2D2B45] to-[#1A1A2E] text-center relative overflow-hidden">
+        {/* Gold glow accents */}
+        <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#C4933F] rounded-full opacity-5 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-[#F5851F] rounded-full opacity-5 blur-3xl pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <AnimatedSection>
-            <h2 className="text-3xl font-bold text-white mb-4">
-              {t.home.ctaTitle}
-            </h2>
-            <p className="text-gray-400 mb-8 max-w-lg mx-auto">
-              {t.home.ctaText}
-            </p>
+            <div className="inline-flex items-center gap-2 bg-[#C4933F]/15 border border-[#C4933F]/30 text-[#DFB96A] rounded-full px-4 py-1.5 text-sm font-medium mb-6">
+              <Sparkles className="w-4 h-4" />
+              {dir === "rtl" ? "عروض حصرية" : "Exclusive Offers"}
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-4">{t.home.ctaTitle}</h2>
+            <p className="text-[#C8BFA8] mb-8 max-w-lg mx-auto">{t.home.ctaText}</p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link href="/products" className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-emerald-700 transition-colors">
+              <Link
+                href="/products"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#F5851F] to-[#E06A0A] text-white px-7 py-3.5 rounded-full font-bold hover:opacity-90 transition-all shadow-lg shadow-[#F5851F]/30 hover:-translate-y-0.5"
+              >
                 {heroCta1}
                 <Arrow className="w-4 h-4" />
               </Link>
-              <Link href="/contact" className="inline-flex items-center gap-2 bg-gray-800 text-white px-6 py-3 rounded-xl font-bold hover:bg-gray-700 transition-colors border border-gray-700">
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-7 py-3.5 rounded-full font-bold hover:bg-white/15 transition-all border border-white/20"
+              >
                 {t.nav.contact}
               </Link>
             </div>

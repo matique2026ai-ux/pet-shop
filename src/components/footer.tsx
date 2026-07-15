@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Heart, Mail, CheckCircle, Truck } from "lucide-react";
+import { Heart, Mail, CheckCircle, Truck, PawPrint } from "lucide-react";
 import { useI18n } from "@/lib/i18n-context";
 import { useSiteSettings } from "@/lib/site-settings";
 
@@ -45,7 +45,7 @@ export default function Footer() {
 
   const { t, lang } = useI18n();
   const { store, content, delivery } = useSiteSettings();
-  const [email, setEmail] = useState("");
+  const [email, setEmail]         = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
   const handleSubscribe = (e: React.FormEvent) => {
@@ -55,103 +55,160 @@ export default function Footer() {
 
   const s = (k: string, fallback: string) => (store && store[k] ? store[k] : fallback);
   const addressLines = (s("address", t.contact.addressText || "Larbi Ben M'hidi Street\nSétif 19000, Algeria")).split("\n");
-  const phone = s("phone", t.contact.phoneText || "+213 661 234 567");
+  const phone        = s("phone",    t.contact.phoneText    || "+213 661 234 567");
   const deliveryPrefix = lang === "ar" ? "توصيل" : lang === "fr" ? "Livraison" : "Delivery";
   const coverage = delivery
     ? `${deliveryPrefix} ${delivery.city} • ${delivery.eta}`
     : `${deliveryPrefix} Sétif • 24-48h`;
-  const emailAddr = s("email", t.contact.emailText || "hello@pawsandwings.com");
-  const whatsapp = s("whatsapp", "+1234567890");
-  const instagram = s("instagram", "https://instagram.com");
-  const facebook = s("facebook", "https://facebook.com");
-  const tiktok = store && store.tiktok ? store.tiktok : "";
+  const emailAddr  = s("email",     t.contact.emailText || "hello@pawsandwings.com");
+  const whatsapp   = s("whatsapp",  "+1234567890");
+  const instagram  = s("instagram", "https://instagram.com");
+  const facebook   = s("facebook",  "https://facebook.com");
+  const tiktok     = store && store.tiktok ? store.tiktok : "";
+
+  const storeName = lang === "ar" ? "طيور الجمال والجواد" : "Paws & Wings";
 
   return (
-    <footer className="bg-[#0F172A] text-slate-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <footer className="bg-gradient-to-b from-[#1A1A2E] to-[#0D0D1A] text-slate-300">
+      {/* Gold divider line */}
+      <div className="h-px bg-gradient-to-r from-transparent via-[#C4933F] to-transparent opacity-60" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+
+          {/* Brand column */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <span className="w-8 h-8 bg-[#1E3A8A] rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">PW</span>
+            <div className="flex items-center gap-2.5 mb-4">
+              <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#DFB96A] to-[#C4933F] flex items-center justify-center shadow-md">
+                <PawPrint className="w-5 h-5 text-white" />
               </span>
-              <span className="font-bold text-white">Paws & Wings</span>
+              <span className="font-bold text-white text-base">{storeName}</span>
             </div>
-            <p className="text-sm text-slate-400 leading-relaxed">
-              {t.footer.madeWith} <Heart className="w-3 h-3 inline text-[#F97316] fill-[#F97316]" />
+            <p className="text-sm text-slate-400 leading-relaxed mb-4">
+              {t.footer.madeWith} <Heart className="w-3 h-3 inline text-[#F5851F] fill-[#F5851F]" />
             </p>
+            {/* Delivery badge */}
+            <div className="inline-flex items-center gap-2 text-xs text-[#DFB96A] bg-[#C4933F]/10 border border-[#C4933F]/20 rounded-full px-3 py-1.5">
+              <Truck className="w-3.5 h-3.5 shrink-0" />
+              <span>{coverage}</span>
+            </div>
           </div>
 
+          {/* Quick links */}
           <div>
-            <h3 className="font-semibold text-white mb-4">{t.footer.quickLinks}</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="font-semibold text-white mb-5 text-sm uppercase tracking-wider">
+              {t.footer.quickLinks}
+            </h3>
+            <ul className="space-y-2.5 text-sm">
               {[
                 { href: "/products", label: t.nav.products },
-                { href: "/vet", label: t.nav.vet },
-                { href: "/faq", label: t.nav.faq },
+                { href: "/vet",      label: t.nav.vet },
+                { href: "/faq",      label: t.nav.faq },
                 { href: "/shipping", label: t.nav.shipping },
-                { href: "/about", label: t.nav.about },
-                { href: "/contact", label: t.nav.contact },
+                { href: "/about",    label: t.nav.about },
+                { href: "/contact",  label: t.nav.contact },
               ].map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="hover:text-[#1E3A8A] transition-colors">{l.label}</Link>
+                  <Link
+                    href={l.href}
+                    className="text-slate-400 hover:text-[#DFB96A] transition-colors flex items-center gap-1.5 group"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-[#C4933F] opacity-0 group-hover:opacity-100 transition-opacity" />
+                    {l.label}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
+          {/* Contact info */}
           <div>
-            <h3 className="font-semibold text-white mb-4">{t.footer.contactInfo}</h3>
-            <ul className="space-y-2 text-sm text-slate-400">
+            <h3 className="font-semibold text-white mb-5 text-sm uppercase tracking-wider">
+              {t.footer.contactInfo}
+            </h3>
+            <ul className="space-y-2.5 text-sm text-slate-400">
               {addressLines.map((line, i) => (
                 <li key={i}>{line}</li>
               ))}
-              <li><a href={`tel:${phone}`} className="hover:text-[#1E3A8A] transition-colors">{phone}</a></li>
-              <li><a href={`mailto:${emailAddr}`} className="hover:text-[#1E3A8A] transition-colors">{emailAddr}</a></li>
+              <li>
+                <a href={`tel:${phone}`} className="hover:text-[#DFB96A] transition-colors">
+                  {phone}
+                </a>
+              </li>
+              <li>
+                <a href={`mailto:${emailAddr}`} className="hover:text-[#DFB96A] transition-colors">
+                  {emailAddr}
+                </a>
+              </li>
             </ul>
-            <div className="mt-3 inline-flex items-center gap-2 text-sm text-[#1E40AF] bg-[#F8FAFC] border border-[#E2E8F0] rounded-full px-3 py-1.5">
-              <Truck className="w-4 h-4 shrink-0" />
-              <span>{coverage}</span>
-            </div>
           </div>
 
+          {/* Newsletter + Social */}
           <div>
-            <h3 className="font-semibold text-white mb-4">{t.footer.newsletter}</h3>
+            <h3 className="font-semibold text-white mb-5 text-sm uppercase tracking-wider">
+              {t.footer.newsletter}
+            </h3>
             {subscribed ? (
-              <div className="flex items-center gap-2 text-[#1E3A8A] text-sm">
+              <div className="flex items-center gap-2 text-[#DFB96A] text-sm">
                 <CheckCircle className="w-4 h-4" />
                 <span>{t.footer.subscribed}</span>
               </div>
             ) : (
-              <form onSubmit={handleSubscribe} className="flex gap-2">
+              <form onSubmit={handleSubscribe} className="flex gap-2 mb-5">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t.footer.emailPlaceholder}
                   required
-                  className="flex-1 px-3 py-2 rounded-lg bg-slate-800 text-white text-sm placeholder-slate-500 border border-slate-700 focus:outline-none focus:border-[#1E3A8A]"
+                  className="flex-1 px-3 py-2 rounded-lg bg-white/5 text-white text-sm placeholder-slate-500 border border-white/10 focus:outline-none focus:border-[#C4933F] transition-colors"
                 />
                 <button
                   type="submit"
-                  className="px-3 py-2 bg-[#1E3A8A] text-white rounded-lg hover:bg-[#1E40AF] transition-colors"
+                  className="px-3 py-2 bg-gradient-to-r from-[#C4933F] to-[#A87A2E] text-white rounded-lg hover:opacity-90 transition-opacity"
                 >
                   <Mail className="w-4 h-4" />
                 </button>
               </form>
             )}
-            <div className="flex gap-3 mt-4">
-              <a href={instagram} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-[#E4405F] transition-colors" aria-label="Instagram">
+
+            {/* Social icons */}
+            <div className="flex gap-2.5 mt-4">
+              <a
+                href={instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center hover:bg-[#E4405F] hover:border-transparent transition-all"
+                aria-label="Instagram"
+              >
                 <InstagramIcon className="w-4 h-4" />
               </a>
-              <a href={facebook} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-[#1877F2] transition-colors" aria-label="Facebook">
+              <a
+                href={facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center hover:bg-[#1877F2] hover:border-transparent transition-all"
+                aria-label="Facebook"
+              >
                 <FacebookIcon className="w-4 h-4" />
               </a>
-              <a href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, "")}`} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-[#25D366] transition-colors" aria-label="WhatsApp">
+              <a
+                href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center hover:bg-[#25D366] hover:border-transparent transition-all"
+                aria-label="WhatsApp"
+              >
                 <WhatsappIcon className="w-4 h-4" />
               </a>
               {tiktok && (
-                <a href={tiktok} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center hover:bg-black transition-colors" aria-label="TikTok">
+                <a
+                  href={tiktok}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center hover:bg-black hover:border-transparent transition-all"
+                  aria-label="TikTok"
+                >
                   <TiktokIcon className="w-4 h-4" />
                 </a>
               )}
@@ -159,12 +216,17 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-slate-800 mt-8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-slate-400">
-          <span>{content && content.footerText ? content.footerText : `© ${new Date().getFullYear()} Paws & Wings. ${t.footer.rights}`}</span>
+        {/* Bottom bar */}
+        <div className="border-t border-white/5 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+          <span>
+            {content && content.footerText
+              ? content.footerText
+              : `© ${new Date().getFullYear()} ${storeName}. ${t.footer.rights}`}
+          </span>
           <button
             type="button"
             onClick={() => window.dispatchEvent(new Event("open-cookie-settings"))}
-            className="hover:text-[#1E3A8A] transition-colors"
+            className="hover:text-[#DFB96A] transition-colors"
           >
             {t.cookies.settings}
           </button>

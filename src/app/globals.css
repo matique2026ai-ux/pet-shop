@@ -7,46 +7,46 @@
 
   --color-white: #ffffff;
 
-  /* Neutral scale remapped to Slate: bg-gray-50 = #F8FAFC, text-gray-800 = #1E293B */
-  --color-gray-50: #F8FAFC;
-  --color-gray-100: #F1F5F9;
-  --color-gray-200: #E2E8F0;
-  --color-gray-300: #CBD5E1;
-  --color-gray-400: #94A3B8;
-  --color-gray-500: #64748B;
-  --color-gray-600: #475569;
-  --color-gray-700: #334155;
-  --color-gray-800: #1E293B;
-  --color-gray-900: #0F172A;
+  /* Neutral scale */
+  --color-gray-50: #F8F7F4;
+  --color-gray-100: #F0EDE6;
+  --color-gray-200: #E2DDD4;
+  --color-gray-300: #C8BFA8;
+  --color-gray-400: #9E9282;
+  --color-gray-500: #7A6F61;
+  --color-gray-600: #5C5348;
+  --color-gray-700: #3D3730;
+  --color-gray-800: #1A1A2E;
+  --color-gray-900: #0D0D1A;
 
-  /* Legacy emerald utilities -> royal blue (primary) */
-  --color-emerald-50: #EFF6FF;
-  --color-emerald-100: #DBEAFE;
-  --color-emerald-200: #BFDBFE;
-  --color-emerald-300: #93C5FD;
-  --color-emerald-400: #60A5FA;
-  --color-emerald-500: #3B82F6;
-  --color-emerald-600: #2563EB;
-  --color-emerald-700: #1D4ED8;
-  --color-emerald-800: #1E40AF;
-  --color-emerald-900: #1E3A8A;
-  --color-emerald-950: #172554;
+  /* Gold/Copper primary palette */
+  --color-emerald-50:  #FBF7EE;
+  --color-emerald-100: #F5EDD6;
+  --color-emerald-200: #ECD8A6;
+  --color-emerald-300: #DFB96A;
+  --color-emerald-400: #D4A042;
+  --color-emerald-500: #C4933F;
+  --color-emerald-600: #A87A2E;
+  --color-emerald-700: #8A6022;
+  --color-emerald-800: #6B4A18;
+  --color-emerald-900: #4A3210;
+  --color-emerald-950: #2A1C08;
 
-  /* Legacy amber utilities -> warm orange (accent) */
-  --color-amber-50: #FFF7ED;
+  /* Orange accent (CTA) */
+  --color-amber-50:  #FFF7ED;
   --color-amber-100: #FFEDD5;
   --color-amber-200: #FED7AA;
   --color-amber-300: #FDBA74;
   --color-amber-400: #FB923C;
-  --color-amber-500: #F97316;
-  --color-amber-600: #EA580C;
-  --color-amber-700: #C2410C;
+  --color-amber-500: #F5851F;
+  --color-amber-600: #E06A0A;
+  --color-amber-700: #C2540A;
 
-  --color-coral: #F97316;
-  --color-coral-600: #EA580C;
+  --color-coral:     #F5851F;
+  --color-coral-600: #E06A0A;
 
-  --color-card: #FFFFFF;
-  --color-surface: #F8FAFC;
+  --color-card:    #FFFFFF;
+  --color-surface: #F8F7F4;
 }
 
 html {
@@ -57,30 +57,49 @@ html {
   font-family: var(--font-tajawal), sans-serif;
 }
 
+/* ===== Gold shimmer for hero title ===== */
+@keyframes goldShimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    #FFFFFF 0%,
+    #F5EDD6 20%,
+    #DFB96A 40%,
+    #FFFFFF 55%,
+    #DFB96A 70%,
+    #F5EDD6 85%,
+    #FFFFFF 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: goldShimmer 4s ease-in-out infinite;
+}
+
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fadeInUp {
   animation: fadeInUp 0.6s ease-out;
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+/* ===== Gold pulse for logo ===== */
+@keyframes goldPulse {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(196, 147, 63, 0.4)); }
+  50%       { filter: drop-shadow(0 0 10px rgba(196, 147, 63, 0.7)); }
+}
+.logo-gold-pulse {
+  animation: goldPulse 3s ease-in-out infinite;
 }
 
-.animate-shimmer {
-  background: linear-gradient(90deg, #F8FAFC 0%, #F97316 25%, #F8FAFC 50%, #F97316 75%, #F8FAFC 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shimmer 3s ease-in-out infinite;
-}
-
-/* ===== Micro-interactions: snappy, tactile feedback ===== */
+/* ===== Micro-interactions ===== */
 nav button,
 nav a {
   transition: transform 0.15s ease, background-color 0.15s ease, color 0.15s ease;
@@ -91,50 +110,83 @@ nav a:active {
   transform: scale(0.94);
 }
 
+/* ===== Add to Cart — filled orange ===== */
 .add-cart-btn {
-  background-color: #F97316;
+  background: linear-gradient(135deg, #F5851F 0%, #E06A0A 100%);
   color: #ffffff;
-  box-shadow: 0 6px 18px rgba(249, 115, 22, 0.25);
-  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 4px 14px rgba(245, 133, 31, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  border-radius: 9999px;
 }
 .add-cart-btn:hover {
-  background-color: #EA580C;
-  box-shadow: 0 8px 22px rgba(234, 88, 12, 0.32);
+  background: linear-gradient(135deg, #E06A0A 0%, #C2540A 100%);
+  box-shadow: 0 6px 20px rgba(224, 106, 10, 0.45);
+  transform: translateY(-1px);
 }
 .add-cart-btn:active {
-  transform: scale(0.94);
+  transform: scale(0.95) translateY(0);
 }
 
+/* ===== CTA button ===== */
 .cta-btn {
-  background-color: #F97316;
+  background: linear-gradient(135deg, #F5851F 0%, #E06A0A 100%);
   color: #ffffff;
-  box-shadow: 0 6px 18px rgba(249, 115, 22, 0.25);
-  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.15s ease;
+  box-shadow: 0 6px 18px rgba(245, 133, 31, 0.30);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.15s ease;
 }
 .cta-btn:hover {
-  background-color: #EA580C;
-  box-shadow: 0 8px 22px rgba(234, 88, 12, 0.32);
+  background: linear-gradient(135deg, #E06A0A 0%, #C2540A 100%);
+  box-shadow: 0 8px 24px rgba(224, 106, 10, 0.40);
+  transform: translateY(-2px);
 }
 .cta-btn:active {
   transform: scale(0.97);
 }
 
+/* ===== Gold outline pill (secondary add-to-cart) ===== */
 .add-cart-pill {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  border: 1px solid #F97316;
-  color: #F97316;
+  border: 1.5px solid #C4933F;
+  color: #C4933F;
   background-color: transparent;
   transition: transform 0.15s ease, background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 .add-cart-pill:hover {
-  background-color: #F97316;
+  background-color: #C4933F;
   color: #ffffff;
-  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.22);
+  box-shadow: 0 4px 14px rgba(196, 147, 63, 0.30);
 }
 .add-cart-pill:active {
   transform: scale(0.94);
+}
+
+/* ===== Product card hover lift ===== */
+.product-card-hover {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+.product-card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(196, 147, 63, 0.15), 0 8px 16px rgba(0,0,0,0.08);
+}
+
+/* ===== Gold gradient text helper ===== */
+.gold-text {
+  background: linear-gradient(135deg, #C4933F 0%, #DFB96A 50%, #C4933F 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===== Announcement bar ===== */
+.announcement-bar {
+  background: linear-gradient(90deg, #1A1A2E 0%, #2D2B45 50%, #1A1A2E 100%);
+  color: #DFB96A;
+  font-size: 0.8rem;
+  padding: 6px 16px;
+  text-align: center;
+  letter-spacing: 0.04em;
 }
 
 button,
@@ -144,39 +196,38 @@ a {
 
 /* ===== Shipping page animations ===== */
 @keyframes shipTruck {
-  0% { left: 6%; transform: translateY(0) scaleX(1); }
-  48% { transform: translateY(-10px) scaleX(1); }
-  52% { transform: translateY(-10px) scaleX(-1); }
+  0%   { left: 6%;  transform: translateY(0) scaleX(1); }
+  48%  { transform: translateY(-10px) scaleX(1); }
+  52%  { transform: translateY(-10px) scaleX(-1); }
   100% { left: 88%; transform: translateY(0) scaleX(-1); }
 }
 @keyframes shipTruckRTL {
-  0% { right: 6%; transform: translateY(0) scaleX(1); }
-  48% { transform: translateY(-10px) scaleX(1); }
-  52% { transform: translateY(-10px) scaleX(-1); }
+  0%   { right: 6%;  transform: translateY(0) scaleX(1); }
+  48%  { transform: translateY(-10px) scaleX(1); }
+  52%  { transform: translateY(-10px) scaleX(-1); }
   100% { right: 88%; transform: translateY(0) scaleX(-1); }
 }
 @keyframes shipPin {
   0%, 100% { transform: translateY(0); opacity: 1; }
-  50% { transform: translateY(-6px); opacity: 0.7; }
+  50%       { transform: translateY(-6px); opacity: 0.7; }
 }
 @keyframes shipDash {
   from { stroke-dashoffset: 240; }
-  to { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: 0; }
 }
 @keyframes shipFloat {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  50%       { transform: translateY(-8px); }
 }
 @keyframes shipScaleIn {
   from { opacity: 0; transform: scale(0.92); }
-  to { opacity: 1; transform: scale(1); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
-.ship-truck { animation: shipTruck 6s ease-in-out infinite; }
+.ship-truck    { animation: shipTruck    6s ease-in-out infinite; }
 [dir="rtl"] .ship-truck { animation: shipTruckRTL 6s ease-in-out infinite; }
-.ship-pin { animation: shipPin 2.4s ease-in-out infinite; }
-.ship-pin-2 { animation: shipPin 2.4s ease-in-out infinite 0.6s; }
-.ship-dash { stroke-dasharray: 6 8; animation: shipDash 3s linear infinite; }
-.ship-float { animation: shipFloat 5s ease-in-out infinite; }
-.ship-scale-in { animation: shipScaleIn 0.6s ease-out both; }
-
+.ship-pin      { animation: shipPin      2.4s ease-in-out infinite; }
+.ship-pin-2    { animation: shipPin      2.4s ease-in-out infinite 0.6s; }
+.ship-dash     { stroke-dasharray: 6 8; animation: shipDash 3s linear infinite; }
+.ship-float    { animation: shipFloat    5s ease-in-out infinite; }
+.ship-scale-in { animation: shipScaleIn  0.6s ease-out both; }
