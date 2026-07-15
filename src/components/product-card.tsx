@@ -30,6 +30,63 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
+/* ─── Card Background Footprints ─── */
+function CardFootprintDecor({ category }: { category: string }) {
+  if (category === "cats") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className="absolute -bottom-2 -right-2 w-16 h-16 text-[#C4933F]/12 pointer-events-none transform rotate-12 select-none z-0"
+        aria-hidden="true"
+      >
+        <path d="M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3zm-4.5-3c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm9 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6.5-3.5C9.17 7.5 8.5 8.17 8.5 9s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm4 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z" />
+      </svg>
+    );
+  }
+  if (category === "birds") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        fill="none"
+        className="absolute -bottom-2 -right-2 w-16 h-16 text-[#C4933F]/15 pointer-events-none transform rotate-45 select-none z-0"
+        aria-hidden="true"
+      >
+        <line x1="12" y1="4" x2="12" y2="20" />
+        <line x1="12" y1="12" x2="6" y2="8" />
+        <line x1="12" y1="12" x2="18" y2="8" />
+        <line x1="12" y1="16" x2="8" y2="19" />
+        <line x1="12" y1="16" x2="16" y2="19" />
+      </svg>
+    );
+  }
+  if (category === "dogs") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className="absolute -bottom-2 -right-2 w-20 h-20 text-[#C4933F]/10 pointer-events-none transform -rotate-12 select-none z-0"
+        aria-hidden="true"
+      >
+        <path d="M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3zm-4.5-3c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm9 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6.5-3.5C9.17 7.5 8.5 8.17 8.5 9s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm4 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z" />
+      </svg>
+    );
+  }
+  // Hoof footprint for horse or generic categories
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="absolute -bottom-2 -right-2 w-14 h-14 text-[#C4933F]/10 pointer-events-none transform rotate-12 select-none z-0"
+      aria-hidden="true"
+    >
+      <path d="M12 3C8.5 3 5 6.5 5 11c0 4.5 3.5 7.5 5.5 8.5C11 19.8 11.5 20 12 20s1-.2 1.5-.5c2-1 5.5-4 5.5-8.5 0-4.5-3.5-8-7-8zm-2 14c-1.5-1-3.5-3-3.5-6 0-3 2-5 3.5-5 .5 0 1 .5 1 1 0 1.5-1 3-1 5 0 1 .5 2 1 2.5-.5.5-1 1.5-1 2.5zm4.5-2.5c.5-.5 1-1.5 1-2.5 0-2-1-3.5-1-5 0-.5.5-1 1-1 1.5 0 3.5 2 3.5 5 0 3-2 5-3.5 6 0-1-.5-2-1-2.5z" />
+    </svg>
+  );
+}
+
 export default function ProductCard({ product, variant = "default" }: ProductCardProps) {
   const isRelated = variant === "related";
   const { addItem } = useCart();
@@ -82,16 +139,18 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
           </div>
 
           {/* Content */}
-          <div className={`${isRelated ? "p-3" : "p-4"} relative`}>
+          <div className={`${isRelated ? "p-3" : "p-4"} relative overflow-hidden`}>
+            {/* Background Footprint Decoration */}
+            <CardFootprintDecor category={product.category} />
 
             {/* Product name */}
-            <h3 className={`font-bold text-[#1A1A2E] ${isRelated ? "text-sm" : "text-sm lg:text-base"} leading-tight mb-2 line-clamp-2 group-hover:text-[#C4933F] transition-colors duration-200`}>
+            <h3 className={`relative z-10 font-bold text-[#1A1A2E] ${isRelated ? "text-sm" : "text-sm lg:text-base"} leading-tight mb-2 line-clamp-2 group-hover:text-[#C4933F] transition-colors duration-200`}>
               {product.name}
             </h3>
 
             {/* Stars + review count */}
             {!isRelated && (
-              <div className="flex items-center gap-1.5 mb-3">
+              <div className="relative z-10 flex items-center gap-1.5 mb-3">
                 <StarRating rating={product.rating} />
                 <span className="text-xs text-[#7A6F61] font-medium">
                   {product.rating}
@@ -101,7 +160,7 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
             )}
 
             {/* Price row */}
-            <div className="flex items-center justify-between gap-2">
+            <div className="relative z-10 flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <span className={`font-bold text-[#1A1A2E] ${isRelated ? "text-sm" : "text-lg"}`}>
                   {currency}{product.price}
@@ -128,7 +187,7 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
             {product.inStock && (
               <button
                 onClick={handleAddToCart}
-                className="add-cart-btn mt-3 w-full flex items-center justify-center gap-2 py-2.5 text-sm font-bold"
+                className="relative z-10 add-cart-btn mt-3 w-full flex items-center justify-center gap-2 py-2.5 text-sm font-bold"
               >
                 <ShoppingCart className="w-4 h-4" />
                 {t.products.addToCart}

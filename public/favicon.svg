@@ -1,54 +1,74 @@
 <svg
-  viewBox="0 0 64 64"
+  viewBox="0 0 100 100"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
 >
   <!-- Background circle matching visual identity -->
-  <circle cx="32" cy="32" r="32" fill="#0B1E36" />
-  
-  <!-- Horse body silhouette (Gold) -->
-  <path
-    d="M14 44 C14 44 16 36 22 33 C25 31 28 32 30 30 C32 28 32 24 34 22 C36 20 40 20 42 22 C44 24 43 28 41 30 C39 32 36 32 35 34 C33 36 34 40 34 44"
-    stroke="url(#goldGradFav)" strokeWidth="2" strokeLinecap="round" fill="none"
-  />
-  <!-- Horse head -->
-  <path
-    d="M40 22 C41 19 43 17 45 18 C47 19 47 22 46 24 C45 25 43 25 42 24"
-    stroke="url(#goldGradFav)" strokeWidth="1.8" strokeLinecap="round" fill="none"
-  />
-  <!-- Horse legs -->
-  <line x1="22" y1="44" x2="20" y2="52" stroke="url(#goldGradFav)" strokeWidth="2" strokeLinecap="round"/>
-  <line x1="28" y1="44" x2="27" y2="52" stroke="url(#goldGradFav)" strokeWidth="2" strokeLinecap="round"/>
-  <line x1="34" y1="44" x2="35" y2="52" stroke="url(#goldGradFav)" strokeWidth="2" strokeLinecap="round"/>
-  <!-- Eagle wings spread (Blue/Cyan/White) -->
-  <path
-    d="M8 28 C10 22 16 20 22 22 C24 23 26 25 26 27"
-    stroke="url(#blueGradFav)" strokeWidth="2" strokeLinecap="round" fill="none"
-  />
-  <path
-    d="M56 22 C54 18 48 17 42 20 C40 21 38 24 38 27"
-    stroke="url(#blueGradFav)" strokeWidth="2" strokeLinecap="round" fill="none"
-  />
-  <!-- Eagle body center -->
-  <ellipse cx="32" cy="26" rx="5" ry="4" fill="url(#blueGradFav)" opacity="0.9"/>
-  <!-- Eagle head -->
-  <circle cx="32" cy="20" r="3.5" fill="url(#blueGradFav)"/>
-  <!-- Eagle beak (Gold) -->
-  <path d="M34 19 L37 21 L34 21 Z" fill="url(#goldGradFav)"/>
-  <!-- Small wing feathers -->
-  <path d="M10 26 L6 20 M13 24 L9 18 M16 23 L13 17" stroke="url(#blueGradFav)" strokeWidth="1.2" strokeLinecap="round"/>
-  <path d="M54 20 L58 14 M51 19 L55 13 M48 19 L51 13" stroke="url(#blueGradFav)" strokeWidth="1.2" strokeLinecap="round"/>
+  <circle cx="50" cy="50" r="50" fill="#0B1E36" />
   
   <defs>
-    <linearGradient id="goldGradFav" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-      <stop offset="0%"   stopColor="#DFB96A"/>
-      <stop offset="50%"  stopColor="#C4933F"/>
-      <stop offset="100%" stopColor="#8A6022"/>
+    <linearGradient id="logoGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#DFB96A" />
+      <stop offset="50%" stopColor="#C4933F" />
+      <stop offset="100%" stopColor="#8A6022" />
     </linearGradient>
-    <linearGradient id="blueGradFav" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-      <stop offset="0%"   stopColor="#DFEAF5"/>
-      <stop offset="50%"  stopColor="#8AB7E0"/>
-      <stop offset="100%" stopColor="#2A75B3"/>
+    <linearGradient id="logoBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#DFEAF5" />
+      <stop offset="50%" stopColor="#8AB7E0" />
+      <stop offset="100%" stopColor="#2A75B3" />
     </linearGradient>
   </defs>
+
+  <!-- Decorative Golden Orbit Circle -->
+  <circle cx="50" cy="50" r="44" stroke="url(#logoGold)" strokeWidth="1" strokeDasharray="3 3" opacity="0.4" />
+
+  <!-- HORSE - Golden Silhouette (Galloping) -->
+  <g transform="translate(18, 30) scale(0.65)">
+    <!-- Body & neck -->
+    <path
+      d="M12 40 C 25 30, 45 35, 55 20 C 58 15, 65 12, 72 15 C 75 16, 78 20, 75 25 C 72 30, 68 32, 65 35 C 55 45, 58 55, 45 65 C 35 72, 20 75, 12 70 C 8 68, 6 60, 12 40 Z"
+      fill="url(#logoGold)"
+    />
+    <!-- Flowing Mane details -->
+    <path d="M50 25 C 55 18, 62 15, 68 18" stroke="url(#logoGold)" strokeWidth="2.5" strokeLinecap="round" />
+    <path d="M45 32 C 50 25, 57 22, 62 25" stroke="url(#logoGold)" strokeWidth="2.5" strokeLinecap="round" />
+    <path d="M40 39 C 45 32, 52 28, 57 32" stroke="url(#logoGold)" strokeWidth="2" strokeLinecap="round" />
+    <!-- Elegant Legs -->
+    <path d="M16 65 L2 78 L-5 82" stroke="url(#logoGold)" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    <path d="M22 62 L10 75 L5 78" stroke="url(#logoGold)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.8" fill="none" />
+    <path d="M48 60 L58 75 L70 78" stroke="url(#logoGold)" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    <path d="M42 62 L50 72 L60 74" stroke="url(#logoGold)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.8" fill="none" />
+    <!-- Flowing Tail -->
+    <path d="M12 70 C 2 75, -8 72, -15 65 C -10 62, -5 62, 0 65" fill="url(#logoGold)" />
+  </g>
+
+  <!-- FALCON - Blue/Navy Silhouette (Flying upwards, wings spread) -->
+  <g transform="translate(30, 16) scale(0.68)">
+    <!-- Main Body -->
+    <path
+      d="M30 45 C 35 40, 42 38, 48 42 C 52 45, 55 52, 52 58 C 48 64, 38 68, 30 65 C 24 62, 22 55, 26 48 C 28 45, 29 46, 30 45 Z"
+      fill="url(#logoBlue)"
+    />
+    <!-- Left Wing (detailed feathers in curved paths) -->
+    <path
+      d="M32 46 C 24 38, 12 36, 2 40 C -8 44, -18 36, -24 25 C -14 26, -4 30, 4 35 C 14 40, 22 42, 32 46 Z"
+      fill="url(#logoBlue)"
+    />
+    <!-- Layered wing feathers -->
+    <path d="M12 37 C 2 32, -8 28, -15 20" stroke="url(#logoBlue)" strokeWidth="2.5" strokeLinecap="round" />
+    <path d="M18 39 C 10 32, 2 28, -5 22" stroke="url(#logoBlue)" strokeWidth="2.5" strokeLinecap="round" />
+    <path d="M24 41 C 18 34, 10 30, 4 25" stroke="url(#logoBlue)" strokeWidth="2" strokeLinecap="round" />
+
+    <!-- Right Wing (pointing upwards) -->
+    <path
+      d="M44 42 C 48 30, 52 18, 58 8 C 54 12, 50 18, 48 24 C 45 32, 44 38, 44 42 Z"
+      fill="url(#logoBlue)"
+    />
+    <path d="M47 30 C 50 22, 54 14, 58 6" stroke="url(#logoBlue)" strokeWidth="2.5" strokeLinecap="round" />
+    <path d="M45 35 C 48 27, 51 19, 54 11" stroke="url(#logoBlue)" strokeWidth="2.5" strokeLinecap="round" />
+
+    <!-- Falcon Head & Beak -->
+    <circle cx="46" cy="46" r="6" fill="url(#logoBlue)" />
+    <path d="M51 43.5 L56 46 L51 48.5 Z" fill="url(#logoGold)" />
+  </g>
 </svg>
