@@ -104,14 +104,14 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
         <div className="relative bg-white rounded-2xl overflow-hidden border border-[#F0EDE6] shadow-md shadow-[#C4933F]/8 group-hover:border-[#DFB96A]/40">
 
           {/* Image */}
-          <div className="relative aspect-square bg-[#F8F7F4] overflow-hidden">
+          <div className="relative aspect-square bg-white overflow-hidden">
             <Image
               src={product.image || "/placeholder.svg"}
               alt={product.name}
               fill
               placeholder="blur"
               blurDataURL={SHIMMER_BLUR}
-              className="object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+              className="object-contain p-3 transition-transform duration-700 ease-out group-hover:scale-108"
               sizes={isRelated ? "(max-width: 640px) 50vw, 25vw" : "(max-width: 640px) 100vw, 25vw"}
             />
             {/* Warm overlay on hover */}

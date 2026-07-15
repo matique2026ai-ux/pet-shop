@@ -163,7 +163,7 @@ export default function ProductDetailPage() {
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
                   {/* Left Side: Product Image & Video Trigger */}
                   <div className="md:col-span-5 flex flex-col items-center gap-4">
-                    <div className="relative w-64 h-64 sm:w-72 sm:h-72 bg-gray-50/50 rounded-2xl p-4 flex items-center justify-center border border-gray-100 shadow-inner group">
+                    <div className="relative w-64 h-64 sm:w-72 sm:h-72 bg-white rounded-2xl p-4 flex items-center justify-center border border-gray-100 shadow-sm group">
                       {activeMedia === "video" && embed ? (
                         embed.kind === "iframe" ? (
                           <iframe
@@ -183,7 +183,7 @@ export default function ProductDetailPage() {
                             alt={product.name}
                             fill
                             priority
-                            className="object-contain p-2 transition-transform duration-550 group-hover:scale-105"
+                            className="object-contain p-4 transition-transform duration-550 group-hover:scale-105"
                             sizes="(max-width: 768px) 100vw, 30vw"
                           />
                           <button
