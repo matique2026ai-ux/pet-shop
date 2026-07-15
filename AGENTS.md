@@ -17,6 +17,7 @@ Pet-shop e-commerce site (Algerian market). Next.js 16 (App Router) + React 19 +
 5. **`.env*` and `mot de passe database supabase.txt` are git-ignored** — never commit secrets (Supabase service-role key, DB password).
 6. **Demo catalog source of truth** is `src/lib/data.ts`; to change products, edit it then click **Seed** in the admin Products tab.
 7. **Always commit and push** every change to `main` (Vercel auto-deploys) **without asking for confirmation**. The user prefers autonomous publishing. Still: never commit `.env*`, secrets, or the password text file.
+8. **Official Circular Badge Logo is at `/logo-badge.png`**. Do not construct custom SVG code paths or attempt mock vectors to represent the logo in `LogoC1`, `LogoC4`, or `LogoFullStack` - the official transparent circle badge `/logo-badge.png` (which has the background removed and the subtitle erased) must be used directly everywhere.
 
 ## Quick orientation
 
@@ -39,3 +40,5 @@ Pet-shop e-commerce site (Algerian market). Next.js 16 (App Router) + React 19 +
 - FAQ and Shipping pages must use `t.faq.items` / `t.shipping.sections` (now translatable), not hardcoded English.
 - Upload API validates file type + 5 MB size limit.
 - Orders API validates required fields.
+- **Card Footprints**: Footprints on product cards are rendered dynamically via `CardFootprintDecor` inside `src/components/product-card.tsx` based on `product.category`. Do not remove the `relative z-10` from the card details to avoid background overlaps.
+

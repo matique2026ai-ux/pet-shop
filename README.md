@@ -151,13 +151,14 @@ Edit the corresponding `*.ts` file. Keep key structure identical across all thre
 
 ## Dynamic Theme & Media Management (July 2026 Updates)
 
-We have modernized the platform's visual identity, moving from the old orange-blue accent palette to a **Premium Navy Blue and Gold** design system matching the new brand logo components.
+We have modernized the platform's visual identity, moving from the old orange-blue accent palette to a **Premium Navy Blue and Gold** design system matching the new brand logo.
 
 ### 1. Logo Components Integration
-The brand system exposes four isolated logo components (`LogoC1` through `LogoC4` and a combination component `LogoFullStack`) defined in [brand-logo.tsx](file:///c:/Users/PCIB/Desktop/pet-shop/src/components/brand-logo.tsx):
-- **`LogoC1`**: Icon-only logo (Horse + Falcon), used as the public site favicon (`public/favicon.svg`) and dashboard/admin panel header icon.
-- **`LogoC4`**: Responsive horizontal logo (Icon + Text), used in the public Navbar and the main sidebar in the Admin Panel.
+The brand system uses the official transparent circular logo badge `/logo-badge.png` (with outer background removed and the subtitle phrase "متجر إلكتروني للحيوانات الأليفة والخيل" erased) defined in [brand-logo.tsx](file:///c:/Users/PCIB/Desktop/pet-shop/src/components/brand-logo.tsx):
+- **`LogoC1`**: The main circular badge image `/logo-badge.png`, used as the public site favicon (`public/favicon.svg`) and dashboard/admin panel header icon.
+- **`LogoC4`**: Used in the public Navbar and the main sidebar in the Admin Panel (renders the `/logo-badge.png` directly).
 - **`LogoFullStack`**: Complete stacked logo badge, used inside the product details card.
+
 
 ### 2. Dynamic Hero Backgrounds
 All page heroes now load their background media dynamically from the **Admin settings** database, rather than being hardcoded:
