@@ -15,6 +15,7 @@ import {
   LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Search, Filter, Tag, Languages, Video, Star, Check, ChevronRight,
 } from "lucide-react";
 import HeroVideoManager from "@/components/hero-video-manager";
+import AdminSettingsPanel from "@/components/admin-settings-panel";
 import { en } from "@/lib/translations/en";
 import type { TranslationOverrides } from "@/lib/i18n-context";
 import { LogoC1, LogoC4 } from "@/components/brand-logo";
@@ -664,22 +665,7 @@ export default function AdminDashboard() {
     }
   };
 
-  const loadSettings = useCallback(async () => {
-    try {
-      const data = await fetch("/api/settings").then((r) => r.json());
-      if (data && data.store) {
-        const storeData = { ...data.store };
-        if (storeData.name && !storeData.storeName) {
-          storeData.storeName = storeData.name;
-        }
-        setStoreSettings(storeData);
-      }
-      if (data && data.content) setContentSettings(data.content);
-      if (data && data.delivery) setDeliverySettings(data.delivery);
-    } catch {
-      // ignore
-    }
-  }, []);
+  // loadSettings removed – settings are loaded inside AdminSettingsPanel
 
   useEffect(() => {
     if (!authed) return;
@@ -690,10 +676,9 @@ export default function AdminDashboard() {
     if (!authed) return;
     if (activeTab === "dashboard" || activeTab === "orders") loadOrders();
     if (activeTab === "products" || activeTab === "dashboard") loadProducts();
-    if (activeTab === "settings") loadSettings();
     if (activeTab === "translations") loadTrans();
     if (activeTab === "reviews") loadReviews();
-  }, [authed, activeTab, loadOrders, loadProducts, loadSettings, loadTrans, loadReviews]);
+  }, [authed, activeTab, loadOrders, loadProducts, loadTrans, loadReviews]);
 
   const openAddModal = () => {
     setEditingProduct(null);
@@ -948,31 +933,7 @@ export default function AdminDashboard() {
     }
   };
 
-  // ----- Site settings (store info + content) -----
-  const [storeSettings, setStoreSettings] = useState<Record<string, string>>({});
-  const [contentSettings, setContentSettings] = useState<Record<string, string>>({});
-  const [deliverySettings, setDeliverySettings] = useState<Record<string, string>>({});
-  const [savingSettings, setSavingSettings] = useState(false);
-
-  const saveSettingsKey = async (key: string, value: Record<string, any>) => {
-    setSavingSettings(true);
-    try {
-      let bodyValue = { ...value };
-      if (key === "store") {
-        if (bodyValue.storeName) {
-          bodyValue.name = bodyValue.storeName;
-        } else if (bodyValue.name) {
-          bodyValue.storeName = bodyValue.name;
-        }
-      }
-      await apiFetch("/api/settings", { method: "PUT", body: JSON.stringify({ key, value: bodyValue }) });
-      alert(a.settings.saved);
-    } catch (e) {
-      alert("Failed to save: " + (e as Error).message);
-    } finally {
-      setSavingSettings(false);
-    }
-  };
+  // ----- Site settings handled by AdminSettingsPanel (isolated component) -----
 
   if (!authed) {
     return (
@@ -2003,94 +1964,11 @@ export default function AdminDashboard() {
             {/* ===== SETTINGS ===== */}
             {activeTab === "settings" && (
               <div className="space-y-6">
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-bold text-[#0B1E36]">{a.settings.store}</h2>
-                    <button
-                      onClick={() => saveSettingsKey("store", storeSettings)}
-                      disabled={savingSettings}
-                      className="px-4 py-2 rounded-xl text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 transition-colors disabled:opacity-50 inline-flex items-center gap-2"
-                    >
-                      {savingSettings && <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />}
-                      {a.common.save}
-                    </button>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <StoreSettingsField label={a.settings.storeName} k="storeName" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
-                    <StoreSettingsField label={a.settings.phone} k="phone" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
-                    <StoreSettingsField label={a.settings.email} k="email" type="email" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
-                    <StoreSettingsField label={a.settings.whatsapp} k="whatsapp" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
-                    <StoreSettingsField label={a.settings.facebook} k="facebook" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
-                    <StoreSettingsField label={a.settings.instagram} k="instagram" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
-                    <StoreSettingsField label={a.settings.tiktok} k="tiktok" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
-                    <StoreSettingsField label={a.settings.currencyLabel} k="currencyLabel" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
-                    <StoreSettingsField label={a.settings.deliveryFee} k="deliveryFee" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
-                    <StoreSettingsField label={a.settings.freeThreshold} k="freeThreshold" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
-                    <StoreSettingsField label={a.settings.address} k="address" storeSettings={storeSettings} setStoreSettings={setStoreSettings} />
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-bold text-[#0B1E36]">{a.settings.content}</h2>
-                    <button
-                      onClick={() => saveSettingsKey("content", contentSettings)}
-                      disabled={savingSettings}
-                      className="px-4 py-2 rounded-xl text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 transition-colors disabled:opacity-50 inline-flex items-center gap-2"
-                    >
-                      {savingSettings && <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />}
-                      {a.common.save}
-                    </button>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <ContentSettingsField label={a.settings.heroTitle} k="heroTitle" contentSettings={contentSettings} setContentSettings={setContentSettings} />
-                    <ContentSettingsField label={a.settings.heroSubtitle} k="heroSubtitle" contentSettings={contentSettings} setContentSettings={setContentSettings} />
-                    <ContentSettingsField label={a.settings.heroCta1} k="heroCta1" contentSettings={contentSettings} setContentSettings={setContentSettings} />
-                    <ContentSettingsField label={a.settings.heroCta2} k="heroCta2" contentSettings={contentSettings} setContentSettings={setContentSettings} />
-                    <ContentSettingsField label={a.settings.footerText} k="footerText" contentSettings={contentSettings} setContentSettings={setContentSettings} />
-                    <ContentSettingsField label={a.settings.about} k="about" contentSettings={contentSettings} setContentSettings={setContentSettings} />
-                    <ContentSettingsField label="Homepage Hero Background (Video/Image URL)" k="heroBackground" contentSettings={contentSettings} setContentSettings={setContentSettings} />
-                    <ContentSettingsField label="Contact Page Hero Background URL" k="contactHeroImage" contentSettings={contentSettings} setContentSettings={setContentSettings} />
-                    <ContentSettingsField label="Veterinary Page Hero Background URL" k="vetHeroImage" contentSettings={contentSettings} setContentSettings={setContentSettings} />
-                    <ContentSettingsField label="About Page Hero Background URL" k="aboutHeroImage" contentSettings={contentSettings} setContentSettings={setContentSettings} />
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-bold text-[#0B1E36]">{a.settings.delivery}</h2>
-                    <button
-                      onClick={() => saveSettingsKey("delivery", deliverySettings)}
-                      disabled={savingSettings}
-                      className="px-4 py-2 rounded-xl text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 transition-colors disabled:opacity-50 inline-flex items-center gap-2"
-                    >
-                      {savingSettings && <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />}
-                      {a.common.save}
-                    </button>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">{a.settings.deliveryScope}</label>
-                      <select
-                        value={deliverySettings.scope || "commune"}
-                        onChange={(e) => setDeliverySettings({ ...deliverySettings, scope: e.target.value })}
-                        className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                      >
-                        <option value="commune">{a.settings.scopeCommune}</option>
-                        <option value="wilaya">{a.settings.scopeWilaya}</option>
-                        <option value="national">{a.settings.scopeNational}</option>
-                        <option value="international">{a.settings.scopeInternational}</option>
-                      </select>
-                    </div>
-                    <DeliverySettingsField label={a.settings.deliveryCity} k="city" deliverySettings={deliverySettings} setDeliverySettings={setDeliverySettings} />
-                    <DeliverySettingsField label={a.settings.deliveryWilaya} k="wilaya" deliverySettings={deliverySettings} setDeliverySettings={setDeliverySettings} />
-                    <DeliverySettingsField label={a.settings.deliveryFee} k="fee" type="number" deliverySettings={deliverySettings} setDeliverySettings={setDeliverySettings} />
-                    <DeliverySettingsField label={a.settings.freeThreshold} k="freeThreshold" type="number" deliverySettings={deliverySettings} setDeliverySettings={setDeliverySettings} />
-                    <DeliverySettingsField label={a.settings.deliveryEta} k="eta" deliverySettings={deliverySettings} setDeliverySettings={setDeliverySettings} />
-                    <DeliverySettingsField label={a.settings.deliveryNote} k="note" deliverySettings={deliverySettings} setDeliverySettings={setDeliverySettings} />
-                    <DeliverySettingsField label={a.settings.deliveryAreas} k="areas" deliverySettings={deliverySettings} setDeliverySettings={setDeliverySettings} />
-                  </div>
-                </div>
+                <AdminSettingsPanel
+                  adminSecret={getSecret()}
+                  a={a}
+                  onSaved={() => {}}
+                />
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <h2 className="text-lg font-bold text-[#0B1E36] mb-4">Quick Actions</h2>
