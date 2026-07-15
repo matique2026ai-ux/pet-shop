@@ -75,7 +75,7 @@ export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, clearCart } = useCart();
   const { t, currency, lang } = useI18n();
   const { user } = useAuth();
-  const { delivery } = useSiteSettings();
+  const { store, delivery } = useSiteSettings();
   const [checkingOut, setCheckingOut] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState<{ id: string } | null>(null);
   const [area, setArea] = useState("");
@@ -97,7 +97,7 @@ export default function CartPage() {
 
   if (orderPlaced) {
     const orderRef = orderPlaced.id.slice(-6).toUpperCase();
-    const whatsappNum = (delivery?.whatsapp || "213555123456").replace(/[^0-9]/g, "");
+    const whatsappNum = (store?.whatsapp || delivery?.whatsapp || store?.phone || "213555123456").replace(/[^0-9]/g, "");
     const message = encodeURIComponent(
       lang === "ar"
         ? `مرحباً، لقد قمت بطلب رقم #${orderRef} من موقع Paws & Wings. أود تأكيد الطلب من فضلك.`

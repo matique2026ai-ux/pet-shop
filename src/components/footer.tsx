@@ -69,7 +69,9 @@ export default function Footer() {
   const facebook   = s("facebook",  "https://facebook.com");
   const tiktok     = store && store.tiktok ? store.tiktok : "";
 
-  const storeName = lang === "ar" ? "طيور الجمال والجواد" : "Paws & Wings";
+  const storeName = store?.storeName || store?.name || (
+    lang === "ar" ? "طيور الجمال والجواد" : "Paws & Wings"
+  );
 
   return (
     <footer className="bg-gradient-to-b from-[#1A1A2E] to-[#0D0D1A] text-slate-300">

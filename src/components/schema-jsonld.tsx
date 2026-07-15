@@ -1,8 +1,15 @@
 "use client";
 
 import { useEffect } from "react";
+import { useSiteSettings } from "@/lib/site-settings";
 
 export function OrganizationSchema() {
+  const { store } = useSiteSettings();
+  const storeName = store?.storeName || store?.name || "Paws & Wings";
+  const phone = store?.phone || "+21336123456";
+  const email = store?.email || "hello@pawsandwings.com";
+  const address = store?.address || "حي الهضاب، سطيف، الجزائر";
+
   useEffect(() => {
     const script = document.createElement("script");
     script.type = "application/ld+json";
@@ -10,13 +17,13 @@ export function OrganizationSchema() {
     script.innerHTML = JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Organization",
-      name: "Paws & Wings",
+      name: storeName,
       url: "https://www.pawsandwings.com",
       logo: "https://www.pawsandwings.com/placeholder.svg",
       description: "Premium pet products and veterinary care for cats, dogs, birds, fish, and small pets.",
       address: {
         "@type": "PostalAddress",
-        streetAddress: "حي الهضاب",
+        streetAddress: address,
         addressLocality: "Sétif",
         addressRegion: "Sétif",
         postalCode: "19000",
@@ -29,7 +36,7 @@ export function OrganizationSchema() {
       },
       contactPoint: {
         "@type": "ContactPoint",
-        telephone: "+21336123456",
+        telephone: phone,
         contactType: "customer service",
         areaServed: ["Sétif", "Algérie"],
       },
@@ -40,12 +47,17 @@ export function OrganizationSchema() {
     });
     document.head.appendChild(script);
     return () => { const s = document.getElementById("organization-schema"); if (s) s.remove(); };
-  }, []);
+  }, [storeName, phone, email, address]);
 
   return null;
 }
 
 export function LocalBusinessSchema() {
+  const { store } = useSiteSettings();
+  const storeName = store?.storeName || store?.name || "Paws & Wings";
+  const phone = store?.phone || "+21336123456";
+  const address = store?.address || "حي الهضاب، سطيف، الجزائر";
+
   useEffect(() => {
     const script = document.createElement("script");
     script.type = "application/ld+json";
@@ -54,14 +66,14 @@ export function LocalBusinessSchema() {
       "@context": "https://schema.org",
       "@type": "PetStore",
       "@id": "https://www.pawsandwings.com/#petstore",
-      name: "Paws & Wings",
+      name: storeName,
       image: "https://www.pawsandwings.com/placeholder.svg",
       url: "https://www.pawsandwings.com",
-      telephone: "+21336123456",
+      telephone: phone,
       priceRange: "د.ج",
       address: {
         "@type": "PostalAddress",
-        streetAddress: "حي الهضاب",
+        streetAddress: address,
         addressLocality: "Sétif",
         addressRegion: "Sétif",
         postalCode: "19000",
@@ -97,12 +109,15 @@ export function LocalBusinessSchema() {
       const s = document.getElementById("localbusiness-schema");
       if (s) s.remove();
     };
-  }, []);
+  }, [storeName, phone, address]);
 
   return null;
 }
 
 export function WebSiteSchema() {
+  const { store } = useSiteSettings();
+  const storeName = store?.storeName || store?.name || "Paws & Wings";
+
   useEffect(() => {
     const script = document.createElement("script");
     script.type = "application/ld+json";
@@ -110,7 +125,7 @@ export function WebSiteSchema() {
     script.innerHTML = JSON.stringify({
       "@context": "https://schema.org",
       "@type": "WebSite",
-      name: "Paws & Wings",
+      name: storeName,
       url: "https://www.pawsandwings.com",
       potentialAction: {
         "@type": "SearchAction",
@@ -123,12 +138,15 @@ export function WebSiteSchema() {
     });
     document.head.appendChild(script);
     return () => { const s = document.getElementById("website-schema"); if (s) s.remove(); };
-  }, []);
+  }, [storeName]);
 
   return null;
 }
 
 export function VeterinaryClinicSchema() {
+  const { store } = useSiteSettings();
+  const storeName = store?.storeName || store?.name || "Paws & Wings";
+
   useEffect(() => {
     const script = document.createElement("script");
     script.type = "application/ld+json";
@@ -136,7 +154,7 @@ export function VeterinaryClinicSchema() {
     script.innerHTML = JSON.stringify({
       "@context": "https://schema.org",
       "@type": "VeterinaryCare",
-      name: "Paws & Wings Veterinary Clinic",
+      name: `${storeName} Veterinary Clinic`,
       url: "https://www.pawsandwings.com/vet",
       description: "Professional veterinary care for your beloved pets.",
       medicalSpecialty: "VeterinaryMedicine",
@@ -149,6 +167,6 @@ export function VeterinaryClinicSchema() {
     });
     document.head.appendChild(script);
     return () => { const s = document.getElementById("vet-schema"); if (s) s.remove(); };
-  }, []);
+  }, [storeName]);
   return null;
 }

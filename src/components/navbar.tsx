@@ -54,11 +54,11 @@ export default function Navbar() {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isRtl = dir === "rtl";
 
-  const storeName = lang === "ar"
-    ? "طيور الجمال والجواد"
-    : lang === "fr"
-    ? "Paws & Wings"
-    : "Paws & Wings";
+  const storeName = store?.storeName || store?.name || (
+    lang === "ar"
+      ? "طيور الجمال والجواد"
+      : "Paws & Wings"
+  );
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {

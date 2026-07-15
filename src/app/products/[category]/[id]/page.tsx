@@ -8,6 +8,7 @@ import { useI18n } from "@/lib/i18n-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
 import { useCart } from "@/lib/cart-context";
 import { useRecentlyViewed } from "@/lib/use-recently-viewed";
+import { useSiteSettings } from "@/lib/site-settings";
 import AnimatedSection from "@/components/animated-section";
 import ProductCard from "@/components/product-card";
 import ProductReviews from "@/components/product-reviews";
@@ -92,6 +93,7 @@ export default function ProductDetailPage() {
   const { addItem } = useCart();
   const { addId } = useRecentlyViewed();
   const params = useParams();
+  const { store } = useSiteSettings();
   const product = products.find((p) => p.id === params.id);
   const [qty, setQty] = useState(1);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -122,11 +124,11 @@ export default function ProductDetailPage() {
   const embed = product.video ? videoEmbed(product.video) : null;
   const hasIngredients = !!product.ingredients && product.ingredients.trim().length > 0;
   const hasVideo = !!embed;
-  const storeName = lang === "ar"
-    ? "طيور الجمال والجواد"
-    : lang === "fr"
-    ? "Paws & Wings"
-    : "Paws & Wings";
+  const storeName = store?.storeName || store?.name || (
+    lang === "ar"
+      ? "طيور الجمال والجواد"
+      : "Paws & Wings"
+  );
 
   return (
     <>

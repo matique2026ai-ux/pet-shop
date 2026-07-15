@@ -158,7 +158,7 @@ export default function ContactPage() {
                 <div className="flex items-center gap-3">
                   <MapPin className="w-5 h-5 text-[#F97316]" />
                   <div>
-                    <p className="font-bold text-gray-900 text-sm">{store?.name || t.contact.storeName}</p>
+                    <p className="font-bold text-gray-900 text-sm">{store?.storeName || store?.name || t.contact.storeName}</p>
                     <p dir="auto" className="text-xs text-gray-500">{address}</p>
                   </div>
                 </div>

@@ -591,7 +591,13 @@ export default function AdminDashboard() {
   const loadSettings = useCallback(async () => {
     try {
       const data = await fetch("/api/settings").then((r) => r.json());
-      if (data && data.store) setStoreSettings(data.store);
+      if (data && data.store) {
+        const storeData = { ...data.store };
+        if (storeData.name && !storeData.storeName) {
+          storeData.storeName = storeData.name;
+        }
+        setStoreSettings(storeData);
+      }
       if (data && data.content) setContentSettings(data.content);
       if (data && data.delivery) setDeliverySettings(data.delivery);
     } catch {
@@ -807,7 +813,15 @@ export default function AdminDashboard() {
   const saveSettingsKey = async (key: string, value: Record<string, any>) => {
     setSavingSettings(true);
     try {
-      await apiFetch("/api/settings", { method: "PUT", body: JSON.stringify({ key, value }) });
+      let bodyValue = { ...value };
+      if (key === "store") {
+        if (bodyValue.storeName) {
+          bodyValue.name = bodyValue.storeName;
+        } else if (bodyValue.name) {
+          bodyValue.storeName = bodyValue.name;
+        }
+      }
+      await apiFetch("/api/settings", { method: "PUT", body: JSON.stringify({ key, value: bodyValue }) });
       alert(a.settings.saved);
     } catch (e) {
       alert("Failed to save: " + (e as Error).message);
