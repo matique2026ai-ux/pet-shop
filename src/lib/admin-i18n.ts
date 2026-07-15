@@ -25,6 +25,7 @@ type AdminTranslations = {
   orders: {
     title: string; total: string; loading: string; noOrders: string;
     order: string; customer: string; product: string; amount: string; status: string; date: string;
+    phone: string; email: string; address: string; items: string; notes: string;
   };
   analytics: {
     totalProducts: string; inStock: string; outOfStock: string; categories: string;
@@ -76,6 +77,7 @@ const en: AdminTranslations = {
   orders: {
     title: "All Orders", total: "orders total", loading: "Loading orders...", noOrders: "No orders yet",
     order: "Order", customer: "Customer", product: "Items", amount: "Amount", status: "Status", date: "Date",
+    phone: "Phone", email: "Email", address: "Delivery Address", items: "Items", notes: "Notes",
   },
   analytics: {
     totalProducts: "Total Products", inStock: "In Stock", outOfStock: "Out of Stock", categories: "Categories",
@@ -128,6 +130,7 @@ const fr: AdminTranslations = {
   orders: {
     title: "Toutes les commandes", total: "commandes au total", loading: "Chargement des commandes...", noOrders: "Aucune commande pour l'instant",
     order: "Commande", customer: "Client", product: "Articles", amount: "Montant", status: "Statut", date: "Date",
+    phone: "Téléphone", email: "E-mail", address: "Adresse de livraison", items: "Articles", notes: "Notes",
   },
   analytics: {
     totalProducts: "Produits totals", inStock: "En stock", outOfStock: "Rupture de stock", categories: "Catégories",
@@ -180,6 +183,7 @@ const ar: AdminTranslations = {
   orders: {
     title: "كل الطلبات", total: "طلبًا إجمالاً", loading: "جارٍ تحميل الطلبات...", noOrders: "لا توجد طلبات بعد",
     order: "الطلب", customer: "العميل", product: "العناصر", amount: "المبلغ", status: "الحالة", date: "التاريخ",
+    phone: "الهاتف", email: "البريد الإلكتروني", address: "عنوان التوصيل", items: "العناصر", notes: "ملاحظات",
   },
   analytics: {
     totalProducts: "إجمالي المنتجات", inStock: "متوفر", outOfStock: "غير متوفر", categories: "الفئات",

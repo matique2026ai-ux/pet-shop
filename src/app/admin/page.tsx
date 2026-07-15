@@ -227,7 +227,7 @@ const emptyForm: FormState = {
 };
 
 function OrderDetailRow({
-  order, currency, ORDER_STATUSES, getStatusColor, onStatusChange, onDelete,
+  order, currency, ORDER_STATUSES, getStatusColor, onStatusChange, onDelete, a,
 }: {
   order: Order;
   currency: string;
@@ -235,6 +235,7 @@ function OrderDetailRow({
   getStatusColor: (s: string) => string;
   onStatusChange: (id: string, s: string) => void;
   onDelete: (id: string) => void;
+  a: any;
 }) {
   const [expanded, setExpanded] = useState(false);
   return (
@@ -277,7 +278,7 @@ function OrderDetailRow({
         <div className="px-6 py-5 bg-blue-50/30 border-t border-blue-100 text-sm space-y-4">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div>
-              <p className="text-gray-400 text-xs uppercase mb-1">Phone</p>
+              <p className="text-gray-400 text-xs uppercase mb-1">{a.orders.phone}</p>
               <div className="flex flex-wrap items-center gap-2">
                 <a href={`tel:${order.customer_phone}`} className="font-semibold text-emerald-750 hover:underline">
                   📞 {order.customer_phone}
@@ -294,19 +295,19 @@ function OrderDetailRow({
             </div>
             {order.customer_email && (
               <div>
-                <p className="text-gray-400 text-xs uppercase mb-1">Email</p>
+                <p className="text-gray-400 text-xs uppercase mb-1">{a.orders.email}</p>
                 <p className="font-medium text-gray-900">{order.customer_email}</p>
               </div>
             )}
             <div className="sm:col-span-2">
-              <p className="text-gray-400 text-xs uppercase mb-1">Delivery Address</p>
+              <p className="text-gray-400 text-xs uppercase mb-1">{a.orders.address}</p>
               <p className="font-medium text-gray-900">{order.delivery_address}{order.city ? `, ${order.city}` : ""}</p>
             </div>
           </div>
 
           {Array.isArray(order.items) && order.items.length > 0 && (
             <div className="border-t border-blue-100 pt-4">
-              <p className="text-gray-400 text-xs uppercase mb-3">Items</p>
+              <p className="text-gray-400 text-xs uppercase mb-3">{a.orders.items}</p>
               <div className="space-y-2">
                 {order.items.map((item, idx) => (
                   <div key={`${item.id}-${idx}`} className="flex items-center justify-between bg-white rounded-xl px-4 py-2.5 shadow-sm">
@@ -334,7 +335,7 @@ function OrderDetailRow({
 
           {order.notes && (
             <div className="border-t border-blue-100 pt-3">
-              <p className="text-gray-400 text-xs uppercase mb-1">Notes</p>
+              <p className="text-gray-400 text-xs uppercase mb-1">{a.orders.notes}</p>
               <p className="text-gray-700 italic">{order.notes}</p>
             </div>
           )}
@@ -798,6 +799,30 @@ export default function AdminDashboard() {
   // ----- Category & Subcategory management -----
   const [catModal, setCatModal] = useState<{ id: string; name: string; icon: string; order: string; imageUrl: string; editingId: string | null; open: boolean }>({ id: "", name: "", icon: "paw-print", order: "0", imageUrl: "", editingId: null, open: false });
   const [subModal, setSubModal] = useState<{ id: string; name: string; category_id: string; editingId: string | null; open: boolean }>({ id: "", name: "", category_id: "", editingId: null, open: false });
+  const [uploadingCatImg, setUploadingCatImg] = useState(false);
+
+  const handleCategoryImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingCatImg(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const secret = getSecret();
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        headers: { ...(secret ? { "x-admin-secret": secret } : {}) },
+        body: formData,
+      });
+      if (!res.ok) throw new Error(await res.text() || "Upload failed");
+      const data = await res.json();
+      setCatModal((prev) => ({ ...prev, imageUrl: data.url }));
+    } catch (err) {
+      alert("Failed to upload category image: " + (err as Error).message);
+    } finally {
+      setUploadingCatImg(false);
+    }
+  };
 
   const openCatModal = (cat?: any) => {
     if (cat) setCatModal({ id: cat.id, name: cat.name, icon: cat.icon || "paw-print", order: String(cat.order ?? 0), imageUrl: cat.image_url || "", editingId: cat.id, open: true });
@@ -1083,7 +1108,12 @@ export default function AdminDashboard() {
               <div className="flex items-center gap-3">
                 <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-xl text-sm text-gray-500">
                   <Calendar className="w-4 h-4" />
-                  <span>Dec 1 - Dec 31, 2024</span>
+                  <span className="capitalize">
+                    {new Date().toLocaleDateString(adminLang === "ar" ? "ar-DZ" : adminLang === "fr" ? "fr-FR" : "en-US", {
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </span>
                 </div>
                 <select
                   value={adminLang}
@@ -1249,12 +1279,12 @@ export default function AdminDashboard() {
                     <table className="w-full text-sm">
                       <thead>
                         <tr className="border-y border-gray-100 bg-gray-50/50">
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.order}</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.customer}</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.product}</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.amount}</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.status}</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.date}</th>
+                          <th className="text-start px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.order}</th>
+                          <th className="text-start px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.customer}</th>
+                          <th className="text-start px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.product}</th>
+                          <th className="text-start px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.amount}</th>
+                          <th className="text-start px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.status}</th>
+                          <th className="text-start px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.orders.date}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1390,7 +1420,7 @@ export default function AdminDashboard() {
                     </span>
                   </td>
                   <td className="px-4 py-3 hidden lg:table-cell"><ProductBadge badge={product.badge} /></td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-4 py-3 text-end">
                     <div className="flex items-center justify-end gap-1 opacity-100 sm:opacity-60 sm:group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => openEditModal(product)}
@@ -1562,13 +1592,13 @@ export default function AdminDashboard() {
                           <table className="w-full text-sm">
                             <thead>
                               <tr className="bg-gray-50/40 text-gray-400">
-                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.name}</th>
-                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider hidden md:table-cell">{a.products.category}</th>
-                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider hidden sm:table-cell">{a.products.price}</th>
-                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider hidden lg:table-cell">{a.products.oldPrice}</th>
-                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider hidden sm:table-cell">{a.products.stock}</th>
-                                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider hidden lg:table-cell">{a.products.badge}</th>
-                                <th className="text-right px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.actions}</th>
+                                <th className="text-start px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.name}</th>
+                                <th className="text-start px-4 py-2.5 text-xs font-semibold uppercase tracking-wider hidden md:table-cell">{a.products.category}</th>
+                                <th className="text-start px-4 py-2.5 text-xs font-semibold uppercase tracking-wider hidden sm:table-cell">{a.products.price}</th>
+                                <th className="text-start px-4 py-2.5 text-xs font-semibold uppercase tracking-wider hidden lg:table-cell">{a.products.oldPrice}</th>
+                                <th className="text-start px-4 py-2.5 text-xs font-semibold uppercase tracking-wider hidden sm:table-cell">{a.products.stock}</th>
+                                <th className="text-start px-4 py-2.5 text-xs font-semibold uppercase tracking-wider hidden lg:table-cell">{a.products.badge}</th>
+                                <th className="text-end px-4 py-2.5 text-xs font-semibold uppercase tracking-wider">{a.products.actions}</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -1674,6 +1704,7 @@ export default function AdminDashboard() {
                             getStatusColor={getStatusColor}
                             onStatusChange={updateOrderStatus}
                             onDelete={deleteOrder}
+                            a={a}
                           />
                         ))}
                       </div>
@@ -1768,11 +1799,11 @@ export default function AdminDashboard() {
                     <table className="w-full text-sm">
                       <thead>
                         <tr className="border-y border-gray-100 bg-gray-50/50">
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.analytics.name}</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.products.category}</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.analytics.rating}</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.analytics.reviews}</th>
-                          <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.products.price}</th>
+                          <th className="text-start px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.analytics.name}</th>
+                          <th className="text-start px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.products.category}</th>
+                          <th className="text-start px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.analytics.rating}</th>
+                          <th className="text-start px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.analytics.reviews}</th>
+                          <th className="text-start px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">{a.products.price}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -2590,13 +2621,24 @@ export default function AdminDashboard() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">صورة القسم (Category Image URL)</label>
-              <input
-                value={catModal.imageUrl}
-                onChange={(e) => setCatModal({ ...catModal, imageUrl: e.target.value })}
-                placeholder="https://images.unsplash.com/..."
-                className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
+              <label className="block text-sm font-medium text-gray-700 mb-1">صورة القسم (Category Image)</label>
+              <div className="flex gap-2">
+                <input
+                  value={catModal.imageUrl}
+                  onChange={(e) => setCatModal({ ...catModal, imageUrl: e.target.value })}
+                  placeholder="https://images.unsplash.com/..."
+                  className="flex-1 px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+                <label className="cursor-pointer bg-gray-50 border border-gray-200 hover:bg-gray-100 transition-colors px-3 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-1.5 whitespace-nowrap text-gray-700">
+                  {uploadingCatImg ? (
+                    <div className="animate-spin w-4 h-4 border-2 border-emerald-600 border-t-transparent rounded-full" />
+                  ) : (
+                    <Upload className="w-4 h-4 text-gray-500" />
+                  )}
+                  <span>Upload</span>
+                  <input type="file" accept="image/*" onChange={handleCategoryImageUpload} className="hidden" />
+                </label>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
