@@ -90,7 +90,7 @@ export default function Navbar() {
   const desktopLinks = [
     { href: "/",                      label: t.nav.home },
     { href: "/products",              label: t.nav.products },
-    { href: "/vet",                   label: t.nav.vet, badge: true },
+    { href: "/vet",                   label: t.nav.vet },
     { href: "/products?filter=offers",label: t.nav.offers },
     { href: "/shipping",              label: t.nav.shipping },
     { href: "/contact",               label: t.nav.contact },
@@ -149,11 +149,6 @@ export default function Navbar() {
                 >
                   <span className="flex items-center gap-1.5">
                     {l.label}
-                    {l.badge && (
-                      <span className="align-middle text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#F5851F] text-white">
-                        {lang === "ar" ? "قريبًا" : lang === "fr" ? "Bientôt" : "Soon"}
-                      </span>
-                    )}
                   </span>
                   <span
                     className={`absolute left-2 right-2 bottom-0.5 h-0.5 rounded-full bg-[#C4933F] origin-${isRtl ? "right" : "left"} transition-transform duration-300 ${
@@ -319,14 +314,14 @@ export default function Navbar() {
                     <Link
                       href="/vet"
                       onClick={() => setMegaOpen(false)}
-                      className="group flex items-center gap-3 p-3 rounded-xl hover:bg-[#FFF7ED] transition-colors border border-dashed border-[#F5851F]/40"
+                      className="group flex items-center gap-3 p-3 rounded-xl hover:bg-[#FBF7EE] transition-colors"
                     >
-                      <span className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center bg-[#FFEDD5] text-[#F5851F] group-hover:bg-[#F5851F] group-hover:text-white transition-colors">
+                      <span className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center bg-[#F5EDD6] text-[#C4933F] group-hover:bg-[#C4933F] group-hover:text-white transition-colors">
                         <Stethoscope className="w-5 h-5" />
                       </span>
                       <span className="min-w-0">
-                        <span className="block font-semibold text-[#1A1A2E] text-sm group-hover:text-[#F5851F] transition-colors">{t.nav.vet}</span>
-                        <span className="block text-[11px] text-[#9E9282]">{lang === "ar" ? "قريبًا" : lang === "fr" ? "Bientôt" : "Soon"}</span>
+                        <span className="block font-semibold text-[#1A1A2E] text-sm group-hover:text-[#C4933F] transition-colors">{t.nav.vet}</span>
+                        <span className="block text-[11px] text-[#9E9282]">{lang === "ar" ? "الفحص والعلاج" : lang === "fr" ? "Clinique Vétérinaire" : "Veterinary Clinic"}</span>
                       </span>
                     </Link>
                   </div>
@@ -404,9 +399,6 @@ export default function Navbar() {
               <div className="border-t border-[#F0EDE6] pt-2 mt-2 space-y-1">
                 <Link href="/vet"      onClick={() => setMobileOpen(false)} className="block py-2 text-[#3D3730] hover:text-[#C4933F] text-sm font-medium">
                   {t.nav.vet}
-                  <span className="ml-1.5 inline-block align-middle text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#F5851F] text-white">
-                    {lang === "ar" ? "قريبًا" : lang === "fr" ? "Bientôt" : "Soon"}
-                  </span>
                 </Link>
                 <Link href="/faq"      onClick={() => setMobileOpen(false)} className="block py-2 text-[#3D3730] hover:text-[#C4933F] text-sm font-medium">{t.nav.faq}</Link>
                 <Link href="/shipping" onClick={() => setMobileOpen(false)} className="block py-2 text-[#3D3730] hover:text-[#C4933F] text-sm font-medium">{t.nav.shipping}</Link>
