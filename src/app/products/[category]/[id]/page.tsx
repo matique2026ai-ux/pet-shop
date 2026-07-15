@@ -75,6 +75,63 @@ function GoldLogo({ className }: { className?: string }) {
   );
 }
 
+function PawIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3z"/>
+      <circle cx="6.5" cy="11.5" r="1.5" />
+      <circle cx="10" cy="8.5" r="1.5" />
+      <circle cx="14" cy="8.5" r="1.5" />
+      <circle cx="17.5" cy="11.5" r="1.5" />
+    </svg>
+  );
+}
+
+function BirdFootprintIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" className={className}>
+      <line x1="12" y1="20" x2="12" y2="4" />
+      <line x1="12" y1="14" x2="6" y2="9" />
+      <line x1="12" y1="14" x2="18" y2="9" />
+      <line x1="12" y1="14" x2="12" y2="21" />
+    </svg>
+  );
+}
+
+function FootprintDecorations({ category }: { category: string }) {
+  const isBird = category === "birds";
+  
+  if (isBird) {
+    return (
+      <>
+        <div className="absolute top-10 left-8 text-[#C4933F] opacity-10 pointer-events-none w-12 h-12 rotate-12">
+          <BirdFootprintIcon className="w-full h-full" />
+        </div>
+        <div className="absolute top-1/3 right-10 text-[#C4933F] opacity-10 pointer-events-none w-10 h-10 -rotate-45">
+          <BirdFootprintIcon className="w-full h-full" />
+        </div>
+        <div className="absolute bottom-24 left-10 text-[#C4933F] opacity-10 pointer-events-none w-10 h-10 rotate-45">
+          <BirdFootprintIcon className="w-full h-full" />
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <div className="absolute top-10 left-8 text-[#C4933F] opacity-10 pointer-events-none w-12 h-12 rotate-12">
+        <PawIcon className="w-full h-full" />
+      </div>
+      <div className="absolute top-1/3 right-10 text-[#C4933F] opacity-10 pointer-events-none w-10 h-10 -rotate-12">
+        <PawIcon className="w-full h-full" />
+      </div>
+      <div className="absolute bottom-24 left-10 text-[#C4933F] opacity-10 pointer-events-none w-10 h-10 rotate-45">
+        <PawIcon className="w-full h-full" />
+      </div>
+    </>
+  );
+}
+
 export default function ProductDetailPage() {
   const { t, currency, lang } = useI18n();
   const { products, categories } = useTranslatedData();
@@ -137,8 +194,11 @@ export default function ProductDetailPage() {
         <section className="py-10 lg:py-14 bg-gray-50/50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <AnimatedSection>
-              <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden p-6 sm:p-10 space-y-8">
+              <div className="relative bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden p-6 sm:p-10 space-y-8">
                 
+                {/* Background decorative animal footprint patterns */}
+                <FootprintDecorations category={product.category} />
+
                 {/* Brand Header inside Card */}
                 <div className="flex flex-col items-center justify-center border-b border-gray-100 pb-6 text-center">
                   <GoldLogo className="w-16 h-16 mb-2" />

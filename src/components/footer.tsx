@@ -39,6 +39,55 @@ function TiktokIcon({ className }: { className?: string }) {
   );
 }
 
+/* ─── Gold Eagle+Horse SVG Logo ─── */
+function GoldLogo({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 64 64"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      <path
+        d="M14 44 C14 44 16 36 22 33 C25 31 28 32 30 30 C32 28 32 24 34 22 C36 20 40 20 42 22 C44 24 43 28 41 30 C39 32 36 32 35 34 C33 36 34 40 34 44"
+        stroke="url(#goldGradFooter)" strokeWidth="2" strokeLinecap="round" fill="none"
+      />
+      <path
+        d="M40 22 C41 19 43 17 45 18 C47 19 47 22 46 24 C45 25 43 25 42 24"
+        stroke="url(#goldGradFooter)" strokeWidth="1.8" strokeLinecap="round" fill="none"
+      />
+      <line x1="22" y1="44" x2="20" y2="52" stroke="url(#goldGradFooter)" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="28" y1="44" x2="27" y2="52" stroke="url(#goldGradFooter)" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="34" y1="44" x2="35" y2="52" stroke="url(#goldGradFooter)" strokeWidth="2" strokeLinecap="round"/>
+      <path
+        d="M8 28 C10 22 16 20 22 22 C24 23 26 25 26 27"
+        stroke="url(#goldGradFooter)" strokeWidth="2" strokeLinecap="round" fill="none"
+      />
+      <path
+        d="M56 22 C54 18 48 17 42 20 C40 21 38 24 38 27"
+        stroke="url(#goldGradFooter)" strokeWidth="2" strokeLinecap="round" fill="none"
+      />
+      <ellipse cx="32" cy="26" rx="5" ry="4" fill="url(#goldGradFooter)" opacity="0.9"/>
+      <circle cx="32" cy="20" r="3.5" fill="url(#goldGradFooter)"/>
+      <path d="M34 19 L37 21 L34 21 Z" fill="url(#goldGradFooter2)"/>
+      <path d="M10 26 L6 20 M13 24 L9 18 M16 23 L13 17" stroke="url(#goldGradFooter)" strokeWidth="1.2" strokeLinecap="round"/>
+      <path d="M54 20 L58 14 M51 19 L55 13 M48 19 L51 13" stroke="url(#goldGradFooter)" strokeWidth="1.2" strokeLinecap="round"/>
+      <defs>
+        <linearGradient id="goldGradFooter" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stopColor="#DFB96A"/>
+          <stop offset="50%"  stopColor="#C4933F"/>
+          <stop offset="100%" stopColor="#8A6022"/>
+        </linearGradient>
+        <linearGradient id="goldGradFooter2" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%"   stopColor="#F5EDD6"/>
+          <stop offset="100%" stopColor="#C4933F"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
 export default function Footer() {
   const pathname = usePathname();
   if (pathname.startsWith("/admin")) return null;
@@ -79,9 +128,7 @@ export default function Footer() {
           {/* Brand column */}
           <div>
             <div className="flex items-center gap-2.5 mb-4">
-              <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#DFB96A] to-[#C4933F] flex items-center justify-center shadow-md">
-                <PawPrint className="w-5 h-5 text-white" />
-              </span>
+              <GoldLogo className="w-10 h-10 shrink-0" />
               <span className="font-bold text-white text-base">{storeName}</span>
             </div>
             <p className="text-sm text-slate-400 leading-relaxed mb-4">
