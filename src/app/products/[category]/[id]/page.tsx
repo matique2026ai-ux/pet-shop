@@ -12,7 +12,6 @@ import { useSiteSettings } from "@/lib/site-settings";
 import AnimatedSection from "@/components/animated-section";
 import ProductCard from "@/components/product-card";
 import ProductReviews from "@/components/product-reviews";
-import { LogoFullStack } from "@/components/brand-logo";
 import {
   Star, ChevronRight, Check, ShoppingCart, Plus, Minus, Share2, X, ZoomIn,
   Play, Truck, ShieldCheck, BadgeCheck, Leaf,
@@ -150,20 +149,15 @@ export default function ProductDetailPage() {
           </div>
         </section>
 
-        <section className="py-10 lg:py-14 bg-gray-50/50">
+        <section className="py-8 lg:py-12 bg-gray-50/50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <AnimatedSection>
-              <div className="relative bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden p-6 sm:p-10 space-y-8">
+              <div className="relative bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden p-6 sm:p-8 space-y-6">
                 
                 {/* Background decorative animal footprint patterns */}
                 <FootprintDecorations category={product.category} />
 
-                {/* Brand Header inside Card */}
-                <div className="flex flex-col items-center justify-center border-b border-gray-100 pb-6 text-center">
-                  <LogoFullStack />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
                   {/* Left Side: Product Image & Video Trigger */}
                   <div className="md:col-span-5 flex flex-col items-center gap-4">
                     <div className="relative w-64 h-64 sm:w-72 sm:h-72 bg-white rounded-2xl p-4 flex items-center justify-center border border-gray-100 shadow-sm group">
@@ -262,20 +256,92 @@ export default function ProductDetailPage() {
                   </div>
 
                   {/* Right Side: Product Details */}
-                  <div className="md:col-span-7 space-y-4 text-right" dir={lang === "ar" ? "rtl" : "ltr"}>
-                    <div>
-                      <span className="text-xs font-bold text-emerald-600 uppercase bg-emerald-50 px-2.5 py-1 rounded-lg">
-                        {catName}
-                      </span>
+                  <div className={`md:col-span-7 space-y-5 ${lang === "ar" ? "text-right" : "text-left"}`} dir={lang === "ar" ? "rtl" : "ltr"}>
+                    <div className="space-y-2">
+                      <div>
+                        <span className="text-xs font-bold text-emerald-600 uppercase bg-emerald-50 px-2.5 py-1 rounded-lg">
+                          {catName}
+                        </span>
+                      </div>
+                      
+                      <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight">
+                        {product.name}
+                      </h1>
+
+                      {/* Ratings */}
+                      <div className={`flex items-center gap-2 pt-1 ${lang === "ar" ? "justify-start" : "justify-start flex-row-reverse"}`}>
+                        <div className="flex items-center gap-0.5">
+                          {[1, 2, 3, 4, 5].map((i) => (
+                            <Star key={i} className={`w-3.5 h-3.5 ${i <= Math.round(product.rating) ? "fill-orange-400 text-orange-400" : "fill-gray-200 text-gray-200"}`} />
+                          ))}
+                        </div>
+                        <span className="text-xs font-semibold text-gray-500">
+                          ({product.reviews} {t.products.reviews})
+                        </span>
+                      </div>
                     </div>
-                    
-                    <h1 className="text-xl sm:text-2xl font-extrabold text-gray-900 leading-tight">
-                      {product.name}
-                    </h1>
+
+                    {/* Price section */}
+                    <div className="pt-2">
+                      <div className={`flex items-baseline gap-3 ${lang === "ar" ? "justify-start" : "justify-start flex-row-reverse"}`}>
+                        <p className="text-3xl font-extrabold text-gray-900">
+                          {product.price.toLocaleString()} {currency}
+                          {product.sold_by && product.sold_by !== "piece" && <span className="text-sm font-normal text-gray-400"> /{unitLabel(product.sold_by, lang)}</span>}
+                        </p>
+                        {product.originalPrice && (
+                          <p className="text-sm text-gray-400 line-through">{product.originalPrice.toLocaleString()} {currency}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="border-t border-gray-100 pt-5">
+                      {/* Quantity and Add to Cart action */}
+                      <div className={`flex flex-col sm:flex-row items-center gap-3 w-full`}>
+                        {/* Quantity selectors */}
+                        {isContinuousUnit(product.sold_by) ? (
+                          <div className="flex items-center justify-between w-full sm:w-auto bg-gray-100 rounded-xl px-4 py-2 shrink-0">
+                            <input
+                              type="number"
+                              min="0.1"
+                              step="0.1"
+                              value={qty}
+                              onChange={(e) => setQty(Math.max(0.1, Number(e.target.value) || 0.1))}
+                              className="w-16 bg-transparent text-center font-bold text-gray-900 text-sm focus:outline-none"
+                            />
+                            <span className="text-xs text-gray-500 font-semibold">{unitLabel(product.sold_by, lang)}</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-between w-full sm:w-auto bg-gray-100 rounded-xl shrink-0">
+                            <button
+                              onClick={() => setQty(Math.max(1, qty - 1))}
+                              className="w-12 h-10 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
+                            >
+                              <Minus className="w-3.5 h-3.5" />
+                            </button>
+                            <span className="w-12 text-center font-bold text-gray-900 text-sm">{qty}</span>
+                            <button
+                              onClick={() => setQty(qty + 1)}
+                              className="w-12 h-10 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
+                            >
+                              <Plus className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        )}
+
+                        {/* Add to Cart button */}
+                        <button
+                          onClick={() => { addItem(product, qty); setQty(1); }}
+                          className="w-full sm:w-auto bg-gradient-to-r from-orange-500 to-[#EA580C] hover:from-orange-600 hover:to-[#D97706] text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md flex items-center justify-center gap-2 text-sm uppercase tracking-wide min-w-[160px]"
+                        >
+                          <ShoppingCart className="w-4 h-4 shrink-0" />
+                          {t.products.addToCart}
+                        </button>
+                      </div>
+                    </div>
 
                     {/* Features List with custom bullet shapes */}
                     {product.features && product.features.length > 0 && (
-                      <div className="space-y-2.5 pt-2">
+                      <div className="space-y-2.5 pt-5 border-t border-gray-100">
                         {product.features.map((f, i) => (
                           <div key={i} className={`flex items-start gap-2.5 ${lang === "ar" ? "flex-row" : "flex-row-reverse justify-end"}`}>
                             <span className="text-sm text-gray-600 font-medium leading-relaxed">{f}</span>
@@ -286,76 +352,6 @@ export default function ProductDetailPage() {
                         ))}
                       </div>
                     )}
-
-                    {/* Ratings */}
-                    <div className={`flex items-center gap-2 pt-2 ${lang === "ar" ? "justify-start" : "justify-start flex-row-reverse"}`}>
-                      <div className="flex items-center gap-0.5">
-                        {[1, 2, 3, 4, 5].map((i) => (
-                          <Star key={i} className={`w-3.5 h-3.5 ${i <= Math.round(product.rating) ? "fill-orange-400 text-orange-400" : "fill-gray-200 text-gray-200"}`} />
-                        ))}
-                      </div>
-                      <span className="text-xs font-semibold text-gray-500">
-                        ({product.reviews} {t.products.reviews})
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Footer Section inside Card: Price + Action Button */}
-                <div className="border-t border-gray-100 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  {/* Price info */}
-                  <div className="text-center sm:text-left">
-                    <p className="text-xs text-gray-400 uppercase font-semibold">{lang === "ar" ? "السعر" : "Prix"}</p>
-                    <p className="text-3xl font-extrabold text-gray-900 mt-1">
-                      {product.price.toLocaleString()} {currency}
-                      {product.sold_by && product.sold_by !== "piece" && <span className="text-sm font-normal text-gray-400"> /{unitLabel(product.sold_by, lang)}</span>}
-                    </p>
-                    {product.originalPrice && (
-                      <p className="text-sm text-gray-400 line-through mt-0.5">{product.originalPrice.toLocaleString()} {currency}</p>
-                    )}
-                  </div>
-
-                  {/* Quantity and Add to Cart action */}
-                  <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-                    {/* Quantity selectors */}
-                    {isContinuousUnit(product.sold_by) ? (
-                      <div className="flex items-center justify-between w-full sm:w-auto bg-gray-100 rounded-xl px-4 py-2 shrink-0">
-                        <input
-                          type="number"
-                          min="0.1"
-                          step="0.1"
-                          value={qty}
-                          onChange={(e) => setQty(Math.max(0.1, Number(e.target.value) || 0.1))}
-                          className="w-16 bg-transparent text-center font-bold text-gray-900 text-sm focus:outline-none"
-                        />
-                        <span className="text-xs text-gray-500 font-semibold">{unitLabel(product.sold_by, lang)}</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-between w-full sm:w-auto bg-gray-100 rounded-xl shrink-0">
-                        <button
-                          onClick={() => setQty(Math.max(1, qty - 1))}
-                          className="w-12 h-10 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
-                        >
-                          <Minus className="w-3.5 h-3.5" />
-                        </button>
-                        <span className="w-12 text-center font-bold text-gray-900 text-sm">{qty}</span>
-                        <button
-                          onClick={() => setQty(qty + 1)}
-                          className="w-12 h-10 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
-                        >
-                          <Plus className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    )}
-
-                    {/* Add to Cart button */}
-                    <button
-                      onClick={() => { addItem(product, qty); setQty(1); }}
-                      className="w-full sm:w-auto bg-gradient-to-r from-orange-500 to-[#EA580C] hover:from-orange-600 hover:to-[#D97706] text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md flex items-center justify-center gap-2 text-sm uppercase tracking-wide min-w-[160px]"
-                    >
-                      <ShoppingCart className="w-4 h-4 shrink-0" />
-                      {t.products.addToCart}
-                    </button>
                   </div>
                 </div>
 
