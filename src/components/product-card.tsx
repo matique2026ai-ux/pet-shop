@@ -152,10 +152,12 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
             {/* Stars + review count */}
             {!isRelated && (
               <div className="relative z-10 flex items-center gap-1.5 mb-3">
-                <StarRating rating={product.rating} />
-                <span className="text-xs text-[#7A6F61] font-medium">
-                  {product.rating}
-                </span>
+                <StarRating rating={product.reviews > 0 ? product.rating : 0} />
+                {product.reviews > 0 && (
+                  <span className="text-xs text-[#7A6F61] font-medium">
+                    {product.rating}
+                  </span>
+                )}
                 <span className="text-xs text-[#9E9282]">({product.reviews})</span>
               </div>
             )}

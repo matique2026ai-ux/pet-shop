@@ -1820,7 +1820,7 @@ export default function AdminDashboard() {
                         </tr>
                       </thead>
                       <tbody>
-                        {[...products].sort((a, b) => b.rating - a.rating).slice(0, 10).map((product) => {
+                        {[...products].sort((a, b) => (b.reviews > 0 ? b.rating : 0) - (a.reviews > 0 ? a.rating : 0)).slice(0, 10).map((product) => {
                           const cat = categories.find((c) => c.id === product.category);
                           return (
                             <tr key={product.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
@@ -1828,7 +1828,7 @@ export default function AdminDashboard() {
                               <td className="px-6 py-4 text-gray-700">{cat?.name || product.category}</td>
                               <td className="px-6 py-4">
                                 <span className="inline-flex items-center gap-1 text-amber-500">
-                                  ★ {product.rating}
+                                  ★ {product.reviews > 0 ? product.rating : 0}
                                 </span>
                               </td>
                               <td className="px-6 py-4 text-gray-700">{product.reviews}</td>

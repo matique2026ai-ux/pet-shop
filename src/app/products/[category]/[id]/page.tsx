@@ -272,7 +272,7 @@ export default function ProductDetailPage() {
                       <div className={`flex items-center gap-2 pt-1 ${lang === "ar" ? "justify-start" : "justify-start flex-row-reverse"}`}>
                         <div className="flex items-center gap-0.5">
                           {[1, 2, 3, 4, 5].map((i) => (
-                            <Star key={i} className={`w-3.5 h-3.5 ${i <= Math.round(product.rating) ? "fill-orange-400 text-orange-400" : "fill-gray-200 text-gray-200"}`} />
+                            <Star key={i} className={`w-3.5 h-3.5 ${i <= Math.round(product.reviews > 0 ? product.rating : 0) ? "fill-orange-400 text-orange-400" : "fill-gray-200 text-gray-200"}`} />
                           ))}
                         </div>
                         <span className="text-xs font-semibold text-gray-500">

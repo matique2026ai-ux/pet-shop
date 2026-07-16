@@ -40,7 +40,7 @@ function ProductsContent() {
     switch (sort) {
       case "price-asc": return [...list].sort((a, b) => a.price - b.price);
       case "price-desc": return [...list].sort((a, b) => b.price - a.price);
-      case "rating": return [...list].sort((a, b) => b.rating - a.rating);
+      case "rating": return [...list].sort((a, b) => (b.reviews > 0 ? b.rating : 0) - (a.reviews > 0 ? a.rating : 0));
       case "name": return [...list].sort((a, b) => a.name.localeCompare(b.name));
       default: return list;
     }
