@@ -54,6 +54,14 @@ export default function Navbar() {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isRtl = dir === "rtl";
 
+  const [expandedCats, setExpandedCats] = useState<Record<string, boolean>>({});
+  const toggleCat = (catId: string) => {
+    setExpandedCats((prev) => ({
+      ...prev,
+      [catId]: !prev[catId],
+    }));
+  };
+
   const storeName = store?.storeName || store?.name || (
     lang === "ar"
       ? "طيور الجمال والجواد"
@@ -383,24 +391,57 @@ export default function Navbar() {
               <Link href="/products?filter=offers" onClick={() => setMobileOpen(false)} className="block py-2 text-[#3D3730] hover:text-[#C4933F] text-sm font-medium">{t.nav.offers}</Link>
 
               <div className="border-t border-[#F0EDE6] pt-2 mt-2">
-                <p className="text-[11px] text-[#9E9282] font-medium uppercase tracking-wider mb-2 px-1">{t.nav.categories}</p>
-                {categories.map((cat) => (
-                  <div key={cat.id}>
-                    <Link href={`/products/${cat.id}`} onClick={() => setMobileOpen(false)} className="flex items-center gap-2 py-2 px-1 text-[#3D3730] hover:text-[#C4933F] text-sm font-medium">
-                      <span className="w-7 h-7 bg-[#FBF7EE] rounded-lg flex items-center justify-center text-[#C4933F]">
-                        {catIcons[cat.icon] ?? <PawPrint className="w-4 h-4" />}
-                      </span>
-                      {cat.name}
-                    </Link>
-                    <div className="ms-9 mb-1 flex flex-wrap gap-1">
-                      {cat.subcategories.map((sub) => (
-                        <Link key={sub.id} href={`/products/${cat.id}?sub=${sub.id}`} onClick={() => setMobileOpen(false)} className="text-xs text-[#7A6F61] hover:text-[#C4933F] px-2 py-1 bg-[#F8F7F4] rounded-md">
-                          {sub.name}
-                        </Link>
-                      ))}
+                <p className="text-[11px] text-[#9E9282] font-semibold uppercase tracking-wider mb-2 px-1">{t.nav.categories}</p>
+                {categories.map((cat) => {
+                  const isExpanded = !!expandedCats[cat.id];
+                  return (
+                    <div key={cat.id} className="border-b border-[#F5F2EB]/50 last:border-b-0">
+                      <button
+                        onClick={() => toggleCat(cat.id)}
+                        className="flex items-center justify-between w-full py-2.5 px-1 text-[#3D3730] hover:text-[#C4933F] text-sm font-medium transition-colors"
+                      >
+                        <span className="flex items-center gap-2.5">
+                          <span className="w-8 h-8 bg-[#FBF7EE] rounded-xl flex items-center justify-center text-[#C4933F]">
+                            {catIcons[cat.icon] ?? <PawPrint className="w-4 h-4" />}
+                          </span>
+                          <span className="text-[#1A1A2E] font-semibold">{cat.name}</span>
+                        </span>
+                        <ChevronRight 
+                          className={`w-4 h-4 text-[#9E9282] transition-transform duration-300 ${
+                            isExpanded ? "rotate-90 text-[#C4933F]" : "rtl:rotate-180"
+                          }`}
+                        />
+                      </button>
+
+                      <div 
+                        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                          isExpanded ? "max-h-[500px] opacity-100 mb-2" : "max-h-0 opacity-0"
+                        }`}
+                      >
+                        <div className="ms-9 pl-2 border-l-2 border-[#F5EDD6] rtl:border-l-0 rtl:border-r-2 rtl:border-[#F5EDD6] rtl:pr-2 py-1 space-y-1">
+                          <Link
+                            href={`/products/${cat.id}`}
+                            onClick={() => setMobileOpen(false)}
+                            className="block py-1.5 px-2 text-xs font-semibold text-[#C4933F] hover:bg-[#FBF7EE] rounded-lg transition-colors"
+                          >
+                            {lang === "ar" ? "عرض كل " + cat.name : lang === "fr" ? "Voir tout " + cat.name : "View all " + cat.name}
+                          </Link>
+
+                          {cat.subcategories.map((sub) => (
+                            <Link
+                              key={sub.id}
+                              href={`/products/${cat.id}?sub=${sub.id}`}
+                              onClick={() => setMobileOpen(false)}
+                              className="block py-1.5 px-2 text-xs text-[#5C5348] hover:text-[#C4933F] hover:bg-[#FBF7EE] rounded-lg transition-colors"
+                            >
+                              {sub.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="border-t border-[#F0EDE6] pt-2 mt-2 space-y-1">
