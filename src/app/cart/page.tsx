@@ -38,16 +38,28 @@ const SOUTH_WILAYAS = new Set([
   "El Oued", "Ghardaïa", "Biskra", "Laghouat", "El Bayadh", "Naâma",
 ]);
 
-function regionForWilaya(w: string): "setif" | "north" | "south" {
-  if (w === "Sétif") return "setif";
+function isSetifCommune(c: string) {
+  const norm = c.trim().toLowerCase();
+  return norm === "setif" || norm === "sétif" || norm === "سطيف";
+}
+
+function regionForWilaya(w: string, c: string = ""): "setifCenter" | "setifOther" | "north" | "south" {
+  if (w === "Sétif") {
+    return isSetifCommune(c) ? "setifCenter" : "setifOther";
+  }
   if (SOUTH_WILAYAS.has(w)) return "south";
   return "north";
 }
 
 const DELIVERY_CONFIG = {
-  setif: {
+  setifCenter: {
     home: 200,
     stopdesk: 150,
+    eta: { en: "12-24h", fr: "12-24h", ar: "12-24 ساعة" }
+  },
+  setifOther: {
+    home: 450,
+    stopdesk: 350,
     eta: { en: "24-48h", fr: "24-48h", ar: "24-48 ساعة" }
   },
   north: {
@@ -102,7 +114,7 @@ export default function CartPage() {
   const cartHasBirds = items.some((item) => products.find((p: any) => p.id === item.productId)?.category === "birds");
 
   const d = { ...DEFAULT_DELIVERY, ...(delivery || {}) };
-  const region = regionForWilaya(wilaya);
+  const region = regionForWilaya(wilaya, commune);
   const deliv = DELIVERY_CONFIG[region];
   const feeNum = deliveryType === "home" ? deliv.home : deliv.stopdesk;
   const etaText = deliv.eta[lang];
