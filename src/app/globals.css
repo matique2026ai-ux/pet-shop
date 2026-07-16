@@ -52,6 +52,7 @@
 html {
   scroll-behavior: smooth;
   font-family: var(--font-cairo), sans-serif;
+  overflow-x: hidden;
 }
 
 body {

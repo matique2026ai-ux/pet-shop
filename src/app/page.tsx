@@ -176,50 +176,54 @@ export default function HomePage() {
       {/* ══════════════════════════════════
           CATEGORIES GRID
       ══════════════════════════════════ */}
-      <section className="py-12 bg-[#F8F7F4] overflow-hidden">
+      <section className="py-12 bg-[#F8F7F4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-[#1A1A2E]">{t.nav.categories}</h2>
               <div className="mt-2 mx-auto w-16 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A]" />
             </div>
-            <div className="flex overflow-x-auto lg:grid lg:grid-cols-5 gap-4 pb-4 px-1 scrollbar-none snap-x snap-mandatory">
-              {categories.map((cat) => (
-                <Link
-                  key={cat.id}
-                  href={`/products/${cat.id}`}
-                  className="group relative block rounded-2xl overflow-hidden aspect-[4/5] shadow-md hover:shadow-xl transition-all shrink-0 w-[145px] sm:w-[180px] lg:w-auto snap-start"
-                >
-                  {cat.video_url ? (
-                    <video
-                      src={cat.video_url}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  ) : (
-                    <Image
-                      src={cat.image_url || categoryImages[cat.id] || categoryImages.cats}
-                      alt={cat.name}
-                      fill
-                      placeholder="blur"
-                      blurDataURL={SHIMMER_BLUR}
-                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent group-hover:from-[#C4933F]/80 transition-all duration-400" />
-                  <div className="absolute bottom-0 inset-x-0 p-4 text-center">
-                    <span className="text-white font-bold text-sm lg:text-base leading-tight block drop-shadow-lg">
-                      {cat.name}
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
           </AnimatedSection>
+          {/* Scroll row sits OUTSIDE AnimatedSection to avoid Framer Motion intercepting touch events */}
+          <div
+            className="flex overflow-x-auto lg:grid lg:grid-cols-5 gap-4 pb-4 px-1 scrollbar-none"
+            style={{ touchAction: "pan-x pan-y" }}
+          >
+            {categories.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/products/${cat.id}`}
+                className="group relative block rounded-2xl overflow-hidden aspect-[4/5] shadow-md hover:shadow-xl transition-all shrink-0 w-[145px] sm:w-[180px] lg:w-auto"
+              >
+                {cat.video_url ? (
+                  <video
+                    src={cat.video_url}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                ) : (
+                  <Image
+                    src={cat.image_url || categoryImages[cat.id] || categoryImages.cats}
+                    alt={cat.name}
+                    fill
+                    placeholder="blur"
+                    blurDataURL={SHIMMER_BLUR}
+                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent group-hover:from-[#C4933F]/80 transition-all duration-400" />
+                <div className="absolute bottom-0 inset-x-0 p-4 text-center">
+                  <span className="text-white font-bold text-sm lg:text-base leading-tight block drop-shadow-lg">
+                    {cat.name}
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
