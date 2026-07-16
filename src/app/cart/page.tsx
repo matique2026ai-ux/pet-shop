@@ -193,70 +193,88 @@ export default function CartPage() {
                 {items.map((item) => (
                   <div
                     key={item.productId}
-                    className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex items-center gap-4"
+                    className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-row items-start sm:items-center gap-3 sm:gap-4 relative"
                   >
-                    <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0">
+                    {/* Product Image */}
+                    <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-100">
                       <Image
                         src={item.image}
                         alt={item.name}
                         fill
                         className="object-cover"
-                        sizes="80px"
+                        sizes="(max-width: 640px) 64px, 80px"
                       />
                     </div>
 
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-gray-900 truncate">{item.name}</h3>
-                      <p className="text-emerald-600 font-medium mt-0.5">
-                        {currency}{item.price.toFixed(2)}
-                        {item.sold_by === "weight" && <span className="text-xs font-normal text-gray-400"> /{lang === "ar" ? "كغ" : "kg"}</span>}
-                      </p>
-                    </div>
+                    {/* Product Details & Actions */}
+                    <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                      {/* Name & Unit Price */}
+                      <div className="min-w-0">
+                        <h3 className="font-semibold text-gray-900 text-sm sm:text-base truncate pr-6 sm:pr-0 rtl:pl-6 rtl:pr-0">
+                          {item.name}
+                        </h3>
+                        <p className="text-emerald-600 font-bold text-xs sm:text-sm mt-0.5 sm:mt-1">
+                          {currency}{item.price.toFixed(2)}
+                          {item.sold_by === "weight" && (
+                            <span className="text-[10px] sm:text-xs font-normal text-gray-400">
+                              {" "}/{lang === "ar" ? "كغ" : "kg"}
+                            </span>
+                          )}
+                        </p>
+                      </div>
 
-                    <div className="flex items-center gap-2">
-                      {item.sold_by === "weight" ? (
-                        <div className="flex items-center gap-1.5 bg-gray-100 rounded-lg px-2 py-1">
-                          <input
-                            type="number"
-                            min="0.1"
-                            step="0.1"
-                            value={item.quantity}
-                            onChange={(e) => updateQuantity(item.productId, Math.max(0.1, Number(e.target.value) || 0.1))}
-                            className="w-16 bg-transparent text-center font-medium text-gray-900 text-sm focus:outline-none"
-                          />
-                          <span className="text-xs text-gray-500">{lang === "ar" ? "كغ" : "kg"}</span>
+                      {/* Quantity & Price Summary Row */}
+                      <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto mt-1 sm:mt-0 pt-2 sm:pt-0 border-t border-dashed border-gray-100 sm:border-0">
+                        {/* Quantity Selector / Weight Input */}
+                        <div className="flex items-center">
+                          {item.sold_by === "weight" ? (
+                            <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-200/60 rounded-xl px-2.5 py-1">
+                              <input
+                                type="number"
+                                min="0.1"
+                                step="0.1"
+                                value={item.quantity}
+                                onChange={(e) => updateQuantity(item.productId, Math.max(0.1, Number(e.target.value) || 0.1))}
+                                className="w-12 sm:w-16 bg-transparent text-center font-bold text-gray-900 text-xs sm:text-sm focus:outline-none"
+                              />
+                              <span className="text-[10px] sm:text-xs text-gray-400 font-medium">{lang === "ar" ? "كغ" : "kg"}</span>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-1 bg-gray-50 border border-gray-200/60 rounded-xl p-0.5">
+                              <button
+                                onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                                disabled={item.quantity <= 1}
+                                className="w-7 h-7 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                              >
+                                <Minus className="w-3 h-3" />
+                              </button>
+                              <span className="w-6 text-center font-bold text-gray-900 text-xs sm:text-sm">
+                                {item.quantity}
+                              </span>
+                              <button
+                                onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                                className="w-7 h-7 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 transition-colors"
+                              >
+                                <Plus className="w-3 h-3" />
+                              </button>
+                            </div>
+                          )}
                         </div>
-                      ) : (
-                        <>
-                          <button
-                            onClick={() => updateQuantity(item.productId, item.quantity - 1)}
-                            disabled={item.quantity <= 1}
-                            className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                          >
-                            <Minus className="w-3.5 h-3.5" />
-                          </button>
-                          <span className="w-8 text-center font-medium text-gray-900 text-sm">
-                            {item.quantity}
-                          </span>
-                          <button
-                            onClick={() => updateQuantity(item.productId, item.quantity + 1)}
-                            className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors"
-                          >
-                            <Plus className="w-3.5 h-3.5" />
-                          </button>
-                        </>
-                      )}
+
+                        {/* Total Price for this item */}
+                        <div className="text-right sm:min-w-[90px]">
+                          <p className="font-bold text-gray-900 text-sm sm:text-base">
+                            {currency}{(item.price * item.quantity).toFixed(2)}
+                          </p>
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="text-right min-w-[80px]">
-                      <p className="font-semibold text-gray-900">
-                        {currency}{(item.price * item.quantity).toFixed(2)}
-                      </p>
-                    </div>
-
+                    {/* Delete Button (absolute on mobile for neat spacing, standard on desktop) */}
                     <button
                       onClick={() => removeItem(item.productId)}
-                      className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                      className="absolute top-3 right-3 sm:relative sm:top-auto sm:right-auto p-1.5 sm:p-2 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all border border-transparent hover:border-red-100 rtl:left-3 rtl:right-auto sm:rtl:left-auto"
+                      aria-label="Remove item"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
