@@ -42,6 +42,7 @@ type AdminTranslations = {
     deliveryCity: string; deliveryWilaya: string; deliveryScope: string;
     deliveryEta: string; deliveryNote: string; deliveryAreas: string;
     scopeCommune: string; scopeWilaya: string; scopeNational: string; scopeInternational: string;
+    subscribers: string; exportCsv: string; noSubscribers: string; subscriberCount: string;
   };
   cats: {
     title: string; subtitle: string; addCategory: string; editCategory: string; addSub: string; editSub: string;
@@ -94,6 +95,7 @@ const en: AdminTranslations = {
     deliveryCity: "City", deliveryWilaya: "Wilaya", deliveryScope: "Coverage Scope",
     deliveryEta: "Delivery Time (ETA)", deliveryNote: "Public Note", deliveryAreas: "Covered Areas (comma-separated)",
     scopeCommune: "Commune (e.g. Sétif)", scopeWilaya: "Wilaya", scopeNational: "National", scopeInternational: "International",
+    subscribers: "Newsletter Subscribers", exportCsv: "Export CSV", noSubscribers: "No subscribers yet", subscriberCount: "Subscribers Count",
   },
   cats: {
     title: "Categories", subtitle: "Manage product categories and subcategories", addCategory: "Add Category", editCategory: "Edit Category",
@@ -147,6 +149,7 @@ const fr: AdminTranslations = {
     deliveryCity: "Ville", deliveryWilaya: "Wilaya", deliveryScope: "Zone de couverture",
     deliveryEta: "Délai de livraison (ETA)", deliveryNote: "Note publique", deliveryAreas: "Zones couvertes (séparées par virgule)",
     scopeCommune: "Commune (ex. Sétif)", scopeWilaya: "Wilaya", scopeNational: "National", scopeInternational: "International",
+    subscribers: "Abonnés à la Newsletter", exportCsv: "Exporter en CSV", noSubscribers: "Aucun abonné pour l'instant", subscriberCount: "Nombre d'abonnés",
   },
   cats: {
     title: "Catégories", subtitle: "Gérez les catégories et sous-catégories", addCategory: "Ajouter une catégorie", editCategory: "Modifier la catégorie",
@@ -200,6 +203,7 @@ const ar: AdminTranslations = {
     deliveryCity: "المدينة", deliveryWilaya: "الولاية", deliveryScope: "نطاق التغطية",
     deliveryEta: "مدة التوصيل (الوقت المقدر)", deliveryNote: "ملاحظة عامة", deliveryAreas: "المناطق المغطاة (مفصولة بفاصلة)",
     scopeCommune: "بلدية (مثل سطيف)", scopeWilaya: "ولاية", scopeNational: "وطني", scopeInternational: "دولي",
+    subscribers: "مشتركو النشرة البريدية", exportCsv: "تصدير كـ CSV", noSubscribers: "لا يوجد مشتركون بعد", subscriberCount: "عدد المشتركين",
   },
   cats: {
     title: "الفئات", subtitle: "إدارة فئات المنتجات والفئات الفرعية", addCategory: "إضافة فئة", editCategory: "تعديل الفئة",

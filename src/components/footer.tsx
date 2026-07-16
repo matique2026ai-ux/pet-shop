@@ -50,10 +50,29 @@ export default function Footer() {
   const { store, content, delivery } = useSiteSettings();
   const [email, setEmail]         = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [subscribing, setSubscribing] = useState(false);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) setSubscribed(true);
+    if (!email) return;
+    setSubscribing(true);
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (res.ok) {
+        setSubscribed(true);
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to subscribe.");
+      }
+    } catch {
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setSubscribing(false);
+    }
   };
 
   const s = (k: string, fallback: string) => (store && store[k] ? store[k] : fallback);
@@ -167,9 +186,14 @@ export default function Footer() {
                 />
                 <button
                   type="submit"
-                  className="px-3 py-2 bg-gradient-to-r from-[#C4933F] to-[#A87A2E] text-white rounded-lg hover:opacity-90 transition-opacity"
+                  disabled={subscribing}
+                  className="px-3 py-2 bg-gradient-to-r from-[#C4933F] to-[#A87A2E] text-white rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center min-w-[40px]"
                 >
-                  <Mail className="w-4 h-4" />
+                  {subscribing ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <Mail className="w-4 h-4" />
+                  )}
                 </button>
               </form>
             )}

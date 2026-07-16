@@ -31,7 +31,8 @@ export async function POST(request: Request) {
       name: String(body.name),
       icon: body.icon || "paw-print",
       order: Number(body.order) || 0,
-      image_url: body.image_url || ""
+      image_url: body.image_url || "",
+      video_url: body.video_url || ""
     }])
     .select()
     .single();
@@ -46,7 +47,7 @@ export async function PUT(request: Request) {
   if (!body.id) return NextResponse.json({ error: "id is required" }, { status: 400 });
   const { data, error } = await supabase
     .from("categories")
-    .update({ name: body.name, icon: body.icon, order: Number(body.order) || 0, image_url: body.image_url })
+    .update({ name: body.name, icon: body.icon, order: Number(body.order) || 0, image_url: body.image_url, video_url: body.video_url })
     .eq("id", body.id)
     .select()
     .single();

@@ -35,6 +35,8 @@ interface ApiCategory {
   id: string;
   name: string;
   icon: string;
+  image_url?: string;
+  video_url?: string;
   subcategories: { id: string; name: string }[];
 }
 
@@ -75,6 +77,8 @@ function mapApiCategory(c: ApiCategory): Category {
     name: c.name,
     icon: iconMap[c.icon] || "paw-print",
     description: "",
+    image_url: c.image_url,
+    video_url: c.video_url,
     subcategories: c.subcategories.map((s: any) => ({ id: s.id, name: s.name, slug: s.id })),
   };
 }
@@ -105,6 +109,8 @@ export function useTranslatedData() {
     ...cat,
     name: getEntity(t, "categories", cat.id, "name", cat.name),
     description: getEntity(t, "categories", cat.id, "description", "description" in cat ? (cat as any).description || "" : ""),
+    image_url: cat.image_url,
+    video_url: cat.video_url,
     subcategories: cat.subcategories.map((sub) => ({
       ...sub,
       name: getSubentity(t, sub.id, sub.name),

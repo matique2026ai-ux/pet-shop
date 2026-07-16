@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { Users, Download, Trash2 } from "lucide-react";
 
 // ────────────────────────────────────────────────────────────────────────────────
 // Completely isolated settings panel – lives in its own React subtree so that
@@ -117,6 +118,63 @@ export default function AdminSettingsPanel({ adminSecret, a, onSaved }: AdminSet
   const [savingStore, setSavingStore] = useState(false);
   const [savingContent, setSavingContent] = useState(false);
   const [savingDelivery, setSavingDelivery] = useState(false);
+
+  const [subscribers, setSubscribers] = useState<{ id: string; email: string; created_at: string }[]>([]);
+  const [loadingSubscribers, setLoadingSubscribers] = useState(true);
+
+  const fetchSubscribers = useCallback(async () => {
+    try {
+      const res = await fetch("/api/newsletter", {
+        headers: {
+          "x-admin-secret": adminSecret,
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSubscribers(data);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingSubscribers(false);
+    }
+  }, [adminSecret]);
+
+  useEffect(() => {
+    fetchSubscribers();
+  }, [fetchSubscribers]);
+
+  const handleDeleteSubscriber = async (id: string) => {
+    if (!confirm(a.common?.confirm ?? "Are you sure?")) return;
+    try {
+      const res = await fetch(`/api/newsletter?id=${id}`, {
+        method: "DELETE",
+        headers: {
+          "x-admin-secret": adminSecret,
+        },
+      });
+      if (res.ok) {
+        setSubscribers((prev) => prev.filter((sub) => sub.id !== id));
+      } else {
+        alert("Failed to delete subscriber");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleExportCSV = () => {
+    if (subscribers.length === 0) return;
+    const csvContent = "data:text/csv;charset=utf-8," 
+      + ["ID,Email,Subscribed At"].concat(subscribers.map((s) => `"${s.id}","${s.email}","${s.created_at}"`)).join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `subscribers_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   // ── Load settings once on mount ─────────────────────────────────────────
   const load = useCallback(async () => {
@@ -255,6 +313,71 @@ export default function AdminSettingsPanel({ adminSecret, a, onSaved }: AdminSet
         <SettingsField label={a.settings?.deliveryNote ?? "Note"} fieldKey="note" initialValue={initialDelivery.note ?? ""} onChange={(k, v) => { deliveryRef.current[k] = v; }} />
         <SettingsField label={a.settings?.deliveryAreas ?? "Coverage Areas"} fieldKey="areas" isTextarea rows={2} initialValue={initialDelivery.areas ?? ""} onChange={(k, v) => { deliveryRef.current[k] = v; }} />
       </SectionCard>
+
+      {/* ── Newsletter Subscribers ── */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="p-3 bg-emerald-50 rounded-xl text-emerald-600">
+              <Users className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-[#0B1E36]">{a.settings?.subscribers ?? "Newsletter Subscribers"}</h2>
+              <p className="text-xs text-gray-500 mt-0.5">
+                {(a.settings?.subscriberCount ?? "Total Subscribers")}: <span className="font-semibold text-emerald-600">{subscribers.length}</span>
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={handleExportCSV}
+            disabled={subscribers.length === 0}
+            className="px-4 py-2 rounded-xl text-sm font-medium text-gray-700 bg-gray-50 border border-gray-200 hover:bg-gray-100 hover:border-gray-300 disabled:opacity-50 disabled:pointer-events-none transition-colors inline-flex items-center gap-2"
+          >
+            <Download className="w-4 h-4" />
+            {a.settings?.exportCsv ?? "Export CSV"}
+          </button>
+        </div>
+
+        {loadingSubscribers ? (
+          <div className="flex justify-center py-6">
+            <div className="animate-spin w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full" />
+          </div>
+        ) : subscribers.length === 0 ? (
+          <div className="text-center py-10 border border-dashed border-gray-200 rounded-xl bg-gray-50">
+            <p className="text-sm text-gray-400">{a.settings?.noSubscribers ?? "No subscribers yet"}</p>
+          </div>
+        ) : (
+          <div className="border border-gray-100 rounded-xl overflow-hidden max-h-[300px] overflow-y-auto">
+            <table className="min-w-full divide-y divide-gray-100">
+              <thead className="bg-gray-50 sticky top-0 z-10">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-100">
+                {subscribers.map((sub) => (
+                  <tr key={sub.id} className="hover:bg-gray-50/50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">{sub.email}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-400">
+                      {new Date(sub.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <button
+                        onClick={() => handleDeleteSubscriber(sub.id)}
+                        className="text-red-500 hover:text-red-700 p-1.5 rounded-lg hover:bg-red-50 transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

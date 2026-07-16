@@ -30,6 +30,7 @@ export interface Category {
   description: string;
   icon: string;
   image_url?: string;
+  video_url?: string;
   subcategories: Subcategory[];
 }
 

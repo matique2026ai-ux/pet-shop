@@ -41,53 +41,74 @@ export default function CategoriesPage() {
 
       <section className="py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="flex overflow-x-auto lg:grid lg:grid-cols-5 gap-6 pb-6 px-1 scrollbar-none snap-x snap-mandatory">
             {categories.map((cat, idx) => (
-              <AnimatedSection key={cat.id}>
+              <AnimatedSection
+                key={cat.id}
+                className="shrink-0 w-[280px] sm:w-[320px] lg:w-auto snap-start"
+              >
                 <Link
                   href={`/products/${cat.id}`}
-                  className="group block"
+                  className="group block h-full"
                 >
-                  <div className="bg-white rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-1.5"
-                    style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.25), 0 1px 4px rgba(0,0,0,0.02)" }}
+                  <div className="bg-white rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-1.5 h-full flex flex-col justify-between"
+                    style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.02)" }}
                   >
-                    <div className="relative aspect-[4/3] overflow-hidden bg-gray-50">
-                      <Image
-                        src={cat.image_url || catBgImages[cat.id] || catBgImages.cats}
-                        alt={cat.name}
-                        fill
-                        className="object-cover transition-all duration-700 group-hover:scale-105"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        priority={idx < 3}
-                      />
+                    <div className="relative aspect-[4/3] overflow-hidden bg-gray-50 shrink-0">
+                      {cat.video_url ? (
+                        <video
+                          src={cat.video_url}
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
+                        />
+                      ) : (
+                        <Image
+                          src={cat.image_url || catBgImages[cat.id] || catBgImages.cats}
+                          alt={cat.name}
+                          fill
+                          className="object-cover transition-all duration-700 group-hover:scale-105"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          priority={idx < 3}
+                        />
+                      )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </div>
 
-                    <div className="p-6">
-                      <div className="flex items-center justify-between mb-3">
-                        <h2 className="text-xl font-bold text-gray-900">{cat.name}</h2>
-                        <span className="text-sm text-gray-400 bg-gray-50 px-3 py-1 rounded-full">
-                          {catCounts[cat.id] !== undefined ? catCounts[cat.id] : cat.subcategories.length} {t.categories.items}
-                        </span>
-                      </div>
-
-                      <p className="text-sm text-gray-500 mb-4 line-clamp-2">{cat.description}</p>
-
-                      <div className="flex flex-wrap gap-1.5 mb-4">
-                        {cat.subcategories.map((sub) => (
-                          <span
-                            key={sub.id}
-                            className="px-3 py-1 bg-gray-50 text-gray-500 text-xs rounded-full border border-gray-100 transition-colors group-hover:bg-[#EFF6FF] group-hover:text-[#F97316] group-hover:border-[#DBEAFE]"
-                          >
-                            {sub.name}
+                    <div className="p-6 flex-1 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center justify-between mb-3 gap-2">
+                          <h2 className="text-lg font-bold text-[#1A1A2E] leading-tight line-clamp-1">{cat.name}</h2>
+                          <span className="text-xs text-[#C4933F] bg-[#F8F7F4] font-medium px-2.5 py-1 rounded-full whitespace-nowrap">
+                            {catCounts[cat.id] !== undefined ? catCounts[cat.id] : cat.subcategories.length} {t.categories.items}
                           </span>
-                        ))}
+                        </div>
+
+                        <p className="text-xs text-gray-500 mb-4 line-clamp-2">{cat.description}</p>
+
+                        <div className="flex flex-wrap gap-1.5 mb-4">
+                          {cat.subcategories.slice(0, 3).map((sub) => (
+                            <span
+                              key={sub.id}
+                              className="px-2.5 py-0.5 bg-[#F8F7F4] text-gray-600 text-[10px] rounded-full border border-gray-100 transition-colors group-hover:bg-[#EFF6FF] group-hover:text-[#C4933F] group-hover:border-[#DBEAFE]"
+                            >
+                              {sub.name}
+                            </span>
+                          ))}
+                          {cat.subcategories.length > 3 && (
+                            <span className="px-2 py-0.5 bg-gray-50 text-gray-400 text-[10px] rounded-full">
+                              +{cat.subcategories.length - 3}
+                            </span>
+                          )}
+                        </div>
                       </div>
 
-                      <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                        <span className="text-xs text-gray-400">{t.nav.subcategoryCount.replace("{n}", String(cat.subcategories.length))}</span>
-                        <span className="flex items-center gap-1 text-sm font-semibold text-[#F97316] group-hover:gap-2 transition-all">
-                          {t.categories.browseAll} <ChevronRight className="w-3.5 h-3.5" />
+                      <div className="flex items-center justify-between pt-3 border-t border-gray-100 mt-auto">
+                        <span className="text-[10px] text-gray-400">{t.nav.subcategoryCount.replace("{n}", String(cat.subcategories.length))}</span>
+                        <span className="flex items-center gap-1 text-xs font-semibold text-[#C4933F] group-hover:gap-2 transition-all">
+                          {t.categories.browseAll} <ChevronRight className="w-3 h-3" />
                         </span>
                       </div>
                     </div>

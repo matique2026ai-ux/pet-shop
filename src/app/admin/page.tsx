@@ -782,9 +782,10 @@ export default function AdminDashboard() {
   };
 
   // ----- Category & Subcategory management -----
-  const [catModal, setCatModal] = useState<{ id: string; name: string; icon: string; order: string; imageUrl: string; editingId: string | null; open: boolean }>({ id: "", name: "", icon: "paw-print", order: "0", imageUrl: "", editingId: null, open: false });
+  const [catModal, setCatModal] = useState<{ id: string; name: string; icon: string; order: string; imageUrl: string; videoUrl: string; editingId: string | null; open: boolean }>({ id: "", name: "", icon: "paw-print", order: "0", imageUrl: "", videoUrl: "", editingId: null, open: false });
   const [subModal, setSubModal] = useState<{ id: string; name: string; category_id: string; editingId: string | null; open: boolean }>({ id: "", name: "", category_id: "", editingId: null, open: false });
   const [uploadingCatImg, setUploadingCatImg] = useState(false);
+  const [uploadingCatVid, setUploadingCatVid] = useState(false);
 
   const handleCategoryImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -809,24 +810,47 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleCategoryVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingCatVid(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const secret = getSecret();
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        headers: { ...(secret ? { "x-admin-secret": secret } : {}) },
+        body: formData,
+      });
+      if (!res.ok) throw new Error(await res.text() || "Upload failed");
+      const data = await res.json();
+      setCatModal((prev) => ({ ...prev, videoUrl: data.url }));
+    } catch (err) {
+      alert("Failed to upload category video: " + (err as Error).message);
+    } finally {
+      setUploadingCatVid(false);
+    }
+  };
+
   const openCatModal = (cat?: any) => {
-    if (cat) setCatModal({ id: cat.id, name: cat.name, icon: cat.icon || "paw-print", order: String(cat.order ?? 0), imageUrl: cat.image_url || "", editingId: cat.id, open: true });
-    else setCatModal({ id: "", name: "", icon: "paw-print", order: "0", imageUrl: "", editingId: null, open: true });
+    if (cat) setCatModal({ id: cat.id, name: cat.name, icon: cat.icon || "paw-print", order: String(cat.order ?? 0), imageUrl: cat.image_url || "", videoUrl: cat.video_url || "", editingId: cat.id, open: true });
+    else setCatModal({ id: "", name: "", icon: "paw-print", order: "0", imageUrl: "", videoUrl: "", editingId: null, open: true });
   };
   const openSubModal = (categoryId: string, sub?: any) => {
     if (sub) setSubModal({ id: sub.id, name: sub.name, category_id: categoryId, editingId: sub.id, open: true });
     else setSubModal({ id: "", name: "", category_id: categoryId, editingId: null, open: true });
   };
-  const closeCatModal = () => setCatModal({ id: "", name: "", icon: "paw-print", order: "0", imageUrl: "", editingId: null, open: false });
+  const closeCatModal = () => setCatModal({ id: "", name: "", icon: "paw-print", order: "0", imageUrl: "", videoUrl: "", editingId: null, open: false });
   const closeSubModal = () => setSubModal({ id: "", name: "", category_id: "", editingId: null, open: false });
 
   const saveCategory = async () => {
     if (!catModal.id.trim() || !catModal.name.trim()) return alert(a.common.name + " / " + a.common.id + " " + a.common.required);
     try {
       if (catModal.editingId) {
-        await apiFetch("/api/categories", { method: "PUT", body: JSON.stringify({ id: catModal.editingId, name: catModal.name, icon: catModal.icon, order: Number(catModal.order), image_url: catModal.imageUrl }) });
+        await apiFetch("/api/categories", { method: "PUT", body: JSON.stringify({ id: catModal.editingId, name: catModal.name, icon: catModal.icon, order: Number(catModal.order), image_url: catModal.imageUrl, video_url: catModal.videoUrl }) });
       } else {
-        await apiFetch("/api/categories", { method: "POST", body: JSON.stringify({ id: catModal.id.trim(), name: catModal.name, icon: catModal.icon, order: Number(catModal.order), image_url: catModal.imageUrl }) });
+        await apiFetch("/api/categories", { method: "POST", body: JSON.stringify({ id: catModal.id.trim(), name: catModal.name, icon: catModal.icon, order: Number(catModal.order), image_url: catModal.imageUrl, video_url: catModal.videoUrl }) });
       }
       closeCatModal();
       await loadCategories();
@@ -2515,6 +2539,26 @@ export default function AdminDashboard() {
                   )}
                   <span>Upload</span>
                   <input type="file" accept="image/*" onChange={handleCategoryImageUpload} className="hidden" />
+                </label>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">فيديو قصير للقسم (Category Video)</label>
+              <div className="flex gap-2">
+                <input
+                  value={catModal.videoUrl}
+                  onChange={(e) => setCatModal({ ...catModal, videoUrl: e.target.value })}
+                  placeholder="https://cdn.pixabay.com/..."
+                  className="flex-1 px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+                <label className="cursor-pointer bg-gray-50 border border-gray-200 hover:bg-gray-100 transition-colors px-3 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-1.5 whitespace-nowrap text-gray-700">
+                  {uploadingCatVid ? (
+                    <div className="animate-spin w-4 h-4 border-2 border-emerald-600 border-t-transparent rounded-full" />
+                  ) : (
+                    <Upload className="w-4 h-4 text-gray-500" />
+                  )}
+                  <span>Upload</span>
+                  <input type="file" accept="video/*" onChange={handleCategoryVideoUpload} className="hidden" />
                 </label>
               </div>
             </div>
