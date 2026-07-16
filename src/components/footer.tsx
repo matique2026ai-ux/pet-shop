@@ -79,10 +79,10 @@ export default function Footer() {
       <div className="h-px bg-gradient-to-r from-transparent via-[#C4933F] to-transparent opacity-60" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 gap-y-12">
 
           {/* Brand column */}
-          <div>
+          <div className="col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
               <LogoC4 light={true} />
             </div>
@@ -97,7 +97,7 @@ export default function Footer() {
           </div>
 
           {/* Quick links */}
-          <div>
+          <div className="col-span-1">
             <h3 className="font-semibold text-white mb-5 text-sm uppercase tracking-wider">
               {t.footer.quickLinks}
             </h3>
@@ -124,7 +124,7 @@ export default function Footer() {
           </div>
 
           {/* Contact info */}
-          <div>
+          <div className="col-span-1">
             <h3 className="font-semibold text-white mb-5 text-sm uppercase tracking-wider">
               {t.footer.contactInfo}
             </h3>
@@ -132,12 +132,12 @@ export default function Footer() {
               {addressLines.map((line, i) => (
                 <li key={i}>{line}</li>
               ))}
-              <li>
+              <li className="break-all">
                 <a href={`tel:${phone}`} className="hover:text-[#DFB96A] transition-colors">
                   {phone}
                 </a>
               </li>
-              <li>
+              <li className="break-all">
                 <a href={`mailto:${emailAddr}`} className="hover:text-[#DFB96A] transition-colors">
                   {emailAddr}
                 </a>
@@ -146,7 +146,7 @@ export default function Footer() {
           </div>
 
           {/* Newsletter + Social */}
-          <div>
+          <div className="col-span-2 lg:col-span-1">
             <h3 className="font-semibold text-white mb-5 text-sm uppercase tracking-wider">
               {t.footer.newsletter}
             </h3>

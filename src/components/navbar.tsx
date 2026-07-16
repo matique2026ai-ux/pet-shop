@@ -200,7 +200,7 @@ export default function Navbar() {
               </button>
 
               {/* Language switcher */}
-              <div dir="ltr" className="flex items-center rounded-full border border-[#E2DDD4] p-0.5 text-xs font-semibold bg-[#F8F7F4]">
+              <div dir="ltr" className="hidden md:flex items-center rounded-full border border-[#E2DDD4] p-0.5 text-xs font-semibold bg-[#F8F7F4]">
                 {langOptions.map((l) => (
                   <button
                     key={l.code}
@@ -218,47 +218,49 @@ export default function Navbar() {
               </div>
 
               {/* Auth */}
-              {authLoading ? (
-                <div className="w-9 h-9 flex items-center justify-center">
-                  <Loader2 className="w-4 h-4 text-[#C4933F] animate-spin" />
-                </div>
-              ) : user ? (
-                <div className="relative" ref={userMenuRef}>
-                  <button
-                    onClick={() => setUserMenuOpen(!userMenuOpen)}
-                    className="w-9 h-9 rounded-full bg-gradient-to-br from-[#DFB96A] to-[#C4933F] text-white flex items-center justify-center font-semibold text-sm hover:opacity-90 transition-opacity shadow-sm"
-                    aria-label={t.auth.myAccount}
-                  >
-                    {(profile?.full_name?.[0] || user.email?.[0] || "U").toUpperCase()}
-                  </button>
-                  {userMenuOpen && (
-                    <div className={`absolute ${isRtl ? "left-0" : "right-0"} mt-2 w-52 bg-white rounded-xl shadow-xl border border-[#E2DDD4] py-2 z-50`}>
-                      <div className="px-4 py-2 border-b border-[#F0EDE6]">
-                        <p className="text-sm font-semibold text-[#1A1A2E] truncate">{profile?.full_name || user.email}</p>
-                        <p className="text-xs text-[#9E9282] truncate">{user.email}</p>
+              <div className="hidden sm:block">
+                {authLoading ? (
+                  <div className="w-9 h-9 flex items-center justify-center">
+                    <Loader2 className="w-4 h-4 text-[#C4933F] animate-spin" />
+                  </div>
+                ) : user ? (
+                  <div className="relative" ref={userMenuRef}>
+                    <button
+                      onClick={() => setUserMenuOpen(!userMenuOpen)}
+                      className="w-9 h-9 rounded-full bg-gradient-to-br from-[#DFB96A] to-[#C4933F] text-white flex items-center justify-center font-semibold text-sm hover:opacity-90 transition-opacity shadow-sm"
+                      aria-label={t.auth.myAccount}
+                    >
+                      {(profile?.full_name?.[0] || user.email?.[0] || "U").toUpperCase()}
+                    </button>
+                    {userMenuOpen && (
+                      <div className={`absolute ${isRtl ? "left-0" : "right-0"} mt-2 w-52 bg-white rounded-xl shadow-xl border border-[#E2DDD4] py-2 z-50`}>
+                        <div className="px-4 py-2 border-b border-[#F0EDE6]">
+                          <p className="text-sm font-semibold text-[#1A1A2E] truncate">{profile?.full_name || user.email}</p>
+                          <p className="text-xs text-[#9E9282] truncate">{user.email}</p>
+                        </div>
+                        <Link href="/account" onClick={() => setUserMenuOpen(false)} className="block px-4 py-2 text-sm text-[#3D3730] hover:text-[#C4933F] hover:bg-[#FBF7EE] transition-colors">
+                          {t.auth.myAccount}
+                        </Link>
+                        <button
+                          onClick={async () => { await logout(); setUserMenuOpen(false); }}
+                          className="block w-full text-left px-4 py-2 text-sm text-[#3D3730] hover:text-[#C4933F] hover:bg-[#FBF7EE] transition-colors"
+                        >
+                          {t.auth.logout}
+                        </button>
                       </div>
-                      <Link href="/account" onClick={() => setUserMenuOpen(false)} className="block px-4 py-2 text-sm text-[#3D3730] hover:text-[#C4933F] hover:bg-[#FBF7EE] transition-colors">
-                        {t.auth.myAccount}
-                      </Link>
-                      <button
-                        onClick={async () => { await logout(); setUserMenuOpen(false); }}
-                        className="block w-full text-left px-4 py-2 text-sm text-[#3D3730] hover:text-[#C4933F] hover:bg-[#FBF7EE] transition-colors"
-                      >
-                        {t.auth.logout}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <button
-                  onClick={() => { setAuthTab("login"); setAuthOpen(true); }}
-                  className="p-2 text-[#5C5348] hover:text-[#C4933F] hover:bg-[#FBF7EE] rounded-lg transition-colors"
-                  aria-label={t.auth.login}
-                  title={t.auth.login}
-                >
-                  <User className="w-5 h-5" />
-                </button>
-              )}
+                    )}
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => { setAuthTab("login"); setAuthOpen(true); }}
+                    className="p-2 text-[#5C5348] hover:text-[#C4933F] hover:bg-[#FBF7EE] rounded-lg transition-colors"
+                    aria-label={t.auth.login}
+                    title={t.auth.login}
+                  >
+                    <User className="w-5 h-5" />
+                  </button>
+                )}
+              </div>
 
               {/* Call button */}
               <a

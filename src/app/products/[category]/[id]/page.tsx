@@ -315,10 +315,10 @@ export default function ProductDetailPage() {
                   </div>
 
                   {/* Quantity and Add to Cart action */}
-                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
                     {/* Quantity selectors */}
                     {product.sold_by === "weight" ? (
-                      <div className="flex items-center gap-1.5 bg-gray-100 rounded-xl px-3 py-2 shrink-0">
+                      <div className="flex items-center justify-between w-full sm:w-auto bg-gray-100 rounded-xl px-4 py-2 shrink-0">
                         <input
                           type="number"
                           min="0.1"
@@ -330,17 +330,17 @@ export default function ProductDetailPage() {
                         <span className="text-xs text-gray-500 font-semibold">{lang === "ar" ? "كغ" : "kg"}</span>
                       </div>
                     ) : (
-                      <div className="flex items-center bg-gray-100 rounded-xl shrink-0">
+                      <div className="flex items-center justify-between w-full sm:w-auto bg-gray-100 rounded-xl shrink-0">
                         <button
                           onClick={() => setQty(Math.max(1, qty - 1))}
-                          className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
+                          className="w-12 h-10 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
                         >
                           <Minus className="w-3.5 h-3.5" />
                         </button>
-                        <span className="w-8 text-center font-bold text-gray-900 text-sm">{qty}</span>
+                        <span className="w-12 text-center font-bold text-gray-900 text-sm">{qty}</span>
                         <button
                           onClick={() => setQty(qty + 1)}
-                          className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
+                          className="w-12 h-10 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
                         >
                           <Plus className="w-3.5 h-3.5" />
                         </button>
@@ -350,7 +350,7 @@ export default function ProductDetailPage() {
                     {/* Add to Cart button */}
                     <button
                       onClick={() => { addItem(product, qty); setQty(1); }}
-                      className="flex-1 sm:flex-none bg-gradient-to-r from-orange-500 to-[#EA580C] hover:from-orange-600 hover:to-[#D97706] text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md flex items-center justify-center gap-2 text-sm uppercase tracking-wide min-w-[160px]"
+                      className="w-full sm:w-auto bg-gradient-to-r from-orange-500 to-[#EA580C] hover:from-orange-600 hover:to-[#D97706] text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md flex items-center justify-center gap-2 text-sm uppercase tracking-wide min-w-[160px]"
                     >
                       <ShoppingCart className="w-4 h-4 shrink-0" />
                       {t.products.addToCart}
