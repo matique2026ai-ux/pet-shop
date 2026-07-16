@@ -111,7 +111,7 @@ export default function ProductDetailPage() {
     const cleanRef = ref.trim().replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
     const prodIdPart = product.id.slice(-6).toUpperCase();
     const randPart = Math.random().toString(36).substring(2, 7).toUpperCase();
-    const code = `TJB-BIRD-${cleanRef ? cleanRef + "-" : ""}${prodIdPart}-${randPart}`;
+    const code = `TJB-REF-${cleanRef ? cleanRef + "-" : ""}${prodIdPart}-${randPart}`;
     setGeneratedCode(code);
     setReferralModalOpen(true);
     setCopied(false);
@@ -353,16 +353,14 @@ export default function ProductDetailPage() {
                           {t.products.addToCart}
                         </button>
 
-                        {/* Bird Direct Shop Purchase button */}
-                        {product.category === "birds" && (
-                          <button
-                            onClick={handleOpenReferralModal}
-                            className="w-full sm:w-auto border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-50 px-6 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wide min-w-[160px] flex-1"
-                          >
-                            <Ticket className="w-4 h-4 shrink-0" />
-                            {lang === "ar" ? "شراء من المحل (خصم)" : lang === "fr" ? "Achat au magasin (code)" : "Buy at Shop (code)"}
-                          </button>
-                        )}
+                        {/* Direct Shop Purchase button (for all products) */}
+                        <button
+                          onClick={handleOpenReferralModal}
+                          className="w-full sm:w-auto border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-50 px-6 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wide min-w-[160px] flex-1"
+                        >
+                          <Ticket className="w-4 h-4 shrink-0" />
+                          {lang === "ar" ? "شراء من المحل (خصم)" : lang === "fr" ? "Achat au magasin (code)" : "Buy at Shop (code)"}
+                        </button>
                       </div>
                     </div>
 
@@ -569,8 +567,8 @@ export default function ProductDetailPage() {
                 <a
                   href={`https://wa.me/${(store?.whatsapp || delivery?.whatsapp || store?.phone || "213555123456").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
                     lang === "ar" 
-                      ? `مرحباً، أود شراء الطائر "${product.name}" من المحل. كود الحجز والخصم الخاص بي هو: ${generatedCode}` 
-                      : `Bonjour, je souhaite acheter l'oiseau "${product.name}" au magasin. Mon code de réduction est : ${generatedCode}`
+                      ? `مرحباً، أود شراء المنتج "${product.name}" من المحل. كود الحجز والخصم الخاص بي هو: ${generatedCode}` 
+                      : `Bonjour, je souhaite acheter le produit "${product.name}" au magasin. Mon code de réduction est : ${generatedCode}`
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
