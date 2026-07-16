@@ -1100,6 +1100,13 @@ export default function AdminDashboard() {
                     })}
                   </span>
                 </div>
+                <Link
+                  href="/"
+                  className="flex items-center gap-1.5 px-3 py-2 bg-[#0B1E36] hover:bg-[#112540] text-[#DFB96A] border border-[#DFB96A]/20 hover:border-[#DFB96A]/40 rounded-xl text-xs font-bold transition-all shadow-sm shrink-0"
+                >
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                  <span>{a.nav.viewStore}</span>
+                </Link>
                 <select
                   value={adminLang}
                   onChange={(e) => setAdminLang(e.target.value as typeof adminLang)}
