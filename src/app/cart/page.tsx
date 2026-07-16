@@ -9,6 +9,7 @@ import AnimatedSection from "@/components/animated-section";
 import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, Truck, MessageCircle, Home, Building2, Banknote } from "lucide-react";
 import { useSiteSettings } from "@/lib/site-settings";
 import { useAuth } from "@/lib/auth-context";
+import { unitLabel, isContinuousUnit } from "@/lib/units";
 
 const DEFAULT_DELIVERY: Record<string, string> = {
   scope: "commune",
@@ -215,9 +216,9 @@ export default function CartPage() {
                         </h3>
                         <p className="text-emerald-600 font-bold text-xs sm:text-sm mt-0.5 sm:mt-1">
                           {currency}{item.price.toFixed(2)}
-                          {item.sold_by === "weight" && (
+                          {item.sold_by && item.sold_by !== "piece" && (
                             <span className="text-[10px] sm:text-xs font-normal text-gray-400">
-                              {" "}/{lang === "ar" ? "كغ" : "kg"}
+                              {" "}/{unitLabel(item.sold_by, lang)}
                             </span>
                           )}
                         </p>
@@ -227,7 +228,7 @@ export default function CartPage() {
                       <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto mt-1 sm:mt-0 pt-2 sm:pt-0 border-t border-dashed border-gray-100 sm:border-0">
                         {/* Quantity Selector / Weight Input */}
                         <div className="flex items-center">
-                          {item.sold_by === "weight" ? (
+                          {isContinuousUnit(item.sold_by) ? (
                             <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-200/60 rounded-xl px-2.5 py-1">
                               <input
                                 type="number"
@@ -237,7 +238,7 @@ export default function CartPage() {
                                 onChange={(e) => updateQuantity(item.productId, Math.max(0.1, Number(e.target.value) || 0.1))}
                                 className="w-12 sm:w-16 bg-transparent text-center font-bold text-gray-900 text-xs sm:text-sm focus:outline-none"
                               />
-                              <span className="text-[10px] sm:text-xs text-gray-400 font-medium">{lang === "ar" ? "كغ" : "kg"}</span>
+                              <span className="text-[10px] sm:text-xs text-gray-400 font-medium">{unitLabel(item.sold_by, lang)}</span>
                             </div>
                           ) : (
                             <div className="flex items-center gap-1 bg-gray-50 border border-gray-200/60 rounded-xl p-0.5">

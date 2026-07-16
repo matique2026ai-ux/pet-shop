@@ -17,6 +17,7 @@ import {
   Star, ChevronRight, Check, ShoppingCart, Plus, Minus, Share2, X, ZoomIn,
   Play, Truck, ShieldCheck, BadgeCheck, Leaf,
 } from "lucide-react";
+import { unitLabel, isContinuousUnit } from "@/lib/units";
 
 function videoEmbed(url: string) {
   if (!url) return null;
@@ -307,7 +308,7 @@ export default function ProductDetailPage() {
                     <p className="text-xs text-gray-400 uppercase font-semibold">{lang === "ar" ? "السعر" : "Prix"}</p>
                     <p className="text-3xl font-extrabold text-gray-900 mt-1">
                       {product.price.toLocaleString()} {currency}
-                      {product.sold_by === "weight" && <span className="text-sm font-normal text-gray-400"> /{lang === "ar" ? "كغ" : "kg"}</span>}
+                      {product.sold_by && product.sold_by !== "piece" && <span className="text-sm font-normal text-gray-400"> /{unitLabel(product.sold_by, lang)}</span>}
                     </p>
                     {product.originalPrice && (
                       <p className="text-sm text-gray-400 line-through mt-0.5">{product.originalPrice.toLocaleString()} {currency}</p>
@@ -317,7 +318,7 @@ export default function ProductDetailPage() {
                   {/* Quantity and Add to Cart action */}
                   <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
                     {/* Quantity selectors */}
-                    {product.sold_by === "weight" ? (
+                    {isContinuousUnit(product.sold_by) ? (
                       <div className="flex items-center justify-between w-full sm:w-auto bg-gray-100 rounded-xl px-4 py-2 shrink-0">
                         <input
                           type="number"
@@ -327,7 +328,7 @@ export default function ProductDetailPage() {
                           onChange={(e) => setQty(Math.max(0.1, Number(e.target.value) || 0.1))}
                           className="w-16 bg-transparent text-center font-bold text-gray-900 text-sm focus:outline-none"
                         />
-                        <span className="text-xs text-gray-500 font-semibold">{lang === "ar" ? "كغ" : "kg"}</span>
+                        <span className="text-xs text-gray-500 font-semibold">{unitLabel(product.sold_by, lang)}</span>
                       </div>
                     ) : (
                       <div className="flex items-center justify-between w-full sm:w-auto bg-gray-100 rounded-xl shrink-0">

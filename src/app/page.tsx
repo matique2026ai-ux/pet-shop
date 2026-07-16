@@ -176,7 +176,7 @@ export default function HomePage() {
       {/* ══════════════════════════════════
           CATEGORIES GRID
       ══════════════════════════════════ */}
-      <section className="py-12 bg-[#F8F7F4]">
+      <section className="py-12 bg-[#F8F7F4] overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center mb-8">

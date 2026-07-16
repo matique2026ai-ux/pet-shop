@@ -54,6 +54,10 @@ html {
   font-family: var(--font-cairo), sans-serif;
 }
 
+body {
+  overflow-x: hidden;
+}
+
 [dir="rtl"] {
   font-family: var(--font-cairo), sans-serif;
 }

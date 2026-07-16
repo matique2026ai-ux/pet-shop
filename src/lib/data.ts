@@ -12,7 +12,7 @@ export interface Product {
   description: string;
   features: string[];
   inStock: boolean;
-  sold_by?: string;
+  sold_by?: import("@/lib/units").UnitType;
   video?: string;
   ingredients?: string;
   images?: string[];

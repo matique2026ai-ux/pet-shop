@@ -72,7 +72,7 @@ const en: AdminTranslations = {
     stockQuantity: "Stock Quantity", stockHelp: "0 = out of stock. Product is marked “In Stock” when quantity > 0.",
     noProducts: "No products yet", addFirst: "Add your first product to get started", filtersNoMatch: "No products match your filters", clearFilters: "Clear filters",
     name: "Name", category: "Category", price: "Price", oldPrice: "Old Price", stock: "Stock", badge: "Badge", actions: "Actions",
-    soldBy: "Sold By", soldByPiece: "Piece (each)", soldByWeight: "Weight (kg)", weightHelp: "Price is per kg. Customer chooses the weight (e.g. 0.5 kg).",
+    soldBy: "Unit of Measure", soldByPiece: "Piece (each)", soldByWeight: "Weight (kg)", weightHelp: "Continuous unit — price is per unit (e.g. per kg, per g, per L). Customer enters a decimal quantity.",
     video: "Product Video URL", videoHelp: "Optional. YouTube, Vimeo, or a direct .mp4 link. Shown on the product page.", ingredients: "Ingredients & Composition", ingredientsHelp: "Optional. List the ingredients / composition (supports multiple lines).",
   },
   orders: {
@@ -126,7 +126,7 @@ const fr: AdminTranslations = {
     stockQuantity: "Quantité en stock", stockHelp: "0 = rupture de stock. Le produit est « En stock » si quantité > 0.",
     noProducts: "Aucun produit pour l'instant", addFirst: "Ajoutez votre premier produit", filtersNoMatch: "Aucun produit ne correspond à vos filtres", clearFilters: "Effacer les filtres",
     name: "Nom", category: "Catégorie", price: "Prix", oldPrice: "Ancien prix", stock: "Stock", badge: "Badge", actions: "Actions",
-    soldBy: "Vendu par", soldByPiece: "Pièce", soldByWeight: "Poids (kg)", weightHelp: "Le prix est au kg. Le client choisit le poids (ex. 0,5 kg).",
+    soldBy: "Unité de mesure", soldByPiece: "Pièce (l'unité)", soldByWeight: "Poids (kg)", weightHelp: "Unité continue — le prix est par unité (ex. au kg, au g, au L). Le client saisit une quantité décimale.",
     video: "URL de la vidéo produit", videoHelp: "Facultatif. YouTube, Vimeo ou un lien .mp4 direct. Affiché sur la page produit.", ingredients: "Ingrédients & Composition", ingredientsHelp: "Facultatif. Listez les ingrédients / la composition (plusieurs lignes possibles).",
   },
   orders: {
@@ -180,7 +180,7 @@ const ar: AdminTranslations = {
     stockQuantity: "كمية المخزون", stockHelp: "0 = غير متوفر. يُعتبر المنتج «متوفر» عندما تكون الكمية > 0.",
     noProducts: "لا توجد منتجات بعد", addFirst: "أضف أول منتج لتبدأ", filtersNoMatch: "لا توجد منتجات تطابق عوامل التصفية", clearFilters: "مسح عوامل التصفية",
     name: "الاسم", category: "الفئة", price: "السعر", oldPrice: "السعر القديم", stock: "المخزون", badge: "الشارة", actions: "الإجراءات",
-    soldBy: "يُباع بـ", soldByPiece: "قطعة", soldByWeight: "الوزن (كغ)", weightHelp: "السعر للكيلوغرام. يختار الزبون الوزن (مثلاً 0.5 كغ).",
+    soldBy: "وحدة القياس", soldByPiece: "قطعة", soldByWeight: "الوزن (كغ)", weightHelp: "وحدة مستمرة — السعر لكل وحدة (مثلاً لكل كغ، غ، لتر). يُدخل الزبون الكمية بأرقام عشرية.",
     video: "رابط فيديو المنتج", videoHelp: "اختياري. YouTube أو Vimeo أو رابط .mp4 مباشر. يُعرض في صفحة المنتج.", ingredients: "المكوّنات والتركيبة", ingredientsHelp: "اختياري. اذكر المكوّنات/التركيبة (أسطر متعددة).",
   },
   orders: {

@@ -63,7 +63,7 @@ function mapApiProduct(p: ApiProduct): Product {
     description: p.description || "",
     features: Array.isArray(p.features) ? p.features : [],
     inStock: p.in_stock,
-    sold_by: p.sold_by,
+    sold_by: p.sold_by as import("@/lib/units").UnitType | undefined,
     video: p.video,
     ingredients: p.ingredients,
     images: Array.isArray(p.images) ? p.images : [],

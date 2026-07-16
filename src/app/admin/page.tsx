@@ -19,6 +19,7 @@ import AdminSettingsPanel from "@/components/admin-settings-panel";
 import { en } from "@/lib/translations/en";
 import type { TranslationOverrides } from "@/lib/i18n-context";
 import { LogoC1, LogoC4 } from "@/components/brand-logo";
+import { type UnitType, UNIT_OPTIONS, isContinuousUnit, unitLabel } from "@/lib/units";
 
 const COLORS = ["#059669", "#10B981", "#34D399", "#6EE7B7", "#A7F3D0"];
 
@@ -203,7 +204,8 @@ type FormState = {
   description: string;
   features: string;
   stockQuantity: string;
-  soldBy: "piece" | "weight";
+  soldBy: UnitType;
+
   video: string;
   ingredients: string;
 };
@@ -222,7 +224,7 @@ const emptyForm: FormState = {
   description: "",
   features: "",
   stockQuantity: "0",
-  soldBy: "piece",
+  soldBy: "piece" as UnitType,
   video: "",
   ingredients: "",
 };
@@ -703,7 +705,7 @@ export default function AdminDashboard() {
       description: product.description || "",
         features: product.features?.join(", ") || "",
         stockQuantity: product.stock_quantity != null ? String(product.stock_quantity) : (product.in_stock ? "1" : "0"),
-        soldBy: (product.sold_by as "piece" | "weight") || "piece",
+        soldBy: (product.sold_by as UnitType) || "piece",
         video: product.video || "",
         ingredients: product.ingredients || "",
       });
@@ -1396,7 +1398,7 @@ export default function AdminDashboard() {
                   </td>
                   <td className="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap hidden sm:table-cell">
                     {currency}{product.price.toFixed(2)}
-                    {product.sold_by === "weight" && <span className="text-xs font-normal text-gray-400"> /kg</span>}
+                    {product.sold_by && product.sold_by !== "piece" && <span className="text-xs font-normal text-gray-400"> /{unitLabel(product.sold_by, "en")}</span>}
                   </td>
                   <td className="px-4 py-3 hidden lg:table-cell">
                     {product.original_price ? (
@@ -2163,13 +2165,16 @@ export default function AdminDashboard() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">{a.products.soldBy}</label>
                   <select
                     value={form.soldBy}
-                    onChange={(e) => setForm({ ...form, soldBy: e.target.value as "piece" | "weight" })}
+                    onChange={(e) => setForm({ ...form, soldBy: e.target.value as UnitType })}
                     className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   >
-                    <option value="piece">{a.products.soldByPiece}</option>
-                    <option value="weight">{a.products.soldByWeight}</option>
+                    {UNIT_OPTIONS.map((u) => (
+                      <option key={u.value} value={u.value}>
+                        {adminLang === "ar" ? u.labelAr : adminLang === "fr" ? u.labelFr : u.labelEn}
+                      </option>
+                    ))}
                   </select>
-                  {form.soldBy === "weight" && (
+                  {isContinuousUnit(form.soldBy) && (
                     <p className="text-xs text-gray-400 mt-1">{a.products.weightHelp}</p>
                   )}
                 </div>

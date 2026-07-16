@@ -7,6 +7,7 @@ import type { Product } from "@/lib/data";
 import { useCart } from "@/lib/cart-context";
 import { useI18n } from "@/lib/i18n-context";
 import { SHIMMER_BLUR } from "@/lib/blur";
+import { unitLabel, isContinuousUnit } from "@/lib/units";
 
 interface ProductCardProps {
   product: Product;
@@ -163,9 +164,9 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
             <div className="relative z-10 flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <span className={`font-bold text-[#1A1A2E] ${isRelated ? "text-sm" : "text-lg"}`}>
-                  {currency}{product.price}
-                  {product.sold_by === "weight" && (
-                    <span className="text-xs font-normal text-[#9E9282]"> /{lang === "ar" ? "كغ" : "kg"}</span>
+                  {currency}{product.price.toLocaleString()}
+                  {product.sold_by && product.sold_by !== "piece" && (
+                    <span className="text-xs font-normal text-[#9E9282]"> /{unitLabel(product.sold_by, lang)}</span>
                   )}
                 </span>
                 {product.originalPrice && (
