@@ -13,13 +13,7 @@ import VetCard from "@/components/vet-card";
 import { SHIMMER_BLUR } from "@/lib/blur";
 import { ArrowRight, Star, Truck, Shield, RefreshCw, Stethoscope, ChevronLeft, ChevronRight, Heart, Sparkles, Award } from "lucide-react";
 
-const categoryImages: Record<string, string> = {
-  cats:        "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&h=400&fit=crop",
-  dogs:        "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400&h=400&fit=crop",
-  birds:       "https://images.unsplash.com/photo-1480044965905-02098d419e96?w=400&h=400&fit=crop",
-  fish:        "https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=400&h=400&fit=crop",
-  "small-pets":"https://images.unsplash.com/photo-1535241749838-299277b6305f?w=400&h=400&fit=crop",
-};
+
 
 const benefitIconComponents = [
   <Truck    className="w-6 h-6" key="truck" />,
@@ -204,9 +198,9 @@ export default function HomePage() {
                     playsInline
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                ) : (
+                ) : cat.image_url ? (
                   <Image
-                    src={cat.image_url || categoryImages[cat.id] || categoryImages.cats}
+                    src={cat.image_url}
                     alt={cat.name}
                     fill
                     placeholder="blur"
@@ -214,6 +208,18 @@ export default function HomePage() {
                     sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
                   />
+                ) : (
+                  // Premium brand fallback gradient with official logo badge centered
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#0B1E36] to-[#050D1A] flex flex-col items-center justify-center p-4">
+                    <div className="relative w-16 h-16 opacity-35 group-hover:opacity-60 transition-opacity duration-300">
+                      <Image
+                        src="/logo-badge.png"
+                        alt="Logo"
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                  </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent group-hover:from-[#C4933F]/80 transition-all duration-400" />
                 <div className="absolute bottom-0 inset-x-0 p-4 text-center">

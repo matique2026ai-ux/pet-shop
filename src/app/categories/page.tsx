@@ -8,13 +8,7 @@ import { products as rawProducts } from "@/lib/data";
 import AnimatedSection from "@/components/animated-section";
 import { ChevronRight } from "lucide-react";
 
-const catBgImages: Record<string, string> = {
-  cats: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800&h=800&fit=crop",
-  dogs: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=800&h=800&fit=crop",
-  birds: "https://images.unsplash.com/photo-1480044965905-02098d419e96?w=800&h=800&fit=crop",
-  fish: "https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=800&h=800&fit=crop",
-  "small-pets": "https://images.unsplash.com/photo-1535241749838-299277b6305f?w=800&h=800&fit=crop",
-};
+
 
 export default function CategoriesPage() {
   const { t } = useI18n();
@@ -54,7 +48,7 @@ export default function CategoriesPage() {
                   <div className="bg-white rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-1.5 h-full flex flex-col justify-between"
                     style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.02)" }}
                   >
-                    <div className="relative aspect-[4/3] overflow-hidden bg-gray-50 shrink-0">
+                     <div className="relative aspect-[4/3] overflow-hidden bg-gray-50 shrink-0">
                       {cat.video_url ? (
                         <video
                           src={cat.video_url}
@@ -64,15 +58,26 @@ export default function CategoriesPage() {
                           playsInline
                           className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
                         />
-                      ) : (
+                      ) : cat.image_url ? (
                         <Image
-                          src={cat.image_url || catBgImages[cat.id] || catBgImages.cats}
+                          src={cat.image_url}
                           alt={cat.name}
                           fill
                           className="object-cover transition-all duration-700 group-hover:scale-105"
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                           priority={idx < 3}
                         />
+                      ) : (
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#0B1E36] to-[#050D1A] flex flex-col items-center justify-center p-4">
+                          <div className="relative w-16 h-16 opacity-30 group-hover:opacity-50 transition-opacity duration-300">
+                            <Image
+                              src="/logo-badge.png"
+                              alt="Logo"
+                              fill
+                              className="object-contain"
+                            />
+                          </div>
+                        </div>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </div>

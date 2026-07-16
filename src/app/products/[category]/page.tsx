@@ -9,13 +9,7 @@ import AnimatedSection from "@/components/animated-section";
 import ProductCard from "@/components/product-card";
 import { ChevronRight, ArrowLeft, Cat, Dog, Bird, Fish, Rabbit, PawPrint, Sparkles } from "lucide-react";
 
-const catHeroImages: Record<string, string> = {
-  cats: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1200&h=600&fit=crop",
-  dogs: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=1200&h=600&fit=crop",
-  birds: "https://images.unsplash.com/photo-1480044965905-02098d419e96?w=1200&h=600&fit=crop",
-  fish: "https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=1200&h=600&fit=crop",
-  "small-pets": "https://images.unsplash.com/photo-1535241749838-299277b6305f?w=1200&h=600&fit=crop",
-};
+
 
 const catIcons: Record<string, React.ReactNode> = {
   cat: <Cat className="w-6 h-6" />,
@@ -52,15 +46,28 @@ export default function CategoryPage() {
     <div>
       <section className="relative overflow-hidden py-16 lg:py-24">
         <div className="absolute inset-0">
-          <Image
-            src={catHeroImages[cat.id] || catHeroImages.cats}
-            alt={cat.name}
-            fill
-            sizes="100vw"
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/80 via-emerald-900/60 to-transparent" />
+          {cat.video_url ? (
+            <video
+              src={cat.video_url}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          ) : cat.image_url ? (
+            <Image
+              src={cat.image_url}
+              alt={cat.name}
+              fill
+              sizes="100vw"
+              className="object-cover"
+              priority
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-[#0B1E36] via-[#050D1A] to-[#0B1E36]" />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#050D1A]/90 via-[#0B1E36]/60 to-transparent" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2 text-sm text-emerald-200/80 mb-4">
