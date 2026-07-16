@@ -10,11 +10,14 @@ ALTER TABLE categories ADD COLUMN IF NOT EXISTS video_url TEXT;
 ALTER TABLE categories ADD COLUMN IF NOT EXISTS image_url TEXT;
 
 -- 3. Update sold_by CHECK constraint to allow all 10 unit types
---    First drop the old constraint, then add the new one
+--    First drop the old constraint, then convert existing 'weight' value to 'kg' to prevent check violation
 DO $$ BEGIN
   ALTER TABLE products DROP CONSTRAINT IF EXISTS products_sold_by_check;
 EXCEPTION WHEN others THEN NULL;
 END $$;
+
+UPDATE products SET sold_by = 'kg' WHERE sold_by = 'weight';
+UPDATE products SET sold_by = 'piece' WHERE sold_by IS NULL OR sold_by NOT IN ('piece', 'bag', 'box', 'bottle', 'pack', 'dose', 'kg', 'g', 'l', 'ml');
 
 ALTER TABLE products ADD CONSTRAINT products_sold_by_check
   CHECK (sold_by IN ('piece', 'bag', 'box', 'bottle', 'pack', 'dose', 'kg', 'g', 'l', 'ml'));
