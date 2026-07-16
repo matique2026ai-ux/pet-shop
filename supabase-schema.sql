@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS categories (
   icon TEXT NOT NULL DEFAULT 'paw-print',
   "order" INTEGER NOT NULL DEFAULT 0,
   image_url TEXT,
+  video_url TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -31,7 +32,7 @@ CREATE TABLE IF NOT EXISTS products (
   features JSONB DEFAULT '[]',
   in_stock BOOLEAN NOT NULL DEFAULT TRUE,
   stock_quantity INTEGER NOT NULL DEFAULT 0,
-  sold_by TEXT NOT NULL DEFAULT 'piece' CHECK (sold_by IN ('piece', 'weight')),
+  sold_by TEXT NOT NULL DEFAULT 'piece' CHECK (sold_by IN ('piece', 'bag', 'box', 'bottle', 'pack', 'dose', 'kg', 'g', 'l', 'ml')),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -59,15 +60,25 @@ ALTER TABLE orders ADD COLUMN IF NOT EXISTS delivery_area TEXT;
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS delivery_fee DECIMAL(10,2) NOT NULL DEFAULT 0;
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS delivery_eta TEXT;
 
--- Sold-by model (piece | weight). Add if table predates this column.
-ALTER TABLE products ADD COLUMN IF NOT EXISTS sold_by TEXT NOT NULL DEFAULT 'piece' CHECK (sold_by IN ('piece', 'weight'));
+-- Sold-by model (expanded to 10 units). Add column and drop old constraint if it predates this.
+ALTER TABLE products ADD COLUMN IF NOT EXISTS sold_by TEXT NOT NULL DEFAULT 'piece';
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'products_sold_by_check') THEN
+    ALTER TABLE products DROP CONSTRAINT products_sold_by_check;
+  END IF;
+EXCEPTION WHEN others THEN NULL;
+END $$;
+ALTER TABLE products DROP CONSTRAINT IF EXISTS products_sold_by_check1;
+ALTER TABLE products ADD CONSTRAINT products_sold_by_check
+  CHECK (sold_by IN ('piece', 'bag', 'box', 'bottle', 'pack', 'dose', 'kg', 'g', 'l', 'ml'));
 
 -- Rich product page: short video + ingredients / composition.
 ALTER TABLE products ADD COLUMN IF NOT EXISTS video TEXT;
 ALTER TABLE products ADD COLUMN IF NOT EXISTS ingredients TEXT;
 
--- Categories image URL
+-- Categories image + video URL
 ALTER TABLE categories ADD COLUMN IF NOT EXISTS image_url TEXT;
+ALTER TABLE categories ADD COLUMN IF NOT EXISTS video_url TEXT;
 
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
