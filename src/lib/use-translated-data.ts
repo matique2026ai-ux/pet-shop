@@ -86,7 +86,17 @@ function mapApiCategory(c: ApiCategory): Category {
 export function useTranslatedData() {
   const { t } = useI18n();
   const [apiProducts, setApiProducts] = useState<Product[] | null>(null);
-  const [apiCategories, setApiCategories] = useState<Category[] | null>(null);
+  const [apiCategories, setApiCategories] = useState<Category[] | null>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const cached = localStorage.getItem("pet_shop_categories");
+        return cached ? JSON.parse(cached) : null;
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  });
   // true = fetch completed (even if result is empty array), false = still loading
   const [productsLoaded, setProductsLoaded] = useState(false);
 
@@ -98,9 +108,16 @@ export function useTranslatedData() {
       }
       setProductsLoaded(true);
     }).catch(() => { setProductsLoaded(true); });
+    
     fetch("/api/categories").then((r) => r.ok ? r.json() : null).then((data) => {
       if (data && Array.isArray(data) && data.length > 0) {
-        setApiCategories(data.map(mapApiCategory));
+        const mapped = data.map(mapApiCategory);
+        setApiCategories(mapped);
+        if (typeof window !== "undefined") {
+          try {
+            localStorage.setItem("pet_shop_categories", JSON.stringify(mapped));
+          } catch {}
+        }
       }
     }).catch(() => {});
   }, []);

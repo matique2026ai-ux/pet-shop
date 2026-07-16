@@ -597,6 +597,25 @@ export default function AdminDashboard() {
     try {
       const data = await fetch("/api/categories").then((r) => r.json());
       setCategories(data);
+      if (typeof window !== "undefined" && Array.isArray(data)) {
+        try {
+          const iconMap: Record<string, string> = { cat: "cat", dog: "dog", bird: "bird", fish: "fish", rabbit: "rabbit" };
+          const mapped = data.map((c: any) => ({
+            id: c.id,
+            name: c.name,
+            icon: iconMap[c.icon] || "paw-print",
+            description: "",
+            image_url: c.image_url,
+            video_url: c.video_url,
+            subcategories: Array.isArray(c.subcategories) 
+              ? c.subcategories.map((s: any) => ({ id: s.id, name: s.name, slug: s.id }))
+              : []
+          }));
+          localStorage.setItem("pet_shop_categories", JSON.stringify(mapped));
+        } catch (e) {
+          console.error("Failed to cache categories:", e);
+        }
+      }
     } catch {
       // fallback empty
     }
