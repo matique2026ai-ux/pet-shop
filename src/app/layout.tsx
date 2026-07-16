@@ -74,7 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <VeterinaryClinicSchema />
             <LocalBusinessSchema />
             <Navbar />
-            <main className="min-h-screen">{children}</main>
+            <main className="min-h-screen app-shell">{children}</main>
             <Footer />
             <WhatsAppButton />
             <CookieConsent />

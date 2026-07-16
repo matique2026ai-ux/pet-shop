@@ -187,7 +187,7 @@ export default function HomePage() {
           {/* Scroll row sits OUTSIDE AnimatedSection to avoid Framer Motion intercepting touch events */}
           <div
             className="flex overflow-x-auto lg:grid lg:grid-cols-5 gap-4 pb-4 px-1 scrollbar-none"
-            style={{ touchAction: "pan-x pan-y" }}
+            style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" } as React.CSSProperties}
           >
             {categories.map((cat) => (
               <Link
