@@ -79,6 +79,20 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const ref = params.get("ref") || params.get("agent");
+        if (ref) {
+          localStorage.setItem("pet_shop_referral", ref.trim());
+        }
+      } catch (err) {
+        console.error("Failed to capture referral parameter", err);
+      }
+    }
+  }, []);
+
   const handleMegaEnter = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setMegaOpen(true);

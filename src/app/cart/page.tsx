@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "@/lib/cart-context";
 import { useI18n } from "@/lib/i18n-context";
+import { useTranslatedData } from "@/lib/use-translated-data";
 import Link from "next/link";
 import Image from "next/image";
 import AnimatedSection from "@/components/animated-section";
@@ -74,6 +75,7 @@ function isValidAlgerianPhone(raw: string): boolean {
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, clearCart } = useCart();
+  const { products } = useTranslatedData();
   const { t, currency, lang } = useI18n();
   const { user } = useAuth();
   const { store, delivery } = useSiteSettings();
@@ -84,6 +86,20 @@ export default function CartPage() {
   const [commune, setCommune] = useState("");
   const [deliveryType, setDeliveryType] = useState<"home" | "stopdesk">("home");
   const [phoneError, setPhoneError] = useState<string | null>(null);
+  const [referralCode, setReferralCode] = useState("");
+  const [orderReferral, setOrderReferral] = useState("");
+  const [hasBirdsInOrder, setHasBirdsInOrder] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("pet_shop_referral") || "";
+        setReferralCode(stored);
+      } catch {}
+    }
+  }, []);
+
+  const cartHasBirds = items.some((item) => products.find((p: any) => p.id === item.productId)?.category === "birds");
 
   const d = { ...DEFAULT_DELIVERY, ...(delivery || {}) };
   const region = regionForWilaya(wilaya);
@@ -99,11 +115,13 @@ export default function CartPage() {
   if (orderPlaced) {
     const orderRef = orderPlaced.id.slice(-6).toUpperCase();
     const whatsappNum = (store?.whatsapp || delivery?.whatsapp || store?.phone || "213555123456").replace(/[^0-9]/g, "");
-    const message = encodeURIComponent(
-      lang === "ar"
-        ? `مرحباً، لقد قمت بطلب رقم #${orderRef} من موقع Paws & Wings. أود تأكيد الطلب من فضلك.`
-        : `Bonjour, je viens de passer la commande #${orderRef} sur Paws & Wings. Je souhaite confirmer ma commande s'il vous plaît.`
-    );
+    
+    const refCodeText = orderReferral ? ` (كود الإحالة: BIRD-${orderReferral.toUpperCase()}-${orderRef})` : ` (كود عمولة الطيور: BIRD-DIRECT-${orderRef})`;
+    const whatsappMsgText = lang === "ar"
+      ? `مرحباً، لقد قمت بطلب رقم #${orderRef} من موقع Paws & Wings. أود تأكيد الطلب من فضلك.${hasBirdsInOrder ? refCodeText : ""}`
+      : `Bonjour, je viens de passer la commande #${orderRef} sur Paws & Wings. Je souhaite confirmer ma commande s'il vous plaît.${hasBirdsInOrder ? ` (Code commission: BIRD-${(orderReferral || "DIRECT").toUpperCase()}-${orderRef})` : ""}`;
+    
+    const message = encodeURIComponent(whatsappMsgText);
     const waUrl = `https://wa.me/${whatsappNum}?text=${message}`;
 
     return (
@@ -129,6 +147,25 @@ export default function CartPage() {
               : "Payment method: Cash on Delivery (COD) upon receiving your package."}
           </p>
         </div>
+
+        {hasBirdsInOrder && (
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 w-full mb-6 text-left" dir={lang === "ar" ? "rtl" : "ltr"}>
+            <h4 className="font-bold text-amber-900 mb-1.5 flex items-center gap-2 text-sm">
+              <span>🐦</span>
+              {lang === "ar" ? "رمز عمولة الطيور الخاص بك:" : lang === "fr" ? "Votre code commission oiseaux :" : "Your Bird Commission Code:"}
+            </h4>
+            <p className="text-xs text-amber-700 leading-relaxed mb-3">
+              {lang === "ar" 
+                ? "يرجى إرسال هذا الكود أو إظهاره لصاحب المحل لكي يُعلم بأنك مرسول من طرف شريكنا وتأكيد عمولتك." 
+                : lang === "fr" 
+                ? "Veuillez envoyer ou présenter ce code au propriétaire pour confirmer votre commission de parrainage." 
+                : "Please share this code with the shop owner to confirm your referral commission."}
+            </p>
+            <span className="font-mono font-bold text-base text-amber-900 bg-white px-3 py-1.5 rounded-lg border border-amber-200 shadow-sm inline-block">
+              BIRD-{(orderReferral || "DIRECT").toUpperCase()}-{orderRef}
+            </span>
+          </div>
+        )}
         <p className="text-gray-500 mb-6 text-sm">
           {lang === "ar"
             ? "يرجى الضغط على الزر أدناه لتأكيد طلبك مباشرة عبر الواتساب معنا للتسليم السريع."
@@ -372,23 +409,23 @@ export default function CartPage() {
                 <span>{t.cart.subtotal}</span>
                 <span className="font-medium text-gray-900">{currency}{subtotal.toFixed(2)}</span>
               </div>
-               <div className="flex items-center justify-between text-sm text-gray-500">
-                 <span className="flex items-center gap-1.5"><Truck className="w-3.5 h-3.5" />{wilaya} · {etaText}</span>
+              <div className="flex items-center justify-between text-sm text-gray-500">
+                <span className="flex items-center gap-1.5"><Truck className="w-3.5 h-3.5" />{wilaya} · {etaText}</span>
                 <span className="font-medium text-gray-900">
                   {deliveryFee === 0 ? t.cart.free : `${currency}${deliveryFee.toFixed(2)}`}
                 </span>
               </div>
-               {remainingForFree > 0 && (
-                 <div className="mt-2">
-                   <div className="h-2 rounded-full bg-emerald-100 overflow-hidden">
-                     <div
-                       className="h-full bg-emerald-500 rounded-full transition-all duration-500"
-                       style={{ width: `${Math.min(100, (subtotal / freeNum) * 100)}%` }}
-                     />
-                   </div>
-                   <p className="text-xs text-emerald-600 mt-1.5">{t.cart.freeProgress.replace("{amount}", `${currency}${remainingForFree.toFixed(2)}`)}</p>
-                 </div>
-               )}
+              {remainingForFree > 0 && (
+                <div className="mt-2">
+                  <div className="h-2 rounded-full bg-emerald-100 overflow-hidden">
+                    <div
+                      className="h-full bg-emerald-500 rounded-full transition-all duration-500"
+                      style={{ width: `${Math.min(100, (subtotal / freeNum) * 100)}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-emerald-600 mt-1.5">{t.cart.freeProgress.replace("{amount}", `${currency}${remainingForFree.toFixed(2)}`)}</p>
+                </div>
+              )}
               <div className="flex items-center justify-between text-lg font-bold text-gray-900 pt-2 border-t border-gray-100">
                 <span>{t.cart.total}</span>
                 <span>{currency}{grandTotal.toFixed(2)}</span>
@@ -412,6 +449,21 @@ export default function CartPage() {
                   ? `[Stop Desk Yalidine] Commune: ${commune}, Wilaya: ${wilaya}`
                   : `[À Domicile] Adresse: ${addressDetails}, Commune: ${commune}, Wilaya: ${wilaya}`;
 
+                const hasBirds = cartHasBirds;
+                const refCode = (fd.get("referral_code") as string || "").trim();
+                let notesVal = "";
+                if (refCode) {
+                  notesVal = `Referral Code: ${refCode}`;
+                }
+                if (hasBirds) {
+                  notesVal = notesVal ? `${notesVal} | Birds Commission Tracked` : `Birds Commission Tracked`;
+                  setHasBirdsInOrder(true);
+                  setOrderReferral(refCode);
+                } else {
+                  setHasBirdsInOrder(false);
+                  setOrderReferral("");
+                }
+
                 const order = {
                   customer_name: fd.get("name") as string,
                   customer_phone: phone,
@@ -422,6 +474,7 @@ export default function CartPage() {
                   delivery_eta: etaText,
                   items: items.map((i) => ({ productId: i.productId, name: i.name, price: i.price, quantity: i.quantity, sold_by: i.sold_by })),
                   total: grandTotal,
+                  notes: notesVal || null,
                   user_id: user?.id || null,
                 };
                 try {
@@ -483,6 +536,28 @@ export default function CartPage() {
                 required
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
+
+              {/* Optional Referral Code */}
+              <div>
+                <input
+                  type="text"
+                  name="referral_code"
+                  value={referralCode}
+                  onChange={(e) => setReferralCode(e.target.value)}
+                  placeholder={lang === "ar" ? "كود الإحالة / الشريك (اختياري)" : lang === "fr" ? "Code de parrainage (Optionnel)" : "Referral Code (Optional)"}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+                {cartHasBirds && (
+                  <p className="text-[11px] text-emerald-600 mt-1 font-medium flex items-center gap-1">
+                    <span>🐦</span>
+                    {lang === "ar" 
+                      ? "سيتم إنشاء كود عمولة طيور خاص بك عند إتمام هذا الطلب." 
+                      : lang === "fr" 
+                      ? "Un code commission oiseaux sera généré pour cette commande." 
+                      : "A bird commission code will be generated for this order."}
+                  </p>
+                )}
+              </div>
 
               {/* Delivery Type Selection */}
               <div className="space-y-1">

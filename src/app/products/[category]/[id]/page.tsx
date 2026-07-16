@@ -14,7 +14,7 @@ import ProductCard from "@/components/product-card";
 import ProductReviews from "@/components/product-reviews";
 import {
   Star, ChevronRight, Check, ShoppingCart, Plus, Minus, Share2, X, ZoomIn,
-  Play, Truck, ShieldCheck, BadgeCheck, Leaf,
+  Play, Truck, ShieldCheck, BadgeCheck, Leaf, Ticket, MessageCircle,
 } from "lucide-react";
 import { unitLabel, isContinuousUnit } from "@/lib/units";
 
@@ -93,13 +93,29 @@ export default function ProductDetailPage() {
   const { addItem } = useCart();
   const { addId } = useRecentlyViewed();
   const params = useParams();
-  const { store } = useSiteSettings();
+  const { store, delivery } = useSiteSettings();
   const product = products.find((p) => p.id === params.id);
   const [qty, setQty] = useState(1);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [activeMedia, setActiveMedia] = useState<"image" | "video">("image");
   const [activeImage, setActiveImage] = useState("");
   const [tab, setTab] = useState<"overview" | "features" | "ingredients" | "video">("overview");
+  
+  const [referralModalOpen, setReferralModalOpen] = useState(false);
+  const [generatedCode, setGeneratedCode] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  const handleOpenReferralModal = () => {
+    if (!product) return;
+    const ref = typeof window !== "undefined" ? localStorage.getItem("pet_shop_referral") || "" : "";
+    const cleanRef = ref.trim().replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+    const prodIdPart = product.id.slice(-6).toUpperCase();
+    const randPart = Math.random().toString(36).substring(2, 7).toUpperCase();
+    const code = `TJB-BIRD-${cleanRef ? cleanRef + "-" : ""}${prodIdPart}-${randPart}`;
+    setGeneratedCode(code);
+    setReferralModalOpen(true);
+    setCopied(false);
+  };
 
   useEffect(() => {
     if (product) addId(product.id);
@@ -331,11 +347,22 @@ export default function ProductDetailPage() {
                         {/* Add to Cart button */}
                         <button
                           onClick={() => { addItem(product, qty); setQty(1); }}
-                          className="w-full sm:w-auto bg-gradient-to-r from-orange-500 to-[#EA580C] hover:from-orange-600 hover:to-[#D97706] text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md flex items-center justify-center gap-2 text-sm uppercase tracking-wide min-w-[160px]"
+                          className="w-full sm:w-auto bg-gradient-to-r from-orange-500 to-[#EA580C] hover:from-orange-600 hover:to-[#D97706] text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md flex items-center justify-center gap-2 text-sm uppercase tracking-wide min-w-[160px] flex-1"
                         >
                           <ShoppingCart className="w-4 h-4 shrink-0" />
                           {t.products.addToCart}
                         </button>
+
+                        {/* Bird Direct Shop Purchase button */}
+                        {product.category === "birds" && (
+                          <button
+                            onClick={handleOpenReferralModal}
+                            className="w-full sm:w-auto border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-50 px-6 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wide min-w-[160px] flex-1"
+                          >
+                            <Ticket className="w-4 h-4 shrink-0" />
+                            {lang === "ar" ? "شراء من المحل (خصم)" : lang === "fr" ? "Achat au magasin (code)" : "Buy at Shop (code)"}
+                          </button>
+                        )}
                       </div>
                     </div>
 
@@ -469,6 +496,92 @@ export default function ProductDetailPage() {
           </button>
           <div className="relative max-w-4xl max-h-[90vh] w-full h-full" onClick={(e) => e.stopPropagation()}>
             <Image src={activeImage || "/placeholder.svg"} alt={product.name} fill sizes="(max-width: 768px) 100vw, 56rem" className="object-contain" />
+          </div>
+        </div>
+      )}
+
+      {/* Bird Direct Purchase Referral Modal */}
+      {referralModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setReferralModalOpen(false)}>
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-gray-100" onClick={(e) => e.stopPropagation()}>
+            
+            {/* Header */}
+            <div className="bg-emerald-600 text-white px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Ticket className="w-5 h-5" />
+                <h3 className="font-bold text-sm sm:text-base">
+                  {lang === "ar" ? "كود الخصم والشراء المباشر" : lang === "fr" ? "Code de réduction & achat" : "Discount & Shop Code"}
+                </h3>
+              </div>
+              <button onClick={() => setReferralModalOpen(false)} className="text-white/80 hover:text-white text-2xl font-bold focus:outline-none">
+                &times;
+              </button>
+            </div>
+
+            {/* Ticket Content */}
+            <div className="p-6 space-y-6 text-center" dir={lang === "ar" ? "rtl" : "ltr"}>
+              
+              <div className="relative border-2 border-dashed border-emerald-200 bg-emerald-50/30 rounded-2xl p-5 space-y-4">
+                
+                {/* Decorative cutouts (left & right circles) */}
+                <div className="absolute top-1/2 -left-4 -translate-y-1/2 w-8 h-8 bg-white border-r border-emerald-100 rounded-full" />
+                <div className="absolute top-1/2 -right-4 -translate-y-1/2 w-8 h-8 bg-white border-l border-emerald-100 rounded-full" />
+
+                <div className="text-xs font-bold text-emerald-700 tracking-wide uppercase bg-emerald-50 px-3 py-1 rounded-full inline-block">
+                  {storeName}
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-xs text-gray-400">{lang === "ar" ? "المنتج المطلـوب" : lang === "fr" ? "Produit demandé" : "Requested Product"}</p>
+                  <h4 className="font-extrabold text-gray-900 text-base sm:text-lg line-clamp-1">{product.name}</h4>
+                </div>
+
+                <div className="border-t border-dashed border-emerald-100 pt-4 space-y-2">
+                  <p className="text-xs text-gray-400">{lang === "ar" ? "رمز الشراء والعمولة الخاص بك" : lang === "fr" ? "Votre code d'achat" : "Your Purchase Code"}</p>
+                  <div className="font-mono font-black text-lg sm:text-xl text-emerald-800 bg-white border border-emerald-100 rounded-xl px-4 py-2.5 shadow-sm select-all tracking-wider">
+                    {generatedCode}
+                  </div>
+                </div>
+
+                <div className="text-xs text-gray-500 leading-relaxed pt-2">
+                  {lang === "ar" 
+                    ? "أظهر هذا الكود لصاحب المحل عند الشراء لتأكيد حجزك والحصول على الخصم المباشر." 
+                    : lang === "fr" 
+                    ? "Présentez ce code au magasin pour bénéficier de votre réduction." 
+                    : "Show this code to the shop owner at the store to secure your discount."}
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="grid grid-cols-2 gap-3 pt-2">
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(generatedCode);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  }}
+                  className={`w-full py-3 rounded-xl font-bold transition-all text-xs flex items-center justify-center gap-2 border ${copied ? "bg-emerald-50 border-emerald-200 text-emerald-800" : "bg-gray-50 border-gray-200 hover:bg-gray-100 text-gray-700"}`}
+                >
+                  <Check className={`w-4 h-4 shrink-0 transition-transform ${copied ? "scale-100" : "scale-0"}`} />
+                  {copied ? (lang === "ar" ? "تم نسخ الكود!" : "Copié !") : (lang === "ar" ? "نسخ الكود" : "Copier le code")}
+                </button>
+
+                <a
+                  href={`https://wa.me/${(store?.whatsapp || delivery?.whatsapp || store?.phone || "213555123456").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+                    lang === "ar" 
+                      ? `مرحباً، أود شراء الطائر "${product.name}" من المحل. كود الحجز والخصم الخاص بي هو: ${generatedCode}` 
+                      : `Bonjour, je souhaite acheter l'oiseau "${product.name}" au magasin. Mon code de réduction est : ${generatedCode}`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full bg-[#25D366] text-white py-3 rounded-xl font-bold hover:bg-[#20ba56] transition-colors shadow-md text-xs flex items-center justify-center gap-2"
+                >
+                  <MessageCircle className="w-4 h-4 shrink-0" />
+                  {lang === "ar" ? "تأكيد عبر واتساب" : "WhatsApp"}
+                </a>
+              </div>
+
+            </div>
           </div>
         </div>
       )}
