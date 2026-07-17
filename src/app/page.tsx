@@ -35,14 +35,20 @@ const DEFAULT_HERO_VIDEOS = [
 ];
 
 export default function HomePage() {
-  const { t, dir } = useI18n();
+  const { t, dir, lang } = useI18n();
   const { content } = useSiteSettings();
   const { categories, products, vetServices, testimonials } = useTranslatedData();
-  const c = (k: string, fb: string) => (content && content[k] ? content[k] : fb);
-  const heroTitle    = c("heroTitle",    t.hero.title);
-  const heroSubtitle = c("heroSubtitle", t.hero.subtitle);
-  const heroCta1     = c("heroCta1",    t.hero.cta1);
-  const heroCta2     = c("heroCta2",    t.hero.cta2);
+  
+  const getLocalizedContent = (baseKey: string, fallback: string) => {
+    if (lang === "fr" && content && content[`${baseKey}Fr`]) return content[`${baseKey}Fr`];
+    if (lang === "en" && content && content[`${baseKey}En`]) return content[`${baseKey}En`];
+    return content && content[baseKey] ? content[baseKey] : fallback;
+  };
+
+  const heroTitle    = getLocalizedContent("heroTitle",    t.hero.title);
+  const heroSubtitle = getLocalizedContent("heroSubtitle", t.hero.subtitle);
+  const heroCta1     = getLocalizedContent("heroCta1",    t.hero.cta1);
+  const heroCta2     = getLocalizedContent("heroCta2",    t.hero.cta2);
   const isRtl        = dir === "rtl";
   const Arrow        = isRtl ? ChevronLeft : ChevronRight;
   const bestsellers  = products.filter((p) => p.rating >= 4.6).slice(0, 8);
@@ -109,6 +115,7 @@ export default function HomePage() {
                 videoRefs.current[i] = el;
               }}
               muted
+              loop={heroVideos.length === 1}
               playsInline
               preload="auto"
               onEnded={handleVideoEnd}
@@ -422,7 +429,7 @@ export default function HomePage() {
       {/* ══════════════════════════════════
           CTA SECTION
       ══════════════════════════════════ */}
-      <section className="py-16 bg-gradient-to-br from-[#1A1A2E] via-[#2D2B45] to-[#1A1A2E] text-center relative overflow-hidden">
+      <section className="py-16 bg-[#1A120B] text-center relative overflow-hidden">
         {/* Gold glow accents */}
         <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#C4933F] rounded-full opacity-5 blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-[#F5851F] rounded-full opacity-5 blur-3xl pointer-events-none" />

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cairo } from "next/font/google";
+import { Cairo, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { I18nProvider } from "@/lib/i18n-context";
 import { CartProvider } from "@/lib/cart-context";
@@ -15,6 +15,13 @@ const cairo = Cairo({
   subsets: ["latin", "arabic"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-cairo",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-playfair",
   display: "swap",
 });
 
@@ -64,7 +71,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={cairo.variable} suppressHydrationWarning>
+    <html lang="en" className={`${cairo.variable} ${playfair.variable}`} suppressHydrationWarning>
       <body className="font-outfit bg-white text-slate-800 antialiased">
         <I18nProvider>
           <CartProvider>

@@ -329,10 +329,21 @@ export default function AdminSettingsPanel({ adminSecret, a, onSaved }: AdminSet
         saving={savingContent}
         onSave={() => save("content", contentRef, setSavingContent)}
       >
-        <SettingsField label={a.settings?.heroTitle ?? "Hero Title"} fieldKey="heroTitle" initialValue={initialContent.heroTitle ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
-        <SettingsField label={a.settings?.heroSubtitle ?? "Hero Subtitle"} fieldKey="heroSubtitle" initialValue={initialContent.heroSubtitle ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
-        <SettingsField label={a.settings?.heroCta1 ?? "Button 1"} fieldKey="heroCta1" initialValue={initialContent.heroCta1 ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
-        <SettingsField label={a.settings?.heroCta2 ?? "Button 2"} fieldKey="heroCta2" initialValue={initialContent.heroCta2 ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
+        <SettingsField label={a.settings?.heroTitle ?? "Hero Title (AR)"} fieldKey="heroTitle" initialValue={initialContent.heroTitle ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
+        <SettingsField label="Hero Title (FR)" fieldKey="heroTitleFr" initialValue={initialContent.heroTitleFr ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
+        <SettingsField label="Hero Title (EN)" fieldKey="heroTitleEn" initialValue={initialContent.heroTitleEn ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
+        
+        <SettingsField label={a.settings?.heroSubtitle ?? "Hero Subtitle (AR)"} fieldKey="heroSubtitle" initialValue={initialContent.heroSubtitle ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
+        <SettingsField label="Hero Subtitle (FR)" fieldKey="heroSubtitleFr" initialValue={initialContent.heroSubtitleFr ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
+        <SettingsField label="Hero Subtitle (EN)" fieldKey="heroSubtitleEn" initialValue={initialContent.heroSubtitleEn ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
+        
+        <SettingsField label={a.settings?.heroCta1 ?? "Button 1 (AR)"} fieldKey="heroCta1" initialValue={initialContent.heroCta1 ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
+        <SettingsField label="Button 1 (FR)" fieldKey="heroCta1Fr" initialValue={initialContent.heroCta1Fr ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
+        <SettingsField label="Button 1 (EN)" fieldKey="heroCta1En" initialValue={initialContent.heroCta1En ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
+
+        <SettingsField label={a.settings?.heroCta2 ?? "Button 2 (AR)"} fieldKey="heroCta2" initialValue={initialContent.heroCta2 ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
+        <SettingsField label="Button 2 (FR)" fieldKey="heroCta2Fr" initialValue={initialContent.heroCta2Fr ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
+        <SettingsField label="Button 2 (EN)" fieldKey="heroCta2En" initialValue={initialContent.heroCta2En ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
         <SettingsField label={a.settings?.footerText ?? "Footer Text"} fieldKey="footerText" initialValue={initialContent.footerText ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
         <SettingsField label={a.settings?.about ?? "About"} fieldKey="about" initialValue={initialContent.about ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />
         <SettingsUploadField label="Homepage Hero Background (Upload Video/Image)" fieldKey="heroBackground" adminSecret={adminSecret} initialValue={initialContent.heroBackground ?? ""} onChange={(k, v) => { contentRef.current[k] = v; }} />

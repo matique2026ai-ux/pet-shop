@@ -2,7 +2,7 @@
 
 @theme {
   --font-outfit: var(--font-cairo);
-  --font-playfair: var(--font-cairo);
+  --font-playfair: var(--font-playfair);
   --font-tajawal: var(--font-cairo);
 
   --color-white: #ffffff;
@@ -249,11 +249,11 @@ a {
 
 /* ===== Premium Glassmorphism ===== */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 8px 32px 0 rgba(196, 147, 63, 0.05);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
 }
 .glass-panel-dark {
   background: rgba(11, 30, 54, 0.65);
@@ -261,4 +261,10 @@ a {
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Language specific fonts */
+html[lang='en'] body,
+html[lang='fr'] body {
+  font-family: var(--font-playfair), serif !important;
 }

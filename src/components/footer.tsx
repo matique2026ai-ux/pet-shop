@@ -93,11 +93,8 @@ export default function Footer() {
   );
 
   return (
-    <footer className="bg-gradient-to-b from-[#1A1A2E] to-[#0D0D1A] text-slate-300">
-      {/* Gold divider line */}
-      <div className="h-px bg-gradient-to-r from-transparent via-[#C4933F] to-transparent opacity-60" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <footer className="bg-[#1A120B] border-t border-stone-800 pt-16 pb-8 text-slate-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 gap-y-12">
 
           {/* Brand column */}
