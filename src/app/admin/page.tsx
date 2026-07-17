@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { useI18n } from "@/lib/i18n-context";
 import { useAdminI18n } from "@/lib/admin-i18n";
@@ -426,6 +426,38 @@ export default function AdminDashboard() {
   const [loginError, setLoginError] = useState("");
   const [authed, setAuthed] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [orderSearch, setOrderSearch] = useState("");
+  const [orderStatusFilter, setOrderStatusFilter] = useState("all");
+  const [orderPage, setOrderPage] = useState(1);
+  const ORDERS_PER_PAGE = 20;
+
+  const [prodPage, setProdPage] = useState(1);
+  const PRODS_PER_PAGE = 20;
+
+  const exportOrdersCSV = (filteredOrders: any[]) => {
+    const headers = ["Order ID", "Customer Name", "Phone", "Address", "City", "Total", "Status", "Date"];
+    const rows = filteredOrders.map(o => [
+      o.id,
+      '"' + (o.customer_name || "").replace(/"/g, '""') + '"',
+      '"' + (o.customer_phone || "") + '"',
+      '"' + (o.delivery_address || "").replace(/"/g, '""') + '"',
+      '"' + (o.city || "").replace(/"/g, '""') + '"',
+      o.total,
+      o.status,
+      o.created_at ? new Date(o.created_at).toISOString() : ""
+    ]);
+    const csvContent = [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "orders_export.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
 
   const [products, setProducts] = useState<ProductData[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -1032,6 +1064,44 @@ export default function AdminDashboard() {
     }
     return Object.values(map).sort((a, b) => months.indexOf(a.month) - months.indexOf(b.month));
   })();
+  
+  const topProductsDynamic = useMemo(() => {
+    if (!orders.length || !products.length) return sampleTopProducts;
+    const salesMap: Record<string, { sales: number, revenue: number }> = {};
+    for (const o of orders) {
+      if (o.status === "cancelled") continue;
+      for (const item of o.items || []) {
+        if (!salesMap[item.id]) salesMap[item.id] = { sales: 0, revenue: 0 };
+        salesMap[item.id].sales += item.quantity;
+        salesMap[item.id].revenue += (item.price * item.quantity);
+      }
+    }
+    return Object.entries(salesMap)
+      .map(([id, stats]) => {
+        const prod = products.find(p => p.id === id);
+        return {
+          name: prod ? prod.name : "Unknown",
+          sales: stats.sales,
+          revenue: stats.revenue,
+          growth: "+0%"
+        };
+      })
+      .sort((a, b) => b.revenue - a.revenue)
+      .slice(0, 5);
+  }, [orders, products]);
+
+  const recentOrdersDynamic = useMemo(() => {
+    if (!orders.length) return sampleRecentOrders;
+    return orders.slice(0, 5).map(o => ({
+      id: o.id.slice(0, 8),
+      customer: o.customer_name,
+      product: o.items?.[0]?.name + ((o.items?.length || 0) > 1 ? " +" + (o.items.length - 1) + " more" : ""),
+      amount: o.total,
+      status: o.status,
+      date: o.created_at ? new Date(o.created_at).toLocaleDateString() : ""
+    }));
+  }, [orders]);
+
   const catDist = categories.map((c) => ({
     name: c.name,
     value: products.filter((p) => p.category === c.id).length,
@@ -1301,7 +1371,7 @@ export default function AdminDashboard() {
                         </tr>
                       </thead>
                       <tbody>
-                        {(orders.length ? orders.slice(0, 5) : sampleRecentOrders).map((order: any, i: number) => (
+                        {recentOrdersDynamic.map((order: any, i: number) => (
                           <tr key={order.id || i} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                             <td className="px-6 py-4 font-semibold text-gray-900">{order.id || `#ORD-${i + 1}`}</td>
                             <td className="px-6 py-4 text-gray-700">{order.customer_name || "-"}</td>
@@ -1332,7 +1402,7 @@ export default function AdminDashboard() {
                     </button>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                    {sampleTopProducts.map((product, i) => (
+                    {topProductsDynamic.map((product, i) => (
                       <div key={i} className="relative bg-gray-50 rounded-xl p-4 border border-gray-100 hover:border-emerald-200 hover:shadow-sm transition-all group">
                         <div className="absolute top-3 right-3 w-7 h-7 bg-white rounded-lg shadow-sm flex items-center justify-center text-xs font-bold text-emerald-600">
                           {i + 1}
@@ -1483,13 +1553,13 @@ export default function AdminDashboard() {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                         <input
                           value={prodSearch}
-                          onChange={(e) => setProdSearch(e.target.value)}
+                          onChange={(e) => { setProdSearch(e.target.value); setProdPage(1); }}
                           placeholder={a.products.searchPlaceholder}
                           className="w-full pl-10 pr-9 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-500 transition-colors"
                         />
                         {prodSearch && (
                           <button
-                            onClick={() => setProdSearch("")}
+                            onClick={() => { setProdSearch(""); setProdPage(1); }}
                             className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                           >
                             <X className="w-4 h-4" />
@@ -1501,7 +1571,7 @@ export default function AdminDashboard() {
                         <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                         <select
                           value={prodCat}
-                          onChange={(e) => setProdCat(e.target.value)}
+                          onChange={(e) => { setProdCat(e.target.value); setProdPage(1); }}
                           className="pl-9 pr-8 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-500 transition-colors appearance-none cursor-pointer"
                         >
                           <option value="all">{a.products.allCategories}</option>
@@ -1513,7 +1583,7 @@ export default function AdminDashboard() {
 
                       <select
                         value={prodStock}
-                        onChange={(e) => setProdStock(e.target.value as "all" | "in" | "out")}
+                        onChange={(e) => { setProdStock(e.target.value as "all" | "in" | "out"); setProdPage(1); }}
                         className="px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-500 transition-colors appearance-none cursor-pointer"
                       >
                           <option value="all">{a.products.allStock}</option>
@@ -1558,7 +1628,7 @@ export default function AdminDashboard() {
                         <Search className="w-10 h-10 mb-3 text-gray-300" />
                         <p className="text-sm font-medium text-gray-500">{a.products.filtersNoMatch}</p>
                         <button
-                          onClick={() => { setProdSearch(""); setProdCat("all"); setProdStock("all"); }}
+                          onClick={() => { setProdSearch(""); setProdCat("all"); setProdStock("all"); setProdPage(1); }}
                           className="mt-3 text-sm text-emerald-600 hover:underline"
                         >
                           {a.products.clearFilters}
@@ -1615,7 +1685,14 @@ export default function AdminDashboard() {
                               </tr>
                             </thead>
                             <tbody>
-                              {filtered.map((product) => <ProductRow key={product.id} product={product} />)}
+                              {filtered.slice(0, prodPage * PRODS_PER_PAGE).map((product) => <ProductRow key={product.id} product={product} />)}
+                              {prodPage * PRODS_PER_PAGE < filtered.length && (
+                                <tr>
+                                  <td colSpan={7} className="text-center py-4">
+                                    <button onClick={() => setProdPage(p => p + 1)} className="px-4 py-2 bg-emerald-50 text-emerald-600 rounded-xl text-xs font-semibold hover:bg-emerald-100 transition-colors">Load More</button>
+                                  </td>
+                                </tr>
+                              )}
                             </tbody>
                           </table>
                         </div>
