@@ -168,7 +168,7 @@ export default function ProductDetailPage() {
         <section className="py-8 lg:py-12 bg-gray-50/50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <AnimatedSection>
-              <div className="relative bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden p-6 sm:p-8 space-y-6">
+              <div className="relative bg-white rounded-3xl shadow-xl border border-gray-100 p-6 sm:p-8 space-y-6">
                 
                 {/* Background decorative animal footprint patterns */}
                 <FootprintDecorations category={product.category} />
@@ -312,7 +312,7 @@ export default function ProductDetailPage() {
 
                     <div className="border-t border-gray-100 pt-5">
                       {/* Quantity and Add to Cart action */}
-                      <div className={`flex flex-col sm:flex-row items-center gap-3 w-full`}>
+                      <div className={`flex flex-col sm:flex-row flex-wrap items-center gap-3 w-full`}>
                         {/* Quantity selectors */}
                         {isContinuousUnit(product.sold_by) ? (
                           <div className="flex items-center justify-between w-full sm:w-auto bg-gray-100 rounded-xl px-4 py-2 shrink-0">
