@@ -123,6 +123,7 @@ export default function Footer() {
                 { href: "/blog",      label: t.nav.blog },
                 { href: "/faq",      label: t.nav.faq },
                 { href: "/shipping", label: t.nav.shipping },
+                { href: "/privacy",  label: (t.nav as any).privacy || "Privacy" },
                 { href: "/about",    label: t.nav.about },
                 { href: "/contact",  label: t.nav.contact },
               ].map((l) => (

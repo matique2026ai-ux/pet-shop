@@ -227,6 +227,31 @@ export default function ShippingPage() {
       </section>
 
       {/* ═══════════════════════════════
+          DETAILED POLICIES (SECTIONS)
+      ═══════════════════════════════ */}
+      {t.shipping.sections && t.shipping.sections.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+          <AnimatedSection>
+            <div className="rounded-3xl border border-[#C4933F]/20 bg-[#241A11] p-8 lg:p-10 space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {(t.shipping.sections as unknown as { title: string; text: string }[]).map((sec, i) => (
+                  <div key={i} className="space-y-3">
+                    <h3 className="text-lg font-bold text-white flex items-center gap-2 border-b border-[#C4933F]/10 pb-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#DFB96A]" />
+                      {sec.title}
+                    </h3>
+                    <p className="text-sm text-white/60 leading-relaxed">
+                      {sec.text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </AnimatedSection>
+        </section>
+      )}
+
+      {/* ═══════════════════════════════
           CTA BANNER (Bento Style)
       ═══════════════════════════════ */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">

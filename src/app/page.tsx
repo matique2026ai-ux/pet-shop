@@ -34,6 +34,61 @@ const DEFAULT_HERO_VIDEOS = [
   "https://cdn.pixabay.com/video/2022/12/03/141480-777708175_large.mp4",
 ];
 
+function CategoryFootprintDecor({ category }: { category: string }) {
+  if (category === "cats") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className="absolute -bottom-6 -left-6 w-24 h-24 text-[#C4933F]/4 pointer-events-none transform -rotate-12 select-none group-hover:scale-110 group-hover:text-[#C4933F]/8 transition-all duration-500 z-0"
+        aria-hidden="true"
+      >
+        <path d="M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3zm-4.5-3c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm9 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6.5-3.5C9.17 7.5 8.5 8.17 8.5 9s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm4 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z" />
+      </svg>
+    );
+  }
+  if (category === "birds") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth="1"
+        fill="none"
+        className="absolute -bottom-6 -left-6 w-24 h-24 text-[#C4933F]/6 pointer-events-none transform rotate-45 select-none group-hover:scale-110 group-hover:text-[#C4933F]/10 transition-all duration-500 z-0"
+        aria-hidden="true"
+      >
+        <line x1="12" y1="4" x2="12" y2="20" />
+        <line x1="12" y1="12" x2="6" y2="8" />
+        <line x1="12" y1="12" x2="18" y2="8" />
+        <line x1="12" y1="16" x2="8" y2="19" />
+        <line x1="12" y1="16" x2="16" y2="19" />
+      </svg>
+    );
+  }
+  if (category === "dogs") {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className="absolute -bottom-6 -left-6 w-28 h-28 text-[#C4933F]/4 pointer-events-none transform -rotate-45 select-none group-hover:scale-110 group-hover:text-[#C4933F]/8 transition-all duration-500 z-0"
+        aria-hidden="true"
+      >
+        <path d="M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3zm-4.5-3c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm9 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6.5-3.5C9.17 7.5 8.5 8.17 8.5 9s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm4 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z" />
+      </svg>
+    );
+  }
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="absolute -bottom-6 -left-6 w-24 h-24 text-[#C4933F]/4 pointer-events-none transform rotate-12 select-none group-hover:scale-110 group-hover:text-[#C4933F]/8 transition-all duration-500 z-0"
+      aria-hidden="true"
+    >
+      <path d="M12 3C8.5 3 5 6.5 5 11c0 4.5 3.5 7.5 5.5 8.5C11 19.8 11.5 20 12 20s1-.2 1.5-.5c2-1 5.5-4 5.5-8.5 0-4.5-3.5-8-7-8zm-2 14c-1.5-1-3.5-3-3.5-6 0-3 2-5 3.5-5 .5 0 1 .5 1 1 0 1.5-1 3-1 5 0 1 .5 2 1 2.5-.5.5-1 1.5-1 2.5zm4.5-2.5c.5-.5 1-1.5 1-2.5 0-2-1-3.5-1-5 0-.5.5-1 1-1 1.5 0 3.5 2 3.5 5 0 3-2 5-3.5 6 0-1-.5-2-1-2.5z" />
+    </svg>
+  );
+}
+
 export default function HomePage() {
   const { t, dir, lang } = useI18n();
   const { content } = useSiteSettings();
@@ -246,52 +301,75 @@ export default function HomePage() {
           </AnimatedSection>
           {/* Scroll row sits OUTSIDE AnimatedSection to avoid Framer Motion intercepting touch events */}
           <div
-            className="flex overflow-x-auto lg:grid lg:grid-cols-5 gap-4 pb-4 px-1 scrollbar-none"
+            className="flex overflow-x-auto lg:grid lg:grid-cols-5 gap-4 lg:gap-6 pb-6 px-1 scrollbar-none"
             style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" } as React.CSSProperties}
           >
             {categories.map((cat) => (
               <Link
                 key={cat.id}
                 href={`/products/${cat.id}`}
-                className="group relative block rounded-2xl overflow-hidden aspect-[4/5] shadow-md hover:shadow-xl transition-all shrink-0 w-[145px] sm:w-[180px] lg:w-auto"
+                className="group relative flex flex-col bg-white rounded-3xl p-5 border border-[#F0EDE6] shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_20px_45px_rgba(196,147,63,0.12)] hover:border-[#DFB96A]/30 transition-all duration-500 shrink-0 w-[155px] sm:w-[190px] lg:w-auto overflow-hidden text-center items-center justify-between min-h-[220px] sm:min-h-[260px]"
               >
-                {cat.video_url ? (
-                  <video
-                    src={cat.video_url}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                ) : cat.image_url ? (
-                  <Image
-                    src={cat.image_url}
-                    alt={cat.name}
-                    fill
-                    placeholder="blur"
-                    blurDataURL={SHIMMER_BLUR}
-                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                ) : (
-                  // Premium brand fallback gradient with official logo badge centered
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#0B1E36] to-[#050D1A] flex flex-col items-center justify-center p-4">
-                    <div className="relative w-16 h-16 opacity-35 group-hover:opacity-60 transition-opacity duration-300">
-                      <Image
-                        src="/logo-badge.png"
-                        alt="Logo"
-                        fill
-                        className="object-contain"
-                      />
+                <CategoryFootprintDecor category={cat.id} />
+                
+                {/* Circular Media Frame */}
+                <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mx-auto border-4 border-white shadow-md group-hover:shadow-xl group-hover:border-[#DFB96A]/20 transition-all duration-500 z-10 shrink-0">
+                  {cat.video_url ? (
+                    <video
+                      src={cat.video_url}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                  ) : cat.image_url ? (
+                    <Image
+                      src={cat.image_url}
+                      alt={cat.name}
+                      fill
+                      placeholder="blur"
+                      blurDataURL={SHIMMER_BLUR}
+                      sizes="(max-width: 640px) 80px, 100px"
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                  ) : (
+                    // Fallback using the official logo badge and premium dark brand gradient
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#0B1E36] to-[#050D1A] flex items-center justify-center p-3">
+                      <div className="relative w-10 h-10 sm:w-12 sm:h-12 opacity-50 group-hover:opacity-85 transition-opacity duration-300">
+                        <Image
+                          src="/logo-badge.png"
+                          alt="Logo"
+                          fill
+                          className="object-contain"
+                        />
+                      </div>
                     </div>
-                  </div>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent group-hover:from-[#C4933F]/80 transition-all duration-400" />
-                <div className="absolute bottom-0 inset-x-0 p-4 text-center">
-                  <span className="text-white font-bold text-sm lg:text-base leading-tight block drop-shadow-lg">
+                  )}
+                  {/* Gold overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#C4933F]/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                </div>
+
+                <div className="mt-3 relative z-10 flex-1 flex flex-col justify-center">
+                  <span className="text-[#0B1E36] font-extrabold text-sm sm:text-base leading-tight block group-hover:text-[#C4933F] transition-colors duration-300">
                     {cat.name}
                   </span>
+                  <div>
+                    <span className="text-[10px] text-[#A87A2E] bg-[#FBF8F3] px-2.5 py-0.5 rounded-full font-bold mt-1.5 inline-block group-hover:bg-[#C4933F]/10 transition-colors duration-300">
+                      {t.nav.subcategoryCount.replace("{n}", String(cat.subcategories ? cat.subcategories.length : 0))}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-3 flex items-center justify-center gap-1 text-[#C4933F] opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-2 transition-all duration-300 z-10 shrink-0">
+                  <span className="text-[10px] font-extrabold">
+                    {lang === "ar" ? "تصفح الآن" : lang === "fr" ? "Découvrir" : "Browse Now"}
+                  </span>
+                  {dir === "rtl" ? (
+                    <ChevronLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
+                  ) : (
+                    <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                  )}
                 </div>
               </Link>
             ))}
