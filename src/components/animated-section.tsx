@@ -34,7 +34,7 @@ export const staggerContainer = {
   },
 };
 
-export const fadeInUpVariant = {
+export const fadeInUpVariant: any = {
   hidden: { opacity: 0, y: 30 },
   show: {
     opacity: 1,
