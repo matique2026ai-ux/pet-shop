@@ -150,13 +150,13 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
             <CardFootprintDecor category={product.category} />
 
             {/* Product name */}
-            <h3 className={`relative z-10 font-bold text-[#1A1A2E] ${isRelated ? "text-sm" : "text-sm lg:text-base"} leading-tight mb-2 line-clamp-2 group-hover:text-[#C4933F] transition-colors duration-200`}>
+            <h3 dir="auto" className={`relative z-10 font-bold text-[#1A1A2E] ${isRelated ? "text-sm" : "text-sm lg:text-base"} leading-tight mb-2 line-clamp-2 group-hover:text-[#C4933F] transition-colors duration-200 text-center mx-auto`}>
               {product.name}
             </h3>
 
             {/* Stars + review count */}
             {!isRelated && (
-              <div className="relative z-10 flex items-center gap-1.5 mb-3">
+              <div className="relative z-10 flex items-center justify-center gap-1.5 mb-3">
                 <StarRating rating={product.reviews > 0 ? product.rating : 0} />
                 {product.reviews > 0 && (
                   <span className="text-xs text-[#7A6F61] font-medium">
@@ -168,22 +168,18 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
             )}
 
             {/* Price row */}
-            <div className="relative z-10 flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <span className={`font-bold text-[#1A1A2E] ${isRelated ? "text-sm" : "text-lg"}`}>
-                  {currency}{product.price.toLocaleString()}
-                  {product.sold_by && product.sold_by !== "piece" && (
-                    <span className="text-xs font-normal text-[#9E9282]"> /{unitLabel(product.sold_by, lang)}</span>
-                  )}
-                </span>
-                {product.originalPrice && (
-                  <span className={`text-[#9E9282] line-through ${isRelated ? "text-xs" : "text-sm"}`}>
-                    {currency}{product.originalPrice}
-                  </span>
+            <div className="relative z-10 flex flex-wrap items-center justify-center gap-2 mb-1">
+              <span className={`font-bold text-[#1A1A2E] ${isRelated ? "text-sm" : "text-lg"}`}>
+                {currency}{product.price.toLocaleString()}
+                {product.sold_by && product.sold_by !== "piece" && (
+                  <span className="text-xs font-normal text-[#9E9282]"> /{unitLabel(product.sold_by, lang)}</span>
                 )}
-              </div>
-
-              {/* Discount badge */}
+              </span>
+              {product.originalPrice && (
+                <span className={`text-[#9E9282] line-through ${isRelated ? "text-xs" : "text-sm"}`}>
+                  {currency}{product.originalPrice}
+                </span>
+              )}
               {product.originalPrice && product.originalPrice > product.price && (
                 <span className="text-[10px] font-bold bg-[#FBF8F3] text-[#C4933F] px-1.5 py-0.5 rounded-full border border-[#ECDCAE] shrink-0">
                   -{Math.round((1 - product.price / product.originalPrice) * 100)}%
