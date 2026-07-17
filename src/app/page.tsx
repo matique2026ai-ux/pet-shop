@@ -150,7 +150,8 @@ export default function HomePage() {
   const heroCta2     = getLocalizedContent("heroCta2",    t.hero.cta2);
   const isRtl        = dir === "rtl";
   const Arrow        = isRtl ? ChevronLeft : ChevronRight;
-  const bestsellers  = products.filter((p) => p.rating >= 4.6).slice(0, 8);
+  const highRated = products.filter((p) => p.rating >= 4.6);
+  const bestsellers = highRated.length > 0 ? highRated.slice(0, 8) : products.slice(0, 8);
   const { ids: recentIds } = useRecentlyViewed();
   const recentProducts = products.filter((p) => recentIds.includes(p.id)).slice(0, 4);
   const [videoIdx, setVideoIdx]     = useState(0);
