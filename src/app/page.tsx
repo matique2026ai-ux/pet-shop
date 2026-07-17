@@ -101,68 +101,84 @@ export default function HomePage() {
             <source src={heroVideos[videoIdx]} type="video/mp4" />
           </video>
         )}
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
-        {/* Gold shimmer overlay at bottom */}
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#C4933F]/20 to-transparent" />
+        {/* Cinematic Vignette Overlay */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-black/20 via-black/50 to-black/90" />
+        
+        {/* Subtle Gold accent at bottom to blend with the tagline */}
+        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/80 to-transparent" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-36 w-full">
-          <StaggerSection className="text-center max-w-3xl mx-auto glass-panel-dark rounded-3xl p-8 lg:p-12 shadow-2xl">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-40 lg:pt-32 lg:pb-48 w-full flex flex-col items-center justify-center">
+          <StaggerSection className="text-center max-w-5xl mx-auto flex flex-col items-center">
             {/* Premium badge */}
             <FadeIn>
-              <div className="inline-flex items-center gap-2 bg-[#C4933F]/20 backdrop-blur-sm border border-[#C4933F]/40 text-[#DFB96A] rounded-full px-4 py-1.5 text-sm font-medium mb-6">
-                <Sparkles className="w-4 h-4" />
-                {dir === "rtl" ? "متجر الحيوانات الأليفة الأول في سطيف" : "Premier Pet Shop in Sétif"}
+              <div className="inline-flex items-center gap-2 bg-black/20 backdrop-blur-md border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.1)] text-white rounded-full px-5 py-2 text-sm sm:text-base font-medium mb-8 transition-transform hover:scale-105 cursor-default">
+                <Sparkles className="w-4 h-4 text-[#DFB96A]" />
+                {dir === "rtl" ? "متجر الحيوانات الأليفة الأول في الجزائر" : "Premier Pet Shop in Algeria"}
               </div>
             </FadeIn>
 
             <FadeIn>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-5 animate-shimmer drop-shadow-lg">
+              <h1 
+                className="text-5xl sm:text-7xl lg:text-8xl font-extrabold text-white leading-tight tracking-tight mb-6"
+                style={{ textShadow: '0 10px 40px rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.5)' }}
+              >
                 {heroTitle}
               </h1>
             </FadeIn>
             
             <FadeIn>
-              <p className="text-lg text-white/85 font-medium mb-8 max-w-xl mx-auto drop-shadow">
+              <p 
+                className="text-lg sm:text-2xl text-gray-200 font-light mb-12 max-w-3xl mx-auto leading-relaxed"
+                style={{ textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}
+              >
                 {heroSubtitle}
               </p>
             </FadeIn>
             
             <FadeIn>
-              <div className="flex flex-wrap justify-center gap-4">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
                 <Link
                   href="/products"
-                  className="inline-flex items-center gap-2 bg-gradient-to-r from-[#F5851F] to-[#E06A0A] text-white px-8 py-3.5 rounded-full font-bold text-base hover:opacity-90 transition-all shadow-lg shadow-[#F5851F]/40 hover:-translate-y-0.5"
+                  className="relative group inline-flex justify-center items-center gap-3 bg-gradient-to-r from-[#F5851F] to-[#E06A0A] text-white px-10 py-4 rounded-full font-bold text-lg transition-all hover:scale-105 shadow-[0_0_40px_rgba(245,133,31,0.4)] hover:shadow-[0_0_60px_rgba(245,133,31,0.6)] w-full sm:w-auto"
                 >
                   {heroCta1}
-                  <Arrow className="w-5 h-5" />
+                  {dir === "rtl" ? (
+                    <Arrow className="w-5 h-5 group-hover:-translate-x-1 transition-transform rotate-180" />
+                  ) : (
+                    <Arrow className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  )}
+                  <div className="absolute inset-0 rounded-full border border-white/20 group-hover:border-white/40 transition-colors" />
                 </Link>
                 <Link
                   href="/vet"
-                  className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-8 py-3.5 rounded-full font-bold text-base hover:bg-white/20 transition-all border-2 border-white/30"
+                  className="inline-flex justify-center items-center gap-3 bg-white/5 backdrop-blur-md text-white px-10 py-4 rounded-full font-bold text-lg transition-all border border-white/20 hover:bg-white/10 hover:border-white/40 hover:scale-105 w-full sm:w-auto"
                 >
-                  <Stethoscope className="w-5 h-5" />
+                  <Stethoscope className="w-5 h-5 text-[#DFB96A]" />
                   {heroCta2}
                 </Link>
               </div>
             </FadeIn>
-
-            {/* Trust badges */}
-            <FadeIn>
-              <div className="flex items-center justify-center gap-6 mt-10 flex-wrap">
-                {[
-                  { icon: <Truck className="w-4 h-4" />, label: dir === "rtl" ? "توصيل سريع" : "Fast Delivery" },
-                  { icon: <Award className="w-4 h-4" />, label: dir === "rtl" ? "جودة مضمونة" : "Quality Guaranteed" },
-                  { icon: <Shield className="w-4 h-4" />, label: dir === "rtl" ? "دفع آمن" : "Secure Payment" },
-                ].map((b, i) => (
-                  <div key={i} className="flex items-center gap-1.5 text-white/75 text-xs font-medium">
-                    <span className="text-[#DFB96A]">{b.icon}</span>
-                    {b.label}
-                  </div>
-                ))}
-              </div>
-            </FadeIn>
           </StaggerSection>
+        </div>
+
+        {/* Sleek Trust Bar at the bottom of the hero */}
+        <div className="absolute bottom-0 inset-x-0 border-t border-white/10 bg-black/40 backdrop-blur-xl z-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+            <div className="flex flex-wrap items-center justify-center sm:justify-around gap-6">
+              {[
+                { icon: <Truck className="w-5 h-5" />, label: dir === "rtl" ? "توصيل سريع لـ 58 ولاية" : "Fast Nationwide Delivery" },
+                { icon: <Award className="w-5 h-5" />, label: dir === "rtl" ? "جودة مضمونة 100%" : "100% Quality Guaranteed" },
+                { icon: <Shield className="w-5 h-5" />, label: dir === "rtl" ? "تسوق إلكتروني آمن" : "Secure Online Shopping" },
+              ].map((b, i) => (
+                <div key={i} className="flex items-center gap-3 text-white/90 text-sm sm:text-base font-medium">
+                  <div className="bg-white/10 p-2 rounded-full border border-white/5">
+                    <span className="text-[#DFB96A]">{b.icon}</span>
+                  </div>
+                  {b.label}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
