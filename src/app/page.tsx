@@ -7,7 +7,8 @@ import { useI18n } from "@/lib/i18n-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
 import { useRecentlyViewed } from "@/lib/use-recently-viewed";
 import { useSiteSettings } from "@/lib/site-settings";
-import AnimatedSection from "@/components/animated-section";
+import AnimatedSection, { StaggerSection, FadeIn } from "@/components/animated-section";
+import { motion } from "framer-motion";
 import ProductCard from "@/components/product-card";
 import VetCard from "@/components/vet-card";
 import { SHIMMER_BLUR } from "@/lib/blur";
@@ -106,50 +107,62 @@ export default function HomePage() {
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#C4933F]/20 to-transparent" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-36 w-full">
-          <div className="text-center max-w-3xl mx-auto">
+          <StaggerSection className="text-center max-w-3xl mx-auto glass-panel-dark rounded-3xl p-8 lg:p-12 shadow-2xl">
             {/* Premium badge */}
-            <div className="inline-flex items-center gap-2 bg-[#C4933F]/20 backdrop-blur-sm border border-[#C4933F]/40 text-[#DFB96A] rounded-full px-4 py-1.5 text-sm font-medium mb-6">
-              <Sparkles className="w-4 h-4" />
-              {dir === "rtl" ? "متجر الحيوانات الأليفة الأول في سطيف" : "Premier Pet Shop in Sétif"}
-            </div>
+            <FadeIn>
+              <div className="inline-flex items-center gap-2 bg-[#C4933F]/20 backdrop-blur-sm border border-[#C4933F]/40 text-[#DFB96A] rounded-full px-4 py-1.5 text-sm font-medium mb-6">
+                <Sparkles className="w-4 h-4" />
+                {dir === "rtl" ? "متجر الحيوانات الأليفة الأول في سطيف" : "Premier Pet Shop in Sétif"}
+              </div>
+            </FadeIn>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-5 animate-shimmer drop-shadow-lg">
-              {heroTitle}
-            </h1>
-            <p className="text-lg text-white/85 font-medium mb-8 max-w-xl mx-auto drop-shadow">
-              {heroSubtitle}
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link
-                href="/products"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#F5851F] to-[#E06A0A] text-white px-8 py-3.5 rounded-full font-bold text-base hover:opacity-90 transition-all shadow-lg shadow-[#F5851F]/40 hover:-translate-y-0.5"
-              >
-                {heroCta1}
-                <Arrow className="w-5 h-5" />
-              </Link>
-              <Link
-                href="/vet"
-                className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-8 py-3.5 rounded-full font-bold text-base hover:bg-white/20 transition-all border-2 border-white/30"
-              >
-                <Stethoscope className="w-5 h-5" />
-                {heroCta2}
-              </Link>
-            </div>
+            <FadeIn>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-5 animate-shimmer drop-shadow-lg">
+                {heroTitle}
+              </h1>
+            </FadeIn>
+            
+            <FadeIn>
+              <p className="text-lg text-white/85 font-medium mb-8 max-w-xl mx-auto drop-shadow">
+                {heroSubtitle}
+              </p>
+            </FadeIn>
+            
+            <FadeIn>
+              <div className="flex flex-wrap justify-center gap-4">
+                <Link
+                  href="/products"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-[#F5851F] to-[#E06A0A] text-white px-8 py-3.5 rounded-full font-bold text-base hover:opacity-90 transition-all shadow-lg shadow-[#F5851F]/40 hover:-translate-y-0.5"
+                >
+                  {heroCta1}
+                  <Arrow className="w-5 h-5" />
+                </Link>
+                <Link
+                  href="/vet"
+                  className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-8 py-3.5 rounded-full font-bold text-base hover:bg-white/20 transition-all border-2 border-white/30"
+                >
+                  <Stethoscope className="w-5 h-5" />
+                  {heroCta2}
+                </Link>
+              </div>
+            </FadeIn>
 
             {/* Trust badges */}
-            <div className="flex items-center justify-center gap-6 mt-10 flex-wrap">
-              {[
-                { icon: <Truck className="w-4 h-4" />, label: dir === "rtl" ? "توصيل سريع" : "Fast Delivery" },
-                { icon: <Award className="w-4 h-4" />, label: dir === "rtl" ? "جودة مضمونة" : "Quality Guaranteed" },
-                { icon: <Shield className="w-4 h-4" />, label: dir === "rtl" ? "دفع آمن" : "Secure Payment" },
-              ].map((b, i) => (
-                <div key={i} className="flex items-center gap-1.5 text-white/75 text-xs font-medium">
-                  <span className="text-[#DFB96A]">{b.icon}</span>
-                  {b.label}
-                </div>
-              ))}
-            </div>
-          </div>
+            <FadeIn>
+              <div className="flex items-center justify-center gap-6 mt-10 flex-wrap">
+                {[
+                  { icon: <Truck className="w-4 h-4" />, label: dir === "rtl" ? "توصيل سريع" : "Fast Delivery" },
+                  { icon: <Award className="w-4 h-4" />, label: dir === "rtl" ? "جودة مضمونة" : "Quality Guaranteed" },
+                  { icon: <Shield className="w-4 h-4" />, label: dir === "rtl" ? "دفع آمن" : "Secure Payment" },
+                ].map((b, i) => (
+                  <div key={i} className="flex items-center gap-1.5 text-white/75 text-xs font-medium">
+                    <span className="text-[#DFB96A]">{b.icon}</span>
+                    {b.label}
+                  </div>
+                ))}
+              </div>
+            </FadeIn>
+          </StaggerSection>
         </div>
       </section>
 
@@ -239,22 +252,26 @@ export default function HomePage() {
       <section className="py-14 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-2 mb-8 flex-wrap">
-            <div>
+            <AnimatedSection>
               <h2 className="text-2xl font-bold text-[#1A1A2E]">{t.home.bestsellers}</h2>
               <div className="mt-1.5 w-14 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A]" />
-            </div>
-            <Link
-              href="/products"
-              className="flex items-center gap-1 text-[#C4933F] font-semibold text-sm hover:text-[#A87A2E] shrink-0 transition-colors"
-            >
-              {t.home.viewAll} <Arrow className="w-4 h-4" />
-            </Link>
+            </AnimatedSection>
+            <AnimatedSection delay={0.2}>
+              <Link
+                href="/products"
+                className="flex items-center gap-1 text-[#C4933F] font-semibold text-sm hover:text-[#A87A2E] shrink-0 transition-colors"
+              >
+                {t.home.viewAll} <Arrow className="w-4 h-4" />
+              </Link>
+            </AnimatedSection>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 gap-y-7">
+          <StaggerSection className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 gap-y-7">
             {bestsellers.map((p) => (
-              <ProductCard key={p.id} product={p} />
+              <FadeIn key={p.id}>
+                <ProductCard product={p} />
+              </FadeIn>
             ))}
-          </div>
+          </StaggerSection>
         </div>
       </section>
 

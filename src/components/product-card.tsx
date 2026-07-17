@@ -8,6 +8,7 @@ import { useCart } from "@/lib/cart-context";
 import { useI18n } from "@/lib/i18n-context";
 import { SHIMMER_BLUR } from "@/lib/blur";
 import { unitLabel, isContinuousUnit } from "@/lib/units";
+import { motion } from "framer-motion";
 
 interface ProductCardProps {
   product: Product;
@@ -101,7 +102,11 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
 
   return (
     <Link href={`/products/${product.category}/${product.id}`} className="group block">
-      <div className="product-card-hover">
+      <motion.div 
+        className="product-card-hover"
+        whileHover={{ y: -6 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
         <div className="relative bg-white rounded-2xl overflow-hidden border border-[#F0EDE6] shadow-md shadow-[#C4933F]/8 group-hover:border-[#DFB96A]/40">
 
           {/* Image */}
@@ -188,17 +193,18 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
 
             {/* Add to cart button */}
             {product.inStock && (
-              <button
+              <motion.button
+                whileTap={{ scale: 0.92 }}
                 onClick={handleAddToCart}
                 className="relative z-10 add-cart-btn mt-3 w-full flex items-center justify-center gap-2 py-2.5 text-sm font-bold"
               >
                 <ShoppingCart className="w-4 h-4" />
                 {t.products.addToCart}
-              </button>
+              </motion.button>
             )}
           </div>
         </div>
-      </div>
+      </motion.div>
     </Link>
   );
 }

@@ -62,6 +62,15 @@ export default function Navbar() {
     }));
   };
 
+  const [isScrolled, setIsScrolled] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const storeName = store?.storeName || store?.name || (
     lang === "ar"
       ? "طيور الجمال والجواد"
@@ -148,7 +157,11 @@ export default function Navbar() {
       </div>
 
       {/* ── Main Navbar ── */}
-      <nav className="bg-white border-b border-[#E2DDD4] sticky top-0 z-50 shadow-sm">
+      <nav className={`sticky top-0 z-50 transition-all duration-300 ${
+        isScrolled 
+          ? "glass-panel border-b border-transparent shadow-md py-1" 
+          : "bg-white border-b border-[#E2DDD4] shadow-sm py-0"
+      }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
 
