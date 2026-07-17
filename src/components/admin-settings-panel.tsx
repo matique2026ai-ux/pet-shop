@@ -310,6 +310,7 @@ export default function AdminSettingsPanel({ adminSecret, a, onSaved }: AdminSet
         onSave={() => save("store", storeRef, setSavingStore)}
       >
         <SettingsField label={a.settings?.storeName ?? "Store Name"} fieldKey="storeName" initialValue={initialStore.storeName ?? ""} onChange={(k, v) => { storeRef.current[k] = v; }} />
+        <SettingsUploadField label="Store Logo (Upload Image)" fieldKey="storeLogo" adminSecret={adminSecret} initialValue={initialStore.storeLogo ?? ""} onChange={(k, v) => { storeRef.current[k] = v; }} />
         <SettingsField label={a.settings?.phone ?? "Phone"} fieldKey="phone" initialValue={initialStore.phone ?? ""} onChange={(k, v) => { storeRef.current[k] = v; }} />
         <SettingsField label={a.settings?.email ?? "Email"} fieldKey="email" type="email" initialValue={initialStore.email ?? ""} onChange={(k, v) => { storeRef.current[k] = v; }} />
         <SettingsField label={a.settings?.whatsapp ?? "WhatsApp"} fieldKey="whatsapp" initialValue={initialStore.whatsapp ?? ""} onChange={(k, v) => { storeRef.current[k] = v; }} />

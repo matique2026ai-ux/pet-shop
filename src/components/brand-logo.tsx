@@ -2,12 +2,17 @@
 
 import React from "react";
 
+import { useSiteSettings } from "@/lib/site-settings";
+
 /* Component C1: Transparent Circular Badge Logo (Icon + 'طيور الجمال والجواد' + 'تأسس 2024') */
 export function LogoC1({ className = "w-20 h-20" }: { className?: string }) {
+  const { store } = useSiteSettings();
+  const logoSrc = store?.storeLogo || "/logo-badge.png";
+  
   return (
     <img
-      src="/logo-badge.png"
-      alt="طيور الجمال والجواد"
+      src={logoSrc}
+      alt={store?.storeName || "طيور الجمال والجواد"}
       className={`${className} object-contain`}
       style={{ display: "inline-block" }}
     />
