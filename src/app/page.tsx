@@ -50,7 +50,7 @@ export default function HomePage() {
   const recentProducts = products.filter((p) => recentIds.includes(p.id)).slice(0, 4);
   const [videoIdx, setVideoIdx]     = useState(0);
   const [heroVideos, setHeroVideos] = useState<string[]>(DEFAULT_HERO_VIDEOS);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   const customBg = content?.heroBackground;
   const isCustomVideo = customBg ? /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(customBg) : false;
@@ -62,9 +62,20 @@ export default function HomePage() {
       .catch(() => {});
   }, []);
 
-  const handleVideoEnd = () => setVideoIdx((videoIdx + 1) % heroVideos.length);
+  const handleVideoEnd = () => setVideoIdx((prev) => (prev + 1) % heroVideos.length);
 
-  useEffect(() => { videoRef.current?.load(); }, [videoIdx]);
+  useEffect(() => {
+    videoRefs.current.forEach((v, i) => {
+      if (v) {
+        if (i === videoIdx) {
+          v.play().catch(() => {});
+        } else {
+          v.pause();
+          setTimeout(() => { if (v) v.currentTime = 0; }, 1500); // Wait for fade out to finish
+        }
+      }
+    });
+  }, [videoIdx, heroVideos]);
 
   return (
     <>
@@ -91,15 +102,21 @@ export default function HomePage() {
             />
           )
         ) : (
-          <video
-            ref={videoRef}
-            key={heroVideos[videoIdx]}
-            autoPlay muted playsInline preload="metadata"
-            onEnded={handleVideoEnd}
-            className="absolute inset-0 w-full h-full object-cover"
-          >
-            <source src={heroVideos[videoIdx]} type="video/mp4" />
-          </video>
+          heroVideos.map((src, i) => (
+            <video
+              key={src}
+              ref={(el) => {
+                videoRefs.current[i] = el;
+              }}
+              muted
+              playsInline
+              preload="auto"
+              onEnded={handleVideoEnd}
+              className={`absolute inset-0 w-full h-full object-cover transition-all duration-[1500ms] ease-in-out ${i === videoIdx ? "opacity-100 scale-100 z-0" : "opacity-0 scale-105 -z-10"}`}
+            >
+              <source src={src} type="video/mp4" />
+            </video>
+          ))
         )}
         {/* Cinematic Vignette Overlay */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-black/20 via-black/50 to-black/90" />
