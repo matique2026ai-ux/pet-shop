@@ -122,22 +122,24 @@ nav a:active {
   transform: scale(0.94);
 }
 
-/* ===== Add to Cart — Premium Gold Gradient ===== */
+/* ===== Add to Cart — Premium Outline to Solid ===== */
 .add-cart-btn {
-  background: linear-gradient(135deg, #DFB96A 0%, #C4933F 100%);
-  color: #050D1A;
-  box-shadow: 0 4px 14px rgba(196, 147, 63, 0.35);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-  border-radius: 9999px;
+  background: transparent;
+  color: #C4933F;
+  border: 1.5px solid rgba(196, 147, 63, 0.4);
+  box-shadow: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 12px;
 }
 .add-cart-btn:hover {
-  background: linear-gradient(135deg, #C4933F 0%, #8A6022 100%);
-  color: #ffffff;
-  box-shadow: 0 6px 20px rgba(196, 147, 63, 0.45);
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #DFB96A 0%, #C4933F 100%);
+  color: #050D1A !important;
+  border-color: transparent;
+  box-shadow: 0 6px 20px rgba(196, 147, 63, 0.3);
+  transform: translateY(-2px);
 }
 .add-cart-btn:active {
-  transform: scale(0.95) translateY(0);
+  transform: scale(0.96) translateY(0);
 }
 
 /* ===== CTA button — Navy with Gold Accent ===== */

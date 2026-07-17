@@ -227,6 +227,7 @@ export default function HomePage() {
               ref={(el) => {
                 videoRefs.current[i] = el;
               }}
+              autoPlay
               muted
               loop={heroVideos.length === 1}
               playsInline
