@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 import ProductCard from "@/components/product-card";
 import BlogCard from "@/components/blog-card";
 import { SHIMMER_BLUR } from "@/lib/blur";
-import { ArrowRight, Star, Truck, Shield, RefreshCw, BookOpen, ChevronLeft, ChevronRight, Heart, Sparkles, Award } from "lucide-react";
+import { ArrowRight, Star, Truck, Shield, RefreshCw, BookOpen, ChevronLeft, ChevronRight, Heart, Sparkles, Award, Cat, Dog, Bird, Fish, Rabbit, PawPrint } from "lucide-react";
 
 
 
@@ -88,6 +88,68 @@ function CategoryFootprintDecor({ category }: { category: string }) {
     </svg>
   );
 }
+
+const CATEGORY_THEMES: Record<string, {
+  gradient: string;
+  circleGradient: string;
+  icon: React.ReactNode;
+  badgeBg: string;
+  badgeText: string;
+  hoverShadow: string;
+  border: string;
+  hoverBorder: string;
+}> = {
+  cats: {
+    gradient: "from-[#FDFBF7] to-[#FFF5EB]",
+    circleGradient: "from-[#FAD4C0] to-[#E67E22]",
+    icon: <Cat className="w-10 h-10 text-white" />,
+    badgeBg: "bg-[#FFF2E6]",
+    badgeText: "text-[#E67E22]",
+    hoverShadow: "hover:shadow-[0_20px_40px_rgba(230,126,34,0.12)]",
+    border: "border-[#FFF0E0]",
+    hoverBorder: "group-hover:border-[#E67E22]/30",
+  },
+  dogs: {
+    gradient: "from-[#FAF9F5] to-[#FAF2DB]",
+    circleGradient: "from-[#ECDCAE] to-[#C4933F]",
+    icon: <Dog className="w-10 h-10 text-white" />,
+    badgeBg: "bg-[#FDF8E7]",
+    badgeText: "text-[#A87A2E]",
+    hoverShadow: "hover:shadow-[0_20px_40px_rgba(196,147,63,0.15)]",
+    border: "border-[#F5EBD0]",
+    hoverBorder: "group-hover:border-[#C4933F]/30",
+  },
+  birds: {
+    gradient: "from-[#F8FAF7] to-[#EFF7F0]",
+    circleGradient: "from-[#D5EAD8] to-[#2ECC71]",
+    icon: <Bird className="w-10 h-10 text-white" />,
+    badgeBg: "bg-[#EEF9F0]",
+    badgeText: "text-[#27AE60]",
+    hoverShadow: "hover:shadow-[0_20px_40px_rgba(46,204,113,0.12)]",
+    border: "border-[#E2F0E5]",
+    hoverBorder: "group-hover:border-[#2ECC71]/30",
+  },
+  fish: {
+    gradient: "from-[#F7FAFC] to-[#EDF5FA]",
+    circleGradient: "from-[#CBE3F0] to-[#2980B9]",
+    icon: <Fish className="w-10 h-10 text-white" />,
+    badgeBg: "bg-[#EBF3F9]",
+    badgeText: "text-[#2980B9]",
+    hoverShadow: "hover:shadow-[0_20px_40px_rgba(41,128,185,0.12)]",
+    border: "border-[#DFECF5]",
+    hoverBorder: "group-hover:border-[#2980B9]/30",
+  },
+  "small-pets": {
+    gradient: "from-[#FCF7F9] to-[#FAF0F4]",
+    circleGradient: "from-[#ECD5E3] to-[#9B59B6]",
+    icon: <Rabbit className="w-10 h-10 text-white" />,
+    badgeBg: "bg-[#FAF0F5]",
+    badgeText: "text-[#9B59B6]",
+    hoverShadow: "hover:shadow-[0_20px_40px_rgba(155,89,182,0.12)]",
+    border: "border-[#F5DFEC]",
+    hoverBorder: "group-hover:border-[#9B59B6]/30",
+  },
+};
 
 export default function HomePage() {
   const { t, dir, lang } = useI18n();
@@ -304,75 +366,81 @@ export default function HomePage() {
             className="flex overflow-x-auto lg:grid lg:grid-cols-5 gap-4 lg:gap-6 pb-6 px-1 scrollbar-none"
             style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" } as React.CSSProperties}
           >
-            {categories.map((cat) => (
-              <Link
-                key={cat.id}
-                href={`/products/${cat.id}`}
-                className="group relative flex flex-col bg-white rounded-3xl p-5 border border-[#F0EDE6] shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_20px_45px_rgba(196,147,63,0.12)] hover:border-[#DFB96A]/30 transition-all duration-500 shrink-0 w-[155px] sm:w-[190px] lg:w-auto overflow-hidden text-center items-center justify-between min-h-[220px] sm:min-h-[260px]"
-              >
-                <CategoryFootprintDecor category={cat.id} />
-                
-                {/* Circular Media Frame */}
-                <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mx-auto border-4 border-white shadow-md group-hover:shadow-xl group-hover:border-[#DFB96A]/20 transition-all duration-500 z-10 shrink-0">
-                  {cat.video_url ? (
-                    <video
-                      src={cat.video_url}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  ) : cat.image_url ? (
-                    <Image
-                      src={cat.image_url}
-                      alt={cat.name}
-                      fill
-                      placeholder="blur"
-                      blurDataURL={SHIMMER_BLUR}
-                      sizes="(max-width: 640px) 80px, 100px"
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  ) : (
-                    // Fallback using the official logo badge and premium dark brand gradient
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#0B1E36] to-[#050D1A] flex items-center justify-center p-3">
-                      <div className="relative w-10 h-10 sm:w-12 sm:h-12 opacity-50 group-hover:opacity-85 transition-opacity duration-300">
-                        <Image
-                          src="/logo-badge.png"
-                          alt="Logo"
-                          fill
-                          className="object-contain"
-                        />
+            {categories.map((cat) => {
+              const theme = CATEGORY_THEMES[cat.id] || {
+                gradient: "from-[#FDFBF7] to-[#FFF5EB]",
+                circleGradient: "from-[#FAD4C0] to-[#E67E22]",
+                icon: <PawPrint className="w-10 h-10 text-white" />,
+                badgeBg: "bg-[#FFF2E6]",
+                badgeText: "text-[#E67E22]",
+                hoverShadow: "hover:shadow-[0_20px_40px_rgba(230,126,34,0.12)]",
+                border: "border-[#FFF0E0]",
+                hoverBorder: "group-hover:border-[#E67E22]/30",
+              };
+              
+              return (
+                <Link
+                  key={cat.id}
+                  href={`/products/${cat.id}`}
+                  className={`group relative flex flex-col bg-gradient-to-b ${theme.gradient} rounded-3xl p-5 border ${theme.border} ${theme.hoverBorder} ${theme.hoverShadow} transition-all duration-500 shrink-0 w-[155px] sm:w-[190px] lg:w-auto overflow-hidden text-center items-center justify-between min-h-[220px] sm:min-h-[260px]`}
+                >
+                  <CategoryFootprintDecor category={cat.id} />
+                  
+                  {/* Circular Media Frame */}
+                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mx-auto border-4 border-white shadow-md group-hover:shadow-xl group-hover:border-white transition-all duration-500 z-10 shrink-0">
+                    {cat.video_url ? (
+                      <video
+                        src={cat.video_url}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    ) : cat.image_url ? (
+                      <Image
+                        src={cat.image_url}
+                        alt={cat.name}
+                        fill
+                        placeholder="blur"
+                        blurDataURL={SHIMMER_BLUR}
+                        sizes="(max-width: 640px) 80px, 100px"
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    ) : (
+                      // Fallback using custom theme gradient and species-specific Lucide icon
+                      <div className={`absolute inset-0 bg-gradient-to-br ${theme.circleGradient} flex items-center justify-center p-3 group-hover:scale-105 transition-transform duration-500`}>
+                        {theme.icon}
                       </div>
-                    </div>
-                  )}
-                  {/* Gold overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#C4933F]/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </div>
-
-                <div className="mt-3 relative z-10 flex-1 flex flex-col justify-center">
-                  <span className="text-[#0B1E36] font-extrabold text-sm sm:text-base leading-tight block group-hover:text-[#C4933F] transition-colors duration-300">
-                    {cat.name}
-                  </span>
-                  <div>
-                    <span className="text-[10px] text-[#A87A2E] bg-[#FBF8F3] px-2.5 py-0.5 rounded-full font-bold mt-1.5 inline-block group-hover:bg-[#C4933F]/10 transition-colors duration-300">
-                      {t.nav.subcategoryCount.replace("{n}", String(cat.subcategories ? cat.subcategories.length : 0))}
-                    </span>
+                    )}
+                    {/* Dark/gold overlay on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#C4933F]/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
-                </div>
 
-                <div className="mt-3 flex items-center justify-center gap-1 text-[#C4933F] opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-2 transition-all duration-300 z-10 shrink-0">
-                  <span className="text-[10px] font-extrabold">
-                    {lang === "ar" ? "تصفح الآن" : lang === "fr" ? "Découvrir" : "Browse Now"}
-                  </span>
-                  {dir === "rtl" ? (
-                    <ChevronLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
-                  ) : (
-                    <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                  )}
-                </div>
-              </Link>
-            ))}
+                  <div className="mt-3 relative z-10 flex-1 flex flex-col justify-center">
+                    <span className="text-[#0B1E36] font-extrabold text-sm sm:text-base leading-tight block group-hover:text-[#C4933F] transition-colors duration-300">
+                      {cat.name}
+                    </span>
+                    <div>
+                      <span className={`text-[10px] ${theme.badgeText} ${theme.badgeBg} px-2.5 py-0.5 rounded-full font-bold mt-1.5 inline-block transition-colors duration-300`}>
+                        {t.nav.subcategoryCount.replace("{n}", String(cat.subcategories ? cat.subcategories.length : 0))}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mt-3 flex items-center justify-center gap-1 text-[#C4933F] opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-2 transition-all duration-300 z-10 shrink-0">
+                    <span className="text-[10px] font-extrabold">
+                      {lang === "ar" ? "تصفح الآن" : lang === "fr" ? "Découvrir" : "Browse Now"}
+                    </span>
+                    {dir === "rtl" ? (
+                      <ChevronLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
+                    ) : (
+                      <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                    )}
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
