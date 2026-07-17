@@ -59,6 +59,19 @@ function getSubentity(t: Record<string, any>, id: string, fallback: string): str
   return t.entities?.subcategories?.[id] ?? fallback;
 }
 
+function cleanPlaceholderImage(imgUrl: string | undefined): string {
+  if (!imgUrl) return "/logo-badge.png";
+  if (
+    imgUrl.includes("picsum.photos") ||
+    imgUrl.includes("unsplash.com") ||
+    imgUrl.includes("placeholder") ||
+    imgUrl.includes("default")
+  ) {
+    return "/logo-badge.png";
+  }
+  return imgUrl;
+}
+
 function mapApiProduct(p: ApiProduct): Product {
   return {
     id: p.id,
@@ -67,7 +80,7 @@ function mapApiProduct(p: ApiProduct): Product {
     subcategory: p.subcategory || "",
     price: p.price,
     originalPrice: p.original_price,
-    image: p.image || "https://picsum.photos/seed/default/400/400",
+    image: cleanPlaceholderImage(p.image),
     badge: p.badge || undefined,
     rating: p.rating,
     reviews: p.reviews,
@@ -88,7 +101,7 @@ function mapApiCategory(c: ApiCategory): Category {
     name: c.name,
     icon: iconMap[c.icon] || "paw-print",
     description: "",
-    image_url: c.image_url,
+    image_url: c.image_url ? cleanPlaceholderImage(c.image_url) : undefined,
     video_url: c.video_url,
     subcategories: c.subcategories.map((s: any) => ({ id: s.id, name: s.name, slug: s.id })),
   };
@@ -144,7 +157,7 @@ export function useTranslatedData() {
     ...cat,
     name: getEntity(t, "categories", cat.id, "name", cat.name),
     description: getEntity(t, "categories", cat.id, "description", "description" in cat ? (cat as any).description || "" : ""),
-    image_url: cat.image_url,
+    image_url: cat.image_url ? cleanPlaceholderImage(cat.image_url) : undefined,
     video_url: cat.video_url,
     subcategories: cat.subcategories.map((sub) => ({
       ...sub,
@@ -162,6 +175,7 @@ export function useTranslatedData() {
     ...p,
     name: getEntity(t, "products", p.id, "name", p.name),
     description: getEntity(t, "products", p.id, "description", p.description),
+    image: cleanPlaceholderImage(p.image),
   }));
 
   const vetServices: VetService[] = rawVetServices.map((s) => ({

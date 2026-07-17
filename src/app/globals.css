@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-outfit: var(--font-cairo);
-  --font-playfair: var(--font-playfair);
+  --font-outfit: var(--font-outfit);
+  --font-playfair: var(--font-outfit);
   --font-tajawal: var(--font-cairo);
 
   --color-white: #ffffff;
@@ -266,5 +266,5 @@ a {
 /* Language specific fonts */
 html[lang='en'] body,
 html[lang='fr'] body {
-  font-family: var(--font-playfair), serif !important;
+  font-family: var(--font-outfit), sans-serif !important;
 }

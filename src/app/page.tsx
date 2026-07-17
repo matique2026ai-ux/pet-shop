@@ -91,63 +91,45 @@ function CategoryFootprintDecor({ category }: { category: string }) {
 
 const CATEGORY_THEMES: Record<string, {
   gradient: string;
-  circleGradient: string;
+  glowColor: string;
   icon: React.ReactNode;
+  accentColor: string;
   badgeBg: string;
-  badgeText: string;
-  hoverShadow: string;
-  border: string;
-  hoverBorder: string;
 }> = {
   cats: {
-    gradient: "from-[#FDFBF7] to-[#FFF5EB]",
-    circleGradient: "from-[#FAD4C0] to-[#E67E22]",
-    icon: <Cat className="w-10 h-10 text-white" />,
-    badgeBg: "bg-[#FFF2E6]",
-    badgeText: "text-[#E67E22]",
-    hoverShadow: "hover:shadow-[0_20px_40px_rgba(230,126,34,0.12)]",
-    border: "border-[#FFF0E0]",
-    hoverBorder: "group-hover:border-[#E67E22]/30",
+    gradient: "from-[#F39C12] via-[#E67E22] to-[#D35400]",
+    glowColor: "rgba(230,126,34,0.35)",
+    icon: <Cat className="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 transform rotate-12 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:text-white/15 pointer-events-none" />,
+    accentColor: "text-[#FFE6CC]",
+    badgeBg: "bg-white/15 backdrop-blur-md text-white border border-white/10",
   },
   dogs: {
-    gradient: "from-[#FAF9F5] to-[#FAF2DB]",
-    circleGradient: "from-[#ECDCAE] to-[#C4933F]",
-    icon: <Dog className="w-10 h-10 text-white" />,
-    badgeBg: "bg-[#FDF8E7]",
-    badgeText: "text-[#A87A2E]",
-    hoverShadow: "hover:shadow-[0_20px_40px_rgba(196,147,63,0.15)]",
-    border: "border-[#F5EBD0]",
-    hoverBorder: "group-hover:border-[#C4933F]/30",
+    gradient: "from-[#F1C40F] via-[#F39C12] to-[#E67E22]",
+    glowColor: "rgba(243,156,18,0.35)",
+    icon: <Dog className="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 transform -rotate-12 transition-all duration-500 group-hover:scale-110 group-hover:rotate-0 group-hover:text-white/15 pointer-events-none" />,
+    accentColor: "text-[#FFF0D0]",
+    badgeBg: "bg-white/15 backdrop-blur-md text-white border border-white/10",
   },
   birds: {
-    gradient: "from-[#F8FAF7] to-[#EFF7F0]",
-    circleGradient: "from-[#D5EAD8] to-[#2ECC71]",
-    icon: <Bird className="w-10 h-10 text-white" />,
-    badgeBg: "bg-[#EEF9F0]",
-    badgeText: "text-[#27AE60]",
-    hoverShadow: "hover:shadow-[0_20px_40px_rgba(46,204,113,0.12)]",
-    border: "border-[#E2F0E5]",
-    hoverBorder: "group-hover:border-[#2ECC71]/30",
+    gradient: "from-[#2ECC71] via-[#27AE60] to-[#16A085]",
+    glowColor: "rgba(46,204,113,0.35)",
+    icon: <Bird className="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 transform rotate-45 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 group-hover:text-white/15 pointer-events-none" />,
+    accentColor: "text-[#E0F8E8]",
+    badgeBg: "bg-white/15 backdrop-blur-md text-white border border-white/10",
   },
   fish: {
-    gradient: "from-[#F7FAFC] to-[#EDF5FA]",
-    circleGradient: "from-[#CBE3F0] to-[#2980B9]",
-    icon: <Fish className="w-10 h-10 text-white" />,
-    badgeBg: "bg-[#EBF3F9]",
-    badgeText: "text-[#2980B9]",
-    hoverShadow: "hover:shadow-[0_20px_40px_rgba(41,128,185,0.12)]",
-    border: "border-[#DFECF5]",
-    hoverBorder: "group-hover:border-[#2980B9]/30",
+    gradient: "from-[#3498DB] via-[#2980B9] to-[#1F3A60]",
+    glowColor: "rgba(52,152,219,0.35)",
+    icon: <Fish className="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 transform -rotate-45 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 group-hover:text-white/15 pointer-events-none" />,
+    accentColor: "text-[#E1F0FA]",
+    badgeBg: "bg-white/15 backdrop-blur-md text-white border border-white/10",
   },
   "small-pets": {
-    gradient: "from-[#FCF7F9] to-[#FAF0F4]",
-    circleGradient: "from-[#ECD5E3] to-[#9B59B6]",
-    icon: <Rabbit className="w-10 h-10 text-white" />,
-    badgeBg: "bg-[#FAF0F5]",
-    badgeText: "text-[#9B59B6]",
-    hoverShadow: "hover:shadow-[0_20px_40px_rgba(155,89,182,0.12)]",
-    border: "border-[#F5DFEC]",
-    hoverBorder: "group-hover:border-[#9B59B6]/30",
+    gradient: "from-[#9B59B6] via-[#8E44AD] to-[#6C3483]",
+    glowColor: "rgba(155,89,182,0.35)",
+    icon: <Rabbit className="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 transform rotate-12 transition-all duration-500 group-hover:scale-110 group-hover:rotate-0 group-hover:text-white/15 pointer-events-none" />,
+    accentColor: "text-[#F5E6FA]",
+    badgeBg: "bg-white/15 backdrop-blur-md text-white border border-white/10",
   },
 };
 
@@ -368,74 +350,82 @@ export default function HomePage() {
           >
             {categories.map((cat) => {
               const theme = CATEGORY_THEMES[cat.id] || {
-                gradient: "from-[#FDFBF7] to-[#FFF5EB]",
-                circleGradient: "from-[#FAD4C0] to-[#E67E22]",
-                icon: <PawPrint className="w-10 h-10 text-white" />,
-                badgeBg: "bg-[#FFF2E6]",
-                badgeText: "text-[#E67E22]",
-                hoverShadow: "hover:shadow-[0_20px_40px_rgba(230,126,34,0.12)]",
-                border: "border-[#FFF0E0]",
-                hoverBorder: "group-hover:border-[#E67E22]/30",
+                gradient: "from-[#F39C12] via-[#E67E22] to-[#D35400]",
+                glowColor: "rgba(230,126,34,0.35)",
+                icon: <PawPrint className="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 transform rotate-12 transition-all duration-500 pointer-events-none" />,
+                accentColor: "text-[#FFE6CC]",
+                badgeBg: "bg-white/15 backdrop-blur-md text-white border border-white/10",
               };
-              
+
               return (
                 <Link
                   key={cat.id}
                   href={`/products/${cat.id}`}
-                  className={`group relative flex flex-col bg-gradient-to-b ${theme.gradient} rounded-3xl p-5 border ${theme.border} ${theme.hoverBorder} ${theme.hoverShadow} transition-all duration-500 shrink-0 w-[155px] sm:w-[190px] lg:w-auto overflow-hidden text-center items-center justify-between min-h-[220px] sm:min-h-[260px]`}
+                  className="group relative flex flex-col justify-end p-6 rounded-[2rem] overflow-hidden border border-[#F0EDE6]/40 shadow-[0_10px_35px_rgba(0,0,0,0.02)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_45px_var(--glow-color)] shrink-0 w-[155px] sm:w-[190px] lg:w-auto min-h-[220px] sm:min-h-[260px] text-left"
+                  style={{
+                    "--glow-color": theme.glowColor,
+                  } as React.CSSProperties}
                 >
-                  <CategoryFootprintDecor category={cat.id} />
-                  
-                  {/* Circular Media Frame */}
-                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mx-auto border-4 border-white shadow-md group-hover:shadow-xl group-hover:border-white transition-all duration-500 z-10 shrink-0">
-                    {cat.video_url ? (
+                  {/* Card Background Media */}
+                  {cat.video_url ? (
+                    <div className="absolute inset-0 z-0">
                       <video
                         src={cat.video_url}
                         autoPlay
                         muted
                         loop
                         playsInline
-                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       />
-                    ) : cat.image_url ? (
+                      {/* Dark overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/10 z-10 transition-opacity duration-500 group-hover:opacity-95" />
+                    </div>
+                  ) : cat.image_url ? (
+                    <div className="absolute inset-0 z-0">
                       <Image
                         src={cat.image_url}
                         alt={cat.name}
                         fill
                         placeholder="blur"
                         blurDataURL={SHIMMER_BLUR}
-                        sizes="(max-width: 640px) 80px, 100px"
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        sizes="(max-width: 640px) 155px, 190px"
+                        className="object-cover group-hover:scale-110 transition-transform duration-700"
                       />
-                    ) : (
-                      // Fallback using custom theme gradient and species-specific Lucide icon
-                      <div className={`absolute inset-0 bg-gradient-to-br ${theme.circleGradient} flex items-center justify-center p-3 group-hover:scale-105 transition-transform duration-500`}>
-                        {theme.icon}
-                      </div>
-                    )}
-                    {/* Dark/gold overlay on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#C4933F]/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  </div>
-
-                  <div className="mt-3 relative z-10 flex-1 flex flex-col justify-center">
-                    <span className="text-[#0B1E36] font-extrabold text-sm sm:text-base leading-tight block group-hover:text-[#C4933F] transition-colors duration-300">
-                      {cat.name}
-                    </span>
-                    <div>
-                      <span className={`text-[10px] ${theme.badgeText} ${theme.badgeBg} px-2.5 py-0.5 rounded-full font-bold mt-1.5 inline-block transition-colors duration-300`}>
-                        {t.nav.subcategoryCount.replace("{n}", String(cat.subcategories ? cat.subcategories.length : 0))}
-                      </span>
+                      {/* Dark overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/10 z-10 transition-opacity duration-500 group-hover:opacity-95" />
                     </div>
+                  ) : (
+                    // Fallback using premium theme gradient mesh and large vector icon
+                    <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} z-0 transition-transform duration-700 group-hover:scale-105 overflow-hidden`}>
+                      {theme.icon}
+                      {/* Subtitle brand overlay to enrich layout */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent z-10" />
+                    </div>
+                  )}
+
+                  {/* Footprint SVG for decorative texture */}
+                  <CategoryFootprintDecor category={cat.id} />
+
+                  {/* Card Content (Text and Badges) on top of background */}
+                  <div className="relative z-20 flex flex-col items-start w-full">
+                    {/* Floating badge */}
+                    <span className={`text-[9px] sm:text-[10px] font-extrabold px-3 py-1 rounded-full ${theme.badgeBg} tracking-wide transition-all duration-300`}>
+                      {t.nav.subcategoryCount.replace("{n}", String(cat.subcategories ? cat.subcategories.length : 0))}
+                    </span>
+                    
+                    {/* Category Title */}
+                    <h3 className="text-white font-black text-base sm:text-lg lg:text-xl mt-2 mb-1 drop-shadow-sm group-hover:text-[#DFB96A] transition-colors duration-300">
+                      {cat.name}
+                    </h3>
                   </div>
 
-                  <div className="mt-3 flex items-center justify-center gap-1 text-[#C4933F] opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-2 transition-all duration-300 z-10 shrink-0">
-                    <span className="text-[10px] font-extrabold">
-                      {lang === "ar" ? "تصفح الآن" : lang === "fr" ? "Découvrir" : "Browse Now"}
-                    </span>
+                  {/* Glassmorphic Action Button on hover */}
+                  <div className="relative z-20 mt-2 flex items-center justify-center gap-1.5 w-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/25 text-white rounded-2xl py-2 text-[11px] font-black transition-all duration-300 transform translate-y-6 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 shrink-0">
+                    <span>{lang === "ar" ? "تصفح الآن" : lang === "fr" ? "Découvrir" : "Browse Now"}</span>
                     {dir === "rtl" ? (
-                      <ChevronLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
+                      <ChevronLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
                     ) : (
-                      <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                      <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                     )}
                   </div>
                 </Link>
