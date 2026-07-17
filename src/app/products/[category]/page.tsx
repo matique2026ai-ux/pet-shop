@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useI18n } from "@/lib/i18n-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
 import AnimatedSection from "@/components/animated-section";
-import ProductCard from "@/components/product-card";
+import ProductCard, { ProductCardSkeleton } from "@/components/product-card";
 import { ChevronRight, ArrowLeft, Cat, Dog, Bird, Fish, Rabbit, PawPrint, Sparkles } from "lucide-react";
 
 
@@ -21,7 +21,7 @@ const catIcons: Record<string, React.ReactNode> = {
 
 export default function CategoryPage() {
   const { t, dir } = useI18n();
-  const { products, categories } = useTranslatedData();
+  const { products, categories, productsLoaded } = useTranslatedData();
   const params = useParams();
   const searchParams = useSearchParams();
   const catSlug = params.category as string;
@@ -128,7 +128,13 @@ export default function CategoryPage() {
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
-            {filtered.length === 0 ? (
+            {!productsLoaded ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 gap-y-8">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <ProductCardSkeleton key={`sk-${i}`} />
+                ))}
+              </div>
+            ) : filtered.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-gray-500">{activeSub ? t.products.noSubcategory : t.products.noCategory}</p>
                 <Link href="/products" className="inline-flex items-center gap-1 text-emerald-600 mt-4 hover:underline">

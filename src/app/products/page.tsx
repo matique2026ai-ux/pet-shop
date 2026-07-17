@@ -7,12 +7,12 @@ import { useSearchParams } from "next/navigation";
 import { useI18n } from "@/lib/i18n-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
 import AnimatedSection from "@/components/animated-section";
-import ProductCard from "@/components/product-card";
+import ProductCard, { ProductCardSkeleton } from "@/components/product-card";
 import { Search } from "lucide-react";
 
 function ProductsContent() {
   const { t } = useI18n();
-  const { products, categories } = useTranslatedData();
+  const { products, categories, productsLoaded } = useTranslatedData();
   const searchParams = useSearchParams();
   const initialFilter = searchParams.get("filter");
   const initialSearch = searchParams.get("q") || "";
@@ -99,7 +99,13 @@ function ProductsContent() {
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
-            {filtered.length === 0 ? (
+            {!productsLoaded ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 gap-y-8">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <ProductCardSkeleton key={`sk-${i}`} />
+                ))}
+              </div>
+            ) : filtered.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-gray-500">{t.products.noResults}</p>
               </div>

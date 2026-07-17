@@ -9,7 +9,7 @@ import { useRecentlyViewed } from "@/lib/use-recently-viewed";
 import { useSiteSettings } from "@/lib/site-settings";
 import AnimatedSection, { StaggerSection, FadeIn } from "@/components/animated-section";
 import { motion } from "framer-motion";
-import ProductCard from "@/components/product-card";
+import ProductCard, { ProductCardSkeleton } from "@/components/product-card";
 import BlogCard from "@/components/blog-card";
 import { SHIMMER_BLUR } from "@/lib/blur";
 import { ArrowRight, Star, Truck, Shield, RefreshCw, BookOpen, ChevronLeft, ChevronRight, Heart, Sparkles, Award, Cat, Dog, Bird, Fish, Rabbit, PawPrint } from "lucide-react";
@@ -136,7 +136,7 @@ const CATEGORY_THEMES: Record<string, {
 export default function HomePage() {
   const { t, dir, lang } = useI18n();
   const { content } = useSiteSettings();
-  const { categories, products, vetServices, testimonials, blogPosts } = useTranslatedData();
+  const { categories, products, vetServices, testimonials, blogPosts, productsLoaded } = useTranslatedData();
   
   const getLocalizedContent = (baseKey: string, fallback: string) => {
     if (lang === "fr" && content && content[`${baseKey}Fr`]) return content[`${baseKey}Fr`];
@@ -455,11 +455,15 @@ export default function HomePage() {
             </AnimatedSection>
           </div>
           <StaggerSection className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 gap-y-7">
-            {bestsellers.map((p) => (
-              <FadeIn key={p.id}>
-                <ProductCard product={p} />
-              </FadeIn>
-            ))}
+            {!productsLoaded
+              ? Array.from({ length: 4 }).map((_, i) => (
+                  <ProductCardSkeleton key={`sk-${i}`} />
+                ))
+              : bestsellers.map((p) => (
+                  <FadeIn key={p.id}>
+                    <ProductCard product={p} />
+                  </FadeIn>
+                ))}
           </StaggerSection>
         </div>
       </section>

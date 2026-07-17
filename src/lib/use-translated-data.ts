@@ -165,11 +165,11 @@ export function useTranslatedData() {
     })),
   }));
 
-  // If the DB fetch is still in progress, use demo data to avoid a blank flash.
+  // If the DB fetch is still in progress, return an empty array to avoid flashes of dummy products.
   // Once the fetch finishes (productsLoaded=true), use the DB result (even if empty).
   const raw = productsLoaded
     ? (apiProducts ?? [])          // DB answered → use its result (may be [])
-    : (apiProducts ?? rawProducts); // Still loading → show demo data temporarily
+    : [];                          // Still loading → return empty array to prevent flashes!
 
   const products: Product[] = raw.map((p: Product) => ({
     ...p,
