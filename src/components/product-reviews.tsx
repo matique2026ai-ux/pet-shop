@@ -168,7 +168,7 @@ export default function ProductReviews({ productId }: { productId: string }) {
                 <p className="text-sm text-gray-500">{t.reviews.loginPrompt}</p>
                 <button
                   onClick={() => setAuthOpen(true)}
-                  className="w-full bg-[#0B1E36] text-white rounded-xl py-2.5 font-semibold hover:bg-[#0B1E36]/90 transition-colors"
+                  className="w-full bg-emerald-600 text-white rounded-xl py-2.5 font-semibold hover:bg-emerald-700 transition-colors"
                 >
                   {t.reviews.loginButton}
                 </button>
@@ -204,7 +204,7 @@ export default function ProductReviews({ productId }: { productId: string }) {
                     onChange={(e) => setComment(e.target.value)}
                     rows={4}
                     placeholder={t.reviews.reviewPlaceholder}
-                    className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0B1E36]/30 resize-none"
+                    className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 resize-none"
                   />
                 </div>
                 {error && <p className="text-sm text-red-600">{error}</p>}
