@@ -93,7 +93,7 @@ export default function HomePage() {
         ) : (
           <video
             ref={videoRef}
-            key={videoIdx}
+            key={heroVideos[videoIdx]}
             autoPlay muted playsInline preload="metadata"
             onEnded={handleVideoEnd}
             className="absolute inset-0 w-full h-full object-cover"
