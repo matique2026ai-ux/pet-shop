@@ -40,6 +40,17 @@ interface ApiCategory {
   subcategories: { id: string; name: string }[];
 }
 
+export interface BlogPost {
+  id: string;
+  slug: string;
+  title: Record<string, string>;
+  content: Record<string, string>;
+  image_url?: string;
+  author: string;
+  published: boolean;
+  created_at: string;
+}
+
 function getEntity(t: Record<string, any>, category: string, id: string, field: string, fallback: string): string {
   return t.entities?.[category]?.[id]?.[field] ?? fallback;
 }
@@ -97,6 +108,7 @@ export function useTranslatedData() {
     }
     return null;
   });
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   // true = fetch completed (even if result is empty array), false = still loading
   const [productsLoaded, setProductsLoaded] = useState(false);
 
@@ -118,6 +130,12 @@ export function useTranslatedData() {
             localStorage.setItem("pet_shop_categories", JSON.stringify(mapped));
           } catch {}
         }
+      }
+    }).catch(() => {});
+
+    fetch("/api/blog").then((r) => r.ok ? r.json() : null).then((data) => {
+      if (data && Array.isArray(data)) {
+        setBlogPosts(data);
       }
     }).catch(() => {});
   }, []);
@@ -165,6 +183,6 @@ export function useTranslatedData() {
     text: getEntity(t, "testimonials", rev.id, "text", rev.text),
   }));
 
-  return { categories, products, vetServices, team, testimonials, productsLoaded };
+  return { categories, products, vetServices, team, testimonials, productsLoaded, blogPosts };
 }
 

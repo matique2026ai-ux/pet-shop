@@ -8,7 +8,7 @@ import AnimatedSection from "@/components/animated-section";
 import { MapPin, Phone, Mail, Clock, Send, Sparkles, ChevronRight, CheckCircle, Loader2 } from "lucide-react";
 
 export default function ContactPage() {
-  const { t } = useI18n();
+  const { t, dir } = useI18n();
   const { store, content } = useSiteSettings();
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
@@ -49,8 +49,9 @@ export default function ContactPage() {
   ];
 
   return (
-    <div>
-      <section className="relative overflow-hidden py-16 lg:py-24 flex items-center min-h-[50vh]">
+    <div className="bg-[#F8F7F4] min-h-screen">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden py-20 lg:py-32 flex items-center">
         <Image
           src={heroBg}
           alt={t.contact.title}
@@ -59,112 +60,123 @@ export default function ContactPage() {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050D1A]/85 via-[#050D1A]/60 to-[#050D1A]/40" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="absolute inset-0 bg-[#1A120B]/80 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#F8F7F4] to-transparent opacity-90" />
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
           <AnimatedSection>
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-xl rounded-full text-sm text-emerald-200 border border-white/10 mb-4">
+            <span className="inline-flex items-center gap-2 px-5 py-2 bg-white/10 backdrop-blur-md rounded-full text-sm font-bold text-[#DFB96A] border border-[#DFB96A]/30 mb-6 shadow-xl">
               <Sparkles className="w-4 h-4" /> {t.contact.heroBadge}
             </span>
-            <h1 className="text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">{t.contact.title}</h1>
-            <p className="text-emerald-100/70 text-lg max-w-lg">{t.contact.subtitle}</p>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 tracking-tight drop-shadow-xl">
+              {t.contact.title}
+            </h1>
+            <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto font-light drop-shadow-md">
+              {t.contact.subtitle}
+            </p>
           </AnimatedSection>
         </div>
       </section>
 
-      <section className="py-16 lg:py-20">
+      <section className="pb-24 -mt-10 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            <div className="lg:col-span-2">
-              <AnimatedSection>
-                <h2 className="text-2xl font-bold text-[#0B1E36] mb-6">{t.contact.infoTitle}</h2>
-                <div className="space-y-3">
-                  {info.map((item) => (
-                    <div key={item.title} className="bg-white rounded-2xl p-4 flex items-start gap-3 transition-all duration-300 hover:-translate-x-1"
-                      style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.25)" }}
-                    >
-                      <span className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center text-white"
-                        style={{ background: "linear-gradient(135deg, #F97316, #EA580C)" }}
-                      >
-                        {item.icon}
-                      </span>
-                      <div className="min-w-0">
-                        <h3 className="font-bold text-gray-900 text-sm">{item.title}</h3>
-                        <p dir="auto" className="text-sm text-gray-500 whitespace-pre-line mt-0.5 break-words">{item.text}</p>
-                      </div>
-                    </div>
-                  ))}
+          
+          {/* Info Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            {info.map((item, i) => (
+              <AnimatedSection key={item.title} delay={i * 0.1}>
+                <div className="bg-white rounded-3xl p-6 text-center border border-[#E2DDD4] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 h-full flex flex-col items-center justify-center">
+                  <div className="w-14 h-14 rounded-full flex items-center justify-center text-white mb-4 bg-gradient-to-br from-[#DFB96A] to-[#C4933F] shadow-lg shadow-[#C4933F]/30">
+                    {item.icon}
+                  </div>
+                  <h3 className="font-bold text-[#1A1A2E] text-lg mb-2">{item.title}</h3>
+                  <p dir="auto" className="text-sm text-[#5C5348] whitespace-pre-line">{item.text}</p>
                 </div>
               </AnimatedSection>
-            </div>
-
-            <div className="lg:col-span-3">
-              <AnimatedSection>
-                <div className="bg-white rounded-3xl p-6 lg:p-8"
-                  style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.3)" }}
-                >
-                  <h2 className="text-2xl font-bold text-gray-900 mb-1">{t.contact.formTitle}</h2>
-                  <p className="text-sm text-gray-500 mb-6">{t.contact.formSubtitle}</p>
-                  {sent ? (
-                    <div className="flex flex-col items-center justify-center py-12 text-center">
-                      <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
-                        <CheckCircle className="w-8 h-8 text-emerald-600" />
-                      </div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-1">{t.contact.formSuccess}</h3>
-                      <p className="text-sm text-gray-500 mb-6">{t.contact.formSuccessDesc}</p>
-                      <button onClick={() => setSent(false)} className="text-sm text-emerald-600 hover:underline font-medium">{t.contact.formSendAnother}</button>
-                    </div>
-                  ) : (
-                  <form onSubmit={handleSubmit} className="space-y-5">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.contact.formName}</label>
-                        <input type="text" name="name" required dir="auto" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#F97316]/20 focus:border-[#F97316] focus:bg-white transition-all" placeholder={t.contact.formNamePlaceholder} />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.contact.formEmail}</label>
-                        <input type="email" name="email" required dir="auto" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#F97316]/20 focus:border-[#F97316] focus:bg-white transition-all" placeholder={t.contact.formEmailPlaceholder} />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t.contact.formMessage}</label>
-                      <textarea name="message" required rows={5} dir="auto" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#F97316]/20 focus:border-[#F97316] focus:bg-white transition-all resize-none" placeholder={t.contact.formMessagePlaceholder} />
-                    </div>
-                    <button type="submit" disabled={sending} className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#F97316] text-white px-8 py-3.5 rounded-2xl text-base font-bold hover:bg-[#EA580C] transition-all shadow-lg shadow-[#F97316]/20 hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-60">
-                      {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                      {t.contact.formSubmit}
-                      <ChevronRight className="w-4 h-4 rtl:rotate-180" />
-                    </button>
-                  </form>
-                  )}
-                </div>
-              </AnimatedSection>
-            </div>
+            ))}
           </div>
 
-          <AnimatedSection>
-            <div className="mt-12 relative overflow-hidden rounded-3xl h-72">
-              <iframe
-                src="https://www.google.com/maps?q=36.1898,5.4123&z=14&output=embed"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="rounded-3xl"
-                title={t.contact.storeName}
-              />
-              <div className="absolute bottom-6 left-6 rtl:left-auto rtl:right-6 bg-white/90 backdrop-blur-xl rounded-2xl px-5 py-3 border border-white/40 shadow-lg">
-                <div className="flex items-center gap-3">
-                  <MapPin className="w-5 h-5 text-[#F97316]" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+            
+            {/* Form Section */}
+            <AnimatedSection>
+              <div className="bg-white rounded-3xl p-8 lg:p-10 border border-[#E2DDD4] shadow-lg h-full relative overflow-hidden">
+                {/* Decorative Elements */}
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#DFB96A]/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-[#C4933F]/10 rounded-full blur-3xl pointer-events-none" />
+                
+                <h2 className="text-3xl font-bold text-[#1A1A2E] mb-2">{t.contact.formTitle}</h2>
+                <div className="w-16 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A] mb-4" />
+                <p className="text-[#9E9282] mb-8">{t.contact.formSubtitle}</p>
+                
+                {sent ? (
+                  <div className="flex flex-col items-center justify-center py-12 text-center h-full">
+                    <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mb-6">
+                      <CheckCircle className="w-10 h-10 text-emerald-600" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-[#1A1A2E] mb-2">{t.contact.formSuccess}</h3>
+                    <p className="text-[#5C5348] mb-8">{t.contact.formSuccessDesc}</p>
+                    <button onClick={() => setSent(false)} className="text-[#C4933F] hover:text-[#A87A2E] font-bold underline underline-offset-4 transition-colors">
+                      {t.contact.formSendAnother}
+                    </button>
+                  </div>
+                ) : (
+                <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-bold text-[#1A1A2E] mb-2">{t.contact.formName}</label>
+                      <input type="text" name="name" required dir="auto" className="w-full px-5 py-3.5 bg-[#F8F7F4] border border-[#E2DDD4] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C4933F]/50 focus:border-[#C4933F] focus:bg-white transition-all shadow-sm" placeholder={t.contact.formNamePlaceholder} />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold text-[#1A1A2E] mb-2">{t.contact.formEmail}</label>
+                      <input type="email" name="email" required dir="auto" className="w-full px-5 py-3.5 bg-[#F8F7F4] border border-[#E2DDD4] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C4933F]/50 focus:border-[#C4933F] focus:bg-white transition-all shadow-sm" placeholder={t.contact.formEmailPlaceholder} />
+                    </div>
+                  </div>
                   <div>
-                    <p className="font-bold text-gray-900 text-sm">{store?.storeName || store?.name || t.contact.storeName}</p>
-                    <p dir="auto" className="text-xs text-gray-500">{address}</p>
+                    <label className="block text-sm font-bold text-[#1A1A2E] mb-2">{t.contact.formMessage}</label>
+                    <textarea name="message" required rows={5} dir="auto" className="w-full px-5 py-3.5 bg-[#F8F7F4] border border-[#E2DDD4] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C4933F]/50 focus:border-[#C4933F] focus:bg-white transition-all resize-none shadow-sm" placeholder={t.contact.formMessagePlaceholder} />
+                  </div>
+                  <button type="submit" disabled={sending} className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#C4933F] to-[#A87A2E] text-white px-8 py-4 rounded-xl text-base font-bold hover:opacity-90 transition-all shadow-lg shadow-[#C4933F]/30 hover:shadow-xl hover:-translate-y-1 disabled:opacity-60">
+                    {sending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+                    {t.contact.formSubmit}
+                    <ChevronRight className={`w-5 h-5 ${dir === 'rtl' ? 'rotate-180' : ''}`} />
+                  </button>
+                </form>
+                )}
+              </div>
+            </AnimatedSection>
+
+            {/* Map Section */}
+            <AnimatedSection delay={0.2}>
+              <div className="bg-white rounded-3xl p-2 border border-[#E2DDD4] shadow-lg h-full min-h-[400px] relative overflow-hidden group">
+                <iframe
+                  src="https://maps.google.com/maps?q=36.1898,5.4123&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0, minHeight: '400px' }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="rounded-2xl transition-transform duration-700 group-hover:scale-105"
+                  title={t.contact.storeName}
+                />
+                
+                {/* Floating Location Card */}
+                <div className="absolute bottom-6 left-6 right-6 sm:right-auto bg-white/95 backdrop-blur-xl rounded-2xl p-4 border border-white/50 shadow-2xl z-10 transition-transform duration-300 translate-y-2 group-hover:translate-y-0">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-[#DFB96A] to-[#C4933F] rounded-full flex items-center justify-center text-white shrink-0 shadow-inner">
+                      <MapPin className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-[#1A1A2E] text-base">{store?.storeName || store?.name || t.contact.storeName}</p>
+                      <p dir="auto" className="text-sm text-[#5C5348] mt-0.5 line-clamp-2">{address}</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </AnimatedSection>
+            </AnimatedSection>
+            
+          </div>
         </div>
       </section>
     </div>

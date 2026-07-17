@@ -12,10 +12,11 @@ import {
 import {
   Users, ShoppingBag, DollarSign, Package, TrendingUp, TrendingDown,
   Edit, Trash2, ArrowUpRight, Calendar, Menu, X, Lock, Phone,
-  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Search, Filter, Tag, Languages, Video, Star, Check, ChevronRight,
+  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Search, Filter, Tag, Languages, Video, Star, Check, ChevronRight, BookOpen
 } from "lucide-react";
 import HeroVideoManager from "@/components/hero-video-manager";
 import AdminSettingsPanel from "@/components/admin-settings-panel";
+import BlogAdminPanel from "@/components/blog-admin";
 import { en } from "@/lib/translations/en";
 import type { TranslationOverrides } from "@/lib/i18n-context";
 import { LogoC1, LogoC4 } from "@/components/brand-logo";
@@ -45,6 +46,7 @@ const sidebarTabs = [
   { label: "Analytics", icon: BarChart3, key: "analytics" },
    { label: "Categories", icon: Tag, key: "categories" },
    { label: "Reviews", icon: Star, key: "reviews" },
+   { label: "Blog", icon: BookOpen, key: "blog" },
    { label: "Settings", icon: Settings, key: "settings" },
    { label: "Translations", icon: Languages, key: "translations" },
 ];

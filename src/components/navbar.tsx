@@ -7,7 +7,7 @@ import { useSiteSettings } from "@/lib/site-settings";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, X, ShoppingCart, Phone, Search, Truck, ChevronRight, User, LogIn, Loader2, Cat, Dog, Bird, Fish, Rabbit, PawPrint, Stethoscope, Zap } from "lucide-react";
+import { Menu, X, ShoppingCart, Phone, Search, Truck, ChevronRight, User, LogIn, Loader2, Cat, Dog, Bird, Fish, Rabbit, PawPrint, BookOpen, Zap } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import AuthModal from "@/components/auth-modal";
 import { LogoC4 } from "@/components/brand-logo";
@@ -121,7 +121,7 @@ export default function Navbar() {
   const desktopLinks = [
     { href: "/",                      label: t.nav.home },
     { href: "/products",              label: t.nav.products },
-    { href: "/vet",                   label: t.nav.vet, badge: true },
+    { href: "/vet",                   label: t.nav.blog, badge: true },
     { href: "/products?filter=offers",label: t.nav.offers },
     { href: "/shipping",              label: t.nav.shipping },
     { href: "/contact",               label: t.nav.contact },
@@ -354,15 +354,15 @@ export default function Navbar() {
                       </Link>
                     ))}
                     <Link
-                      href="/vet"
+                      href="/blog"
                       onClick={() => setMegaOpen(false)}
                       className="group flex items-center gap-3 p-3 rounded-xl hover:bg-[#FFF7ED] transition-colors border border-dashed border-[#F5851F]/40"
                     >
                       <span className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center bg-[#FFEDD5] text-[#F5851F] group-hover:bg-[#F5851F] group-hover:text-white transition-colors">
-                        <Stethoscope className="w-5 h-5" />
+                        <BookOpen className="w-5 h-5" />
                       </span>
                       <span className="min-w-0">
-                        <span className="block font-semibold text-white text-sm group-hover:text-[#F5851F] transition-colors">{t.nav.vet}</span>
+                        <span className="block font-semibold text-white text-sm group-hover:text-[#F5851F] transition-colors">{t.nav.blog}</span>
                         <span className="block text-[11px] text-white/50">{lang === "ar" ? "قريبًا" : lang === "fr" ? "Bientôt" : "Soon"}</span>
                       </span>
                     </Link>
@@ -472,8 +472,8 @@ export default function Navbar() {
               </div>
 
               <div className="border-t border-white/10 pt-2 mt-2 space-y-1">
-                <Link href="/vet"      onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#DFB96A] text-sm font-medium">
-                  {t.nav.vet}
+                <Link href="/blog"      onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#DFB96A] text-sm font-medium">
+                  {t.nav.blog}
                   <span className="ml-1.5 inline-block align-middle text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#F5851F] text-white">
                     {lang === "ar" ? "قريبًا" : lang === "fr" ? "Bientôt" : "Soon"}
                   </span>
@@ -491,4 +491,5 @@ export default function Navbar() {
     </>
   );
 }
+
 

@@ -120,7 +120,7 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm">
               {[
                 { href: "/products", label: t.nav.products },
-                { href: "/vet",      label: t.nav.vet },
+                { href: "/blog",      label: t.nav.blog },
                 { href: "/faq",      label: t.nav.faq },
                 { href: "/shipping", label: t.nav.shipping },
                 { href: "/about",    label: t.nav.about },

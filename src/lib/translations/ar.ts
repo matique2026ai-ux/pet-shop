@@ -17,7 +17,7 @@ export const ar = {
     home: "الرئيسية",
     products: "المنتجات",
     categories: "الأقسام",
-    vet: "العيادة",
+    blog: "المدونة",
     about: "من نحن",
     contact: "اتصل بنا",
     faq: "الأسئلة",
@@ -203,6 +203,18 @@ export const ar = {
     wilaya: "الولاية",
     commune: "البلدية",
     phoneInvalid: "يرجى إدخال رقم هاتف جزائري صحيح",
+    calculatedAtCheckout: "يتم حسابه عند الشراء",
+  },
+  blog: {
+    title: "????? ??????",
+    subtitle: "????? ???????? ???????? ??????? ??????? ??????",
+    heroBadge: "?????? ?????",
+    viewArticles: "???? ????????",
+    latestArticlesTitle: "???? ????????",
+    readMore: "???? ??????",
+    publishedOn: "???? ??",
+    author: "??????",
+    noArticles: "?? ???? ?????? ?????? ??????.",
   },
   vet: {
     title: "العيادة البيطرية",
@@ -444,7 +456,9 @@ export const ar = {
       "s5": { name: "مغذي تبن الأرانب مع تبن 1كغ", description: "مغذي تبن خشبي مع تبن تيموثي ممتاز." },
       "s6": { name: "فراش الحيوانات الصغيرة 10لتر", description: "فراش ناعم ورقي للحيوانات الصغيرة." },
     },
-    vetServices: {
+    blogArticles: {
+  },
+  vetServices: {
       "v1": { title: "فحص عام", description: "فحص صحي شامل لحيوانك الأليف" },
       "v2": { title: "تطعيمات", description: "تطعيمات أساسية للوقاية من الأمراض" },
       "v3": { title: "عناية بالأسنان", description: "تنظيف أسنان احترافي وصحة الفم" },
@@ -470,3 +484,4 @@ export const ar = {
     invalidPassword: "كلمة سر غير صحيحة. حاول مرة أخرى.",
   },
 } as const;
+

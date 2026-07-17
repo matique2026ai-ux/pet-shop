@@ -10,9 +10,9 @@ import { useSiteSettings } from "@/lib/site-settings";
 import AnimatedSection, { StaggerSection, FadeIn } from "@/components/animated-section";
 import { motion } from "framer-motion";
 import ProductCard from "@/components/product-card";
-import VetCard from "@/components/vet-card";
+import BlogCard from "@/components/blog-card";
 import { SHIMMER_BLUR } from "@/lib/blur";
-import { ArrowRight, Star, Truck, Shield, RefreshCw, Stethoscope, ChevronLeft, ChevronRight, Heart, Sparkles, Award } from "lucide-react";
+import { ArrowRight, Star, Truck, Shield, RefreshCw, BookOpen, ChevronLeft, ChevronRight, Heart, Sparkles, Award } from "lucide-react";
 
 
 
@@ -37,7 +37,7 @@ const DEFAULT_HERO_VIDEOS = [
 export default function HomePage() {
   const { t, dir, lang } = useI18n();
   const { content } = useSiteSettings();
-  const { categories, products, vetServices, testimonials } = useTranslatedData();
+  const { categories, products, vetServices, testimonials, blogPosts } = useTranslatedData();
   
   const getLocalizedContent = (baseKey: string, fallback: string) => {
     if (lang === "fr" && content && content[`${baseKey}Fr`]) return content[`${baseKey}Fr`];
@@ -187,10 +187,10 @@ export default function HomePage() {
                   <div className="absolute inset-0 rounded-full border border-white/20 group-hover:border-white/40 transition-colors" />
                 </Link>
                 <Link
-                  href="/vet"
+                  href="/blog"
                   className="inline-flex justify-center items-center gap-3 bg-white/5 backdrop-blur-md text-white px-10 py-4 rounded-full font-bold text-lg transition-all border border-white/20 hover:bg-white/10 hover:border-white/40 hover:scale-105 w-full sm:w-auto"
                 >
-                  <Stethoscope className="w-5 h-5 text-[#DFB96A]" />
+                  <BookOpen className="w-5 h-5 text-[#DFB96A]" />
                   {heroCta2}
                 </Link>
               </div>
@@ -377,6 +377,9 @@ export default function HomePage() {
       {/* ══════════════════════════════════
           VET SERVICES
       ══════════════════════════════════ */}
+      {/* ══════════════════════════════════
+          BLOG ARTICLES
+      ══════════════════════════════════ */}
       <section className="py-14 bg-[#F8F7F4] relative overflow-hidden">
         <div className="absolute inset-0 opacity-5 pointer-events-none"
           style={{ backgroundImage: "radial-gradient(circle at 20% 50%, #C4933F 1px, transparent 1px), radial-gradient(circle at 80% 50%, #C4933F 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
@@ -384,22 +387,30 @@ export default function HomePage() {
           <AnimatedSection>
             <div className="text-center mb-10">
               <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full text-sm text-[#C4933F] border border-[#ECD8A6] shadow-sm mb-3">
-                <Stethoscope className="w-4 h-4" /> {t.vet.subtitle}
+                <BookOpen className="w-4 h-4" /> {t.blog?.subtitle || "Our Blog"}
               </span>
-              <h2 className="text-3xl lg:text-4xl font-bold text-[#1A1A2E]">{t.vet.servicesTitle}</h2>
+              <h2 className="text-3xl lg:text-4xl font-bold text-[#1A1A2E]">{t.blog?.latestArticlesTitle || "Latest Articles"}</h2>
               <div className="mt-3 mx-auto w-20 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A]" />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {vetServices.slice(0, 4).map((s) => (
-                <VetCard key={s.id} service={s} />
-              ))}
-            </div>
+            
+            {(!blogPosts || blogPosts.length === 0) ? (
+              <div className="text-center py-10">
+                <p className="text-[#9E9282]">{t.blog?.noArticles || "No articles published yet."}</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {blogPosts.slice(0, 3).map((post) => (
+                  <BlogCard key={post.id} post={post} />
+                ))}
+              </div>
+            )}
+
             <div className="text-center mt-10">
               <Link
-                href="/vet"
+                href="/blog"
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-[#C4933F] to-[#A87A2E] text-white px-8 py-3.5 rounded-full font-bold text-sm hover:opacity-90 transition-all shadow-lg shadow-[#C4933F]/30 hover:-translate-y-0.5"
               >
-                {t.vet.bookNow}
+                {t.blog?.viewArticles || "View Articles"}
                 <Arrow className="w-4 h-4" />
               </Link>
             </div>

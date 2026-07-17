@@ -1,4 +1,4 @@
-export const fr = {
+﻿export const fr = {
   home: {
     bestsellers: "Meilleures Ventes",
     viewAll: "Voir Tout",
@@ -202,8 +202,7 @@ export const fr = {
     freeProgress: "Ajoutez {amount} de plus pour la livraison gratuite !",
     wilaya: "Wilaya",
     commune: "Commune",
-    phoneInvalid: "Veuillez entrer un numéro de téléphone algérien valide",
-    calculatedAtCheckout: "Calculé lors du paiement",
+    phoneInvalid: "Veuillez entrer un numÃ©ro de tÃ©lÃ©phone algÃ©rien valide",
   },
   blog: {
     title: "Le Blog",

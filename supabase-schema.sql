@@ -230,3 +230,60 @@ BEGIN
   END IF;
 END $$;
 
+-- ===========================================================================
+-- Blog Posts. Managed by admin, viewable by public.
+-- ===========================================================================
+
+CREATE TABLE IF NOT EXISTS blog_posts (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  slug TEXT UNIQUE NOT NULL,
+  title JSONB NOT NULL DEFAULT '{"ar": "", "fr": "", "en": ""}',
+  content JSONB NOT NULL DEFAULT '{"ar": "", "fr": "", "en": ""}',
+  image_url TEXT,
+  author TEXT DEFAULT 'مُتجر الحيوانات الأليفة',
+  seo_keywords TEXT,
+  published BOOLEAN NOT NULL DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE blog_posts ENABLE ROW LEVEL SECURITY;
+
+DO $$
+BEGIN
+  -- Anyone can read published blog posts
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='blog_posts' AND policyname='blog_posts_select_public') THEN
+    CREATE POLICY blog_posts_select_public ON blog_posts FOR SELECT USING (published = true);
+  END IF;
+END $$;
+
+-- ===========================================================================
+-- Blog Comments. Readers can comment on blog posts.
+-- ===========================================================================
+
+CREATE TABLE IF NOT EXISTS blog_comments (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  post_slug TEXT NOT NULL REFERENCES blog_posts(slug) ON DELETE CASCADE,
+  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  user_name TEXT NOT NULL,
+  comment TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'approved' CHECK (status IN ('pending', 'approved', 'rejected')),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS blog_comments_post_slug_idx ON blog_comments (post_slug);
+
+ALTER TABLE blog_comments ENABLE ROW LEVEL SECURITY;
+
+DO $$
+BEGIN
+  -- Anyone can read approved comments
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='blog_comments' AND policyname='blog_comments_select_approved') THEN
+    CREATE POLICY blog_comments_select_approved ON blog_comments FOR SELECT USING (status = 'approved');
+  END IF;
+  -- Any user (even guests if we allow anonymous comments, but we require name) can insert comments
+  -- To prevent spam, let's just let anyone insert, but we can set default to 'approved' for now.
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='blog_comments' AND policyname='blog_comments_insert_public') THEN
+    CREATE POLICY blog_comments_insert_public ON blog_comments FOR INSERT WITH CHECK (true);
+  END IF;
+END $$;

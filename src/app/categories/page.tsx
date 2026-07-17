@@ -132,7 +132,7 @@ export default function CategoriesPage() {
             <p className="text-gray-500 mb-6 max-w-md mx-auto">{t.categories.notSureDesc}</p>
             <div className="flex items-center justify-center gap-4">
               <Link href="/products" className="inline-flex items-center gap-2 bg-white text-gray-900 px-7 py-3 rounded-2xl font-bold border border-gray-200 hover:border-gray-300 hover:-translate-y-0.5 transition-all shadow-sm">{t.categories.allProductsLink}</Link>
-              <Link href="/vet" className="inline-flex items-center gap-2 bg-[#F97316] text-white px-7 py-3 rounded-2xl font-bold hover:bg-[#EA580C] hover:-translate-y-0.5 transition-all shadow-lg shadow-[#F97316]/20">{t.categories.visitVet}</Link>
+              <Link href="/blog" className="px-6 py-2 bg-[#F97316] text-white rounded-full text-sm font-semibold hover:bg-[#EA580C] hover:-translate-y-0.5 transition-all shadow-lg shadow-[#F97316]/20">{t.categories.visitBlog}</Link>
             </div>
           </AnimatedSection>
         </div>

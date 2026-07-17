@@ -344,10 +344,10 @@ export default function CartPage() {
                   <div className="flex items-center justify-between py-3 border-b border-gray-100">
                     <span className="text-gray-500 flex items-center gap-1.5">
                       <Truck className="w-4 h-4" />
-                      {wilaya} · {etaText}
+                      {t.nav.shipping || "Shipping"}
                     </span>
-                    <span className="font-semibold text-gray-900">
-                      {deliveryFee === 0 ? t.cart.free : `${currency}${deliveryFee.toFixed(2)}`}
+                    <span className="text-sm font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">
+                      {t.cart.calculatedAtCheckout || "Calculated at checkout"}
                     </span>
                   </div>
 
@@ -367,7 +367,7 @@ export default function CartPage() {
 
                   <div className="flex items-center justify-between py-3 border-b border-gray-100 text-lg font-bold text-gray-900">
                     <span>{t.cart.total}</span>
-                    <span>{currency}{grandTotal.toFixed(2)}</span>
+                    <span>{currency}{subtotal.toFixed(2)}</span>
                   </div>
 
                   <div className="mt-5 flex items-start gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium rounded-xl px-3 py-2.5 leading-relaxed">

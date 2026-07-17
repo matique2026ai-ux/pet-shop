@@ -17,7 +17,7 @@ export const en = {
     home: "Home",
     products: "Products",
     categories: "Categories",
-    vet: "Vet",
+    blog: "Blog",
     about: "About",
     contact: "Contact",
     faq: "FAQ",
@@ -70,9 +70,9 @@ export const en = {
     items: "items",
     browseAll: "Browse All",
     notSure: "Not sure what you need?",
-    notSureDesc: "Browse all products or visit our vet clinic for expert advice.",
+    notSureDesc: "Browse all products or read our blog for expert advice.",
     allProductsLink: "All Products",
-    visitVet: "Visit Vet Clinic",
+    visitBlog: "Visit Blog",
   },
   products: {
     title: "Featured Products",
@@ -203,6 +203,18 @@ export const en = {
     wilaya: "Wilaya",
     commune: "Commune / Municipality",
     phoneInvalid: "Please enter a valid Algerian phone number",
+    calculatedAtCheckout: "Calculated at checkout",
+  },
+  blog: {
+    title: "The Blog",
+    subtitle: "Professional tips and guides for your pets",
+    heroBadge: "Exclusive Articles",
+    viewArticles: "Browse Articles",
+    latestArticlesTitle: "Latest Articles",
+    readMore: "Read More",
+    publishedOn: "Published on",
+    author: "Author",
+    noArticles: "No articles published yet.",
   },
   vet: {
     title: "Veterinary Clinic",
@@ -470,3 +482,4 @@ export const en = {
     invalidPassword: "Invalid password. Please try again.",
   },
 } as const;
+
