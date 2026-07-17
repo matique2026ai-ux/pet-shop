@@ -121,7 +121,7 @@ export default function Navbar() {
   const desktopLinks = [
     { href: "/",                      label: t.nav.home },
     { href: "/products",              label: t.nav.products },
-    { href: "/vet",                   label: t.nav.blog, badge: true },
+    { href: "/blog",                   label: t.nav.blog, badge: true },
     { href: "/products?filter=offers",label: t.nav.offers },
     { href: "/shipping",              label: t.nav.shipping },
     { href: "/contact",               label: t.nav.contact },

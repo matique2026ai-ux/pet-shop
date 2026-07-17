@@ -201,8 +201,11 @@ export const en = {
     codBadge: "Cash on Delivery — pay comfortably when your order arrives",
     freeProgress: "Add {amount} more to get free delivery!",
     wilaya: "Wilaya",
-    commune: "Commune / Municipality",
+    commune: "Commune",
     phoneInvalid: "Please enter a valid Algerian phone number",
+    referralCode: "Referral Code",
+    pickup: "Store Pickup",
+    readyNow: "Ready for pickup",
     calculatedAtCheckout: "Calculated at checkout",
   },
   blog: {

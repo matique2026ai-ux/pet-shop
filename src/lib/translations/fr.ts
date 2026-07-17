@@ -203,7 +203,10 @@ export const fr = {
     wilaya: "Wilaya",
     commune: "Commune",
     phoneInvalid: "Veuillez entrer un numéro de téléphone algérien valide",
-    calculatedAtCheckout: "Calculé lors du paiement",
+    referralCode: "Code de parrainage",
+    pickup: "Retrait en magasin",
+    readyNow: "Prêt au retrait",
+    calculatedAtCheckout: "Calculé à la caisse",
   },
   blog: {
     title: "Le Blog",

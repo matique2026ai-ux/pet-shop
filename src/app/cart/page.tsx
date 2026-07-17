@@ -7,7 +7,7 @@ import { useTranslatedData } from "@/lib/use-translated-data";
 import Link from "next/link";
 import Image from "next/image";
 import AnimatedSection from "@/components/animated-section";
-import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, Truck, MessageCircle, Home, Building2, Banknote } from "lucide-react";
+import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, Truck, MessageCircle, Home, Building2, Banknote, Store } from "lucide-react";
 import { useSiteSettings } from "@/lib/site-settings";
 import { useAuth } from "@/lib/auth-context";
 import { unitLabel, isContinuousUnit } from "@/lib/units";
@@ -92,11 +92,11 @@ export default function CartPage() {
   const { user } = useAuth();
   const { store, delivery } = useSiteSettings();
   const [checkingOut, setCheckingOut] = useState(false);
-  const [orderPlaced, setOrderPlaced] = useState<{ id: string } | null>(null);
+  const [orderPlaced, setOrderPlaced] = useState<{ id: string, delivery_address?: string } | null>(null);
   const [area, setArea] = useState("");
   const [wilaya, setWilaya] = useState("");
   const [commune, setCommune] = useState("");
-  const [deliveryType, setDeliveryType] = useState<"home" | "stopdesk">("home");
+  const [deliveryType, setDeliveryType] = useState<"home" | "stopdesk" | "pickup" | "">("");
   const [phoneError, setPhoneError] = useState<string | null>(null);
   const [referralCode, setReferralCode] = useState("");
   const [orderReferral, setOrderReferral] = useState("");
@@ -116,8 +116,8 @@ export default function CartPage() {
   const d = { ...DEFAULT_DELIVERY, ...(delivery || {}) };
   const region = regionForWilaya(wilaya, commune);
   const deliv = DELIVERY_CONFIG[region];
-  const feeNum = wilaya ? (deliveryType === "home" ? deliv.home : deliv.stopdesk) : 0;
-  const etaText = wilaya ? deliv.eta[lang] : "";
+  const feeNum = deliveryType === "pickup" ? 0 : (wilaya ? (deliveryType === "home" ? deliv.home : deliv.stopdesk) : 0);
+  const etaText = deliveryType === "pickup" ? t.cart.readyNow : (wilaya ? deliv.eta[lang] : "");
   const freeNum = Number(d.freeThreshold) || 5000;
   const subtotal = totalPrice;
   const deliveryFee = subtotal > 0 && subtotal >= freeNum ? 0 : feeNum;
@@ -129,9 +129,14 @@ export default function CartPage() {
     const whatsappNum = (store?.whatsapp || delivery?.whatsapp || store?.phone || "213555123456").replace(/[^0-9]/g, "");
     
     const refCodeText = orderReferral ? ` (كود الإحالة: BIRD-${orderReferral.toUpperCase()}-${orderRef})` : ` (كود عمولة الطيور: BIRD-DIRECT-${orderRef})`;
-    const whatsappMsgText = lang === "ar"
+    const isPickup = orderPlaced.delivery_address === "[Pickup] الاستلام من المحل";
+    const waTextPickup = lang === "ar"
+      ? `مرحباً، لقد قمت بطلب رقم #${orderRef} من موقع Paws & Wings وسأقوم باستلامه من المحل. كود الإحالة الخاص بي هو: BIRD-${(orderReferral || "DIRECT").toUpperCase()}-${orderRef}`
+      : `Bonjour, je viens de passer la commande #${orderRef} sur Paws & Wings. Je passerai la récupérer en magasin. Mon code de parrainage est: BIRD-${(orderReferral || "DIRECT").toUpperCase()}-${orderRef}`;
+    
+    const whatsappMsgText = isPickup ? waTextPickup : (lang === "ar"
       ? `مرحباً، لقد قمت بطلب رقم #${orderRef} من موقع Paws & Wings. أود تأكيد الطلب من فضلك.${hasBirdsInOrder ? refCodeText : ""}`
-      : `Bonjour, je viens de passer la commande #${orderRef} sur Paws & Wings. Je souhaite confirmer ma commande s'il vous plaît.${hasBirdsInOrder ? ` (Code commission: BIRD-${(orderReferral || "DIRECT").toUpperCase()}-${orderRef})` : ""}`;
+      : `Bonjour, je viens de passer la commande #${orderRef} sur Paws & Wings. Je souhaite confirmer ma commande s'il vous plaît.${hasBirdsInOrder ? ` (Code commission: BIRD-${(orderReferral || "DIRECT").toUpperCase()}-${orderRef})` : ""}`);
     
     const message = encodeURIComponent(whatsappMsgText);
     const waUrl = `https://wa.me/${whatsappNum}?text=${message}`;
@@ -160,23 +165,43 @@ export default function CartPage() {
           </p>
         </div>
 
-        {hasBirdsInOrder && (
-          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 w-full mb-6 text-left" dir={lang === "ar" ? "rtl" : "ltr"}>
-            <h4 className="font-bold text-amber-900 mb-1.5 flex items-center gap-2 text-sm">
-              <span>🐦</span>
-              {lang === "ar" ? "رمز عمولة الطيور الخاص بك:" : lang === "fr" ? "Votre code commission oiseaux :" : "Your Bird Commission Code:"}
-            </h4>
-            <p className="text-xs text-amber-700 leading-relaxed mb-3">
+        {orderPlaced.delivery_address === "[Pickup] الاستلام من المحل" ? (
+          <div className="bg-amber-50 text-amber-900 border border-amber-200 rounded-xl p-5 mb-8 w-full max-w-sm text-right" dir="auto">
+            <h3 className="font-bold mb-2 flex items-center justify-center gap-2 text-center">
+              <Store className="w-5 h-5 text-amber-600" />
+              {lang === "ar" ? "استلام من المحل" : "Retrait en magasin"}
+            </h3>
+            <p className="text-sm mb-4 leading-relaxed text-center">
               {lang === "ar" 
-                ? "يرجى إرسال هذا الكود أو إظهاره لصاحب المحل لكي يُعلم بأنك مرسول من طرف شريكنا وتأكيد عمولتك." 
-                : lang === "fr" 
-                ? "Veuillez envoyer ou présenter ce code au propriétaire pour confirmer votre commission de parrainage." 
-                : "Please share this code with the shop owner to confirm your referral commission."}
+                ? "يرجى التوجه إلى المحل واستلام طلبك. أعطِ هذا الكود لصاحب المحل لكي يعرف أنك من طرفنا:" 
+                : "Veuillez vous présenter au magasin pour récupérer votre commande. Donnez ce code au propriétaire pour qu'il sache que vous venez de notre part :"}
             </p>
-            <span className="font-mono font-bold text-base text-amber-900 bg-white px-3 py-1.5 rounded-lg border border-amber-200 shadow-sm inline-block">
-              BIRD-{(orderReferral || "DIRECT").toUpperCase()}-{orderRef}
-            </span>
+            <div className="bg-white px-4 py-3 rounded-lg border-2 border-dashed border-amber-300 text-center font-mono font-bold text-lg tracking-wider text-amber-700">
+              BIRD-{orderReferral ? orderReferral.toUpperCase() : "DIRECT"}-{orderRef}
+            </div>
+            <p className="text-xs text-amber-600 mt-3 text-center">
+              {lang === "ar" ? "احتفظ بهذا الكود كمرجعية." : "Gardez ce code comme référence."}
+            </p>
           </div>
+        ) : (
+          hasBirdsInOrder && (
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 w-full mb-6 text-left" dir={lang === "ar" ? "rtl" : "ltr"}>
+              <h4 className="font-bold text-amber-900 mb-1.5 flex items-center gap-2 text-sm">
+                <span>🐦</span>
+                {lang === "ar" ? "رمز عمولة الطيور الخاص بك:" : lang === "fr" ? "Votre code commission oiseaux :" : "Your Bird Commission Code:"}
+              </h4>
+              <p className="text-xs text-amber-700 leading-relaxed mb-3">
+                {lang === "ar" 
+                  ? "يرجى إرسال هذا الكود أو إظهاره لصاحب المحل لكي يُعلم بأنك مرسول من طرف شريكنا وتأكيد عمولتك." 
+                  : lang === "fr" 
+                  ? "Veuillez envoyer ou présenter ce code au propriétaire pour confirmer votre commission de parrainage." 
+                  : "Please share this code with the shop owner to confirm your referral commission."}
+              </p>
+              <span className="font-mono font-bold text-base text-amber-900 bg-white px-3 py-1.5 rounded-lg border border-amber-200 shadow-sm inline-block">
+                BIRD-{(orderReferral || "DIRECT").toUpperCase()}-{orderRef}
+              </span>
+            </div>
+          )
         )}
         <p className="text-gray-500 mb-6 text-sm">
           {lang === "ar"
@@ -444,11 +469,12 @@ export default function CartPage() {
               </div>
             </div>
 
-            <form
+              <form
               onSubmit={async (e) => {
                 e.preventDefault();
-                const form = e.currentTarget;
-                const fd = new FormData(form);
+                if (deliveryType === "") return;
+                
+                const fd = new FormData(e.currentTarget);
                 const phone = (fd.get("phone") as string) || "";
                 if (!isValidAlgerianPhone(phone)) {
                   setPhoneError(t.cart.phoneInvalid);
@@ -457,9 +483,11 @@ export default function CartPage() {
                 setPhoneError(null);
                 
                 const addressDetails = fd.get("address_details") as string || "";
-                const fullAddress = deliveryType === "stopdesk"
-                  ? `[Stop Desk Yalidine] Commune: ${commune}, Wilaya: ${wilaya}`
-                  : `[À Domicile] Adresse: ${addressDetails}, Commune: ${commune}, Wilaya: ${wilaya}`;
+                const fullAddress = deliveryType === "pickup"
+                  ? "[Pickup] الاستلام من المحل"
+                  : (deliveryType === "stopdesk"
+                    ? `[Stop Desk Yalidine] Commune: ${commune}, Wilaya: ${wilaya}`
+                    : `[À Domicile] Adresse: ${addressDetails}, Commune: ${commune}, Wilaya: ${wilaya}`);
 
                 const hasBirds = cartHasBirds;
                 const refCode = (fd.get("referral_code") as string || "").trim();
@@ -480,8 +508,8 @@ export default function CartPage() {
                   customer_name: fd.get("name") as string,
                   customer_phone: phone,
                   delivery_address: fullAddress,
-                  city: wilaya,
-                  delivery_area: commune,
+                  city: deliveryType === "pickup" ? "" : wilaya,
+                  delivery_area: deliveryType === "pickup" ? "" : commune,
                   delivery_fee: deliveryFee,
                   delivery_eta: etaText,
                   items: items.map((i) => ({ productId: i.productId, name: i.name, price: i.price, quantity: i.quantity, sold_by: i.sold_by })),
@@ -532,37 +560,87 @@ export default function CartPage() {
               {phoneError && (
                 <p className="text-xs text-red-500 mt-1">{phoneError}</p>
               )}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t.cart.wilaya}</label>
-                <select
-                  value={wilaya}
-                  onChange={(e) => {
-                    (e.target as HTMLSelectElement).setCustomValidity("");
-                    setWilaya(e.target.value);
-                  }}
-                  onInvalid={(e) => (e.target as HTMLSelectElement).setCustomValidity(lang === "ar" ? "يرجى اختيار ولاية" : lang === "fr" ? "Veuillez sélectionner une wilaya" : "Please select a wilaya")}
-                  name="wilaya"
-                  required
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                >
-                  <option value="" disabled hidden>{lang === "ar" ? "اختر الولاية" : lang === "fr" ? "Sélectionnez une wilaya" : "Select Wilaya"}</option>
-                  {WILAYAS.map((w) => (
-                    <option key={w} value={w}>{w}</option>
-                  ))}
-                </select>
+              {/* Delivery Type Selection */}
+              <div className="space-y-1">
+                <label className="block text-sm font-medium text-gray-700">
+                  {lang === "ar" ? "نوع التوصيل" : lang === "fr" ? "Type de livraison" : "Delivery Type"}
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setDeliveryType("home")}
+                    className={`px-2 py-3 rounded-xl border text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${deliveryType === "home" ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
+                  >
+                    <Home className="w-4 h-4 shrink-0" />
+                    <span className="truncate">{lang === "ar" ? "للمنزل" : lang === "fr" ? "À domicile" : "Home"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDeliveryType("stopdesk")}
+                    className={`px-2 py-3 rounded-xl border text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${deliveryType === "stopdesk" ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
+                  >
+                    <Building2 className="w-4 h-4 shrink-0" />
+                    <span className="truncate">{lang === "ar" ? "ياليدين" : lang === "fr" ? "Bureau" : "Office"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDeliveryType("pickup")}
+                    className={`px-2 py-3 rounded-xl border text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${deliveryType === "pickup" ? "border-amber-600 bg-amber-50 text-amber-800 ring-2 ring-amber-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
+                  >
+                    <Store className="w-4 h-4 shrink-0" />
+                    <span className="truncate">{t.cart.pickup || "Pickup"}</span>
+                  </button>
+                </div>
+                {deliveryType === "" && (
+                  <p className="text-xs text-red-500 mt-1">{lang === "ar" ? "يرجى اختيار نوع التوصيل." : "Veuillez choisir un type de livraison."}</p>
+                )}
               </div>
-              <input
-                type="text"
-                name="commune"
-                value={commune}
-                onChange={(e) => setCommune(e.target.value)}
-                placeholder={t.cart.commune}
-                required
-                onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity(lang === "ar" ? "يرجى ملء هذا الحقل" : lang === "fr" ? "Veuillez renseigner ce champ" : "Please fill out this field")}
-                onInput={(e) => (e.target as HTMLInputElement).setCustomValidity("")}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
 
+              {/* Conditional Address Fields */}
+              {(deliveryType === "home" || deliveryType === "stopdesk") && (
+                <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t.cart.wilaya}</label>
+                    <select
+                      value={wilaya}
+                      onChange={(e) => {
+                        (e.target as HTMLSelectElement).setCustomValidity("");
+                        setWilaya(e.target.value);
+                      }}
+                      onInvalid={(e) => (e.target as HTMLSelectElement).setCustomValidity(lang === "ar" ? "يرجى اختيار ولاية" : lang === "fr" ? "Veuillez sélectionner une wilaya" : "Please select a wilaya")}
+                      name="wilaya"
+                      required
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                      <option value="" disabled hidden>{lang === "ar" ? "اختر الولاية" : lang === "fr" ? "Sélectionnez une wilaya" : "Select Wilaya"}</option>
+                      {WILAYAS.map((w) => (
+                        <option key={w} value={w}>{w}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <input
+                    type="text"
+                    name="commune"
+                    value={commune}
+                    onChange={(e) => setCommune(e.target.value)}
+                    placeholder={t.cart.commune}
+                    required
+                    onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity(lang === "ar" ? "يرجى ملء هذا الحقل" : lang === "fr" ? "Veuillez renseigner ce champ" : "Please fill out this field")}
+                    onInput={(e) => (e.target as HTMLInputElement).setCustomValidity("")}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                  {deliveryType === "home" && (
+                    <input
+                      type="text"
+                      name="address_details"
+                      placeholder={lang === "ar" ? "العنوان بالتفصيل (الحي، الشارع، رقم الشقة...)" : lang === "fr" ? "Adresse détaillée (Quartier, Rue, N°...)" : "Detailed Address (Neighborhood, Street, N°...)"}
+                      required
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  )}
+                </div>
+              )}
+              
               {/* Optional Referral Code */}
               <div>
                 <input
@@ -585,41 +663,7 @@ export default function CartPage() {
                 )}
               </div>
 
-              {/* Delivery Type Selection */}
-              <div className="space-y-1">
-                <label className="block text-sm font-medium text-gray-700">
-                  {lang === "ar" ? "نوع التوصيل" : lang === "fr" ? "Type de livraison" : "Delivery Type"}
-                </label>
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setDeliveryType("home")}
-                    className={`px-4 py-3 rounded-xl border text-sm font-bold transition-all flex items-center justify-center gap-2 ${deliveryType === "home" ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
-                  >
-                    <Home className="w-4 h-4" />
-                    {lang === "ar" ? "توصيل للمنزل" : lang === "fr" ? "À domicile" : "Home Delivery"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setDeliveryType("stopdesk")}
-                    className={`px-4 py-3 rounded-xl border text-sm font-bold transition-all flex items-center justify-center gap-2 ${deliveryType === "stopdesk" ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
-                  >
-                    <Building2 className="w-4 h-4" />
-                    {lang === "ar" ? "مكتب ياليدين (Stop)" : lang === "fr" ? "Bureau (Stop)" : "Stop Desk"}
-                  </button>
-                </div>
-              </div>
 
-              {/* Detailed Address field (shown for home delivery) */}
-              {deliveryType === "home" && (
-                <input
-                  type="text"
-                  name="address_details"
-                  placeholder={lang === "ar" ? "العنوان بالتفصيل (الحي، الشارع، رقم الشقة...)" : lang === "fr" ? "Adresse détaillée (Quartier, Rue, N°...)" : "Detailed Address (Neighborhood, Street, N°...)"}
-                  required
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                />
-              )}
 
               {/* Payment info box */}
               <div className="bg-gray-50 border border-gray-150 rounded-xl p-3 text-xs space-y-1">
