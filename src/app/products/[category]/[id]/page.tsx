@@ -285,7 +285,7 @@ export default function ProductDetailPage() {
                       </h1>
 
                       {/* Ratings */}
-                      <div className={`flex items-center gap-2 pt-1 ${lang === "ar" ? "justify-start" : "justify-start flex-row-reverse"}`}>
+                      <div className="flex items-center gap-2 pt-1">
                         <div className="flex items-center gap-0.5">
                           {[1, 2, 3, 4, 5].map((i) => (
                             <Star key={i} className={`w-3.5 h-3.5 ${i <= Math.round(product.reviews > 0 ? product.rating : 0) ? "fill-orange-400 text-orange-400" : "fill-gray-200 text-gray-200"}`} />
@@ -299,7 +299,7 @@ export default function ProductDetailPage() {
 
                     {/* Price section */}
                     <div className="pt-2">
-                      <div className={`flex items-baseline gap-3 ${lang === "ar" ? "justify-start" : "justify-start flex-row-reverse"}`}>
+                      <div className="flex items-baseline gap-3">
                         <p className="text-3xl font-extrabold text-gray-900">
                           {product.price.toLocaleString()} {currency}
                           {product.sold_by && product.sold_by !== "piece" && <span className="text-sm font-normal text-gray-400"> /{unitLabel(product.sold_by, lang)}</span>}
@@ -368,7 +368,7 @@ export default function ProductDetailPage() {
                     {product.features && product.features.length > 0 && (
                       <div className="space-y-2.5 pt-5 border-t border-gray-100">
                         {product.features.map((f, i) => (
-                          <div key={i} className={`flex items-start gap-2.5 ${lang === "ar" ? "flex-row" : "flex-row-reverse justify-end"}`}>
+                          <div key={i} className="flex items-start gap-2.5">
                             <span className="text-sm text-gray-600 font-medium leading-relaxed">{f}</span>
                             <div className="w-5 h-5 rounded-full bg-orange-100 text-[#EA580C] flex items-center justify-center text-xs shrink-0 font-bold mt-0.5">
                               ✓
