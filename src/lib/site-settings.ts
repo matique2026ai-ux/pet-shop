@@ -22,12 +22,34 @@ async function load(): Promise<SiteSettings> {
   }
 }
 
+export function invalidateSettingsCache() {
+  cache = null;
+  inflight = null;
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("site-settings-updated"));
+  }
+}
+
 export function useSiteSettings(): SiteSettings {
   const [settings, setSettings] = useState<SiteSettings>(cache || {});
+  
   useEffect(() => {
-    if (cache) return;
-    if (!inflight) inflight = load().then((d) => { cache = d; return d; });
-    inflight.then(setSettings);
+    const fetchSettings = () => {
+      if (!inflight) inflight = load().then((d) => { cache = d; return d; });
+      inflight.then(setSettings);
+    };
+
+    if (!cache) {
+      fetchSettings();
+    }
+
+    const handleUpdate = () => {
+      fetchSettings();
+    };
+
+    window.addEventListener("site-settings-updated", handleUpdate);
+    return () => window.removeEventListener("site-settings-updated", handleUpdate);
   }, []);
+
   return settings;
 }

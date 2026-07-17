@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Users, Download, Trash2 } from "lucide-react";
+import { invalidateSettingsCache } from "@/lib/site-settings";
 
 // ────────────────────────────────────────────────────────────────────────────────
 // Completely isolated settings panel – lives in its own React subtree so that
@@ -227,6 +228,7 @@ export default function AdminSettingsPanel({ adminSecret, a, onSaved }: AdminSet
       });
       if (!res.ok) throw new Error(await res.text());
       alert(a.settings?.saved ?? "Saved!");
+      invalidateSettingsCache();
       onSaved?.();
     } catch (e) {
       alert("Failed: " + (e as Error).message);
