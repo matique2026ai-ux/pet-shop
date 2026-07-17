@@ -20,7 +20,7 @@ export default function ShippingPage() {
   const regionLabels = [t.shipping.express, t.shipping.north, t.shipping.south];
 
   return (
-    <div className="bg-[#1A120B] min-h-screen text-slate-200 pb-20" dir={dir}>
+    <div className="bg-[#1A120B] text-slate-200 pb-20" dir={dir}>
 
       {/* ═══════════════════════════════
           HERO

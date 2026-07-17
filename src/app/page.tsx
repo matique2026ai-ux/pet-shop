@@ -68,7 +68,7 @@ export default function HomePage() {
       .catch(() => {});
   }, []);
 
-  const handleVideoEnd = () => setVideoIdx((prev) => (prev + 1) % heroVideos.length);
+
 
   useEffect(() => {
     videoRefs.current.forEach((v, i) => {
@@ -76,12 +76,25 @@ export default function HomePage() {
         if (i === videoIdx) {
           v.play().catch(() => {});
         } else {
-          v.pause();
-          setTimeout(() => { if (v) v.currentTime = 0; }, 1500); // Wait for fade out to finish
+          // Let it keep playing while it fades out, pause after 1500ms
+          setTimeout(() => { 
+            if (v) {
+              v.pause();
+              v.currentTime = 0; 
+            }
+          }, 1500);
         }
       }
     });
-  }, [videoIdx, heroVideos]);
+  }, [videoIdx]);
+
+  const handleTimeUpdate = (e: React.SyntheticEvent<HTMLVideoElement>, index: number) => {
+    const video = e.currentTarget;
+    // Only trigger if this is the active video
+    if (index === videoIdx && heroVideos.length > 1 && video.duration - video.currentTime <= 1.5) {
+      setVideoIdx((prev) => (prev + 1) % heroVideos.length);
+    }
+  };
 
   return (
     <>
@@ -118,7 +131,7 @@ export default function HomePage() {
               loop={heroVideos.length === 1}
               playsInline
               preload="auto"
-              onEnded={handleVideoEnd}
+              onTimeUpdate={(e) => handleTimeUpdate(e, i)}
               className={`absolute inset-0 w-full h-full object-cover transition-all duration-[1500ms] ease-in-out ${i === videoIdx ? "opacity-100 scale-100 z-0" : "opacity-0 scale-105 -z-10"}`}
             >
               <source src={src} type="video/mp4" />
