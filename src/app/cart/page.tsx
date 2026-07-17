@@ -94,7 +94,7 @@ export default function CartPage() {
   const [checkingOut, setCheckingOut] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState<{ id: string } | null>(null);
   const [area, setArea] = useState("");
-  const [wilaya, setWilaya] = useState("Sétif");
+  const [wilaya, setWilaya] = useState("");
   const [commune, setCommune] = useState("");
   const [deliveryType, setDeliveryType] = useState<"home" | "stopdesk">("home");
   const [phoneError, setPhoneError] = useState<string | null>(null);
@@ -116,8 +116,8 @@ export default function CartPage() {
   const d = { ...DEFAULT_DELIVERY, ...(delivery || {}) };
   const region = regionForWilaya(wilaya, commune);
   const deliv = DELIVERY_CONFIG[region];
-  const feeNum = deliveryType === "home" ? deliv.home : deliv.stopdesk;
-  const etaText = deliv.eta[lang];
+  const feeNum = wilaya ? (deliveryType === "home" ? deliv.home : deliv.stopdesk) : 0;
+  const etaText = wilaya ? deliv.eta[lang] : "";
   const freeNum = Number(d.freeThreshold) || 5000;
   const subtotal = totalPrice;
   const deliveryFee = subtotal > 0 && subtotal >= freeNum ? 0 : feeNum;
@@ -422,9 +422,9 @@ export default function CartPage() {
                 <span className="font-medium text-gray-900">{currency}{subtotal.toFixed(2)}</span>
               </div>
               <div className="flex items-center justify-between text-sm text-gray-500">
-                <span className="flex items-center gap-1.5"><Truck className="w-3.5 h-3.5" />{wilaya} · {etaText}</span>
+                <span className="flex items-center gap-1.5"><Truck className="w-3.5 h-3.5" />{wilaya ? `${wilaya} · ${etaText}` : (t.nav.shipping || "Shipping")}</span>
                 <span className="font-medium text-gray-900">
-                  {deliveryFee === 0 ? t.cart.free : `${currency}${deliveryFee.toFixed(2)}`}
+                  {!wilaya ? "-" : (deliveryFee === 0 ? t.cart.free : `${currency}${deliveryFee.toFixed(2)}`)}
                 </span>
               </div>
               {remainingForFree > 0 && (
@@ -511,6 +511,8 @@ export default function CartPage() {
                 name="name"
                 placeholder={t.cart.namePlaceholder}
                 required
+                onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity(lang === "ar" ? "يرجى ملء هذا الحقل" : lang === "fr" ? "Veuillez renseigner ce champ" : "Please fill out this field")}
+                onInput={(e) => (e.target as HTMLInputElement).setCustomValidity("")}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
               <input
@@ -520,6 +522,10 @@ export default function CartPage() {
                 inputMode="tel"
                 dir="auto"
                 required
+                onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity(lang === "ar" ? "يرجى ملء هذا الحقل" : lang === "fr" ? "Veuillez renseigner ce champ" : "Please fill out this field")}
+                onInput={(e) => {
+                  (e.target as HTMLInputElement).setCustomValidity("");
+                }}
                 onChange={() => phoneError && setPhoneError(null)}
                 className={`w-full px-4 py-3 rounded-xl border text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${phoneError ? "border-red-400 bg-red-50" : "border-gray-200"}`}
               />
@@ -530,10 +536,16 @@ export default function CartPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t.cart.wilaya}</label>
                 <select
                   value={wilaya}
-                  onChange={(e) => setWilaya(e.target.value)}
+                  onChange={(e) => {
+                    (e.target as HTMLSelectElement).setCustomValidity("");
+                    setWilaya(e.target.value);
+                  }}
+                  onInvalid={(e) => (e.target as HTMLSelectElement).setCustomValidity(lang === "ar" ? "يرجى اختيار ولاية" : lang === "fr" ? "Veuillez sélectionner une wilaya" : "Please select a wilaya")}
                   name="wilaya"
+                  required
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 >
+                  <option value="" disabled hidden>{lang === "ar" ? "اختر الولاية" : lang === "fr" ? "Sélectionnez une wilaya" : "Select Wilaya"}</option>
                   {WILAYAS.map((w) => (
                     <option key={w} value={w}>{w}</option>
                   ))}
@@ -546,6 +558,8 @@ export default function CartPage() {
                 onChange={(e) => setCommune(e.target.value)}
                 placeholder={t.cart.commune}
                 required
+                onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity(lang === "ar" ? "يرجى ملء هذا الحقل" : lang === "fr" ? "Veuillez renseigner ce champ" : "Please fill out this field")}
+                onInput={(e) => (e.target as HTMLInputElement).setCustomValidity("")}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
 
