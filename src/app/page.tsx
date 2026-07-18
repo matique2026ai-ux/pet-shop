@@ -178,22 +178,29 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
+    const timeouts: NodeJS.Timeout[] = [];
     videoRefs.current.forEach((v, i) => {
       if (v) {
         if (i === videoIdx) {
           v.play().catch(() => {});
         } else {
-          setTimeout(() => {
-            if (v) { v.pause(); v.currentTime = 0; }
+          const t = setTimeout(() => {
+            if (v) {
+              v.pause();
+              v.currentTime = 0;
+            }
           }, 1500);
+          timeouts.push(t);
         }
       }
     });
+    return () => {
+      timeouts.forEach(clearTimeout);
+    };
   }, [videoIdx]);
 
-  const handleTimeUpdate = (e: React.SyntheticEvent<HTMLVideoElement>, index: number) => {
-    const video = e.currentTarget;
-    if (index === videoIdx && heroVideos.length > 1 && video.duration - video.currentTime <= 1.5) {
+  const handleVideoEnded = () => {
+    if (heroVideos.length > 1) {
       setVideoIdx((prev) => (prev + 1) % heroVideos.length);
     }
   };
@@ -204,10 +211,15 @@ export default function HomePage() {
           HERO SECTION
       ══════════════════════════════════ */}
       <section className="relative overflow-hidden min-h-[560px] flex items-center">
-        {isMobile ? (
-          // On mobile, never render heavy video files to prevent memory/GPU crashes.
-          // If the custom background is a static image, render it, otherwise show a premium brand gradient.
-          customBg && !isCustomVideo ? (
+        {customBg ? (
+          isCustomVideo ? (
+            <video
+              autoPlay muted loop playsInline preload="metadata"
+              className="absolute inset-0 w-full h-full object-cover"
+            >
+              <source src={customBg} type="video/mp4" />
+            </video>
+          ) : (
             <Image
               src={customBg}
               alt={heroTitle}
@@ -216,48 +228,23 @@ export default function HomePage() {
               sizes="100vw"
               className="object-cover"
             />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-[#022C22] via-[#064E3B] to-[#0A1E3F]">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#DFB96A]/10 via-transparent to-transparent" />
-            </div>
           )
         ) : (
-          // On desktop, render videos as usual
-          customBg ? (
-            isCustomVideo ? (
-              <video
-                autoPlay muted loop playsInline preload="metadata"
-                className="absolute inset-0 w-full h-full object-cover"
-              >
-                <source src={customBg} type="video/mp4" />
-              </video>
-            ) : (
-              <Image
-                src={customBg}
-                alt={heroTitle}
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover"
-              />
-            )
-          ) : (
-            heroVideos.map((src, i) => (
-              <video
-                key={src}
-                ref={(el) => { videoRefs.current[i] = el; }}
-                autoPlay
-                muted
-                loop={heroVideos.length === 1}
-                playsInline
-                preload="metadata"
-                onTimeUpdate={(e) => handleTimeUpdate(e, i)}
-                className={`absolute inset-0 w-full h-full object-cover transition-all duration-[1500ms] ease-in-out ${i === videoIdx ? "opacity-100 scale-100 z-0" : "opacity-0 scale-105 -z-10"}`}
-              >
-                <source src={src} type="video/mp4" />
-              </video>
-            ))
-          )
+          heroVideos.map((src, i) => (
+            <video
+              key={src}
+              ref={(el) => { videoRefs.current[i] = el; }}
+              autoPlay
+              muted
+              loop={heroVideos.length === 1}
+              playsInline
+              preload={i === videoIdx ? "auto" : "none"}
+              onEnded={handleVideoEnded}
+              className={`absolute inset-0 w-full h-full object-cover transition-all duration-[1500ms] ease-in-out ${i === videoIdx ? "opacity-100 scale-100 z-0" : "opacity-0 scale-105 -z-10"}`}
+            >
+              <source src={src} type="video/mp4" />
+            </video>
+          ))
         )}
         {/* Cinematic Vignette Overlay */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-black/20 via-black/50 to-black/90" />
