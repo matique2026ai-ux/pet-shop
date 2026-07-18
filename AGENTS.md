@@ -12,7 +12,7 @@ Pet-shop e-commerce site (Algerian market). Next.js 16 (App Router) + React 19 +
 
 1. **`products.id` is `TEXT`, NOT UUID.** Product translations in `src/lib/translations/*` are keyed by original demo IDs (`c1`, `d1`, `b1`…). The `seed` route preserves these IDs. If the DB column is UUID, seeding fails with `invalid input syntax for type uuid: "c1"`. Fix with `ALTER TABLE products ALTER COLUMN id TYPE TEXT USING id::text;`. Never revert to UUID.
 2. **Admin password** is verified dynamically against the `ADMIN_SECRET` environment variable via the `/api/admin/verify` API route. There is no hardcoded admin password in `src/app/admin/page.tsx`. Ensure `ADMIN_SECRET` is set in Vercel settings and locally in `.env.local`.
-3. **Keep the 3 translation files in sync**: `src/lib/translations/{en,fr,ar}.ts` must have identical key structure. Arabic (`ar`) sets `dir="rtl"`.
+3. **Keep translation files in sync**: The public translations in `src/lib/translations/{en,fr,ar}.ts` must have identical key structure. Similarly, the admin translations inside `src/lib/admin-i18n.ts` must maintain identical keys across its `en`, `fr`, and `ar` objects. Arabic (`ar`) sets `dir="rtl"`.
 4. **Currency** is always DZD (`د.ج`) regardless of language.
 5. **`.env*` and `mot de passe database supabase.txt` are git-ignored** — never commit secrets (Supabase service-role key, DB password).
 6. **Demo catalog source of truth** is `src/lib/data.ts`; to change products, edit it then click **Seed** in the admin Products tab.
@@ -41,4 +41,5 @@ Pet-shop e-commerce site (Algerian market). Next.js 16 (App Router) + React 19 +
 - Upload API validates file type + 5 MB size limit.
 - Orders API validates required fields.
 - **Card Footprints**: Footprints on product cards are rendered dynamically via `CardFootprintDecor` inside `src/components/product-card.tsx` based on `product.category`. Do not remove the `relative z-10` from the card details to avoid background overlaps.
+- **Admin Multilingual UI**: Admin dashboard elements and labels must be translated using the dictionary `a` (from `useAdminI18n()`), such as `{a.dashboard.totalRevenue}`, instead of using hardcoded English text.
 
