@@ -506,12 +506,13 @@ export default function AdminDashboard() {
 
   const sortedProducts = [...products].sort((a, b) => {
     const getVal = (p: ProductData) => {
+      if (!p) return "";
       switch (sortBy) {
-        case "name": return p.name.toLowerCase();
-        case "category": return categories.find((c) => c.id === p.category)?.name || p.category;
-        case "price": return p.price;
+        case "name": return (p.name || "").toLowerCase();
+        case "category": return (categories.find((c) => c.id === p.category)?.name || p.category || "").toLowerCase();
+        case "price": return Number(p.price) || 0;
         case "stock": return p.in_stock ? 0 : 1;
-        default: return p.name.toLowerCase();
+        default: return (p.name || "").toLowerCase();
       }
     };
     const va = getVal(a);
@@ -1437,7 +1438,7 @@ export default function AdminDashboard() {
                           <div className="w-full bg-gray-200 rounded-full h-1.5">
                             <div
                               className="bg-emerald-500 h-1.5 rounded-full transition-all"
-                              style={{ width: `${Math.min(100, (product.sales / (Math.max(...topProductsDynamic.map(p => p.sales)) || 1)) * 100)}%` }}
+                              style={{ width: `${Math.min(100, (product.sales / (Math.max(...topProductsDynamic.map(p => Number(p.sales) || 0), 1)) * 100))}%` }}
                             />
                           </div>
                         </div>
@@ -1454,7 +1455,7 @@ export default function AdminDashboard() {
                 if (prodCat !== "all" && p.category !== prodCat) return false;
                 if (prodStock === "in" && !p.in_stock) return false;
                 if (prodStock === "out" && p.in_stock) return false;
-                if (prodSearch && !p.name.toLowerCase().includes(prodSearch.toLowerCase())) return false;
+                if (prodSearch && !(p.name || "").toLowerCase().includes(prodSearch.toLowerCase())) return false;
                 return true;
               });
               const inStockCount = products.filter((p) => p.in_stock).length;
@@ -1477,10 +1478,10 @@ export default function AdminDashboard() {
                         </div>
                       )}
                       <div className="min-w-0">
-                        <p className="font-semibold text-gray-900 truncate max-w-[160px] sm:max-w-[220px]">{product.name}</p>
+                        <p className="font-semibold text-gray-900 truncate max-w-[160px] sm:max-w-[220px]">{product.name || "Untitled"}</p>
                         <p className="text-xs text-gray-400">{product.id}</p>
                         <p className="sm:hidden mt-0.5 text-xs font-semibold text-gray-700">
-                          {currency}{product.price.toFixed(2)}
+                          {currency}{Number(product.price || 0).toFixed(2)}
                           <span className={`ms-2 font-medium ${product.in_stock ? "text-emerald-600" : "text-red-500"}`}>
                             {product.in_stock ? `• ${product.stock_quantity ?? 0}` : "• Out"}
                           </span>
@@ -1490,16 +1491,16 @@ export default function AdminDashboard() {
                   </td>
                   <td className="px-4 py-3 hidden md:table-cell">
                     <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-gray-100 text-gray-600 text-xs font-medium">
-                      {categories.find((c) => c.id === product.category)?.name || product.category}
+                      {categories.find((c) => c.id === product.category)?.name || product.category || "General"}
                     </span>
                   </td>
                   <td className="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap hidden sm:table-cell">
-                    {currency}{product.price.toFixed(2)}
+                    {currency}{Number(product.price || 0).toFixed(2)}
                     {product.sold_by && product.sold_by !== "piece" && <span className="text-xs font-normal text-gray-400"> /{unitLabel(product.sold_by, "en")}</span>}
                   </td>
                   <td className="px-4 py-3 hidden lg:table-cell">
                     {product.original_price ? (
-                      <span className="text-xs text-gray-400 line-through">{currency}{product.original_price.toFixed(2)}</span>
+                      <span className="text-xs text-gray-400 line-through">{currency}{Number(product.original_price || 0).toFixed(2)}</span>
                     ) : <span className="text-xs text-gray-300">—</span>}
                   </td>
                   <td className="px-4 py-3 hidden sm:table-cell">
