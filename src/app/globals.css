@@ -266,7 +266,12 @@ a {
 }
 
 /* Language specific fonts */
+[dir="rtl"] body,
+html[lang='ar'] body {
+  font-family: var(--font-cairo), sans-serif !important;
+}
+
 html[lang='en'] body,
 html[lang='fr'] body {
-  font-family: var(--font-outfit), sans-serif !important;
+  font-family: var(--font-outfit), var(--font-cairo), sans-serif !important;
 }
