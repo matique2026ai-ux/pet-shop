@@ -45,7 +45,7 @@ src/
       [category]/[id]/page.tsx  # Product detail (multi-image gallery + video player)
     categories/page.tsx    # All categories grid
     cart/page.tsx          # Cart + checkout form
-    vet/page.tsx           # Veterinary services + team
+    blog/page.tsx          # Blog listing + detail page
     about/page.tsx
     contact/page.tsx       # Contact form (Formspree)
     faq/page.tsx           # FAQ (translatable)
@@ -67,11 +67,11 @@ src/
       seed/route.ts                # POST → bulk-import demo products from data.ts
       admin/verify/route.ts        # POST → verify admin password
   components/
-    navbar.tsx, footer.tsx, product-card.tsx, vet-card.tsx,
+    navbar.tsx, footer.tsx, product-card.tsx, blog-card.tsx,
     whatsapp-button.tsx, animated-section.tsx, schema-jsonld.tsx,
     brand-logo.tsx, hero-video-manager.tsx, admin-settings-panel.tsx
   lib/
-    data.ts                 # Source of truth for demo products/categories/vet/team/testimonials
+    data.ts                 # Source of truth for demo products/categories/testimonials
     data-service.ts         # Product CRUD abstraction (Supabase OR localStorage fallback)
     use-translated-data.ts  # Loads API data + applies i18n translations
     i18n-context.tsx        # Language provider (en/fr/ar), dir (rtl for ar), currency
@@ -165,7 +165,7 @@ A full-featured professional CRM panel with:
 - Languages: **English (en)**, **French (fr)**, **Arabic (ar)**. Arabic switches the layout to RTL (`dir="rtl"`).
 - Auto-detects browser language on first visit (`ar`→Arabic, `fr`→French, else English), overridable via the language switcher in the navbar.
 - All UI strings live in `src/lib/translations/{en,fr,ar}.ts`. **All three files must stay in sync** (same keys).
-- Entity content (product names, descriptions, category/subcategory names, vet services, team, testimonials) is translated in the `entities` section of each file, keyed by the entity's ID.
+- Entity content (product names, descriptions, category/subcategory names, testimonials) is translated in the `entities` section of each file, keyed by the entity's ID.
 - Admin panel has its own i18n in `src/lib/admin-i18n.ts` (EN/FR/AR), fully translatable including order details, reviews, and all settings labels.
 - **Currency is DZD (د.ج)** for all languages (Algerian market).
 - The admin panel displays the current month dynamically in the selected language locale (e.g. "juillet 2026" in French, "يوليو 2026" in Arabic).
@@ -188,7 +188,7 @@ The brand system uses the official transparent circular logo badge `/logo-badge.
 All page heroes load their background media from the **Admin Settings** database:
 - **Homepage Hero**: `heroBackground` key (supports video URLs `.mp4/.webm` or image URLs)
 - **Contact Page**: `contactHeroImage`
-- **Veterinary Clinic Page**: `vetHeroImage`
+- **Veterinary Clinic Page**: `vetHeroImage` (legacy setting)
 - **About Page**: `aboutHeroImage`
 
 *To change: `/admin` → Settings → Site Content.*
@@ -253,7 +253,7 @@ Use the Supabase SQL Editor: `DELETE FROM products;` — or use the admin panel 
 4. **Currency** is hardcoded to DZD in `i18n-context.tsx` regardless of language.
 5. **RLS**: product write policies use the service-role key (bypasses RLS). The `SUPABASE_SERVICE_ROLE_KEY` must be set in Vercel env vars.
 6. **Orders API** is public POST (intended for checkout) but validates required fields server-side.
-7. **Vet page images** must use keys `v1`…`v8`, not `vet-1`.
+7. **Blog images**: Blog post images can be configured in settings / markdown.
 8. **Card Footprints**: rendered via `CardFootprintDecor` inside `product-card.tsx` based on `product.category`. Do not remove `relative z-10` from card details.
 
 ---

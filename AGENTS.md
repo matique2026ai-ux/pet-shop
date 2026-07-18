@@ -21,7 +21,7 @@ Pet-shop e-commerce site (Algerian market). Next.js 16 (App Router) + React 19 +
 
 ## Quick orientation
 
-- Storefront pages: `src/app/**` (homepage `page.tsx`, `products/`, `vet/`, `cart/`, `admin/`, etc.)
+- Storefront pages: `src/app/**` (homepage `page.tsx`, `products/`, `blog/`, `cart/`, `admin/`, etc.)
 - Admin dashboard: `src/app/admin/page.tsx`
 - APIs: `src/app/api/**` (products, categories, orders, upload, seed)
 - i18n: `src/lib/i18n-context.tsx` + `src/lib/translations/*`
@@ -35,7 +35,6 @@ Pet-shop e-commerce site (Algerian market). Next.js 16 (App Router) + React 19 +
 - Don't commit `.env*` or the password text file.
 
 ## Recurring pain points already solved (don't reintroduce)
-- Vet page image keys must match service IDs (`v1`…`v8`), not `vet-1`.
 - Cart checkout must not clear the cart on API failure (show error instead).
 - FAQ and Shipping pages must use `t.faq.items` / `t.shipping.sections` (now translatable), not hardcoded English.
 - Upload API validates file type + 5 MB size limit.
