@@ -8,7 +8,7 @@ import { useTranslatedData } from "@/lib/use-translated-data";
 import { useRecentlyViewed } from "@/lib/use-recently-viewed";
 import { useSiteSettings } from "@/lib/site-settings";
 import AnimatedSection, { StaggerSection, FadeIn } from "@/components/animated-section";
-import { motion } from "framer-motion";
+
 import ProductCard, { ProductCardSkeleton } from "@/components/product-card";
 import BlogCard from "@/components/blog-card";
 import { SHIMMER_BLUR } from "@/lib/blur";
@@ -158,6 +158,15 @@ export default function HomePage() {
   const [heroVideos, setHeroVideos] = useState<string[]>(DEFAULT_HERO_VIDEOS);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
+  // Detect mobile to disable heavy features that crash low-end phones
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768 || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent));
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   const customBg = content?.heroBackground;
   const isCustomVideo = customBg ? /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(customBg) : false;
 
@@ -168,20 +177,14 @@ export default function HomePage() {
       .catch(() => {});
   }, []);
 
-
-
   useEffect(() => {
     videoRefs.current.forEach((v, i) => {
       if (v) {
         if (i === videoIdx) {
           v.play().catch(() => {});
         } else {
-          // Let it keep playing while it fades out, pause after 1500ms
-          setTimeout(() => { 
-            if (v) {
-              v.pause();
-              v.currentTime = 0; 
-            }
+          setTimeout(() => {
+            if (v) { v.pause(); v.currentTime = 0; }
           }, 1500);
         }
       }
@@ -190,7 +193,6 @@ export default function HomePage() {
 
   const handleTimeUpdate = (e: React.SyntheticEvent<HTMLVideoElement>, index: number) => {
     const video = e.currentTarget;
-    // Only trigger if this is the active video
     if (index === videoIdx && heroVideos.length > 1 && video.duration - video.currentTime <= 1.5) {
       setVideoIdx((prev) => (prev + 1) % heroVideos.length);
     }
@@ -221,23 +223,26 @@ export default function HomePage() {
             />
           )
         ) : (
-          heroVideos.map((src, i) => (
-            <video
-              key={src}
-              ref={(el) => {
-                videoRefs.current[i] = el;
-              }}
-              autoPlay
-              muted
-              loop={heroVideos.length === 1}
-              playsInline
-              preload="auto"
-              onTimeUpdate={(e) => handleTimeUpdate(e, i)}
-              className={`absolute inset-0 w-full h-full object-cover transition-all duration-[1500ms] ease-in-out ${i === videoIdx ? "opacity-100 scale-100 z-0" : "opacity-0 scale-105 -z-10"}`}
-            >
-              <source src={src} type="video/mp4" />
-            </video>
-          ))
+          // On mobile: only render the active video to save memory.
+          // On desktop: render all videos for smooth crossfade transitions.
+          (isMobile ? [heroVideos[videoIdx]] : heroVideos).map((src, rawIndex) => {
+            const i = isMobile ? videoIdx : rawIndex;
+            return (
+              <video
+                key={src}
+                ref={(el) => { videoRefs.current[i] = el; }}
+                autoPlay
+                muted
+                loop={heroVideos.length === 1}
+                playsInline
+                preload={isMobile ? "none" : "metadata"}
+                onTimeUpdate={(e) => handleTimeUpdate(e, i)}
+                className={`absolute inset-0 w-full h-full object-cover transition-all duration-[1500ms] ease-in-out ${i === videoIdx ? "opacity-100 scale-100 z-0" : "opacity-0 scale-105 -z-10"}`}
+              >
+                <source src={src} type="video/mp4" />
+              </video>
+            );
+          })
         )}
         {/* Cinematic Vignette Overlay */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-black/20 via-black/50 to-black/90" />
