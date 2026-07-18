@@ -4,7 +4,8 @@ import { createAdminClient } from "@/lib/supabase";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const text = (body.query || "").toLowerCase().trim();
+    const queryVal = body.query;
+    const text = (queryVal !== undefined && queryVal !== null ? String(queryVal) : "").toLowerCase().trim();
 
     if (!text) {
       return NextResponse.json({ replies: [] });
