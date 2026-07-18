@@ -223,8 +223,8 @@ export default function ProductDetailPage() {
                           }}
                           className={`relative w-12 h-12 rounded-lg border bg-white overflow-hidden p-1 transition-all ${
                             activeMedia === "image" && activeImage === product.image
-                              ? "border-emerald-600 ring-2 ring-emerald-600/20"
-                              : "border-gray-200 hover:border-emerald-600"
+                              ? "border-coral ring-2 ring-coral/20"
+                              : "border-gray-200 hover:border-coral"
                           }`}
                         >
                           <div className="relative w-full h-full">
@@ -242,8 +242,8 @@ export default function ProductDetailPage() {
                             }}
                             className={`relative w-12 h-12 rounded-lg border bg-white overflow-hidden p-1 transition-all ${
                               activeMedia === "image" && activeImage === imgUrl
-                                ? "border-emerald-600 ring-2 ring-emerald-600/20"
-                                : "border-gray-200 hover:border-emerald-600"
+                                ? "border-coral ring-2 ring-coral/20"
+                                : "border-gray-200 hover:border-coral"
                             }`}
                           >
                             <div className="relative w-full h-full">
@@ -260,8 +260,8 @@ export default function ProductDetailPage() {
                             }}
                             className={`relative w-12 h-12 rounded-lg border bg-gray-900 overflow-hidden flex items-center justify-center transition-all ${
                               activeMedia === "video"
-                                ? "border-emerald-600 ring-2 ring-emerald-600/20"
-                                : "border-gray-200 hover:border-emerald-600"
+                                ? "border-coral ring-2 ring-coral/20"
+                                : "border-gray-200 hover:border-coral"
                             }`}
                           >
                             <Play className="w-5 h-5 text-white fill-white/20" />
@@ -275,7 +275,7 @@ export default function ProductDetailPage() {
                   <div className={`md:col-span-7 space-y-5 ${lang === "ar" ? "text-right" : "text-left"}`} dir={lang === "ar" ? "rtl" : "ltr"}>
                     <div className="space-y-2">
                       <div>
-                        <span className="text-xs font-bold text-emerald-600 uppercase bg-emerald-50 px-2.5 py-1 rounded-lg">
+                        <span className="text-xs font-bold text-emerald-800 uppercase bg-emerald-50 px-2.5 py-1 rounded-lg">
                           {catName}
                         </span>
                       </div>
@@ -347,7 +347,7 @@ export default function ProductDetailPage() {
                         {/* Add to Cart button */}
                         <button
                           onClick={() => { addItem(product, qty); setQty(1); }}
-                          className="w-full sm:w-auto bg-gradient-to-r from-orange-500 to-[#EA580C] hover:from-orange-600 hover:to-[#D97706] text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md flex items-center justify-center gap-2 text-sm uppercase tracking-wide min-w-[160px] flex-1"
+                          className="w-full sm:w-auto bg-coral hover:bg-coral-600 text-white px-8 py-3 rounded-lg font-bold transition-all shadow-md flex items-center justify-center gap-2 text-sm uppercase tracking-wide min-w-[160px] flex-1"
                         >
                           <ShoppingCart className="w-4 h-4 shrink-0" />
                           {t.products.addToCart}
@@ -356,7 +356,7 @@ export default function ProductDetailPage() {
                         {/* Direct Shop Purchase button (for all products) */}
                         <button
                           onClick={handleOpenReferralModal}
-                          className="w-full sm:w-auto border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-50 px-6 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wide min-w-[160px] flex-1"
+                          className="w-full sm:w-auto border-2 border-coral text-coral hover:bg-coral/5 px-6 py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wide min-w-[160px] flex-1"
                         >
                           <Ticket className="w-4 h-4 shrink-0" />
                           {lang === "ar" ? "شراء من المحل (خصم)" : lang === "fr" ? "Achat au magasin (code)" : "Buy at Shop (code)"}
