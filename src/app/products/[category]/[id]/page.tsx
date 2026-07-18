@@ -425,14 +425,14 @@ export default function ProductDetailPage() {
 
                 <div className="py-8">
                   {tab === "overview" && product.description && (
-                    <p className="text-gray-600 leading-relaxed max-w-3xl whitespace-pre-line">{product.description}</p>
+                    <p dir="auto" className="text-gray-600 leading-relaxed max-w-3xl whitespace-pre-line text-start">{product.description}</p>
                   )}
                   {tab === "features" && product.features && product.features.length > 0 && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-3xl">
                       {product.features.map((f, i) => (
                         <div key={i} className="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3">
                           <Check className="w-5 h-5 text-emerald-600 shrink-0" />
-                          <span className="text-sm text-gray-700">{f}</span>
+                          <span dir="auto" className="text-sm text-gray-700 text-start">{f}</span>
                         </div>
                       ))}
                     </div>
@@ -443,7 +443,7 @@ export default function ProductDetailPage() {
                         <Leaf className="w-5 h-5 text-emerald-600" />
                         <h3 className="font-bold text-gray-900">{t.products.ingredients}</h3>
                       </div>
-                      <p className="text-gray-600 leading-relaxed whitespace-pre-line">{product.ingredients}</p>
+                      <p dir="auto" className="text-gray-600 leading-relaxed whitespace-pre-line text-start">{product.ingredients}</p>
                     </div>
                   )}
                   {tab === "video" && hasVideo && embed && (

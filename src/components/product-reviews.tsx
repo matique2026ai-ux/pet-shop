@@ -149,7 +149,7 @@ export default function ProductReviews({ productId }: { productId: string }) {
                     />
                   ))}
                 </div>
-                {r.comment && <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{r.comment}</p>}
+                {r.comment && <p dir="auto" className="text-gray-600 text-sm leading-relaxed whitespace-pre-line text-start">{r.comment}</p>}
               </div>
             ))
           )}
