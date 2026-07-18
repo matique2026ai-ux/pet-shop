@@ -143,30 +143,3 @@ export function WebSiteSchema() {
   return null;
 }
 
-export function VeterinaryClinicSchema() {
-  const { store } = useSiteSettings();
-  const storeName = store?.storeName || store?.name || "Paws & Wings";
-
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.id = "vet-schema";
-    script.innerHTML = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "VeterinaryCare",
-      name: `${storeName} Veterinary Clinic`,
-      url: "https://www.pawsandwings.com/vet",
-      description: "Professional veterinary care for your beloved pets.",
-      medicalSpecialty: "VeterinaryMedicine",
-      availableService: [
-        { "@type": "MedicalService", name: "General Checkup" },
-        { "@type": "MedicalService", name: "Vaccination" },
-        { "@type": "MedicalService", name: "Dental Care" },
-        { "@type": "MedicalService", name: "Surgery" },
-      ],
-    });
-    document.head.appendChild(script);
-    return () => { const s = document.getElementById("vet-schema"); if (s) s.remove(); };
-  }, [storeName]);
-  return null;
-}

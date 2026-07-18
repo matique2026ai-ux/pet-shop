@@ -8,7 +8,7 @@ import WhatsAppButton from "@/components/whatsapp-button";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import CookieConsent from "@/components/cookie-consent";
-import { OrganizationSchema, WebSiteSchema, VeterinaryClinicSchema, LocalBusinessSchema } from "@/components/schema-jsonld";
+import { OrganizationSchema, WebSiteSchema, LocalBusinessSchema } from "@/components/schema-jsonld";
 import Script from "next/script";
 
 const cairo = Cairo({
@@ -78,7 +78,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <AuthProvider>
             <OrganizationSchema />
             <WebSiteSchema />
-            <VeterinaryClinicSchema />
             <LocalBusinessSchema />
             <Navbar />
             <main className="min-h-screen app-shell">{children}</main>
