@@ -183,7 +183,7 @@ const CustomTooltip = ({ active, payload, label, currency }: any) => {
         <p className="text-sm font-semibold text-gray-900 mb-2">{label}</p>
         {payload.map((p: any, i: number) => (
           <p key={i} className="text-sm" style={{ color: p.color }}>
-            {p.name}: {p.name === "Revenue" ? `${p.value.toLocaleString()} ${currency}` : p.value}
+            {p.name}: {p.name === "Revenue" ? `${(p.value || 0).toLocaleString()} ${currency}` : p.value}
           </p>
         ))}
       </div>
@@ -289,7 +289,7 @@ function OrderDetailRow({
                   <Phone className="w-3.5 h-3.5 text-emerald-600" /> {order.customer_phone}
                 </a>
                 <a
-                  href={`https://wa.me/${order.customer_phone.replace(/[^0-9]/g, "")}`}
+                  href={`https://wa.me/${(order.customer_phone || "").replace(/[^0-9]/g, "")}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-[#25D366] text-white px-2 py-0.5 rounded-lg text-[10px] font-bold flex items-center gap-1 hover:bg-[#20ba56] transition-colors"
@@ -427,6 +427,11 @@ export default function AdminDashboard() {
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [authed, setAuthed] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const [activeTab, setActiveTab] = useState("dashboard");
   const [orderSearch, setOrderSearch] = useState("");
   const [orderStatusFilter, setOrderStatusFilter] = useState("all");
@@ -1197,10 +1202,10 @@ export default function AdminDashboard() {
                 <div className="hidden sm:flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-xl text-sm text-gray-500">
                   <Calendar className="w-4 h-4" />
                   <span className="capitalize">
-                    {new Date().toLocaleDateString(adminLang === "ar" ? "ar-DZ" : adminLang === "fr" ? "fr-FR" : "en-US", {
+                    {mounted ? new Date().toLocaleDateString(adminLang === "ar" ? "ar-DZ" : adminLang === "fr" ? "fr-FR" : "en-US", {
                       month: "long",
                       year: "numeric",
-                    })}
+                    }) : ""}
                   </span>
                 </div>
                 <Link
@@ -1286,16 +1291,18 @@ export default function AdminDashboard() {
                       </div>
                     </div>
                     <div className="h-72">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={monthlyRevenue} barGap={2}>
-                          <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
-                          <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
-                          <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
-                           <Tooltip content={(props: any) => <CustomTooltip {...props} currency={currency} />} />
-                           <Bar yAxisId="left" dataKey="revenue" name="Revenue" fill="#059669" radius={[4, 4, 0, 0]} maxBarSize={24} />
-                          <Bar yAxisId="right" dataKey="orders" name="Orders" fill="#6EE7B7" radius={[4, 4, 0, 0]} maxBarSize={24} />
-                        </BarChart>
-                      </ResponsiveContainer>
+                      {mounted && (
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={monthlyRevenue} barGap={2}>
+                            <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
+                            <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
+                            <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
+                            <Tooltip content={(props: any) => <CustomTooltip {...props} currency={currency} />} />
+                            <Bar yAxisId="left" dataKey="revenue" name="Revenue" fill="#059669" radius={[4, 4, 0, 0]} maxBarSize={24} />
+                            <Bar yAxisId="right" dataKey="orders" name="Orders" fill="#6EE7B7" radius={[4, 4, 0, 0]} maxBarSize={24} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      )}
                     </div>
                   </div>
 
@@ -1305,24 +1312,26 @@ export default function AdminDashboard() {
                       <p className="text-sm text-gray-500 mt-0.5">Distribution by pet</p>
                     </div>
                     <div className="h-64 mt-2">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                          <Pie
-                            data={catDist.length ? catDist : sampleCategoryDist}
-                            cx="50%"
-                            cy="50%"
-                            innerRadius={52}
-                            outerRadius={88}
-                            paddingAngle={3}
-                            dataKey="value"
-                          >
-                            {(catDist.length ? catDist : sampleCategoryDist).map((_, i) => (
-                              <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
-                            ))}
-                          </Pie>
-                          <Tooltip content={(props: any) => <CustomTooltip {...props} currency={currency} />} />
-                        </PieChart>
-                      </ResponsiveContainer>
+                      {mounted && (
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie
+                              data={catDist.length ? catDist : sampleCategoryDist}
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={52}
+                              outerRadius={88}
+                              paddingAngle={3}
+                              dataKey="value"
+                            >
+                              {(catDist.length ? catDist : sampleCategoryDist).map((_, i) => (
+                                <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
+                              ))}
+                            </Pie>
+                            <Tooltip content={(props: any) => <CustomTooltip {...props} currency={currency} />} />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      )}
                     </div>
                     <div className="space-y-2.5 mt-2">
                       {(catDist.length ? catDist : sampleCategoryDist).map((item, i) => {
@@ -1841,14 +1850,16 @@ export default function AdminDashboard() {
                   <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                     <h2 className="text-lg font-bold text-[#0B1E36] mb-4">{a.analytics.perCategory}</h2>
                     <div className="h-72">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={categories.map((c) => ({ name: c.name, count: products.filter((p) => p.category === c.id).length }))}>
-                          <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#9CA3AF" }} />
-                          <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
-                          <Tooltip />
-                          <Bar dataKey="count" name="Products" fill="#059669" radius={[4, 4, 0, 0]} maxBarSize={40} />
-                        </BarChart>
-                      </ResponsiveContainer>
+                      {mounted && (
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={categories.map((c) => ({ name: c.name, count: products.filter((p) => p.category === c.id).length }))}>
+                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#9CA3AF" }} />
+                            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#9CA3AF" }} />
+                            <Tooltip />
+                            <Bar dataKey="count" name="Products" fill="#059669" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      )}
                     </div>
                   </div>
 
