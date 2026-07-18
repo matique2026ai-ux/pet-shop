@@ -11,7 +11,7 @@ Pet-shop e-commerce site (Algerian market). Next.js 16 (App Router) + React 19 +
 ## Critical rules (will break things if ignored)
 
 1. **`products.id` is `TEXT`, NOT UUID.** Product translations in `src/lib/translations/*` are keyed by original demo IDs (`c1`, `d1`, `b1`…). The `seed` route preserves these IDs. If the DB column is UUID, seeding fails with `invalid input syntax for type uuid: "c1"`. Fix with `ALTER TABLE products ALTER COLUMN id TYPE TEXT USING id::text;`. Never revert to UUID.
-2. **Admin password** is hardcoded `admin123` in `src/app/admin/page.tsx` (`ADMIN_PASSWORD`) and MUST equal the `ADMIN_SECRET` env var used by all admin API routes. Change both together.
+2. **Admin password** is verified dynamically against the `ADMIN_SECRET` environment variable via the `/api/admin/verify` API route. There is no hardcoded admin password in `src/app/admin/page.tsx`. Ensure `ADMIN_SECRET` is set in Vercel settings and locally in `.env.local`.
 3. **Keep the 3 translation files in sync**: `src/lib/translations/{en,fr,ar}.ts` must have identical key structure. Arabic (`ar`) sets `dir="rtl"`.
 4. **Currency** is always DZD (`د.ج`) regardless of language.
 5. **`.env*` and `mot de passe database supabase.txt` are git-ignored** — never commit secrets (Supabase service-role key, DB password).
