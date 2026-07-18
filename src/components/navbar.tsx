@@ -405,13 +405,38 @@ export default function Navbar() {
                   <button onClick={async () => { await logout(); setMobileOpen(false); }} className="text-sm text-white/50 hover:text-[#E3602D]">{t.auth.logout}</button>
                 </div>
               ) : (
-                <button
-                  onClick={() => { setAuthTab("login"); setAuthOpen(true); setMobileOpen(false); }}
-                  className="flex items-center gap-2 w-full py-2 text-[#E3602D] font-semibold text-sm"
-                >
-                  <LogIn className="w-4 h-4" /> {t.auth.login}
-                </button>
+                <div className="flex items-center justify-between py-2 border-b border-white/10 mb-1">
+                  <button
+                    onClick={() => { setAuthTab("login"); setAuthOpen(true); setMobileOpen(false); }}
+                    className="flex items-center gap-2 py-2 text-[#E3602D] font-semibold text-sm"
+                  >
+                    <LogIn className="w-4 h-4" /> {t.auth.login}
+                  </button>
+                </div>
               )}
+
+              {/* Language Selector for Mobile */}
+              <div className="flex items-center justify-between py-2 border-b border-white/10 mb-2">
+                <span className="text-sm font-medium text-white/80">
+                  {lang === "ar" ? "اللغة" : lang === "fr" ? "Langue" : "Language"}
+                </span>
+                <div dir="ltr" className="flex items-center rounded-full border border-white/20 p-0.5 text-xs font-semibold bg-white/10">
+                  {langOptions.map((l) => (
+                    <button
+                      key={l.code}
+                      onClick={() => setLang(l.code)}
+                      aria-label={l.label}
+                      className={`px-2.5 py-1 rounded-full transition-colors ${
+                        lang === l.code
+                          ? "bg-[#E3602D] text-white shadow-sm"
+                          : "text-white/70 hover:text-[#F1C290]"
+                      }`}
+                    >
+                      {l.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
               <Link href="/account"                onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#F1C290] text-sm font-medium">{t.auth.myAccount}</Link>
               <Link href="/"                       onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#F1C290] text-sm font-medium">{t.nav.home}</Link>
               <Link href="/products?filter=new"    onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#F1C290] text-sm font-medium">{t.nav.newArrivals}</Link>
