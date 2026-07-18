@@ -1018,6 +1018,51 @@ export default function AdminDashboard() {
     }
   };
 
+  const topProductsDynamic = useMemo(() => {
+    if (!orders.length || !products.length) return [];
+    const salesMap: Record<string, { sales: number, revenue: number }> = {};
+    for (const o of orders) {
+      if (o.status === "cancelled") continue;
+      const items = Array.isArray(o.items) ? o.items : [];
+      for (const item of items) {
+        if (!item || !item.id) continue;
+        if (!salesMap[item.id]) salesMap[item.id] = { sales: 0, revenue: 0 };
+        salesMap[item.id].sales += Number(item.quantity) || 0;
+        salesMap[item.id].revenue += (Number(item.price) || 0) * (Number(item.quantity) || 0);
+      }
+    }
+    return Object.entries(salesMap)
+      .map(([id, stats]) => {
+        const prod = products.find(p => p.id === id);
+        return {
+          name: prod ? prod.name : "Unknown",
+          sales: stats.sales,
+          revenue: stats.revenue,
+          growth: "+0%"
+        };
+      })
+      .sort((a, b) => b.revenue - a.revenue)
+      .slice(0, 5);
+  }, [orders, products]);
+
+  const recentOrdersDynamic = useMemo(() => {
+    if (!orders.length) return [];
+    return orders.slice(0, 5).map(o => {
+      const idStr = o && o.id ? String(o.id) : "";
+      const items = Array.isArray(o.items) ? o.items : [];
+      const firstItemName = items[0]?.name || "Product";
+      const extraCount = items.length > 1 ? " +" + (items.length - 1) + " more" : "";
+      return {
+        id: idStr.slice(0, 8),
+        customer: o.customer_name || "",
+        product: firstItemName + extraCount,
+        amount: o.total,
+        status: o.status,
+        date: o.created_at ? String(o.created_at).slice(0, 10) : ""
+      };
+    });
+  }, [orders]);
+
   // ----- Site settings handled by AdminSettingsPanel (isolated component) -----
 
   if (!authed) {
@@ -1074,51 +1119,6 @@ export default function AdminDashboard() {
     }
     return Object.values(map).sort((a, b) => months.indexOf(a.month) - months.indexOf(b.month));
   })();
-  
-  const topProductsDynamic = useMemo(() => {
-    if (!orders.length || !products.length) return [];
-    const salesMap: Record<string, { sales: number, revenue: number }> = {};
-    for (const o of orders) {
-      if (o.status === "cancelled") continue;
-      const items = Array.isArray(o.items) ? o.items : [];
-      for (const item of items) {
-        if (!item || !item.id) continue;
-        if (!salesMap[item.id]) salesMap[item.id] = { sales: 0, revenue: 0 };
-        salesMap[item.id].sales += Number(item.quantity) || 0;
-        salesMap[item.id].revenue += (Number(item.price) || 0) * (Number(item.quantity) || 0);
-      }
-    }
-    return Object.entries(salesMap)
-      .map(([id, stats]) => {
-        const prod = products.find(p => p.id === id);
-        return {
-          name: prod ? prod.name : "Unknown",
-          sales: stats.sales,
-          revenue: stats.revenue,
-          growth: "+0%"
-        };
-      })
-      .sort((a, b) => b.revenue - a.revenue)
-      .slice(0, 5);
-  }, [orders, products]);
-
-  const recentOrdersDynamic = useMemo(() => {
-    if (!orders.length) return [];
-    return orders.slice(0, 5).map(o => {
-      const idStr = o && o.id ? String(o.id) : "";
-      const items = Array.isArray(o.items) ? o.items : [];
-      const firstItemName = items[0]?.name || "Product";
-      const extraCount = items.length > 1 ? " +" + (items.length - 1) + " more" : "";
-      return {
-        id: idStr.slice(0, 8),
-        customer: o.customer_name || "",
-        product: firstItemName + extraCount,
-        amount: o.total,
-        status: o.status,
-        date: o.created_at ? String(o.created_at).slice(0, 10) : ""
-      };
-    });
-  }, [orders]);
 
   const catDist = categories.map((c) => ({
     name: c.name,
