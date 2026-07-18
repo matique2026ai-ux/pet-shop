@@ -21,6 +21,7 @@ import { en } from "@/lib/translations/en";
 import type { TranslationOverrides } from "@/lib/i18n-context";
 import { LogoC1, LogoC4 } from "@/components/brand-logo";
 import { type UnitType, UNIT_OPTIONS, isContinuousUnit, unitLabel } from "@/lib/units";
+import { compressImage } from "@/lib/image-utils";
 
 const COLORS = ["#059669", "#10B981", "#34D399", "#6EE7B7", "#A7F3D0"];
 
@@ -960,10 +961,11 @@ export default function AdminDashboard() {
   const [uploadingCatVid, setUploadingCatVid] = useState(false);
 
   const handleCategoryImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const rawFile = e.target.files?.[0];
+    if (!rawFile) return;
     setUploadingCatImg(true);
     try {
+      const file = await compressImage(rawFile);
       const formData = new FormData();
       formData.append("file", file);
       const secret = getSecret();
@@ -1082,9 +1084,10 @@ export default function AdminDashboard() {
     );
   };
 
-  const handleImageUpload = async (file: File) => {
+  const handleImageUpload = async (rawFile: File) => {
     setUploadingImage(true);
     try {
+      const file = await compressImage(rawFile);
       const formData = new FormData();
       formData.append("file", file);
       const secret = getSecret();
@@ -1097,15 +1100,16 @@ export default function AdminDashboard() {
       const data = await res.json();
       setForm({ ...form, image: data.url });
     } catch (e) {
-      alert("Upload failed: " + (e as Error).message);
+      showAlert("Upload failed: " + (e as Error).message);
     } finally {
       setUploadingImage(false);
     }
   };
 
-  const handleAdditionalImageUpload = async (file: File) => {
+  const handleAdditionalImageUpload = async (rawFile: File) => {
     setUploadingAdditional(true);
     try {
+      const file = await compressImage(rawFile);
       const formData = new FormData();
       formData.append("file", file);
       const secret = getSecret();
@@ -1118,7 +1122,7 @@ export default function AdminDashboard() {
       const data = await res.json();
       setForm((prev) => ({ ...prev, images: [...prev.images, data.url] }));
     } catch (e) {
-      alert("Upload failed: " + (e as Error).message);
+      showAlert("Upload failed: " + (e as Error).message);
     } finally {
       setUploadingAdditional(false);
     }

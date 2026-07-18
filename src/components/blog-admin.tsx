@@ -6,6 +6,7 @@ import {
   BookOpen, Calendar, User, Globe, X, AlertTriangle, Upload, ImageIcon, RefreshCw
 } from "lucide-react";
 import type { BlogPost } from "@/lib/use-translated-data";
+import { compressImage } from "@/lib/image-utils";
 
 // ── Inline mini confirm modal ──────────────────────────────────────────────
 function MiniConfirm({
@@ -132,13 +133,15 @@ export default function BlogAdminPanel({ adminSecret }: { adminSecret: string })
     }
   };
 
-  const handleImageUpload = async (file: File) => {
-    if (file.size > 5 * 1024 * 1024) {
-      showAlert("File is too large. Max size is 5 MB.", "Upload Error");
-      return;
-    }
+  const handleImageUpload = async (rawFile: File) => {
     setUploadingImg(true);
     try {
+      const file = await compressImage(rawFile);
+      if (file.size > 5 * 1024 * 1024) {
+        showAlert("File is too large. Max size is 5 MB.", "Upload Error");
+        setUploadingImg(false);
+        return;
+      }
       const fd = new FormData();
       fd.append("file", file);
       const res = await fetch("/api/upload", {
