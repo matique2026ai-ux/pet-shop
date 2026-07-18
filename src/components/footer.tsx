@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { Heart, Mail, CheckCircle, Truck, PawPrint } from "lucide-react";
 import { useI18n } from "@/lib/i18n-context";
 import { useSiteSettings } from "@/lib/site-settings";
-import { LogoC4, LogoFullStack } from "@/components/brand-logo";
+import { LogoC4 } from "@/components/brand-logo";
 
 function InstagramIcon({ className }: { className?: string }) {
   return (
@@ -255,11 +255,6 @@ export default function Footer() {
             >
               {t.cookies.settings}
             </button>
-          </div>
-          
-          {/* Full logo stack Component C1 + C2 + C3 combined */}
-          <div className="pt-6 border-t border-white/5 w-full flex justify-center">
-            <LogoFullStack light={true} />
           </div>
         </div>
       </div>
