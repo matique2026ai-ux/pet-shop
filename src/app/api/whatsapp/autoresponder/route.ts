@@ -4,14 +4,11 @@ import { createAdminClient } from "@/lib/supabase";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const text = body.query; // AutoResponder sends message in "query" field
-    const sender = body.sender; // AutoResponder sends sender ID/phone in "sender" field
+    const text = (body.query || "").toLowerCase().trim();
 
     if (!text) {
       return NextResponse.json({ replies: [] });
     }
-
-    const geminiKey = process.env.GEMINI_API_KEY;
 
     // 1. Fetch products catalog from Supabase
     const supabase = createAdminClient();
@@ -20,42 +17,66 @@ export async function POST(req: NextRequest) {
       .select("id, name, price, description, in_stock, category")
       .eq("in_stock", true);
 
-    const catalogContext = products
-      ? products
-          .map((p) => `- ${p.name} (Category: ${p.category}): Price ${p.price} DZD. Description: ${p.description || "N/A"}`)
-          .join("\n")
-      : "No products available in stock.";
+    const hasProducts = products && products.length > 0;
 
-    // 2. Prepare System Prompt for Gemini
-    const systemPrompt = `You are a helpful and friendly AI assistant for "Paws & Wings", a pet shop in Algeria (Sétif). 
-Your task is to answer customers' questions about our store, catalog, products, prices, and stock.
-You must speak in Algerian Darja (الدارجة الجزائرية) or French/Arabic, depending on the customer's language. Keep answers concise, helpful, and polite.
-
-Here is our current in-stock catalog:
-${catalogContext}
-
-Our Store Info:
-- Store Name: طيور الجمال والجواد (Paws & Wings)
-- Location: Sétif, Algeria (Cité elhidhab)
-- Delivery: Delivery is available in Sétif for 250 DZD (Free for orders above 5000 DZD). Delivery takes 24-48h.
-
-Customer message: "${text}"
-Answer directly and politely in their language:`;
-
-    // 3. Request answer from Gemini
+    // 2. Local smart keyword matching (No API key needed!)
     let replyText = "";
-    if (geminiKey) {
-      try {
-        replyText = await askGemini(systemPrompt, geminiKey);
-      } catch (err) {
-        console.error("Gemini API Error:", err);
-        replyText = "مرحباً! شكراً لتواصلك معنا. نحن نواجه عطلاً مؤقتاً في نظام الذكاء الاصطناعي، سنتواصل معك يدوياً قريباً.";
+
+    const isArabic = /[\u0600-\u06FF]/.test(text);
+
+    // Keyword detection
+    const wantsDelivery = text.includes("delivery") || text.includes("tousil") || text.includes("toussil") || text.includes("livraison") || text.includes("توصيل") || text.includes("بكم التوصيل") || text.includes("شحن");
+    const wantsProducts = text.includes("product") || text.includes("produit") || text.includes("catalog") || text.includes("price") || text.includes("prix") || text.includes("أكل") || text.includes("طعام") || text.includes("منتج") || text.includes("سعر") || text.includes("سومة") || text.includes("عندكم") || text.includes("متوفر");
+    const isGreeting = text.includes("hello") || text.includes("hi") || text.includes("bonjour") || text.includes("سلام") || text.includes("مرحبا") || text.includes("صباح الخير") || text.includes("مساء الخير");
+
+    if (wantsDelivery) {
+      replyText = isArabic 
+        ? "🚚 خدمات التوصيل لدينا:\n- التوصيل متوفر في ولاية سطيف بـ 250 د.ج.\n- التوصيل مجاني تماماً للطلبات التي تفوق 5000 د.ج!\n- مدة التوصيل بين 24 إلى 48 ساعة."
+        : "🚚 Nos services de livraison :\n- Livraison disponible à Sétif pour 250 DZD.\n- Livraison gratuite pour toute commande supérieure à 5000 DZD !\n- Délai de livraison : 24 à 48 heures.";
+    } else if (wantsProducts) {
+      if (hasProducts) {
+        const list = products.map(p => `- ${p.name}: ${p.price} DZD`).join("\n");
+        replyText = isArabic
+          ? `🐾 المنتجات المتوفرة حالياً في متجرنا:\n\n${list}\n\nلطلب أي منتج أو الاستفسار، يمكنك كتابة اسمه هنا وسنتواصل معك!`
+          : `🐾 Produits actuellement disponibles en magasin :\n\n${list}\n\nPour commander ou demander des détails, écrivez simplement le nom du produit ici !`;
+      } else {
+        replyText = isArabic
+          ? "مرحباً! عذراً، لا توجد منتجات متوفرة في المخزن حالياً. سنقوم بتحديث المخزن قريباً."
+          : "Bonjour ! Désolé, aucun produit n'est actuellement disponible en stock. Nous mettrons à jour le stock très bientôt.";
+      }
+    } else if (isGreeting) {
+      if (hasProducts) {
+        const list = products.slice(0, 5).map(p => `- ${p.name}: ${p.price} DZD`).join("\n");
+        replyText = isArabic
+          ? `مرحباً بك في متجر طيور الجمال والجواد (Paws & Wings)! 🐾✨\nكيف يمكنني مساعدتك اليوم؟\n\nبعض منتجاتنا المتوفرة حالياً:\n${list}\n\n- اكتب "توصيل" لمعرفة معلومات الشحن.\n- اكتب "منتجات" لعرض القائمة الكاملة.`
+          : `Bienvenue chez Paws & Wings (طيور الجمال والجواد) ! 🐾✨\nComment puis-je vous aider aujourd'hui ?\n\nQuelques produits disponibles :\n${list}\n\n- Écrivez "livraison" pour les infos de livraison.\n- Écrivez "produits" pour voir tout le catalogue.`;
+      } else {
+        replyText = isArabic
+          ? "مرحباً بك في متجر طيور الجمال والجواد (Paws & Wings)! 🐾 كيف يمكنني مساعدتك اليوم؟"
+          : "Bienvenue chez Paws & Wings ! 🐾 Comment puis-je vous aider aujourd'hui ?";
       }
     } else {
-      // Fallback message if Gemini API key is missing
-      replyText = `مرحباً! شكراً لتواصلك مع متجر Paws & Wings. 🐾
-لقد تلقينا رسالتك وسيتواصل معك أحد عملائنا يدوياً في أقرب وقت للإجابة على استفسارك.
-يمكنك تصفح متجرنا مباشرة من الرابط التالي: https://pet-cat.vercel.app`;
+      // Default fallback using Gemini if key exists, otherwise local fallback
+      const geminiKey = process.env.GEMINI_API_KEY;
+      if (geminiKey) {
+        try {
+          const catalogContext = products
+            ? products.map((p) => `- ${p.name} (${p.category}): ${p.price} DZD.`).join("\n")
+            : "No products in stock.";
+          const systemPrompt = `You are a helpful AI assistant for Paws & Wings pet shop in Sétif, Algeria. Answer directly in Algerian Darja/Arabic/French.
+In-stock products:\n${catalogContext}\nCustomer message: "${text}"`;
+          replyText = await askGemini(systemPrompt, geminiKey);
+        } catch (err) {
+          console.error("Gemini fallback error:", err);
+          replyText = isArabic 
+            ? "شكراً لتواصلك معنا! سنقوم بالرد عليك يدوياً في أقرب وقت ممكن. 🐾"
+            : "Merci pour votre message ! Nous vous répondrons manuellement très bientôt. 🐾";
+        }
+      } else {
+        replyText = isArabic
+          ? "شكراً لتواصلك مع متجر طيور الجمال والجواد! 🐾\nرسالتك وصلت وسيقوم أحد عملائنا بالرد عليك يدوياً في أقرب وقت.\nاكتب 'منتجات' لرؤية ما هو متوفر حالياً في المخزن."
+          : "Merci de contacter Paws & Wings ! 🐾\nVotre message a été reçu, un conseiller vous répondra manuellement sous peu.\nÉcrivez 'produits' pour voir le stock disponible.";
+      }
     }
 
     return NextResponse.json({
