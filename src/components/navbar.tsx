@@ -121,7 +121,7 @@ export default function Navbar() {
   const desktopLinks = [
     { href: "/",                      label: t.nav.home },
     { href: "/products",              label: t.nav.products },
-    { href: "/blog",                   label: t.nav.blog, badge: true },
+    { href: "/blog",                   label: t.nav.blog, badge: false },
     { href: "/products?filter=offers",label: t.nav.offers },
     { href: "/shipping",              label: t.nav.shipping },
     { href: "/contact",               label: t.nav.contact },
@@ -363,7 +363,7 @@ export default function Navbar() {
                       </span>
                       <span className="min-w-0">
                         <span className="block font-semibold text-white text-sm group-hover:text-[#F5851F] transition-colors">{t.nav.blog}</span>
-                        <span className="block text-[11px] text-white/50">{lang === "ar" ? "قريبًا" : lang === "fr" ? "Bientôt" : "Soon"}</span>
+                        <span className="block text-[11px] text-white/50">{t.nav.blog}</span>
                       </span>
                     </Link>
                   </div>
@@ -474,9 +474,6 @@ export default function Navbar() {
               <div className="border-t border-white/10 pt-2 mt-2 space-y-1">
                 <Link href="/blog"      onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#DFB96A] text-sm font-medium">
                   {t.nav.blog}
-                  <span className="ml-1.5 inline-block align-middle text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#F5851F] text-white">
-                    {lang === "ar" ? "قريبًا" : lang === "fr" ? "Bientôt" : "Soon"}
-                  </span>
                 </Link>
                 <Link href="/faq"      onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#DFB96A] text-sm font-medium">{t.nav.faq}</Link>
                 <Link href="/shipping" onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#DFB96A] text-sm font-medium">{t.nav.shipping}</Link>
