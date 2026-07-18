@@ -42,4 +42,9 @@ Pet-shop e-commerce site (Algerian market). Next.js 16 (App Router) + React 19 +
 - Orders API validates required fields.
 - **Card Footprints**: Footprints on product cards are rendered dynamically via `CardFootprintDecor` inside `src/components/product-card.tsx` based on `product.category`. Do not remove the `relative z-10` from the card details to avoid background overlaps.
 - **Admin Multilingual UI**: Admin dashboard elements and labels must be translated using the dictionary `a` (from `useAdminI18n()`), such as `{a.dashboard.totalRevenue}`, instead of using hardcoded English text.
+- **Direction & Alignment (RTL/LTR)**: Avoid manual, ad-hoc flex-direction reversals (like `flex-row-reverse` conditional on language) in pages. Let the browser's native `dir="rtl"` (or `dir="ltr"`) handle layouts. Use `dir="auto"` on dynamic user-generated content (like product names, review texts) to let the browser automatically resolve direction.
+- **Branding & Theme Colors**: Do not introduce generic blue buttons or accents. Keep styling aligned with the primary brand colors: emerald green (e.g. `bg-emerald-600`, `text-emerald-800`) and warm gold/amber accents.
+- **Fonts**: Use the `Cairo` font for Arabic texts and the `Outfit` font for Latin languages (English and French).
+- **Bestsellers Fallback**: In bestseller/popular product collections, if no products meet the rating threshold, fallback to rendering the first 8 products to prevent a blank list.
+- **Loading State Flash Avoidance**: During database product fetch loading states, return empty arrays (or loaders) instead of temporarily showing demo/placeholder products to prevent visual layout flashes.
 
