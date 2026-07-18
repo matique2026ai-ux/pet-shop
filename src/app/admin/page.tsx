@@ -1052,8 +1052,10 @@ export default function AdminDashboard() {
     ? new Set(orders.map((o: any) => o.customer_email || o.customer_phone || o.customer_name)).size
     : 0;
   const monthlyRevenue = (() => {
-    if (!orders.length) return sampleRevenue;
     const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    if (!orders.length) {
+      return months.map(m => ({ month: m, revenue: 0, orders: 0 }));
+    }
     const map: Record<string, { month: string; revenue: number; orders: number }> = {};
     for (const o of orders) {
       if (!o.created_at) continue;
@@ -1068,7 +1070,7 @@ export default function AdminDashboard() {
   })();
   
   const topProductsDynamic = useMemo(() => {
-    if (!orders.length || !products.length) return sampleTopProducts;
+    if (!orders.length || !products.length) return [];
     const salesMap: Record<string, { sales: number, revenue: number }> = {};
     for (const o of orders) {
       if (o.status === "cancelled") continue;
@@ -1093,7 +1095,7 @@ export default function AdminDashboard() {
   }, [orders, products]);
 
   const recentOrdersDynamic = useMemo(() => {
-    if (!orders.length) return sampleRecentOrders;
+    if (!orders.length) return [];
     return orders.slice(0, 5).map(o => ({
       id: o.id.slice(0, 8),
       customer: o.customer_name,
@@ -1221,25 +1223,12 @@ export default function AdminDashboard() {
             {/* ===== DASHBOARD ===== */}
             {activeTab === "dashboard" && (
               <>
-                {productsError && (
-                  <div className="bg-amber-50 border border-amber-200 rounded-2xl px-5 py-4 flex items-start gap-3">
-                    <div className="w-8 h-8 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600 flex-shrink-0 mt-0.5">
-                      <BarChart3 className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-amber-800">Sample Data Mode</p>
-                      <p className="text-xs text-amber-700/70 mt-0.5">
-                        Admin dashboard with sample data. Connect to a backend for live data.
-                      </p>
-                    </div>
-                  </div>
-                )}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   <StatCard
                     icon={DollarSign}
-                    label={a.dashboard.inventoryValue}
-                    value={productsError ? `124,500 ${currency}` : `${inventoryValue.toLocaleString()} ${currency}`}
+                    label={a.dashboard.totalRevenue}
+                    value={`${orderTotalRevenue.toLocaleString()} ${currency}`}
                     trend="+12.5% from last month"
                     trendUp
                     color="bg-emerald-100 text-emerald-600"
@@ -1374,15 +1363,15 @@ export default function AdminDashboard() {
                       </thead>
                       <tbody>
                         {recentOrdersDynamic.map((order: any, i: number) => (
-                          <tr key={order.id || i} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                            <td className="px-6 py-4 font-semibold text-gray-900">{order.id || `#ORD-${i + 1}`}</td>
-                            <td className="px-6 py-4 text-gray-700">{order.customer_name || "-"}</td>
+                          <tr key={order.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                            <td className="px-6 py-4 font-semibold text-gray-900">#{order.id}</td>
+                            <td className="px-6 py-4 text-gray-700">{order.customer}</td>
                             <td className="px-6 py-4 text-gray-700 max-w-[200px] truncate">
-                              {Array.isArray(order.items) ? `${order.items.length} item${order.items.length === 1 ? "" : "s"}` : "-"}
+                              {order.product}
                             </td>
-                            <td className="px-6 py-4 font-semibold text-gray-900">{(Number(order.total) || 0).toLocaleString()} {currency}</td>
+                            <td className="px-6 py-4 font-semibold text-gray-900">{Number(order.amount).toLocaleString()} {currency}</td>
                             <td className="px-6 py-4"><StatusBadge status={order.status || "Pending"} /></td>
-                            <td className="px-6 py-4 text-gray-500">{order.created_at?.slice(0, 10) || "-"}</td>
+                            <td className="px-6 py-4 text-gray-500">{order.date}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -1420,7 +1409,7 @@ export default function AdminDashboard() {
                           </div>
                           <div className="flex justify-between text-gray-500">
                             <span>Revenue</span>
-                            <span className="font-medium text-gray-900">${product.revenue.toLocaleString()}</span>
+                            <span className="font-medium text-gray-900">{product.revenue.toLocaleString()} {currency}</span>
                           </div>
                           <div className="flex justify-between text-gray-500">
                             <span>Growth</span>
@@ -1431,7 +1420,7 @@ export default function AdminDashboard() {
                           <div className="w-full bg-gray-200 rounded-full h-1.5">
                             <div
                               className="bg-emerald-500 h-1.5 rounded-full transition-all"
-                              style={{ width: `${(product.sales / 342) * 100}%` }}
+                              style={{ width: `${Math.min(100, (product.sales / (Math.max(...topProductsDynamic.map(p => p.sales)) || 1)) * 100)}%` }}
                             />
                           </div>
                         </div>

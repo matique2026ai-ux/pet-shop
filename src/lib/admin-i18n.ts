@@ -10,7 +10,7 @@ type AdminTranslations = {
   lang: { label: string; en: string; fr: string; ar: string };
   common: { loading: string; save: string; cancel: string; create: string; update: string; delete: string; search: string; all: string; confirm: string; close: string; add: string; name: string; id: string; icon: string; order: string; required: string };
   dashboard: {
-    inventoryValue: string; totalOrders: string; totalCustomers: string; totalProducts: string;
+    inventoryValue: string; totalOrders: string; totalCustomers: string; totalProducts: string; totalRevenue: string;
     revenueOverview: string; revenueSub: string; recentOrders: string; noRecent: string;
     sampleMode: string; sampleModeBody: string;
   };
@@ -62,7 +62,7 @@ const en: AdminTranslations = {
   lang: { label: "Language", en: "English", fr: "Français", ar: "العربية" },
   common: { loading: "Loading...", save: "Save", cancel: "Cancel", create: "Create", update: "Update", delete: "Delete", search: "Search", all: "All", confirm: "Confirm", close: "Close", add: "Add", name: "Name", id: "ID", icon: "Icon", order: "Order", required: "is required" },
   dashboard: {
-    inventoryValue: "Inventory Value", totalOrders: "Total Orders", totalCustomers: "Total Customers", totalProducts: "Total Products",
+    inventoryValue: "Inventory Value", totalOrders: "Total Orders", totalCustomers: "Total Customers", totalProducts: "Total Products", totalRevenue: "Total Revenue",
     revenueOverview: "Revenue Overview", revenueSub: "Monthly revenue & order trends", recentOrders: "Recent Orders", noRecent: "No orders yet",
     sampleMode: "Sample Data Mode", sampleModeBody: "Admin dashboard with sample data. Connect to a backend for live data.",
   },
@@ -116,7 +116,7 @@ const fr: AdminTranslations = {
   lang: { label: "Langue", en: "English", fr: "Français", ar: "العربية" },
   common: { loading: "Chargement...", save: "Enregistrer", cancel: "Annuler", create: "Créer", update: "Mettre à jour", delete: "Supprimer", search: "Rechercher", all: "Tous", confirm: "Confirmer", close: "Fermer", add: "Ajouter", name: "Nom", id: "ID", icon: "Icône", order: "Ordre", required: "est requis" },
   dashboard: {
-    inventoryValue: "Valeur du stock", totalOrders: "Commandes totales", totalCustomers: "Clients totals", totalProducts: "Produits totals",
+    inventoryValue: "Valeur du stock", totalOrders: "Commandes totales", totalCustomers: "Clients totals", totalProducts: "Produits totals", totalRevenue: "Revenu Total",
     revenueOverview: "Aperçu des revenus", revenueSub: "Tendances mensuelles des revenus et commandes", recentOrders: "Commandes récentes", noRecent: "Aucune commande pour l'instant",
     sampleMode: "Mode données exemple", sampleModeBody: "Tableau de bord avec des données exemple. Connectez un backend pour les données en direct.",
   },
@@ -170,7 +170,7 @@ const ar: AdminTranslations = {
   lang: { label: "اللغة", en: "English", fr: "Français", ar: "العربية" },
   common: { loading: "جارٍ التحميل...", save: "حفظ", cancel: "إلغاء", create: "إنشاء", update: "تحديث", delete: "حذف", search: "بحث", all: "الكل", confirm: "تأكيد", close: "إغلاق", add: "إضافة", name: "الاسم", id: "المعرّف", icon: "الأيقونة", order: "الترتيب", required: "مطلوب" },
   dashboard: {
-    inventoryValue: "قيمة المخزون", totalOrders: "إجمالي الطلبات", totalCustomers: "إجمالي العملاء", totalProducts: "إجمالي المنتجات",
+    inventoryValue: "قيمة المخزون", totalOrders: "إجمالي الطلبات", totalCustomers: "إجمالي العملاء", totalProducts: "إجمالي المنتجات", totalRevenue: "إجمالي الإيرادات",
     revenueOverview: "نظرة عامة على الإيرادات", revenueSub: "اتجاهات الإيرادات والطلبات الشهرية", recentOrders: "أحدث الطلبات", noRecent: "لا توجد طلبات بعد",
     sampleMode: "وضع البيانات التجريبية", sampleModeBody: "لوحة تحكم ببيانات تجريبية. اتصل بقاعدة بيانات خلفية لعرض البيانات الحقيقية.",
   },
