@@ -59,13 +59,13 @@ function FootprintDecorations({ category }: { category: string }) {
   if (isBird) {
     return (
       <>
-        <div className="absolute top-10 left-8 text-[#C4933F] opacity-10 pointer-events-none w-12 h-12 rotate-12">
+        <div className="absolute top-10 left-8 text-[#E3602D] opacity-10 pointer-events-none w-12 h-12 rotate-12">
           <BirdFootprintIcon className="w-full h-full" />
         </div>
-        <div className="absolute top-1/3 right-10 text-[#C4933F] opacity-10 pointer-events-none w-10 h-10 -rotate-45">
+        <div className="absolute top-1/3 right-10 text-[#E3602D] opacity-10 pointer-events-none w-10 h-10 -rotate-45">
           <BirdFootprintIcon className="w-full h-full" />
         </div>
-        <div className="absolute bottom-24 left-10 text-[#C4933F] opacity-10 pointer-events-none w-10 h-10 rotate-45">
+        <div className="absolute bottom-24 left-10 text-[#E3602D] opacity-10 pointer-events-none w-10 h-10 rotate-45">
           <BirdFootprintIcon className="w-full h-full" />
         </div>
       </>
@@ -74,13 +74,13 @@ function FootprintDecorations({ category }: { category: string }) {
 
   return (
     <>
-      <div className="absolute top-10 left-8 text-[#C4933F] opacity-10 pointer-events-none w-12 h-12 rotate-12">
+      <div className="absolute top-10 left-8 text-[#E3602D] opacity-10 pointer-events-none w-12 h-12 rotate-12">
         <PawIcon className="w-full h-full" />
       </div>
-      <div className="absolute top-1/3 right-10 text-[#C4933F] opacity-10 pointer-events-none w-10 h-10 -rotate-12">
+      <div className="absolute top-1/3 right-10 text-[#E3602D] opacity-10 pointer-events-none w-10 h-10 -rotate-12">
         <PawIcon className="w-full h-full" />
       </div>
-      <div className="absolute bottom-24 left-10 text-[#C4933F] opacity-10 pointer-events-none w-10 h-10 rotate-45">
+      <div className="absolute bottom-24 left-10 text-[#E3602D] opacity-10 pointer-events-none w-10 h-10 rotate-45">
         <PawIcon className="w-full h-full" />
       </div>
     </>

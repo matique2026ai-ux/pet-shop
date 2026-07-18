@@ -139,7 +139,7 @@ function SectionCard({ title, onSave, saving, saveLabel, children }: SectionCard
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-[#0B1E36]">{title}</h2>
+        <h2 className="text-lg font-bold text-[#1E2D24]">{title}</h2>
         <button
           onClick={onSave}
           disabled={saving}
@@ -391,7 +391,7 @@ export default function AdminSettingsPanel({ adminSecret, a, onSaved }: AdminSet
               <Users className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-[#0B1E36]">{a.settings?.subscribers ?? "Newsletter Subscribers"}</h2>
+              <h2 className="text-lg font-bold text-[#1E2D24]">{a.settings?.subscribers ?? "Newsletter Subscribers"}</h2>
               <p className="text-xs text-gray-500 mt-0.5">
                 {(a.settings?.subscriberCount ?? "Total Subscribers")}: <span className="font-semibold text-emerald-600">{subscribers.length}</span>
               </p>

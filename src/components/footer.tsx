@@ -106,7 +106,7 @@ export default function Footer() {
               {t.footer.madeWith} <Heart className="w-3 h-3 inline text-[#F5851F] fill-[#F5851F]" />
             </p>
             {/* Delivery badge */}
-            <div className="inline-flex items-center gap-2 text-xs text-[#DFB96A] bg-[#C4933F]/10 border border-[#C4933F]/20 rounded-full px-3 py-1.5">
+            <div className="inline-flex items-center gap-2 text-xs text-[#F1C290] bg-[#E3602D]/10 border border-[#E3602D]/20 rounded-full px-3 py-1.5">
               <Truck className="w-3.5 h-3.5 shrink-0" />
               <span>{coverage}</span>
             </div>
@@ -130,9 +130,9 @@ export default function Footer() {
                 <li key={l.href}>
                   <Link
                     href={l.href}
-                    className="text-slate-400 hover:text-[#DFB96A] transition-colors flex items-center gap-1.5 group"
+                    className="text-slate-400 hover:text-[#F1C290] transition-colors flex items-center gap-1.5 group"
                   >
-                    <span className="w-1 h-1 rounded-full bg-[#C4933F] opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <span className="w-1 h-1 rounded-full bg-[#E3602D] opacity-0 group-hover:opacity-100 transition-opacity" />
                     {l.label}
                   </Link>
                 </li>
@@ -150,12 +150,12 @@ export default function Footer() {
                 <li key={i}>{line}</li>
               ))}
               <li className="break-all">
-                <a href={`tel:${phone}`} className="hover:text-[#DFB96A] transition-colors">
+                <a href={`tel:${phone}`} className="hover:text-[#F1C290] transition-colors">
                   {phone}
                 </a>
               </li>
               <li className="break-all">
-                <a href={`mailto:${emailAddr}`} className="hover:text-[#DFB96A] transition-colors">
+                <a href={`mailto:${emailAddr}`} className="hover:text-[#F1C290] transition-colors">
                   {emailAddr}
                 </a>
               </li>
@@ -168,7 +168,7 @@ export default function Footer() {
               {t.footer.newsletter}
             </h3>
             {subscribed ? (
-              <div className="flex items-center gap-2 text-[#DFB96A] text-sm">
+              <div className="flex items-center gap-2 text-[#F1C290] text-sm">
                 <CheckCircle className="w-4 h-4" />
                 <span>{t.footer.subscribed}</span>
               </div>
@@ -180,12 +180,12 @@ export default function Footer() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t.footer.emailPlaceholder}
                   required
-                  className="flex-1 px-3 py-2 rounded-lg bg-white/5 text-white text-sm placeholder-slate-500 border border-white/10 focus:outline-none focus:border-[#C4933F] transition-colors"
+                  className="flex-1 px-3 py-2 rounded-lg bg-white/5 text-white text-sm placeholder-slate-500 border border-white/10 focus:outline-none focus:border-[#E3602D] transition-colors"
                 />
                 <button
                   type="submit"
                   disabled={subscribing}
-                  className="px-3 py-2 bg-gradient-to-r from-[#C4933F] to-[#A87A2E] text-white rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center min-w-[40px]"
+                  className="px-3 py-2 bg-gradient-to-r from-[#E3602D] to-[#A87A2E] text-white rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center min-w-[40px]"
                 >
                   {subscribing ? (
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -251,7 +251,7 @@ export default function Footer() {
             <button
               type="button"
               onClick={() => window.dispatchEvent(new Event("open-cookie-settings"))}
-              className="hover:text-[#DFB96A] transition-colors"
+              className="hover:text-[#F1C290] transition-colors"
             >
               {t.cookies.settings}
             </button>

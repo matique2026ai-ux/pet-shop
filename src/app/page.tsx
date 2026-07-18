@@ -23,9 +23,9 @@ const benefitIconComponents = [
 ];
 
 const benefitColors = [
-  { icon: "from-[#C4933F] to-[#DFB96A]", bg: "bg-[#FBF8F3]", border: "border-[#ECDCAE]" },
-  { icon: "from-[#A87A2E] to-[#C4933F]", bg: "bg-[#F7EFE0]", border: "border-[#DFB96A]" },
-  { icon: "from-[#C4933F] to-[#8A6022]", bg: "bg-[#FBF8F3]", border: "border-[#ECDCAE]" },
+  { icon: "from-[#E3602D] to-[#F1C290]", bg: "bg-[#FBF8F3]", border: "border-[#ECDCAE]" },
+  { icon: "from-[#A87A2E] to-[#E3602D]", bg: "bg-[#F7EFE0]", border: "border-[#F1C290]" },
+  { icon: "from-[#E3602D] to-[#8A6022]", bg: "bg-[#FBF8F3]", border: "border-[#ECDCAE]" },
 ];
 
 const DEFAULT_HERO_VIDEOS = [
@@ -40,7 +40,7 @@ function CategoryFootprintDecor({ category }: { category: string }) {
       <svg
         viewBox="0 0 24 24"
         fill="currentColor"
-        className="absolute -bottom-6 -left-6 w-24 h-24 text-[#C4933F]/4 pointer-events-none transform -rotate-12 select-none group-hover:scale-110 group-hover:text-[#C4933F]/8 transition-all duration-500 z-0"
+        className="absolute -bottom-6 -left-6 w-24 h-24 text-[#E3602D]/4 pointer-events-none transform -rotate-12 select-none group-hover:scale-110 group-hover:text-[#E3602D]/8 transition-all duration-500 z-0"
         aria-hidden="true"
       >
         <path d="M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3zm-4.5-3c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm9 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6.5-3.5C9.17 7.5 8.5 8.17 8.5 9s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm4 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z" />
@@ -54,7 +54,7 @@ function CategoryFootprintDecor({ category }: { category: string }) {
         stroke="currentColor"
         strokeWidth="1"
         fill="none"
-        className="absolute -bottom-6 -left-6 w-24 h-24 text-[#C4933F]/6 pointer-events-none transform rotate-45 select-none group-hover:scale-110 group-hover:text-[#C4933F]/10 transition-all duration-500 z-0"
+        className="absolute -bottom-6 -left-6 w-24 h-24 text-[#E3602D]/6 pointer-events-none transform rotate-45 select-none group-hover:scale-110 group-hover:text-[#E3602D]/10 transition-all duration-500 z-0"
         aria-hidden="true"
       >
         <line x1="12" y1="4" x2="12" y2="20" />
@@ -70,7 +70,7 @@ function CategoryFootprintDecor({ category }: { category: string }) {
       <svg
         viewBox="0 0 24 24"
         fill="currentColor"
-        className="absolute -bottom-6 -left-6 w-28 h-28 text-[#C4933F]/4 pointer-events-none transform -rotate-45 select-none group-hover:scale-110 group-hover:text-[#C4933F]/8 transition-all duration-500 z-0"
+        className="absolute -bottom-6 -left-6 w-28 h-28 text-[#E3602D]/4 pointer-events-none transform -rotate-45 select-none group-hover:scale-110 group-hover:text-[#E3602D]/8 transition-all duration-500 z-0"
         aria-hidden="true"
       >
         <path d="M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3zm-4.5-3c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm9 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6.5-3.5C9.17 7.5 8.5 8.17 8.5 9s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm4 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z" />
@@ -81,7 +81,7 @@ function CategoryFootprintDecor({ category }: { category: string }) {
     <svg
       viewBox="0 0 24 24"
       fill="currentColor"
-      className="absolute -bottom-6 -left-6 w-24 h-24 text-[#C4933F]/4 pointer-events-none transform rotate-12 select-none group-hover:scale-110 group-hover:text-[#C4933F]/8 transition-all duration-500 z-0"
+      className="absolute -bottom-6 -left-6 w-24 h-24 text-[#E3602D]/4 pointer-events-none transform rotate-12 select-none group-hover:scale-110 group-hover:text-[#E3602D]/8 transition-all duration-500 z-0"
       aria-hidden="true"
     >
       <path d="M12 3C8.5 3 5 6.5 5 11c0 4.5 3.5 7.5 5.5 8.5C11 19.8 11.5 20 12 20s1-.2 1.5-.5c2-1 5.5-4 5.5-8.5 0-4.5-3.5-8-7-8zm-2 14c-1.5-1-3.5-3-3.5-6 0-3 2-5 3.5-5 .5 0 1 .5 1 1 0 1.5-1 3-1 5 0 1 .5 2 1 2.5-.5.5-1 1.5-1 2.5zm4.5-2.5c.5-.5 1-1.5 1-2.5 0-2-1-3.5-1-5 0-.5.5-1 1-1 1.5 0 3.5 2 3.5 5 0 3-2 5-3.5 6 0-1-.5-2-1-2.5z" />
@@ -250,7 +250,7 @@ export default function HomePage() {
             {/* Premium badge */}
             <FadeIn>
               <div className="inline-flex items-center gap-2 bg-black/20 backdrop-blur-md border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.1)] text-white rounded-full px-5 py-2 text-sm sm:text-base font-medium mb-8 transition-transform hover:scale-105 cursor-default">
-                <Sparkles className="w-4 h-4 text-[#DFB96A]" />
+                <Sparkles className="w-4 h-4 text-[#F1C290]" />
                 {dir === "rtl" ? "متجر الحيوانات الأليفة الأول في الجزائر" : "Premier Pet Shop in Algeria"}
               </div>
             </FadeIn>
@@ -291,7 +291,7 @@ export default function HomePage() {
                   href="/blog"
                   className="inline-flex justify-center items-center gap-3 bg-white/5 backdrop-blur-md text-white px-10 py-4 rounded-full font-bold text-lg transition-all border border-white/20 hover:bg-white/10 hover:border-white/40 hover:scale-105 w-full sm:w-auto"
                 >
-                  <BookOpen className="w-5 h-5 text-[#DFB96A]" />
+                  <BookOpen className="w-5 h-5 text-[#F1C290]" />
                   {heroCta2}
                 </Link>
               </div>
@@ -310,7 +310,7 @@ export default function HomePage() {
               ].map((b, i) => (
                 <div key={i} className="flex items-center gap-3 text-white/90 text-sm sm:text-base font-medium">
                   <div className="bg-white/10 p-2 rounded-full border border-white/5">
-                    <span className="text-[#DFB96A]">{b.icon}</span>
+                    <span className="text-[#F1C290]">{b.icon}</span>
                   </div>
                   {b.label}
                 </div>
@@ -327,7 +327,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center">
-              <p className="text-lg font-semibold text-[#C4933F]">{t.home.tagline}</p>
+              <p className="text-lg font-semibold text-[#E3602D]">{t.home.tagline}</p>
               <p className="text-[#9E9282] text-sm mt-1">{t.home.taglineSub}</p>
             </div>
           </AnimatedSection>
@@ -342,7 +342,7 @@ export default function HomePage() {
           <AnimatedSection>
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-[#1A1A2E]">{t.nav.categories}</h2>
-              <div className="mt-2 mx-auto w-16 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A]" />
+              <div className="mt-2 mx-auto w-16 h-1 rounded-full bg-gradient-to-r from-[#E3602D] to-[#F1C290]" />
             </div>
           </AnimatedSection>
           {/* Scroll row sits OUTSIDE AnimatedSection to avoid Framer Motion intercepting touch events */}
@@ -416,7 +416,7 @@ export default function HomePage() {
                     </span>
                     
                     {/* Category Title */}
-                    <h3 className="text-white font-black text-base sm:text-lg lg:text-xl mt-2 mb-1 drop-shadow-sm group-hover:text-[#DFB96A] transition-colors duration-300">
+                    <h3 className="text-white font-black text-base sm:text-lg lg:text-xl mt-2 mb-1 drop-shadow-sm group-hover:text-[#F1C290] transition-colors duration-300">
                       {cat.name}
                     </h3>
                   </div>
@@ -445,12 +445,12 @@ export default function HomePage() {
           <div className="flex items-center justify-between gap-2 mb-8 flex-wrap">
             <AnimatedSection>
               <h2 className="text-2xl font-bold text-[#1A1A2E]">{t.home.bestsellers}</h2>
-              <div className="mt-1.5 w-14 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A]" />
+              <div className="mt-1.5 w-14 h-1 rounded-full bg-gradient-to-r from-[#E3602D] to-[#F1C290]" />
             </AnimatedSection>
             <AnimatedSection delay={0.2}>
               <Link
                 href="/products"
-                className="flex items-center gap-1 text-[#C4933F] font-semibold text-sm hover:text-[#A87A2E] shrink-0 transition-colors"
+                className="flex items-center gap-1 text-[#E3602D] font-semibold text-sm hover:text-[#A87A2E] shrink-0 transition-colors"
               >
                 {t.home.viewAll} <Arrow className="w-4 h-4" />
               </Link>
@@ -479,7 +479,7 @@ export default function HomePage() {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="text-2xl font-bold text-[#1A1A2E]">{t.products.recentlyViewed}</h2>
-                <div className="mt-1.5 w-14 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A]" />
+                <div className="mt-1.5 w-14 h-1 rounded-full bg-gradient-to-r from-[#E3602D] to-[#F1C290]" />
               </div>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 gap-y-7">
@@ -499,7 +499,7 @@ export default function HomePage() {
           <AnimatedSection>
             <div className="text-center mb-10">
               <h2 className="text-2xl font-bold text-[#1A1A2E]">{t.home.benefitsTitle}</h2>
-              <div className="mt-2 mx-auto w-16 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A]" />
+              <div className="mt-2 mx-auto w-16 h-1 rounded-full bg-gradient-to-r from-[#E3602D] to-[#F1C290]" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {t.home.benefits.map((b: { title: string; text: string }, i: number) => (
@@ -524,15 +524,15 @@ export default function HomePage() {
       ══════════════════════════════════ */}
       <section className="py-14 bg-[#F8F7F4] relative overflow-hidden">
         <div className="absolute inset-0 opacity-5 pointer-events-none"
-          style={{ backgroundImage: "radial-gradient(circle at 20% 50%, #C4933F 1px, transparent 1px), radial-gradient(circle at 80% 50%, #C4933F 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+          style={{ backgroundImage: "radial-gradient(circle at 20% 50%, #E3602D 1px, transparent 1px), radial-gradient(circle at 80% 50%, #E3602D 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <AnimatedSection>
             <div className="text-center mb-10">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full text-sm text-[#C4933F] border border-[#ECD8A6] shadow-sm mb-3">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full text-sm text-[#E3602D] border border-[#ECD8A6] shadow-sm mb-3">
                 <BookOpen className="w-4 h-4" /> {t.blog?.subtitle || "Our Blog"}
               </span>
               <h2 className="text-3xl lg:text-4xl font-bold text-[#1A1A2E]">{t.blog?.latestArticlesTitle || "Latest Articles"}</h2>
-              <div className="mt-3 mx-auto w-20 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A]" />
+              <div className="mt-3 mx-auto w-20 h-1 rounded-full bg-gradient-to-r from-[#E3602D] to-[#F1C290]" />
             </div>
             
             {(!blogPosts || blogPosts.length === 0) ? (
@@ -550,7 +550,7 @@ export default function HomePage() {
             <div className="text-center mt-10">
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#C4933F] to-[#A87A2E] text-white px-8 py-3.5 rounded-full font-bold text-sm hover:opacity-90 transition-all shadow-lg shadow-[#C4933F]/30 hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#E3602D] to-[#A87A2E] text-white px-8 py-3.5 rounded-full font-bold text-sm hover:opacity-90 transition-all shadow-lg shadow-[#E3602D]/30 hover:-translate-y-0.5"
               >
                 {t.blog?.viewArticles || "View Articles"}
                 <Arrow className="w-4 h-4" />
@@ -568,7 +568,7 @@ export default function HomePage() {
           <AnimatedSection>
             <div className="text-center mb-10">
               <h2 className="text-2xl font-bold text-[#1A1A2E] mb-2">{t.vet.testimonialsTitle}</h2>
-              <div className="mt-1.5 mx-auto w-16 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A]" />
+              <div className="mt-1.5 mx-auto w-16 h-1 rounded-full bg-gradient-to-r from-[#E3602D] to-[#F1C290]" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
               {testimonials.map((rev) => (
@@ -580,7 +580,7 @@ export default function HomePage() {
                   </div>
                   <p className="text-sm text-[#5C5348] mb-4 leading-relaxed">&ldquo;{rev.text}&rdquo;</p>
                   <div className="flex items-center gap-2">
-                    <div className="w-9 h-9 bg-gradient-to-br from-[#DFB96A] to-[#C4933F] rounded-full flex items-center justify-center text-xs font-bold text-white shadow-sm">
+                    <div className="w-9 h-9 bg-gradient-to-br from-[#F1C290] to-[#E3602D] rounded-full flex items-center justify-center text-xs font-bold text-white shadow-sm">
                       {rev.initials}
                     </div>
                     <span className="text-sm font-semibold text-[#1A1A2E]">{rev.name}</span>
@@ -597,12 +597,12 @@ export default function HomePage() {
       ══════════════════════════════════ */}
       <section className="py-16 bg-[#1A120B] text-center relative overflow-hidden">
         {/* Gold glow accents */}
-        <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#C4933F] rounded-full opacity-5 blur-3xl pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#E3602D] rounded-full opacity-5 blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-[#F5851F] rounded-full opacity-5 blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <AnimatedSection>
-            <div className="inline-flex items-center gap-2 bg-[#C4933F]/15 border border-[#C4933F]/30 text-[#DFB96A] rounded-full px-4 py-1.5 text-sm font-medium mb-6">
+            <div className="inline-flex items-center gap-2 bg-[#E3602D]/15 border border-[#E3602D]/30 text-[#F1C290] rounded-full px-4 py-1.5 text-sm font-medium mb-6">
               <Sparkles className="w-4 h-4" />
               {dir === "rtl" ? "عروض حصرية" : "Exclusive Offers"}
             </div>

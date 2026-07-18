@@ -38,8 +38,8 @@
   --color-amber-100: #FAF2DF;
   --color-amber-200: #F4E2BD;
   --color-amber-300: #E9C685;
-  --color-amber-400: #DFB96A; /* Brand Gold Light */
-  --color-amber-500: #C4933F; /* Brand Gold Solid */
+  --color-amber-400: #F1C290; /* Brand Gold Light */
+  --color-amber-500: #E3602D; /* Brand Gold Solid */
   --color-amber-600: #A87A2E;
   --color-amber-700: #8A6022;
 
@@ -82,9 +82,9 @@ body {
     90deg,
     #FFFFFF 0%,
     #F7EFE0 20%,
-    #DFB96A 40%,
+    #F1C290 40%,
     #FFFFFF 55%,
-    #DFB96A 70%,
+    #F1C290 70%,
     #F7EFE0 85%,
     #FFFFFF 100%
   );
@@ -154,7 +154,7 @@ nav a:active {
   border-radius: 8px;
 }
 .cta-btn:hover {
-  background: linear-gradient(135deg, #F1C290 0%, #DFB96A 100%);
+  background: linear-gradient(135deg, #F1C290 0%, #F1C290 100%);
   color: #1E2D24;
   box-shadow: 0 8px 24px rgba(227, 96, 45, 0.40);
   transform: translateY(-2px);
@@ -194,7 +194,7 @@ nav a:active {
 
 /* ===== Gold gradient text helper ===== */
 .gold-text {
-  background: linear-gradient(135deg, #C4933F 0%, #DFB96A 50%, #C4933F 100%);
+  background: linear-gradient(135deg, #E3602D 0%, #F1C290 50%, #E3602D 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -203,7 +203,7 @@ nav a:active {
 /* ===== Announcement bar ===== */
 .announcement-bar {
   background: linear-gradient(90deg, #1A1A2E 0%, #2D2B45 50%, #1A1A2E 100%);
-  color: #DFB96A;
+  color: #F1C290;
   font-size: 0.8rem;
   padding: 6px 16px;
   text-align: center;

@@ -55,11 +55,11 @@ export default function BlogListingPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <AnimatedSection>
           <div className="text-center mb-12">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full text-sm text-[#C4933F] border border-[#ECD8A6] shadow-sm mb-3">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-full text-sm text-[#E3602D] border border-[#ECD8A6] shadow-sm mb-3">
               <BookOpen className="w-4 h-4" /> {t.blog?.subtitle || "Our Blog"}
             </span>
             <h1 className="text-4xl lg:text-5xl font-bold text-[#1A1A2E] mb-4">{t.blog?.title || "Blog"}</h1>
-            <div className="mt-3 mx-auto w-24 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A]" />
+            <div className="mt-3 mx-auto w-24 h-1 rounded-full bg-gradient-to-r from-[#E3602D] to-[#F1C290]" />
           </div>
           
           <div className="max-w-xl mx-auto mb-12 relative">
@@ -68,7 +68,7 @@ export default function BlogListingPage() {
               placeholder={t.products?.searchPlaceholder || "Search articles..."}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white border border-[#E2DDD4] rounded-full py-3 px-12 focus:outline-none focus:ring-2 focus:ring-[#C4933F] focus:border-transparent shadow-sm"
+              className="w-full bg-white border border-[#E2DDD4] rounded-full py-3 px-12 focus:outline-none focus:ring-2 focus:ring-[#E3602D] focus:border-transparent shadow-sm"
             />
             <div className={`absolute top-1/2 -translate-y-1/2 ${dir === 'rtl' ? 'right-4' : 'left-4'} text-[#9E9282]`}>
               <Search className="w-5 h-5" />
@@ -84,7 +84,7 @@ export default function BlogListingPage() {
           </div>
         ) : filteredPosts.length === 0 ? (
           <div className="text-center py-20">
-            <BookOpen className="w-16 h-16 text-[#C4933F]/30 mx-auto mb-4" />
+            <BookOpen className="w-16 h-16 text-[#E3602D]/30 mx-auto mb-4" />
             <p className="text-xl text-[#9E9282]">{t.blog?.noArticles || "No articles found."}</p>
           </div>
         ) : (

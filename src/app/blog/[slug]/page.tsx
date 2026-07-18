@@ -86,7 +86,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F8F7F4] pt-24 pb-20 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#C4933F]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#E3602D]"></div>
       </div>
     );
   }
@@ -95,7 +95,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
     return (
       <div className="min-h-screen bg-[#F8F7F4] pt-24 pb-20 flex flex-col items-center justify-center">
         <h1 className="text-3xl font-bold text-[#1A1A2E] mb-4">Post not found</h1>
-        <Link href="/blog" className="text-[#C4933F] hover:underline">Return to Blog</Link>
+        <Link href="/blog" className="text-[#E3602D] hover:underline">Return to Blog</Link>
       </div>
     );
   }
@@ -111,7 +111,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
     <div className="min-h-screen bg-[#F8F7F4] pt-24 pb-20" dir={dir}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <AnimatedSection>
-          <Link href="/blog" className="inline-flex items-center gap-2 text-[#9E9282] hover:text-[#C4933F] mb-8 transition-colors">
+          <Link href="/blog" className="inline-flex items-center gap-2 text-[#9E9282] hover:text-[#E3602D] mb-8 transition-colors">
             {dir === "rtl" ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
             {t.blog?.viewArticles || "Back to Blog"}
           </Link>
@@ -128,7 +128,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
               <span>{date}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Share2 className="w-4 h-4 cursor-pointer hover:text-[#C4933F]" onClick={() => {
+              <Share2 className="w-4 h-4 cursor-pointer hover:text-[#E3602D]" onClick={() => {
                 navigator.clipboard.writeText(window.location.href);
                 alert("Link copied!");
               }} />
@@ -149,7 +149,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
           {/* Comments Section */}
           <div className="mt-16 pt-10 border-t border-[#E2DDD4]">
             <h2 className="text-2xl font-bold text-[#1A1A2E] mb-6 flex items-center gap-2">
-              <MessageCircle className="w-6 h-6 text-[#C4933F]" />
+              <MessageCircle className="w-6 h-6 text-[#E3602D]" />
               {lang === "ar" ? "التعليقات" : lang === "fr" ? "Commentaires" : "Comments"} ({comments.length})
             </h2>
             
@@ -176,7 +176,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                   placeholder={lang === "ar" ? "الاسم" : "Name"}
                   value={newCommentName}
                   onChange={(e) => setNewCommentName(e.target.value)}
-                  className="w-full bg-white border border-[#E2DDD4] rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#C4933F] focus:border-transparent"
+                  className="w-full bg-white border border-[#E2DDD4] rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#E3602D] focus:border-transparent"
                 />
                 <textarea 
                   required
@@ -184,7 +184,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                   placeholder={lang === "ar" ? "تعليقك..." : "Your comment..."}
                   value={newCommentText}
                   onChange={(e) => setNewCommentText(e.target.value)}
-                  className="w-full bg-white border border-[#E2DDD4] rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#C4933F] focus:border-transparent resize-none"
+                  className="w-full bg-white border border-[#E2DDD4] rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#E3602D] focus:border-transparent resize-none"
                 />
                 <button 
                   type="submit" 

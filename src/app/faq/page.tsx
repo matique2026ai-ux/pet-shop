@@ -18,12 +18,12 @@ export default function FAQPage() {
           HERO
       ═══════════════════════════════ */}
       <section className="relative overflow-hidden bg-gradient-to-br from-[#1A1A2E] via-[#2D2B45] to-[#1A1A2E] py-20 lg:py-28">
-        <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#C4933F] rounded-full opacity-5 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-[#DFB96A] rounded-full opacity-5 blur-3xl pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#E3602D] rounded-full opacity-5 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-[#F1C290] rounded-full opacity-5 blur-3xl pointer-events-none" />
 
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <AnimatedSection>
-            <div className="inline-flex items-center gap-2 bg-[#C4933F]/20 backdrop-blur-sm border border-[#C4933F]/40 text-[#DFB96A] rounded-full px-4 py-1.5 text-sm font-medium mb-6">
+            <div className="inline-flex items-center gap-2 bg-[#E3602D]/20 backdrop-blur-sm border border-[#E3602D]/40 text-[#F1C290] rounded-full px-4 py-1.5 text-sm font-medium mb-6">
               <HelpCircle className="w-4 h-4" />
               {t.faq.title}
             </div>
@@ -49,8 +49,8 @@ export default function FAQPage() {
                   key={i}
                   className={`rounded-2xl overflow-hidden border transition-all duration-300 ${
                     openIndex === i
-                      ? "bg-white border-[#C4933F]/40 shadow-md shadow-[#C4933F]/10"
-                      : "bg-white border-[#ECDCAE] hover:border-[#C4933F]/30 hover:shadow-sm"
+                      ? "bg-white border-[#E3602D]/40 shadow-md shadow-[#E3602D]/10"
+                      : "bg-white border-[#ECDCAE] hover:border-[#E3602D]/30 hover:shadow-sm"
                   }`}
                 >
                   <button
@@ -60,8 +60,8 @@ export default function FAQPage() {
                     <span className="flex items-center gap-3">
                       <span className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
                         openIndex === i
-                          ? "bg-gradient-to-br from-[#C4933F] to-[#DFB96A] text-white"
-                          : "bg-[#FBF8F3] text-[#C4933F]"
+                          ? "bg-gradient-to-br from-[#E3602D] to-[#F1C290] text-white"
+                          : "bg-[#FBF8F3] text-[#E3602D]"
                       }`}>
                         <HelpCircle className="w-4 h-4" />
                       </span>
@@ -69,7 +69,7 @@ export default function FAQPage() {
                     </span>
                     <ChevronDown
                       className={`w-5 h-5 shrink-0 transition-all duration-300 ${
-                        openIndex === i ? "rotate-180 text-[#C4933F]" : "text-[#9E9282]"
+                        openIndex === i ? "rotate-180 text-[#E3602D]" : "text-[#9E9282]"
                       }`}
                     />
                   </button>
@@ -90,8 +90,8 @@ export default function FAQPage() {
 
           {/* Contact CTA */}
           <AnimatedSection>
-            <div className="mt-12 text-center bg-gradient-to-br from-[#1A1A2E] to-[#2D2B45] rounded-3xl p-8 border border-[#C4933F]/20">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#C4933F] to-[#DFB96A] flex items-center justify-center text-white mx-auto mb-4 shadow-md">
+            <div className="mt-12 text-center bg-gradient-to-br from-[#1A1A2E] to-[#2D2B45] rounded-3xl p-8 border border-[#E3602D]/20">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#E3602D] to-[#F1C290] flex items-center justify-center text-white mx-auto mb-4 shadow-md">
                 <MessageCircle className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-white mb-2">
@@ -102,7 +102,7 @@ export default function FAQPage() {
               </p>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#C4933F] to-[#A87A2E] text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:opacity-90 transition-all shadow-md shadow-[#C4933F]/30 hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#E3602D] to-[#A87A2E] text-white px-6 py-2.5 rounded-full font-semibold text-sm hover:opacity-90 transition-all shadow-md shadow-[#E3602D]/30 hover:-translate-y-0.5"
               >
                 <MessageCircle className="w-4 h-4" />
                 {dir === "rtl" ? "تواصل معنا" : "Nous contacter"}

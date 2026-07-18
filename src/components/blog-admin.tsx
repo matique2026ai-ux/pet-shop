@@ -59,7 +59,7 @@ function MiniAlert({
         <p className="text-sm text-gray-500 mb-6 break-words">{message}</p>
         <button
           onClick={onClose}
-          className="w-full px-4 py-2.5 rounded-xl bg-[#0B1E36] text-white text-sm font-medium hover:bg-[#112540] transition-colors"
+          className="w-full px-4 py-2.5 rounded-xl bg-[#1E2D24] text-white text-sm font-medium hover:bg-[#112540] transition-colors"
         >
           OK
         </button>
@@ -267,7 +267,7 @@ export default function BlogAdminPanel({ adminSecret }: { adminSecret: string })
               <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
                 <BookOpen className="w-4 h-4 text-emerald-600" />
               </div>
-              <h2 className="text-base font-bold text-[#0B1E36]">
+              <h2 className="text-base font-bold text-[#1E2D24]">
                 {editingPost ? "Edit Post" : "New Blog Post"}
               </h2>
             </div>
@@ -507,7 +507,7 @@ export default function BlogAdminPanel({ adminSecret }: { adminSecret: string })
               <BookOpen className="w-4 h-4 text-emerald-600" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-[#0B1E36]">Blog Posts</h2>
+              <h2 className="text-base font-bold text-[#1E2D24]">Blog Posts</h2>
               <p className="text-xs text-gray-400">{posts.length} post{posts.length !== 1 ? "s" : ""}</p>
             </div>
           </div>

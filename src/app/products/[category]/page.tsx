@@ -65,9 +65,9 @@ export default function CategoryPage() {
               priority
             />
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-[#0B1E36] via-[#050D1A] to-[#0B1E36]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#1E2D24] via-[#0E1611] to-[#1E2D24]" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#050D1A]/90 via-[#0B1E36]/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0E1611]/90 via-[#1E2D24]/60 to-transparent" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2 text-sm text-emerald-200/80 mb-4">

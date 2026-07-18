@@ -178,8 +178,8 @@ export default function Navbar() {
                   href={l.href}
                   className={`group relative px-3 py-2 text-[13px] whitespace-nowrap rounded-lg transition-colors font-medium ${
                     isActive(l.href)
-                      ? "text-[#C4933F] font-semibold"
-                      : "text-white/80 hover:text-[#DFB96A]"
+                      ? "text-[#E3602D] font-semibold"
+                      : "text-white/80 hover:text-[#F1C290]"
                   }`}
                 >
                   <span className="flex items-center gap-1.5">
@@ -191,7 +191,7 @@ export default function Navbar() {
                     )}
                   </span>
                   <span
-                    className={`absolute left-2 right-2 bottom-0.5 h-0.5 rounded-full bg-[#C4933F] origin-${isRtl ? "right" : "left"} transition-transform duration-300 ${
+                    className={`absolute left-2 right-2 bottom-0.5 h-0.5 rounded-full bg-[#E3602D] origin-${isRtl ? "right" : "left"} transition-transform duration-300 ${
                       isActive(l.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                     }`}
                   />
@@ -211,13 +211,13 @@ export default function Navbar() {
                   onChange={(e) => setSearchVal(e.target.value)}
                   onKeyDown={(e) => { if (e.key === "Enter") doSearch(); }}
                   placeholder={t.nav.searchPlaceholder}
-                  className="w-32 lg:w-44 pl-8 pr-3 py-1.5 rounded-full bg-white/10 text-white text-sm placeholder-[#9E9282] border border-white/20 focus:outline-none focus:border-[#C4933F] transition-colors rtl:pr-8 rtl:pl-3"
+                  className="w-32 lg:w-44 pl-8 pr-3 py-1.5 rounded-full bg-white/10 text-white text-sm placeholder-[#9E9282] border border-white/20 focus:outline-none focus:border-[#E3602D] transition-colors rtl:pr-8 rtl:pl-3"
                 />
                 <button
                   type="button"
                   onClick={doSearch}
                   aria-label={t.nav.search}
-                  className="absolute left-2.5 top-1/2 -translate-y-1/2 text-white/50 hover:text-[#C4933F] transition-colors rtl:right-2.5 rtl:left-auto"
+                  className="absolute left-2.5 top-1/2 -translate-y-1/2 text-white/50 hover:text-[#E3602D] transition-colors rtl:right-2.5 rtl:left-auto"
                 >
                   <Search className="w-4 h-4" />
                 </button>
@@ -229,7 +229,7 @@ export default function Navbar() {
                   if (!searchOpen) setTimeout(() => searchRef.current?.focus(), 100);
                 }}
                 aria-label={t.nav.search}
-                className="xl:hidden p-2 text-white/70 hover:text-[#DFB96A] hover:bg-white/10 rounded-lg transition-colors"
+                className="xl:hidden p-2 text-white/70 hover:text-[#F1C290] hover:bg-white/10 rounded-lg transition-colors"
               >
                 <Search className="w-4 h-4" />
               </button>
@@ -243,8 +243,8 @@ export default function Navbar() {
                     aria-label={l.label}
                     className={`px-2.5 py-1 rounded-full transition-colors ${
                       lang === l.code
-                        ? "bg-[#C4933F] text-white shadow-sm"
-                        : "text-white/70 hover:text-[#DFB96A]"
+                        ? "bg-[#E3602D] text-white shadow-sm"
+                        : "text-white/70 hover:text-[#F1C290]"
                     }`}
                   >
                     {l.label}
@@ -256,29 +256,29 @@ export default function Navbar() {
               <div className="hidden sm:block">
                 {authLoading ? (
                   <div className="w-9 h-9 flex items-center justify-center">
-                    <Loader2 className="w-4 h-4 text-[#C4933F] animate-spin" />
+                    <Loader2 className="w-4 h-4 text-[#E3602D] animate-spin" />
                   </div>
                 ) : user ? (
                   <div className="relative" ref={userMenuRef}>
                     <button
                       onClick={() => setUserMenuOpen(!userMenuOpen)}
-                      className="w-9 h-9 rounded-full bg-gradient-to-br from-[#DFB96A] to-[#C4933F] text-white flex items-center justify-center font-semibold text-sm hover:opacity-90 transition-opacity shadow-sm"
+                      className="w-9 h-9 rounded-full bg-gradient-to-br from-[#F1C290] to-[#E3602D] text-white flex items-center justify-center font-semibold text-sm hover:opacity-90 transition-opacity shadow-sm"
                       aria-label={t.auth.myAccount}
                     >
                       {(profile?.full_name?.[0] || user.email?.[0] || "U").toUpperCase()}
                     </button>
                     {userMenuOpen && (
-                      <div className={`absolute ${isRtl ? "left-0" : "right-0"} mt-2 w-52 bg-[#0B1E36]/95 backdrop-blur-xl rounded-xl shadow-xl border border-white/10 py-2 z-50`}>
+                      <div className={`absolute ${isRtl ? "left-0" : "right-0"} mt-2 w-52 bg-[#1E2D24]/95 backdrop-blur-xl rounded-xl shadow-xl border border-white/10 py-2 z-50`}>
                         <div className="px-4 py-2 border-b border-white/10">
                           <p className="text-sm font-semibold text-white truncate">{profile?.full_name || user.email}</p>
                           <p className="text-xs text-white/50 truncate">{user.email}</p>
                         </div>
-                        <Link href="/account" onClick={() => setUserMenuOpen(false)} className="block px-4 py-2 text-sm text-white/80 hover:text-[#DFB96A] hover:bg-white/10 transition-colors">
+                        <Link href="/account" onClick={() => setUserMenuOpen(false)} className="block px-4 py-2 text-sm text-white/80 hover:text-[#F1C290] hover:bg-white/10 transition-colors">
                           {t.auth.myAccount}
                         </Link>
                         <button
                           onClick={async () => { await logout(); setUserMenuOpen(false); }}
-                          className="block w-full text-left px-4 py-2 text-sm text-white/80 hover:text-[#DFB96A] hover:bg-white/10 transition-colors"
+                          className="block w-full text-left px-4 py-2 text-sm text-white/80 hover:text-[#F1C290] hover:bg-white/10 transition-colors"
                         >
                           {t.auth.logout}
                         </button>
@@ -288,7 +288,7 @@ export default function Navbar() {
                 ) : (
                   <button
                     onClick={() => { setAuthTab("login"); setAuthOpen(true); }}
-                    className="p-2 text-white/70 hover:text-[#DFB96A] hover:bg-white/10 rounded-lg transition-colors"
+                    className="p-2 text-white/70 hover:text-[#F1C290] hover:bg-white/10 rounded-lg transition-colors"
                     aria-label={t.auth.login}
                     title={t.auth.login}
                   >
@@ -307,7 +307,7 @@ export default function Navbar() {
               </a>
 
               {/* Cart */}
-              <Link href="/cart" className="relative p-2 text-white/70 hover:text-[#DFB96A] hover:bg-white/10 rounded-lg transition-colors">
+              <Link href="/cart" className="relative p-2 text-white/70 hover:text-[#F1C290] hover:bg-white/10 rounded-lg transition-colors">
                 <ShoppingCart className="w-5 h-5" />
                 {totalItems > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 rounded-full bg-gradient-to-br from-[#F5851F] to-[#E06A0A] text-white text-xs w-4 h-4 flex items-center justify-center font-bold shadow-sm">
@@ -317,7 +317,7 @@ export default function Navbar() {
               </Link>
 
               {/* Hamburger */}
-              <button onClick={() => setMobileOpen(!mobileOpen)} className="lg:hidden p-2 text-white/70 hover:text-[#DFB96A]">
+              <button onClick={() => setMobileOpen(!mobileOpen)} className="lg:hidden p-2 text-white/70 hover:text-[#F1C290]">
                 {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
             </div>
@@ -330,12 +330,12 @@ export default function Navbar() {
             ref={megaRef}
             onMouseEnter={handleMegaEnter}
             onMouseLeave={handleMegaLeave}
-            className="hidden lg:block absolute left-0 right-0 bg-[#0B1E36]/95 backdrop-blur-xl border-t border-white/10 shadow-2xl shadow-[#C4933F]/10"
+            className="hidden lg:block absolute left-0 right-0 bg-[#1E2D24]/95 backdrop-blur-xl border-t border-white/10 shadow-2xl shadow-[#E3602D]/10"
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 <div className="lg:col-span-3">
-                  <p className="text-[11px] font-semibold uppercase tracking-widest text-[#C4933F] mb-4">{t.nav.categories}</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-widest text-[#E3602D] mb-4">{t.nav.categories}</p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     {categories.map((cat) => (
                       <Link
@@ -344,11 +344,11 @@ export default function Navbar() {
                         onClick={() => setMegaOpen(false)}
                         className="group flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors"
                       >
-                        <span className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center bg-[#F5EDD6] text-[#C4933F] group-hover:bg-[#C4933F] group-hover:text-white transition-colors">
+                        <span className="w-10 h-10 shrink-0 rounded-xl flex items-center justify-center bg-[#F5EDD6] text-[#E3602D] group-hover:bg-[#E3602D] group-hover:text-white transition-colors">
                           {catIcons[cat.icon] ?? <PawPrint className="w-5 h-5" />}
                         </span>
                         <span className="min-w-0">
-                          <span className="block font-semibold text-white text-sm group-hover:text-[#C4933F] transition-colors truncate">{cat.name}</span>
+                          <span className="block font-semibold text-white text-sm group-hover:text-[#E3602D] transition-colors truncate">{cat.name}</span>
                           <span className="block text-[11px] text-white/50">{t.nav.subcategoryCount.replace("{n}", String(cat.subcategories.length))}</span>
                         </span>
                       </Link>
@@ -372,7 +372,7 @@ export default function Navbar() {
                 <div className="lg:col-span-1">
                   <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1A1A2E] to-[#2D2B45] p-6 h-full min-h-[180px] flex flex-col justify-between">
                     <div>
-                      <span className="inline-flex items-center gap-1.5 text-[11px] font-medium bg-[#C4933F]/20 text-[#DFB96A] rounded-full px-2.5 py-1 mb-3">
+                      <span className="inline-flex items-center gap-1.5 text-[11px] font-medium bg-[#E3602D]/20 text-[#F1C290] rounded-full px-2.5 py-1 mb-3">
                         <Truck className="w-3.5 h-3.5" />
                         {lang === "ar" ? "توصيل سطيف 24-48س" : lang === "fr" ? "Livraison Sétif 24-48h" : "Sétif delivery 24-48h"}
                       </span>
@@ -397,25 +397,25 @@ export default function Navbar() {
 
         {/* ── Mobile Menu ── */}
         {mobileOpen && (
-          <div className="lg:hidden border-t border-white/10 bg-[#0B1E36]/95 backdrop-blur-xl max-h-[80vh] overflow-y-auto">
+          <div className="lg:hidden border-t border-white/10 bg-[#1E2D24]/95 backdrop-blur-xl max-h-[80vh] overflow-y-auto">
             <div className="px-4 py-3 space-y-1">
               {user ? (
                 <div className="flex items-center justify-between py-2 border-b border-white/10 mb-1">
                   <span className="text-sm font-semibold text-white truncate">{profile?.full_name || user.email}</span>
-                  <button onClick={async () => { await logout(); setMobileOpen(false); }} className="text-sm text-white/50 hover:text-[#C4933F]">{t.auth.logout}</button>
+                  <button onClick={async () => { await logout(); setMobileOpen(false); }} className="text-sm text-white/50 hover:text-[#E3602D]">{t.auth.logout}</button>
                 </div>
               ) : (
                 <button
                   onClick={() => { setAuthTab("login"); setAuthOpen(true); setMobileOpen(false); }}
-                  className="flex items-center gap-2 w-full py-2 text-[#C4933F] font-semibold text-sm"
+                  className="flex items-center gap-2 w-full py-2 text-[#E3602D] font-semibold text-sm"
                 >
                   <LogIn className="w-4 h-4" /> {t.auth.login}
                 </button>
               )}
-              <Link href="/account"                onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#DFB96A] text-sm font-medium">{t.auth.myAccount}</Link>
-              <Link href="/"                       onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#DFB96A] text-sm font-medium">{t.nav.home}</Link>
-              <Link href="/products?filter=new"    onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#DFB96A] text-sm font-medium">{t.nav.newArrivals}</Link>
-              <Link href="/products?filter=offers" onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#DFB96A] text-sm font-medium">{t.nav.offers}</Link>
+              <Link href="/account"                onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#F1C290] text-sm font-medium">{t.auth.myAccount}</Link>
+              <Link href="/"                       onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#F1C290] text-sm font-medium">{t.nav.home}</Link>
+              <Link href="/products?filter=new"    onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#F1C290] text-sm font-medium">{t.nav.newArrivals}</Link>
+              <Link href="/products?filter=offers" onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#F1C290] text-sm font-medium">{t.nav.offers}</Link>
 
               <div className="border-t border-white/10 pt-2 mt-2">
                 <p className="text-[11px] text-white/50 font-semibold uppercase tracking-wider mb-2 px-1">{t.nav.categories}</p>
@@ -425,17 +425,17 @@ export default function Navbar() {
                     <div key={cat.id} className="border-b border-white/5 last:border-b-0">
                       <button
                         onClick={() => toggleCat(cat.id)}
-                        className="flex items-center justify-between w-full py-2.5 px-1 text-white/80 hover:text-[#DFB96A] text-sm font-medium transition-colors"
+                        className="flex items-center justify-between w-full py-2.5 px-1 text-white/80 hover:text-[#F1C290] text-sm font-medium transition-colors"
                       >
                         <span className="flex items-center gap-2.5">
-                          <span className="w-8 h-8 bg-white/5 rounded-xl flex items-center justify-center text-[#C4933F]">
+                          <span className="w-8 h-8 bg-white/5 rounded-xl flex items-center justify-center text-[#E3602D]">
                             {catIcons[cat.icon] ?? <PawPrint className="w-4 h-4" />}
                           </span>
                           <span className="text-white font-semibold">{cat.name}</span>
                         </span>
                         <ChevronRight 
                           className={`w-4 h-4 text-white/50 transition-transform duration-300 ${
-                            isExpanded ? "rotate-90 text-[#C4933F]" : "rtl:rotate-180"
+                            isExpanded ? "rotate-90 text-[#E3602D]" : "rtl:rotate-180"
                           }`}
                         />
                       </button>
@@ -449,7 +449,7 @@ export default function Navbar() {
                           <Link
                             href={`/products/${cat.id}`}
                             onClick={() => setMobileOpen(false)}
-                            className="block py-1.5 px-2 text-xs font-semibold text-[#C4933F] hover:bg-white/10 rounded-lg transition-colors"
+                            className="block py-1.5 px-2 text-xs font-semibold text-[#E3602D] hover:bg-white/10 rounded-lg transition-colors"
                           >
                             {lang === "ar" ? "عرض كل " + cat.name : lang === "fr" ? "Voir tout " + cat.name : "View all " + cat.name}
                           </Link>
@@ -459,7 +459,7 @@ export default function Navbar() {
                               key={sub.id}
                               href={`/products/${cat.id}?sub=${sub.id}`}
                               onClick={() => setMobileOpen(false)}
-                              className="block py-1.5 px-2 text-xs text-white/70 hover:text-[#DFB96A] hover:bg-white/10 rounded-lg transition-colors"
+                              className="block py-1.5 px-2 text-xs text-white/70 hover:text-[#F1C290] hover:bg-white/10 rounded-lg transition-colors"
                             >
                               {sub.name}
                             </Link>
@@ -472,13 +472,13 @@ export default function Navbar() {
               </div>
 
               <div className="border-t border-white/10 pt-2 mt-2 space-y-1">
-                <Link href="/blog"      onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#DFB96A] text-sm font-medium">
+                <Link href="/blog"      onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#F1C290] text-sm font-medium">
                   {t.nav.blog}
                 </Link>
-                <Link href="/faq"      onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#DFB96A] text-sm font-medium">{t.nav.faq}</Link>
-                <Link href="/shipping" onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#DFB96A] text-sm font-medium">{t.nav.shipping}</Link>
-                <Link href="/about"    onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#DFB96A] text-sm font-medium">{t.nav.about}</Link>
-                <Link href="/contact"  onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#DFB96A] text-sm font-medium">{t.nav.contact}</Link>
+                <Link href="/faq"      onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#F1C290] text-sm font-medium">{t.nav.faq}</Link>
+                <Link href="/shipping" onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#F1C290] text-sm font-medium">{t.nav.shipping}</Link>
+                <Link href="/about"    onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#F1C290] text-sm font-medium">{t.nav.about}</Link>
+                <Link href="/contact"  onClick={() => setMobileOpen(false)} className="block py-2 text-white/80 hover:text-[#F1C290] text-sm font-medium">{t.nav.contact}</Link>
               </div>
             </div>
           </div>

@@ -23,7 +23,7 @@ export function LogoC1({ className = "w-20 h-20" }: { className?: string }) {
 export function LogoC2({ className = "", light = false }: { className?: string; light?: boolean }) {
   return (
     <div className={`flex flex-col text-right select-none ${className}`} dir="rtl">
-      <span className={`text-lg sm:text-2xl font-black tracking-tight leading-tight ${light ? "text-white" : "text-[#0B1E36]"} font-cairo`}>
+      <span className={`text-lg sm:text-2xl font-black tracking-tight leading-tight ${light ? "text-white" : "text-[#1E2D24]"} font-cairo`}>
         طيور الجمال والجواد
       </span>
     </div>
@@ -32,7 +32,7 @@ export function LogoC2({ className = "", light = false }: { className?: string; 
 
 export function LogoC3({ className = "", light = false }: { className?: string; light?: boolean }) {
   return (
-    <div className={`text-center font-bold text-xs select-none ${light ? "text-[#DFB96A]/80" : "text-[#C4933F]"} font-cairo`} dir="rtl">
+    <div className={`text-center font-bold text-xs select-none ${light ? "text-[#F1C290]/80" : "text-[#E3602D]"} font-cairo`} dir="rtl">
       تأسس 2024
     </div>
   );

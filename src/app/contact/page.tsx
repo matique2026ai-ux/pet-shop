@@ -65,7 +65,7 @@ export default function ContactPage() {
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
           <AnimatedSection>
-            <span className="inline-flex items-center gap-2 px-5 py-2 bg-white/10 backdrop-blur-md rounded-full text-sm font-bold text-[#DFB96A] border border-[#DFB96A]/30 mb-6 shadow-xl">
+            <span className="inline-flex items-center gap-2 px-5 py-2 bg-white/10 backdrop-blur-md rounded-full text-sm font-bold text-[#F1C290] border border-[#F1C290]/30 mb-6 shadow-xl">
               <Sparkles className="w-4 h-4" /> {t.contact.heroBadge}
             </span>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 tracking-tight drop-shadow-xl">
@@ -86,7 +86,7 @@ export default function ContactPage() {
             {info.map((item, i) => (
               <AnimatedSection key={item.title} delay={i * 0.1}>
                 <div className="bg-white rounded-3xl p-6 text-center border border-[#E2DDD4] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 h-full flex flex-col items-center justify-center">
-                  <div className="w-14 h-14 rounded-full flex items-center justify-center text-white mb-4 bg-gradient-to-br from-[#DFB96A] to-[#C4933F] shadow-lg shadow-[#C4933F]/30">
+                  <div className="w-14 h-14 rounded-full flex items-center justify-center text-white mb-4 bg-gradient-to-br from-[#F1C290] to-[#E3602D] shadow-lg shadow-[#E3602D]/30">
                     {item.icon}
                   </div>
                   <h3 className="font-bold text-[#1A1A2E] text-lg mb-2">{item.title}</h3>
@@ -102,11 +102,11 @@ export default function ContactPage() {
             <AnimatedSection>
               <div className="bg-white rounded-3xl p-8 lg:p-10 border border-[#E2DDD4] shadow-lg h-full relative overflow-hidden">
                 {/* Decorative Elements */}
-                <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#DFB96A]/10 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-[#C4933F]/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#F1C290]/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-[#E3602D]/10 rounded-full blur-3xl pointer-events-none" />
                 
                 <h2 className="text-3xl font-bold text-[#1A1A2E] mb-2">{t.contact.formTitle}</h2>
-                <div className="w-16 h-1 rounded-full bg-gradient-to-r from-[#C4933F] to-[#DFB96A] mb-4" />
+                <div className="w-16 h-1 rounded-full bg-gradient-to-r from-[#E3602D] to-[#F1C290] mb-4" />
                 <p className="text-[#9E9282] mb-8">{t.contact.formSubtitle}</p>
                 
                 {sent ? (
@@ -116,7 +116,7 @@ export default function ContactPage() {
                     </div>
                     <h3 className="text-2xl font-bold text-[#1A1A2E] mb-2">{t.contact.formSuccess}</h3>
                     <p className="text-[#5C5348] mb-8">{t.contact.formSuccessDesc}</p>
-                    <button onClick={() => setSent(false)} className="text-[#C4933F] hover:text-[#A87A2E] font-bold underline underline-offset-4 transition-colors">
+                    <button onClick={() => setSent(false)} className="text-[#E3602D] hover:text-[#A87A2E] font-bold underline underline-offset-4 transition-colors">
                       {t.contact.formSendAnother}
                     </button>
                   </div>
@@ -125,18 +125,18 @@ export default function ContactPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-bold text-[#1A1A2E] mb-2">{t.contact.formName}</label>
-                      <input type="text" name="name" required dir="auto" className="w-full px-5 py-3.5 bg-[#F8F7F4] border border-[#E2DDD4] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C4933F]/50 focus:border-[#C4933F] focus:bg-white transition-all shadow-sm" placeholder={t.contact.formNamePlaceholder} />
+                      <input type="text" name="name" required dir="auto" className="w-full px-5 py-3.5 bg-[#F8F7F4] border border-[#E2DDD4] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#E3602D]/50 focus:border-[#E3602D] focus:bg-white transition-all shadow-sm" placeholder={t.contact.formNamePlaceholder} />
                     </div>
                     <div>
                       <label className="block text-sm font-bold text-[#1A1A2E] mb-2">{t.contact.formEmail}</label>
-                      <input type="email" name="email" required dir="auto" className="w-full px-5 py-3.5 bg-[#F8F7F4] border border-[#E2DDD4] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C4933F]/50 focus:border-[#C4933F] focus:bg-white transition-all shadow-sm" placeholder={t.contact.formEmailPlaceholder} />
+                      <input type="email" name="email" required dir="auto" className="w-full px-5 py-3.5 bg-[#F8F7F4] border border-[#E2DDD4] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#E3602D]/50 focus:border-[#E3602D] focus:bg-white transition-all shadow-sm" placeholder={t.contact.formEmailPlaceholder} />
                     </div>
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-[#1A1A2E] mb-2">{t.contact.formMessage}</label>
-                    <textarea name="message" required rows={5} dir="auto" className="w-full px-5 py-3.5 bg-[#F8F7F4] border border-[#E2DDD4] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C4933F]/50 focus:border-[#C4933F] focus:bg-white transition-all resize-none shadow-sm" placeholder={t.contact.formMessagePlaceholder} />
+                    <textarea name="message" required rows={5} dir="auto" className="w-full px-5 py-3.5 bg-[#F8F7F4] border border-[#E2DDD4] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#E3602D]/50 focus:border-[#E3602D] focus:bg-white transition-all resize-none shadow-sm" placeholder={t.contact.formMessagePlaceholder} />
                   </div>
-                  <button type="submit" disabled={sending} className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#C4933F] to-[#A87A2E] text-white px-8 py-4 rounded-xl text-base font-bold hover:opacity-90 transition-all shadow-lg shadow-[#C4933F]/30 hover:shadow-xl hover:-translate-y-1 disabled:opacity-60">
+                  <button type="submit" disabled={sending} className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#E3602D] to-[#A87A2E] text-white px-8 py-4 rounded-xl text-base font-bold hover:opacity-90 transition-all shadow-lg shadow-[#E3602D]/30 hover:shadow-xl hover:-translate-y-1 disabled:opacity-60">
                     {sending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
                     {t.contact.formSubmit}
                     <ChevronRight className={`w-5 h-5 ${dir === 'rtl' ? 'rotate-180' : ''}`} />
@@ -164,7 +164,7 @@ export default function ContactPage() {
                 {/* Floating Location Card */}
                 <div className="absolute bottom-6 left-6 right-6 sm:right-auto bg-white/95 backdrop-blur-xl rounded-2xl p-4 border border-white/50 shadow-2xl z-10 transition-transform duration-300 translate-y-2 group-hover:translate-y-0">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#DFB96A] to-[#C4933F] rounded-full flex items-center justify-center text-white shrink-0 shadow-inner">
+                    <div className="w-12 h-12 bg-gradient-to-br from-[#F1C290] to-[#E3602D] rounded-full flex items-center justify-center text-white shrink-0 shadow-inner">
                       <MapPin className="w-6 h-6" />
                     </div>
                     <div>

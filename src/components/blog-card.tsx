@@ -45,11 +45,11 @@ export default function BlogCard({ post }: { post: BlogPost }) {
             className="object-cover group-hover:scale-105 transition-transform duration-500" 
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-[#C4933F]/30">
+          <div className="absolute inset-0 flex items-center justify-center text-[#E3602D]/30">
             <BookOpen className="w-16 h-16" />
           </div>
         )}
-        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-[#C4933F] shadow-sm">
+        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-[#E3602D] shadow-sm">
           {t.blog?.heroBadge || "Blog"}
         </div>
       </div>
@@ -66,7 +66,7 @@ export default function BlogCard({ post }: { post: BlogPost }) {
           </div>
         </div>
         
-        <h3 className="text-xl font-bold text-[#1A1A2E] mb-3 group-hover:text-[#C4933F] transition-colors line-clamp-2 leading-tight">
+        <h3 className="text-xl font-bold text-[#1A1A2E] mb-3 group-hover:text-[#E3602D] transition-colors line-clamp-2 leading-tight">
           {title}
         </h3>
         
@@ -74,7 +74,7 @@ export default function BlogCard({ post }: { post: BlogPost }) {
           {excerpt}
         </p>
         
-        <div className="inline-flex items-center gap-1.5 text-sm font-bold text-[#C4933F]">
+        <div className="inline-flex items-center gap-1.5 text-sm font-bold text-[#E3602D]">
           {t.blog?.readMore || "Read More"} 
           {dir === "rtl" ? <span className="text-lg">←</span> : <span className="text-lg">→</span>}
         </div>
