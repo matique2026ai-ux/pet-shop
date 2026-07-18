@@ -9,6 +9,7 @@ import { useTranslatedData } from "@/lib/use-translated-data";
 import { useCart } from "@/lib/cart-context";
 import { useRecentlyViewed } from "@/lib/use-recently-viewed";
 import { useSiteSettings } from "@/lib/site-settings";
+import { formatWhatsAppNumber } from "@/lib/phone-utils";
 import AnimatedSection from "@/components/animated-section";
 import ProductCard from "@/components/product-card";
 import ProductReviews from "@/components/product-reviews";
@@ -565,7 +566,7 @@ export default function ProductDetailPage() {
                 </button>
 
                 <a
-                  href={`https://wa.me/${(store?.whatsapp || delivery?.whatsapp || store?.phone || "213555123456").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+                  href={`https://wa.me/${formatWhatsAppNumber(store?.whatsapp || delivery?.whatsapp || store?.phone, "213555123456")}?text=${encodeURIComponent(
                     lang === "ar" 
                       ? `مرحباً، أود شراء المنتج "${product.name}" من المحل. كود الحجز والخصم الخاص بي هو: ${generatedCode}` 
                       : `Bonjour, je souhaite acheter le produit "${product.name}" au magasin. Mon code de réduction est : ${generatedCode}`

@@ -11,6 +11,7 @@ import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, T
 import { useSiteSettings } from "@/lib/site-settings";
 import { useAuth } from "@/lib/auth-context";
 import { unitLabel, isContinuousUnit } from "@/lib/units";
+import { formatWhatsAppNumber } from "@/lib/phone-utils";
 
 const DEFAULT_DELIVERY: Record<string, string> = {
   scope: "commune",
@@ -126,7 +127,7 @@ export default function CartPage() {
 
   if (orderPlaced) {
     const orderRef = orderPlaced.id.slice(-6).toUpperCase();
-    const whatsappNum = (store?.whatsapp || delivery?.whatsapp || store?.phone || "213555123456").replace(/[^0-9]/g, "");
+    const whatsappNum = formatWhatsAppNumber(store?.whatsapp || delivery?.whatsapp || store?.phone, "213555123456");
     
     const refCodeText = orderReferral ? ` (كود الإحالة: BIRD-${orderReferral.toUpperCase()}-${orderRef})` : ` (كود عمولة الطيور: BIRD-DIRECT-${orderRef})`;
     const isPickup = orderPlaced.delivery_address === "[Pickup] الاستلام من المحل";

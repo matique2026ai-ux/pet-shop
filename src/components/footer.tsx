@@ -7,6 +7,7 @@ import { Heart, Mail, CheckCircle, Truck, PawPrint } from "lucide-react";
 import { useI18n } from "@/lib/i18n-context";
 import { useSiteSettings } from "@/lib/site-settings";
 import { LogoC4 } from "@/components/brand-logo";
+import { formatWhatsAppNumber } from "@/lib/phone-utils";
 
 function InstagramIcon({ className }: { className?: string }) {
   return (
@@ -83,7 +84,7 @@ export default function Footer() {
     ? `${deliveryPrefix} ${delivery.city} • ${delivery.eta}`
     : `${deliveryPrefix} Sétif • 24-48h`;
   const emailAddr  = s("email",     t.contact.emailText || "hello@pawsandwings.com");
-  const whatsapp   = s("whatsapp",  "+1234567890");
+  const whatsapp   = formatWhatsAppNumber(store?.whatsapp, "213555123456");
   const instagram  = s("instagram", "https://instagram.com");
   const facebook   = s("facebook",  "https://facebook.com");
   const tiktok     = store && store.tiktok ? store.tiktok : "";
@@ -149,11 +150,6 @@ export default function Footer() {
               {addressLines.map((line, i) => (
                 <li key={i}>{line}</li>
               ))}
-              <li className="break-all">
-                <a href={`tel:${phone}`} className="hover:text-[#F1C290] transition-colors">
-                  {phone}
-                </a>
-              </li>
               <li className="break-all">
                 <a href={`mailto:${emailAddr}`} className="hover:text-[#F1C290] transition-colors">
                   {emailAddr}

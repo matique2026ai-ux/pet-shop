@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { MessageCircle } from "lucide-react";
 import { useSiteSettings } from "@/lib/site-settings";
 import { useI18n } from "@/lib/i18n-context";
+import { formatWhatsAppNumber } from "@/lib/phone-utils";
 
 const DEFAULT_PHONE = "+213555123456";
 
@@ -12,7 +13,7 @@ export default function WhatsAppButton() {
   const { store } = useSiteSettings();
   const { dir, t } = useI18n();
   if (pathname.startsWith("/admin")) return null;
-  const phone = (store && store.whatsapp ? store.whatsapp : DEFAULT_PHONE).replace(/[^0-9]/g, "");
+  const phone = formatWhatsAppNumber(store?.whatsapp, DEFAULT_PHONE);
   const handleClick = () => {
     window.open(
       `https://wa.me/${phone}?text=${encodeURIComponent(t.nav.whatsappMessage)}`,
