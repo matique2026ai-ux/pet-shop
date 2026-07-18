@@ -252,7 +252,7 @@ function OrderDetailRow({
           title="Show/hide details"
         >
           {expanded ? <ChevronDown className="w-3.5 h-3.5 shrink-0" /> : <ChevronRight className="w-3.5 h-3.5 shrink-0" />}
-          <span className="truncate">{order.id.slice(-6)}</span>
+          <span className="truncate">{order.id ? String(order.id).slice(-6) : ""}</span>
         </button>
         <div className="col-span-2 text-sm font-medium text-gray-900 truncate">{order.customer_name}</div>
         <div className="col-span-2 text-sm text-gray-500">{order.created_at?.slice(0, 10)}</div>
@@ -1074,10 +1074,12 @@ export default function AdminDashboard() {
     const salesMap: Record<string, { sales: number, revenue: number }> = {};
     for (const o of orders) {
       if (o.status === "cancelled") continue;
-      for (const item of o.items || []) {
+      const items = Array.isArray(o.items) ? o.items : [];
+      for (const item of items) {
+        if (!item || !item.id) continue;
         if (!salesMap[item.id]) salesMap[item.id] = { sales: 0, revenue: 0 };
-        salesMap[item.id].sales += item.quantity;
-        salesMap[item.id].revenue += (item.price * item.quantity);
+        salesMap[item.id].sales += Number(item.quantity) || 0;
+        salesMap[item.id].revenue += (Number(item.price) || 0) * (Number(item.quantity) || 0);
       }
     }
     return Object.entries(salesMap)
@@ -1096,14 +1098,20 @@ export default function AdminDashboard() {
 
   const recentOrdersDynamic = useMemo(() => {
     if (!orders.length) return [];
-    return orders.slice(0, 5).map(o => ({
-      id: o.id.slice(0, 8),
-      customer: o.customer_name,
-      product: o.items?.[0]?.name + ((o.items?.length || 0) > 1 ? " +" + (o.items.length - 1) + " more" : ""),
-      amount: o.total,
-      status: o.status,
-      date: o.created_at ? new Date(o.created_at).toLocaleDateString() : ""
-    }));
+    return orders.slice(0, 5).map(o => {
+      const idStr = o && o.id ? String(o.id) : "";
+      const items = Array.isArray(o.items) ? o.items : [];
+      const firstItemName = items[0]?.name || "Product";
+      const extraCount = items.length > 1 ? " +" + (items.length - 1) + " more" : "";
+      return {
+        id: idStr.slice(0, 8),
+        customer: o.customer_name || "",
+        product: firstItemName + extraCount,
+        amount: o.total,
+        status: o.status,
+        date: o.created_at ? String(o.created_at).slice(0, 10) : ""
+      };
+    });
   }, [orders]);
 
   const catDist = categories.map((c) => ({
