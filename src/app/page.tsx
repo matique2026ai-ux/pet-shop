@@ -158,14 +158,7 @@ export default function HomePage() {
   const [heroVideos, setHeroVideos] = useState<string[]>(DEFAULT_HERO_VIDEOS);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
-  // Detect mobile to disable heavy features that crash low-end phones
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768 || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent));
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
+
 
   const customBg = content?.heroBackground;
   const isCustomVideo = customBg ? /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(customBg) : false;
@@ -238,7 +231,7 @@ export default function HomePage() {
               muted
               loop={heroVideos.length === 1}
               playsInline
-              preload={i === videoIdx ? "auto" : "none"}
+              preload="metadata"
               onEnded={handleVideoEnded}
               className={`absolute inset-0 w-full h-full object-cover transition-all duration-[1500ms] ease-in-out ${i === videoIdx ? "opacity-100 scale-100 z-0" : "opacity-0 scale-105 -z-10"}`}
             >
