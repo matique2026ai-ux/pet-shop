@@ -156,12 +156,20 @@ export default function HomePage() {
   const recentProducts = products.filter((p) => recentIds.includes(p.id)).slice(0, 4);
   const [videoIdx, setVideoIdx]     = useState(0);
   const [heroVideos, setHeroVideos] = useState<string[]>(DEFAULT_HERO_VIDEOS);
-  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
-
-
+  const [isMobile, setIsMobile]     = useState(false);
 
   const customBg = content?.heroBackground;
   const isCustomVideo = customBg ? /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(customBg) : false;
+
+  useEffect(() => {
+    // Detect mobile screens to disable heavy video background
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     fetch("/api/hero-videos")
@@ -169,28 +177,6 @@ export default function HomePage() {
       .then((d) => { if (d.videos && d.videos.length > 0) setHeroVideos(d.videos); })
       .catch(() => {});
   }, []);
-
-  useEffect(() => {
-    const timeouts: NodeJS.Timeout[] = [];
-    videoRefs.current.forEach((v, i) => {
-      if (v) {
-        if (i === videoIdx) {
-          v.play().catch(() => {});
-        } else {
-          const t = setTimeout(() => {
-            if (v) {
-              v.pause();
-              v.currentTime = 0;
-            }
-          }, 1500);
-          timeouts.push(t);
-        }
-      }
-    });
-    return () => {
-      timeouts.forEach(clearTimeout);
-    };
-  }, [videoIdx]);
 
   const handleVideoEnded = () => {
     if (heroVideos.length > 1) {
@@ -206,12 +192,16 @@ export default function HomePage() {
       <section className="relative overflow-hidden min-h-[560px] flex items-center">
         {customBg ? (
           isCustomVideo ? (
-            <video
-              autoPlay muted loop playsInline preload="metadata"
-              className="absolute inset-0 w-full h-full object-cover"
-            >
-              <source src={customBg} type="video/mp4" />
-            </video>
+            !isMobile ? (
+              <video
+                autoPlay muted loop playsInline preload="metadata"
+                className="absolute inset-0 w-full h-full object-cover"
+              >
+                <source src={customBg} type="video/mp4" />
+              </video>
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-[#121B15] via-[#1E2D24] to-[#121B15] z-0" />
+            )
           ) : (
             <Image
               src={customBg}
@@ -223,21 +213,21 @@ export default function HomePage() {
             />
           )
         ) : (
-          heroVideos.map((src, i) => (
+          !isMobile && heroVideos.length > 0 ? (
             <video
-              key={src}
-              ref={(el) => { videoRefs.current[i] = el; }}
+              key={heroVideos[videoIdx]}
               autoPlay
               muted
-              loop={heroVideos.length === 1}
               playsInline
               preload="metadata"
               onEnded={handleVideoEnded}
-              className={`absolute inset-0 w-full h-full object-cover transition-all duration-[1500ms] ease-in-out ${i === videoIdx ? "opacity-100 scale-100 z-0" : "opacity-0 scale-105 -z-10"}`}
+              className="absolute inset-0 w-full h-full object-cover opacity-100 scale-100 z-0"
             >
-              <source src={src} type="video/mp4" />
+              <source src={heroVideos[videoIdx]} type="video/mp4" />
             </video>
-          ))
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-[#121B15] via-[#1E2D24] to-[#121B15] z-0" />
+          )
         )}
         {/* Cinematic Vignette Overlay */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-black/20 via-black/50 to-black/90" />
