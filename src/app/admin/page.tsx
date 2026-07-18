@@ -192,6 +192,79 @@ const CustomTooltip = ({ active, payload, label, currency }: any) => {
   return null;
 };
 
+// ===== CUSTOM CONFIRM MODAL =====
+function ConfirmModal({
+  open, title, message, confirmLabel, cancelLabel, danger, onConfirm, onCancel
+}: {
+  open: boolean;
+  title: string;
+  message: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  danger?: boolean;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-[200] flex items-center justify-center px-4">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onCancel} />
+      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 animate-in fade-in zoom-in-95 duration-200">
+        <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 ${
+          danger ? "bg-red-100" : "bg-amber-100"
+        }`}>
+          <Trash2 className={`w-6 h-6 ${danger ? "text-red-600" : "text-amber-600"}`} />
+        </div>
+        <h3 className="text-lg font-bold text-gray-900 text-center mb-2">{title}</h3>
+        <p className="text-sm text-gray-500 text-center mb-6">{message}</p>
+        <div className="flex gap-3">
+          <button
+            onClick={onCancel}
+            className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            {cancelLabel || "Cancel"}
+          </button>
+          <button
+            onClick={onConfirm}
+            className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-colors ${
+              danger ? "bg-red-600 hover:bg-red-700" : "bg-amber-600 hover:bg-amber-700"
+            }`}
+          >
+            {confirmLabel || "Confirm"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ===== ALERT MODAL =====
+function AlertModal({
+  open, title, message, onClose
+}: {
+  open: boolean;
+  title: string;
+  message: string;
+  onClose: () => void;
+}) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-[200] flex items-center justify-center px-4">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+        <h3 className="text-lg font-bold text-gray-900 text-center mb-2">{title}</h3>
+        <p className="text-sm text-gray-500 text-center mb-6 break-words">{message}</p>
+        <button
+          onClick={onClose}
+          className="w-full px-4 py-2.5 rounded-xl bg-[#0B1E36] text-white text-sm font-medium hover:bg-[#112540] transition-colors"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+  );
+}
+
 type FormState = {
   name: string;
   category: string;
@@ -429,6 +502,28 @@ export default function AdminDashboard() {
   const [authed, setAuthed] = useState(false);
   const [mounted, setMounted] = useState(false);
 
+  // ----- Custom Confirm/Alert modal state -----
+  const [confirmModal, setConfirmModal] = useState<{
+    open: boolean;
+    title: string;
+    message: string;
+    confirmLabel?: string;
+    danger?: boolean;
+    onConfirm: () => void;
+  }>({ open: false, title: "", message: "", onConfirm: () => {} });
+
+  const [alertModal, setAlertModal] = useState<{ open: boolean; title: string; message: string }>(
+    { open: false, title: "Error", message: "" }
+  );
+
+  const showConfirm = (title: string, message: string, onConfirm: () => void, danger = true, confirmLabel?: string) => {
+    setConfirmModal({ open: true, title, message, onConfirm, danger, confirmLabel });
+  };
+
+  const showAlert = (message: string, title = "Error") => {
+    setAlertModal({ open: true, title, message });
+  };
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -614,7 +709,7 @@ export default function AdminDashboard() {
       alert(a.settings.saved);
       reloadOverrides();
     } catch (e) {
-      alert("Failed to save: " + (e as Error).message);
+      showAlert("Failed to save: " + (e as Error).message);
     } finally {
       setSavingTrans(false);
     }
@@ -685,14 +780,22 @@ export default function AdminDashboard() {
     }
   };
 
-  const deleteOrder = async (id: string) => {
-    if (!confirm("هل أنت متأكد من حذف هذا الطلب نهائياً؟\nAre you sure you want to delete this order?")) return;
-    try {
-      await apiFetch(`/api/orders/${id}`, { method: "DELETE" });
-      setOrders((prev) => prev.filter((o) => o.id !== id));
-    } catch (e) {
-      alert("Failed to delete order: " + (e as Error).message);
-    }
+  const deleteOrder = (id: string) => {
+    showConfirm(
+      "Delete Order",
+      "Are you sure you want to permanently delete this order? This cannot be undone.",
+      async () => {
+        setConfirmModal(m => ({ ...m, open: false }));
+        try {
+          await apiFetch(`/api/orders/${id}`, { method: "DELETE" });
+          setOrders((prev) => prev.filter((o) => o.id !== id));
+        } catch (e) {
+          showAlert("Failed to delete order: " + (e as Error).message);
+        }
+      },
+      true,
+      "Delete"
+    );
   };
 
   const loadReviews = useCallback(async () => {
@@ -716,14 +819,22 @@ export default function AdminDashboard() {
     }
   };
 
-  const deleteReview = async (id: string) => {
-    if (!confirm(a.reviews.deleteConfirm)) return;
-    try {
-      await apiFetch(`/api/reviews/${id}`, { method: "DELETE" });
-      setReviews((prev) => prev.filter((r) => r.id !== id));
-    } catch (e) {
-      alert("Failed: " + (e as Error).message);
-    }
+  const deleteReview = (id: string) => {
+    showConfirm(
+      "Delete Review",
+      a.reviews.deleteConfirm,
+      async () => {
+        setConfirmModal(m => ({ ...m, open: false }));
+        try {
+          await apiFetch(`/api/reviews/${id}`, { method: "DELETE" });
+          setReviews((prev) => prev.filter((r) => r.id !== id));
+        } catch (e) {
+          showAlert("Failed: " + (e as Error).message);
+        }
+      },
+      true,
+      "Delete"
+    );
   };
 
   // loadSettings removed – settings are loaded inside AdminSettingsPanel
@@ -822,7 +933,7 @@ export default function AdminDashboard() {
       closeModal();
       await loadProducts();
     } catch (e) {
-      alert("Failed to save product: " + (e as Error).message);
+      showAlert("Failed to save product: " + (e as Error).message);
     } finally {
       setSaving(false);
     }
@@ -836,7 +947,7 @@ export default function AdminDashboard() {
       setDeleteTarget(null);
       await loadProducts();
     } catch (e) {
-      alert("Failed to delete: " + (e as Error).message);
+      showAlert("Failed to delete: " + (e as Error).message);
     } finally {
       setDeleting(false);
     }
@@ -865,7 +976,7 @@ export default function AdminDashboard() {
       const data = await res.json();
       setCatModal((prev) => ({ ...prev, imageUrl: data.url }));
     } catch (err) {
-      alert("Failed to upload category image: " + (err as Error).message);
+      showAlert("Failed to upload category image: " + (err as Error).message);
     } finally {
       setUploadingCatImg(false);
     }
@@ -888,7 +999,7 @@ export default function AdminDashboard() {
       const data = await res.json();
       setCatModal((prev) => ({ ...prev, videoUrl: data.url }));
     } catch (err) {
-      alert("Failed to upload category video: " + (err as Error).message);
+      showAlert("Failed to upload category video: " + (err as Error).message);
     } finally {
       setUploadingCatVid(false);
     }
@@ -906,7 +1017,7 @@ export default function AdminDashboard() {
   const closeSubModal = () => setSubModal({ id: "", name: "", category_id: "", editingId: null, open: false });
 
   const saveCategory = async () => {
-    if (!catModal.id.trim() || !catModal.name.trim()) return alert(a.common.name + " / " + a.common.id + " " + a.common.required);
+    if (!catModal.id.trim() || !catModal.name.trim()) { showAlert(a.common.name + " / " + a.common.id + " " + a.common.required, "Validation"); return; }
     try {
       if (catModal.editingId) {
         await apiFetch("/api/categories", { method: "PUT", body: JSON.stringify({ id: catModal.editingId, name: catModal.name, icon: catModal.icon, order: Number(catModal.order), image_url: catModal.imageUrl, video_url: catModal.videoUrl }) });
@@ -916,22 +1027,30 @@ export default function AdminDashboard() {
       closeCatModal();
       await loadCategories();
     } catch (e) {
-      alert("Failed to save category: " + (e as Error).message);
+      showAlert("Failed to save category: " + (e as Error).message);
     }
   };
 
-  const deleteCategory = async (id: string) => {
-    if (!confirm(a.cats.deleteConfirm)) return;
-    try {
-      await apiFetch(`/api/categories?id=${id}`, { method: "DELETE" });
-      await loadCategories();
-    } catch (e) {
-      alert("Failed to delete: " + (e as Error).message);
-    }
+  const deleteCategory = (id: string) => {
+    showConfirm(
+      "Delete Category",
+      a.cats.deleteConfirm,
+      async () => {
+        setConfirmModal(m => ({ ...m, open: false }));
+        try {
+          await apiFetch(`/api/categories?id=${id}`, { method: "DELETE" });
+          await loadCategories();
+        } catch (e) {
+          showAlert("Failed to delete: " + (e as Error).message);
+        }
+      },
+      true,
+      "Delete"
+    );
   };
 
   const saveSub = async () => {
-    if (!subModal.id.trim() || !subModal.name.trim()) return alert(a.common.name + " / " + a.common.id + " " + a.common.required);
+    if (!subModal.id.trim() || !subModal.name.trim()) { showAlert(a.common.name + " / " + a.common.id + " " + a.common.required, "Validation"); return; }
     try {
       if (subModal.editingId) {
         await apiFetch("/api/subcategories", { method: "PUT", body: JSON.stringify({ id: subModal.editingId, name: subModal.name, category_id: subModal.category_id }) });
@@ -941,18 +1060,26 @@ export default function AdminDashboard() {
       closeSubModal();
       await loadCategories();
     } catch (e) {
-      alert("Failed to save subcategory: " + (e as Error).message);
+      showAlert("Failed to save subcategory: " + (e as Error).message);
     }
   };
 
-  const deleteSub = async (id: string) => {
-    if (!confirm(a.cats.deleteConfirm)) return;
-    try {
-      await apiFetch(`/api/subcategories?id=${id}`, { method: "DELETE" });
-      await loadCategories();
-    } catch (e) {
-      alert("Failed to delete: " + (e as Error).message);
-    }
+  const deleteSub = (id: string) => {
+    showConfirm(
+      "Delete Subcategory",
+      a.cats.deleteConfirm,
+      async () => {
+        setConfirmModal(m => ({ ...m, open: false }));
+        try {
+          await apiFetch(`/api/subcategories?id=${id}`, { method: "DELETE" });
+          await loadCategories();
+        } catch (e) {
+          showAlert("Failed to delete: " + (e as Error).message);
+        }
+      },
+      true,
+      "Delete"
+    );
   };
 
   const handleImageUpload = async (file: File) => {
@@ -2101,6 +2228,11 @@ export default function AdminDashboard() {
               </div>
             )}
 
+            {/* ===== BLOG ===== */}
+            {activeTab === "blog" && (
+              <BlogAdminPanel adminSecret={getSecret()} />
+            )}
+
             {/* ===== SETTINGS ===== */}
             {activeTab === "settings" && (
               <div className="space-y-6">
@@ -2780,6 +2912,24 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+      {/* ===== CUSTOM CONFIRM MODAL ===== */}
+      <ConfirmModal
+        open={confirmModal.open}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        confirmLabel={confirmModal.confirmLabel}
+        danger={confirmModal.danger}
+        onConfirm={confirmModal.onConfirm}
+        onCancel={() => setConfirmModal(m => ({ ...m, open: false }))}
+      />
+
+      {/* ===== ALERT MODAL ===== */}
+      <AlertModal
+        open={alertModal.open}
+        title={alertModal.title}
+        message={alertModal.message}
+        onClose={() => setAlertModal(m => ({ ...m, open: false }))}
+      />
     </div>
   );
 }
