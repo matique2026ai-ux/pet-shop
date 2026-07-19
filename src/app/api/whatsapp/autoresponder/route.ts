@@ -108,10 +108,10 @@ Answer directly and politely in their language:`;
         replyText = await askGemini(systemPrompt, geminiKey);
       } catch (err) {
         console.error("Gemini AI agent error, falling back to local keywords:", err);
-        replyText = getLocalResponse(text, isArabic, hasProducts, products);
+        replyText = getLocalResponse(text, isArabic, hasProducts, products || []);
       }
     } else {
-      replyText = getLocalResponse(text, isArabic, hasProducts, products);
+      replyText = getLocalResponse(text, isArabic, hasProducts, products || []);
     }
 
     await logRequest(supabase, {
