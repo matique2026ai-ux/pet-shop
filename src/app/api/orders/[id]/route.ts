@@ -64,6 +64,13 @@ export async function PATCH(
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // Send WhatsApp notification to customer when status changes
+  if (updates.status && data?.customer_phone) {
+    const { sendOrderStatusNotification } = await import("@/lib/whatsapp-notify");
+    sendOrderStatusNotification(data.customer_phone, id, updates.status).catch(() => {});
+  }
+
   return NextResponse.json(data);
 }
 

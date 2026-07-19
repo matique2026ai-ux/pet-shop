@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useI18n } from "@/lib/i18n-context";
 import { useAuth } from "@/lib/auth-context";
 import { createClient } from "@/lib/supabase";
-import { User, Package, LogOut, Mail, Loader2, CheckCircle, Save, ShoppingBag } from "lucide-react";
+import { User, Package, LogOut, Mail, Loader2, CheckCircle, Save, ShoppingBag, XCircle } from "lucide-react";
 import AuthModal from "@/components/auth-modal";
 
 const statusStyles: Record<string, string> = {
@@ -28,6 +28,8 @@ export default function AccountPage() {
   const [saved, setSaved] = useState(false);
   const [orders, setOrders] = useState<any[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
+  const [modifyingId, setModifyingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (profile) {
@@ -52,6 +54,67 @@ export default function AccountPage() {
       .order("created_at", { ascending: false });
     setOrders(data || []);
     setOrdersLoading(false);
+  };
+
+  const cancelOrder = async (orderId: string) => {
+    const confirmed = window.confirm(
+      lang === "ar" ? "هل تريد إلغاء هذا الطلب؟ لا يمكن التراجع عن هذا الإجراء."
+      : lang === "fr" ? "Voulez-vous annuler cette commande ? Cette action est irréversible."
+      : "Do you want to cancel this order? This action cannot be undone."
+    );
+    if (!confirmed) return;
+    setCancellingId(orderId);
+    try {
+      const supabase = createClient();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+      const res = await fetch(`/api/orders/${orderId}/cancel`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      if (res.ok) {
+        await loadOrders();
+      } else {
+        const err = await res.json();
+        alert(err.error || (lang === "ar" ? "حدث خطأ" : "Une erreur s'est produite"));
+      }
+    } finally {
+      setCancellingId(null);
+    }
+  };
+
+  const modifyOrder = async (orderId: string, deliveryType: "pickup" | "delivery") => {
+    const label =
+      deliveryType === "pickup"
+        ? lang === "ar" ? "تحويل الطلب إلى استلام من المتجر (مجاني)؟"
+          : lang === "fr" ? "Convertir en retrait en magasin (gratuit) ?"
+          : "Switch to store pickup (free)?"
+        : lang === "ar" ? "تحويل الطلب إلى توصيل للمنزل (250 د.ج)؟"
+          : lang === "fr" ? "Convertir en livraison (250 DZD) ?"
+          : "Switch to home delivery (250 DZD)?";
+    if (!window.confirm(label)) return;
+    setModifyingId(orderId);
+    try {
+      const supabase = createClient();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+      const res = await fetch(`/api/orders/${orderId}/modify`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ delivery_type: deliveryType }),
+      });
+      if (res.ok) {
+        await loadOrders();
+      } else {
+        const err = await res.json();
+        alert(err.error || (lang === "ar" ? "حدث خطأ" : "Une erreur s'est produite"));
+      }
+    } finally {
+      setModifyingId(null);
+    }
   };
 
   const save = async () => {
@@ -225,6 +288,50 @@ export default function AccountPage() {
                       <span className="text-sm text-gray-500">{lang === "ar" ? "المجموع" : lang === "fr" ? "Total" : "Total"}</span>
                       <span className="font-bold text-gray-900">{currency}{(o.total || 0).toFixed(2)}</span>
                     </div>
+                    {/* Action buttons — only for pending orders */}
+                    {o.status === "pending" && (
+                      <div className="mt-3 flex flex-col gap-2">
+                        {/* Switch delivery type */}
+                        {o.delivery_area !== "pickup" ? (
+                          <button
+                            onClick={() => modifyOrder(o.id, "pickup")}
+                            disabled={modifyingId === o.id}
+                            className="w-full inline-flex items-center justify-center gap-2 text-sm text-amber-700 border border-amber-200 rounded-xl py-2 hover:bg-amber-50 transition-colors disabled:opacity-50"
+                          >
+                            {modifyingId === o.id
+                              ? <Loader2 className="w-4 h-4 animate-spin" />
+                              : <Package className="w-4 h-4" />}
+                            {lang === "ar" ? "🏪 تحويل إلى استلام من المتجر (مجاني)"
+                              : lang === "fr" ? "🏪 Convertir en retrait magasin (gratuit)"
+                              : "🏪 Switch to store pickup (free)"}
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => modifyOrder(o.id, "delivery")}
+                            disabled={modifyingId === o.id}
+                            className="w-full inline-flex items-center justify-center gap-2 text-sm text-blue-700 border border-blue-200 rounded-xl py-2 hover:bg-blue-50 transition-colors disabled:opacity-50"
+                          >
+                            {modifyingId === o.id
+                              ? <Loader2 className="w-4 h-4 animate-spin" />
+                              : <Package className="w-4 h-4" />}
+                            {lang === "ar" ? "🚚 تحويل إلى توصيل للمنزل (250 د.ج)"
+                              : lang === "fr" ? "🚚 Convertir en livraison (250 DZD)"
+                              : "🚚 Switch to home delivery (250 DZD)"}
+                          </button>
+                        )}
+                        {/* Cancel button */}
+                        <button
+                          onClick={() => cancelOrder(o.id)}
+                          disabled={cancellingId === o.id}
+                          className="w-full inline-flex items-center justify-center gap-2 text-sm text-red-600 border border-red-200 rounded-xl py-2 hover:bg-red-50 transition-colors disabled:opacity-50"
+                        >
+                          {cancellingId === o.id
+                            ? <Loader2 className="w-4 h-4 animate-spin" />
+                            : <XCircle className="w-4 h-4" />}
+                          {lang === "ar" ? "إلغاء الطلب" : lang === "fr" ? "Annuler la commande" : "Cancel Order"}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))
               )}
