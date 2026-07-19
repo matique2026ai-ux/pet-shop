@@ -108,6 +108,9 @@ Answer directly and politely in their language:`;
         replyText = await askGemini(systemPrompt, geminiKey);
       } catch (err) {
         console.error("Gemini AI agent error, falling back to local keywords:", err);
+        await logRequest(supabase, {
+          geminiError: (err as Error).message
+        });
         replyText = getLocalResponse(text, isArabic, hasProducts, products || []);
       }
     } else {
@@ -121,7 +124,8 @@ Answer directly and politely in their language:`;
       text,
       userAgent: req.headers.get("user-agent"),
       ip: req.headers.get("x-forwarded-for"),
-      response: replyText
+      response: replyText,
+      geminiKeyPresent: !!geminiKey
     });
 
     return NextResponse.json({
