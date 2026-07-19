@@ -78,18 +78,61 @@ export async function POST(req: NextRequest) {
       .eq("in_stock", true);
 
     const catalogContext = products
-      ? products
-          .map((p) => `- ${p.name} (Category: ${p.category}): Price ${p.price} DZD. Description: ${p.description || "N/A"}`)
-          .join("\n")
+      ? products.map((p) => `- Name: ${p.name}\n  Category: ${p.category}\n  Price: ${p.price} DZD\n  Description: ${p.description || "N/A"}\n  Link: https://pet-cat.vercel.app/products/${p.category}/${p.id}`).join("\n\n")
       : "No products available in stock.";
+
+    // Fetch customer's recent orders for tracking
+    let ordersContext = "No recent orders found for this phone number.";
+    if (sender) {
+      try {
+        const cleanedSender = sender.replace(/\s+/g, "");
+        const digitsOnly = sender.replace(/\D/g, "");
+        let localFormat = digitsOnly;
+        if (digitsOnly.startsWith("213")) {
+          localFormat = "0" + digitsOnly.slice(3);
+        }
+        const orFilter = [
+          `customer_phone.eq."${sender}"`,
+          `customer_phone.eq."${cleanedSender}"`,
+          `customer_phone.eq."${digitsOnly}"`,
+          `customer_phone.eq."${localFormat}"`
+        ].join(",");
+
+        const { data: customerOrders } = await supabase
+          .from("orders")
+          .select("id, status, total, items, created_at")
+          .or(orFilter)
+          .order("created_at", { ascending: false })
+          .limit(3);
+
+        if (customerOrders && customerOrders.length > 0) {
+          ordersContext = customerOrders.map(o => {
+            const dateStr = new Date(o.created_at).toLocaleDateString("fr-FR");
+            const itemsList = Array.isArray(o.items) 
+              ? o.items.map((it: any) => `${it.name} (Qty: ${it.quantity})`).join(", ")
+              : "N/A";
+            return `- Order ID: ${o.id}\n  Date: ${dateStr}\n  Status: ${o.status}\n  Total: ${o.total} DZD\n  Items: ${itemsList}`;
+          }).join("\n\n");
+        }
+      } catch (err) {
+        console.error("Error fetching customer orders for tracking in webhook:", err);
+      }
+    }
 
     // 2. Prepare System Prompt for Gemini
     const systemPrompt = `You are a helpful and friendly AI assistant for "Paws & Wings", a pet shop in Algeria (Sétif). 
-Your task is to answer customers' questions about our store, catalog, products, prices, and stock.
+Your task is to answer customers' questions about our store, catalog, products, prices, stock, delivery, and their order status.
 You must speak in Algerian Darja (الدارجة الجزائرية) or French/Arabic, depending on the customer's language. Keep answers concise, helpful, and polite.
+
+When recommending or discussing any specific product, you MUST include its direct Link (from the Link field in the catalog context below) in your response so the customer can view the product images and make a purchase.
+
+If the customer asks about their order status or queries "تتبع طلبيتي" or similar, use the "Recent Orders for this Customer" section below to track it. Explain their order status clearly, translate the status into a friendly Darja explanation, and reassure them.
 
 Here is our current in-stock catalog:
 ${catalogContext}
+
+Recent Orders for this Customer (${sender || "N/A"}):
+${ordersContext}
 
 Our Store Info:
 - Store Name: طيور الجمال والجواد (Paws & Wings)
@@ -112,7 +155,7 @@ Answer directly and politely in their language:`;
       // Fallback response if Gemini key is not configured
       replyText = `مرحباً! شكراً لتواصلك مع متجر Paws & Wings. 🐾
 لقد تلقينا رسالتك وسيتواصل معك أحد عملائنا يدوياً في أقرب وقت للإجابة على استفسارك.
-يمكنك تصفح متجرنا مباشرة من الرابط التالي: https://pawsandwings.com`;
+يمكنك تصفح متجرنا مباشرة من الرابط التالي: https://pet-cat.vercel.app`;
     }
 
     // 4. Send the message back via WhatsApp Cloud API

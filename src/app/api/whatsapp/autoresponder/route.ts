@@ -72,12 +72,57 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ replies: [] });
     }
 
+    let sender = "";
+    if (body.query && typeof body.query === "object") {
+      sender = body.query.sender || "";
+    } else if (body.sender) {
+      sender = body.sender;
+    }
+
     const { data: products } = await supabase
       .from("products")
       .select("id, name, price, description, in_stock, category")
       .eq("in_stock", true);
 
     const hasProducts = !!(products && products.length > 0);
+
+    // Fetch customer's recent orders for tracking
+    let ordersContext = "No recent orders found for this phone number.";
+    if (sender) {
+      try {
+        const cleanedSender = sender.replace(/\s+/g, "");
+        const digitsOnly = sender.replace(/\D/g, "");
+        let localFormat = digitsOnly;
+        if (digitsOnly.startsWith("213")) {
+          localFormat = "0" + digitsOnly.slice(3);
+        }
+        const orFilter = [
+          `customer_phone.eq."${sender}"`,
+          `customer_phone.eq."${cleanedSender}"`,
+          `customer_phone.eq."${digitsOnly}"`,
+          `customer_phone.eq."${localFormat}"`
+        ].join(",");
+
+        const { data: customerOrders } = await supabase
+          .from("orders")
+          .select("id, status, total, items, created_at")
+          .or(orFilter)
+          .order("created_at", { ascending: false })
+          .limit(3);
+
+        if (customerOrders && customerOrders.length > 0) {
+          ordersContext = customerOrders.map(o => {
+            const dateStr = new Date(o.created_at).toLocaleDateString("fr-FR");
+            const itemsList = Array.isArray(o.items) 
+              ? o.items.map((it: any) => `${it.name} (Qty: ${it.quantity})`).join(", ")
+              : "N/A";
+            return `- Order ID: ${o.id}\n  Date: ${dateStr}\n  Status: ${o.status}\n  Total: ${o.total} DZD\n  Items: ${itemsList}`;
+          }).join("\n\n");
+        }
+      } catch (err) {
+        console.error("Error fetching customer orders for tracking:", err);
+      }
+    }
 
     // 2. Response Generation
     let replyText = "";
@@ -91,13 +136,18 @@ export async function POST(req: NextRequest) {
           : "No products in stock.";
         
         const systemPrompt = `You are a helpful and friendly AI assistant for "Paws & Wings", a pet shop in Algeria (Sétif). 
-Your task is to answer customers' questions about our store, catalog, products, prices, stock, and delivery.
+Your task is to answer customers' questions about our store, catalog, products, prices, stock, delivery, and their order status.
 You must speak in Algerian Darja (الدارجة الجزائرية) or French/Arabic, depending on the customer's language. Keep answers concise, helpful, and polite.
 
 When recommending or discussing any specific product, you MUST include its direct Link (from the Link field in the catalog context below) in your response so the customer can view the product images and make a purchase.
 
+If the customer asks about their order status or queries "تتبع طلبيتي" or similar, use the "Recent Orders for this Customer" section below to track it. Explain their order status clearly, translate the status into a friendly Darja explanation, and reassure them.
+
 Here is our current in-stock catalog:
 ${catalogContext}
+
+Recent Orders for this Customer (${sender || "N/A"}):
+${ordersContext}
 
 Our Store Info:
 - Store Name: طيور الجمال والجواد (Paws & Wings)
