@@ -34,7 +34,7 @@ export const fr = {
     subcategoryCount: "{n} sous-catégories",
     bookAppointment: "Prendre RDV",
     whatsapp: "Discutez avec nous sur WhatsApp",
-    whatsappMessage: "Bonjour ! J'ai une question sur vos produits pour animaux.",
+    whatsappMessage: "Bonjour",
   },
   hero: {
     title: "Votre Compagnon Mérite le Meilleur",

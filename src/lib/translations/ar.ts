@@ -34,7 +34,7 @@ export const ar = {
     subcategoryCount: "{n} أقسام فرعية",
     bookAppointment: "احجز موعداً",
     whatsapp: "تواصل معنا عبر واتساب",
-    whatsappMessage: "مرحباً! لدي سؤال حول منتجاتكم للحيوانات الأليفة.",
+    whatsappMessage: "سلام",
   },
   hero: {
     title: "حيوانك الأليف يستحق الأفضل",
