@@ -20,6 +20,7 @@ export interface ProductData {
   ingredients?: string;
   created_at?: string;
   images?: string[];
+  variants?: string[];
 }
 
 function isSupabaseConfigured(): boolean {

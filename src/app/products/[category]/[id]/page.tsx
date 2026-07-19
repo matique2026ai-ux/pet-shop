@@ -101,6 +101,7 @@ export default function ProductDetailPage() {
   const [activeMedia, setActiveMedia] = useState<"image" | "video">("image");
   const [activeImage, setActiveImage] = useState("");
   const [tab, setTab] = useState<"overview" | "features" | "ingredients" | "video">("overview");
+  const [selectedVariant, setSelectedVariant] = useState<string>("");
   
   const [referralModalOpen, setReferralModalOpen] = useState(false);
   const [generatedCode, setGeneratedCode] = useState("");
@@ -127,7 +128,8 @@ export default function ProductDetailPage() {
     setTab("overview");
     setQty(1);
     setActiveImage(product?.image || "");
-  }, [product?.id]);
+    setSelectedVariant(product?.variants?.[0] || "");
+  }, [product?.id, product?.variants]);
 
   if (!product) {
     return (
@@ -278,7 +280,7 @@ export default function ProductDetailPage() {
                     </span>
                   </div>
                   
-                  <h1 className={`text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 leading-tight tracking-tight ${lang === "ar" ? "font-cairo" : "font-outfit"}`}>
+                  <h1 className={`text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 leading-snug tracking-tight ${lang === "ar" ? "font-cairo" : "font-outfit"}`}>
                     {product.name}
                   </h1>
 
@@ -296,24 +298,51 @@ export default function ProductDetailPage() {
                 </div>
 
                 {/* Price section */}
-                <div className="py-5 border-y border-gray-100">
+                <div className="py-4 border-y border-gray-100">
                   <div className="flex items-baseline gap-3">
-                    <p className={`text-3xl sm:text-4xl font-black text-gray-900 ${lang === "ar" ? "font-cairo" : "font-outfit"}`}>
+                    <p className={`text-2xl sm:text-3xl font-bold text-emerald-700 ${lang === "ar" ? "font-cairo" : "font-outfit"}`}>
                       {product.price.toLocaleString()} {currency}
-                      {product.sold_by && product.sold_by !== "piece" && <span className="text-sm font-normal text-gray-400"> /{unitLabel(product.sold_by, lang)}</span>}
+                      {product.sold_by && product.sold_by !== "piece" && <span className="text-xs sm:text-sm font-normal text-gray-400"> /{unitLabel(product.sold_by, lang)}</span>}
                     </p>
                     {product.originalPrice && (
-                      <p className="text-base text-gray-400 line-through">{product.originalPrice.toLocaleString()} {currency}</p>
+                      <p className="text-sm sm:text-base text-gray-400 line-through font-medium">{product.originalPrice.toLocaleString()} {currency}</p>
                     )}
                   </div>
                 </div>
+
+                {/* Variants Selector */}
+                {product.variants && product.variants.length > 0 && (
+                  <div className="space-y-2.5 pt-2">
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      {lang === "ar" ? "النوع / النكهة" : lang === "fr" ? "Type / Saveur" : "Type / Flavor"}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {product.variants.map((v) => {
+                        const isSelected = selectedVariant === v;
+                        return (
+                          <button
+                            key={v}
+                            onClick={() => setSelectedVariant(v)}
+                            className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${
+                              isSelected
+                                ? "border-coral bg-coral text-white shadow-sm ring-2 ring-coral/20"
+                                : "border-gray-200 bg-white text-gray-700 hover:border-coral/50"
+                            }`}
+                          >
+                            {v}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 {/* Actions Section */}
                 <div className="space-y-4 pt-2">
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full">
                     {/* Quantity selectors */}
                     {isContinuousUnit(product.sold_by) ? (
-                      <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3.5 border border-gray-200/60 shrink-0">
+                      <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 border border-gray-200/60 shrink-0">
                         <input
                           type="number"
                           min="0.1"
@@ -328,24 +357,24 @@ export default function ProductDetailPage() {
                       <div className="flex items-center justify-between bg-gray-50 rounded-xl border border-gray-200/60 shrink-0">
                         <button
                           onClick={() => setQty(Math.max(1, qty - 1))}
-                          className="w-14 h-12 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
+                          className="w-12 h-10 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
                         >
-                          <Minus className="w-4 h-4" />
+                          <Minus className="w-3.5 h-3.5" />
                         </button>
-                        <span className="w-12 text-center font-bold text-gray-900 text-sm">{qty}</span>
+                        <span className="w-10 text-center font-bold text-gray-900 text-sm">{qty}</span>
                         <button
                           onClick={() => setQty(qty + 1)}
-                          className="w-14 h-12 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
+                          className="w-12 h-10 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
                         >
-                          <Plus className="w-4 h-4" />
+                          <Plus className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     )}
 
                     {/* Add to Cart button */}
                     <button
-                      onClick={() => { addItem(product, qty); setQty(1); }}
-                      className="bg-coral hover:bg-[#C44E1E] text-white px-8 py-3.5 rounded-xl font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2.5 text-sm uppercase tracking-wide flex-1"
+                      onClick={() => { addItem(product, qty, selectedVariant || undefined); setQty(1); }}
+                      className="bg-[#E3602D] hover:bg-[#C44E1E] text-white px-8 py-3 rounded-xl font-bold transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2.5 text-sm uppercase tracking-wide flex-1"
                     >
                       <ShoppingCart className="w-4 h-4 shrink-0" />
                       {t.products.addToCart}
@@ -355,7 +384,7 @@ export default function ProductDetailPage() {
                   {/* Direct Shop Purchase button */}
                   <button
                     onClick={handleOpenReferralModal}
-                    className="w-full border-2 border-emerald-600 hover:bg-emerald-50/50 text-emerald-800 px-6 py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2.5 text-sm uppercase tracking-wide"
+                    className="w-full border border-emerald-600/30 bg-emerald-50/10 hover:bg-emerald-50/40 text-emerald-800 px-6 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2.5 text-sm uppercase tracking-wide"
                   >
                     <Ticket className="w-4 h-4 shrink-0 text-emerald-600" />
                     {lang === "ar" ? "شراء من المحل (خصم)" : lang === "fr" ? "Achat au magasin (code)" : "Buy at Shop (code)"}

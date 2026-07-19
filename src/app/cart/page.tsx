@@ -268,7 +268,7 @@ export default function CartPage() {
               <div className="flex-1 space-y-4">
                 {items.map((item) => (
                   <div
-                    key={item.productId}
+                    key={`${item.productId}-${item.selectedVariant || "default"}`}
                     className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-row items-start sm:items-center gap-3 sm:gap-4 relative"
                   >
                     {/* Product Image */}
@@ -289,6 +289,13 @@ export default function CartPage() {
                         <h3 className="font-semibold text-gray-900 text-sm sm:text-base truncate pr-6 sm:pr-0 rtl:pl-6 rtl:pr-0">
                           {item.name}
                         </h3>
+                        {item.selectedVariant && (
+                          <div className="mt-1">
+                            <span className="inline-block text-[10px] sm:text-xs font-bold text-orange-700 bg-orange-50 px-2 py-0.5 rounded-md border border-orange-100/50">
+                              {item.selectedVariant}
+                            </span>
+                          </div>
+                        )}
                         <p className="text-emerald-600 font-bold text-xs sm:text-sm mt-0.5 sm:mt-1">
                           {currency}{item.price.toFixed(2)}
                           {item.sold_by && item.sold_by !== "piece" && (
@@ -310,7 +317,7 @@ export default function CartPage() {
                                 min="0.1"
                                 step="0.1"
                                 value={item.quantity}
-                                onChange={(e) => updateQuantity(item.productId, Math.max(0.1, Number(e.target.value) || 0.1))}
+                                onChange={(e) => updateQuantity(item.productId, Math.max(0.1, Number(e.target.value) || 0.1), item.selectedVariant)}
                                 className="w-12 sm:w-16 bg-transparent text-center font-bold text-gray-900 text-xs sm:text-sm focus:outline-none"
                               />
                               <span className="text-[10px] sm:text-xs text-gray-400 font-medium">{unitLabel(item.sold_by, lang)}</span>
@@ -318,7 +325,7 @@ export default function CartPage() {
                           ) : (
                             <div className="flex items-center gap-1 bg-gray-50 border border-gray-200/60 rounded-xl p-0.5">
                               <button
-                                onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                                onClick={() => updateQuantity(item.productId, item.quantity - 1, item.selectedVariant)}
                                 disabled={item.quantity <= 1}
                                 className="w-7 h-7 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:pointer-events-none transition-colors"
                               >
@@ -328,7 +335,7 @@ export default function CartPage() {
                                 {item.quantity}
                               </span>
                               <button
-                                onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                                onClick={() => updateQuantity(item.productId, item.quantity + 1, item.selectedVariant)}
                                 className="w-7 h-7 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 transition-colors"
                               >
                                 <Plus className="w-3 h-3" />
@@ -348,7 +355,7 @@ export default function CartPage() {
 
                     {/* Delete Button (absolute on mobile for neat spacing, standard on desktop) */}
                     <button
-                      onClick={() => removeItem(item.productId)}
+                      onClick={() => removeItem(item.productId, item.selectedVariant)}
                       className="absolute top-3 right-3 sm:relative sm:top-auto sm:right-auto p-1.5 sm:p-2 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all border border-transparent hover:border-red-100 rtl:left-3 rtl:right-auto sm:rtl:left-auto"
                       aria-label="Remove item"
                     >

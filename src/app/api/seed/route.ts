@@ -40,6 +40,7 @@ export async function POST(request: Request) {
     description: p.description,
     features: p.features,
     in_stock: p.inStock,
+    variants: p.variants || [],
   }));
 
   const { data, error } = await supabase.from("products").insert(mapped).select();

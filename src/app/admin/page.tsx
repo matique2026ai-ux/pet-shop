@@ -82,7 +82,7 @@ interface Order {
   delivery_area?: string | null;
   delivery_fee?: number;
   delivery_eta?: string | null;
-  items: { id: string; name: string; price: number; quantity: number; image?: string }[];
+  items: { id: string; name: string; price: number; quantity: number; image?: string; selectedVariant?: string }[];
   total: number;
   status: string;
   notes?: string | null;
@@ -284,6 +284,7 @@ type FormState = {
 
   video: string;
   ingredients: string;
+  variants: string;
 };
 
 const emptyForm: FormState = {
@@ -303,6 +304,7 @@ const emptyForm: FormState = {
   soldBy: "piece" as UnitType,
   video: "",
   ingredients: "",
+  variants: "",
 };
 
 function OrderDetailRow({
@@ -394,7 +396,14 @@ function OrderDetailRow({
                       {item.image && (
                         <img src={item.image} alt={item.name} className="w-8 h-8 rounded-lg object-cover" />
                       )}
-                      <span className="font-medium text-gray-900">{item.name}</span>
+                      <span className="font-medium text-gray-900">
+                        {item.name}
+                        {item.selectedVariant && (
+                          <span className="ml-2 text-xs text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full font-bold">
+                            {item.selectedVariant}
+                          </span>
+                        )}
+                      </span>
                       <span className="text-gray-400 text-xs">× {item.quantity}</span>
                     </div>
                     <span className="font-semibold text-gray-900">{(item.price * item.quantity).toLocaleString()} {currency}</span>
@@ -879,6 +888,7 @@ export default function AdminDashboard() {
         soldBy: (product.sold_by as UnitType) || "piece",
         video: product.video || "",
         ingredients: product.ingredients || "",
+        variants: product.variants?.join(", ") || "",
       });
     setFormErrors({});
     setShowModal(true);
@@ -923,6 +933,7 @@ export default function AdminDashboard() {
         sold_by: form.soldBy,
         video: form.video || undefined,
         ingredients: form.ingredients || undefined,
+        variants: form.variants.split(",").map((v) => v.trim()).filter(Boolean),
       };
       if (form.originalPrice) body.original_price = Number(form.originalPrice);
 
@@ -2699,6 +2710,17 @@ export default function AdminDashboard() {
                       value={form.features}
                       onChange={(e) => setForm({ ...form, features: e.target.value })}
                       placeholder="Feature 1, Feature 2, Feature 3"
+                      className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Variants (comma-separated, e.g. "Chicken, Turkey, Fish")</label>
+                    <input
+                      type="text"
+                      value={form.variants}
+                      onChange={(e) => setForm({ ...form, variants: e.target.value })}
+                      placeholder="Strawberry, Pineapple, Orange"
                       className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
                   </div>

@@ -16,6 +16,7 @@ export interface Product {
   video?: string;
   ingredients?: string;
   images?: string[];
+  variants?: string[];
 }
 
 export interface Subcategory {
@@ -123,8 +124,8 @@ export const categories: Category[] = [
 
 export const products: Product[] = [
   // ===== CATS =====
-  { id: "c1", name: "Premium Dry Cat Food 2kg", category: "cats", subcategory: "cats-food", price: 32.99, originalPrice: 39.99, image: "https://picsum.photos/seed/c1/400/400", badge: "SALE", rating: 4.7, reviews: 89, description: "High-protein dry cat food with real chicken.", features: ["Real chicken first ingredient", "No artificial colors", "Grain-free option", "Omega-3 fatty acids"], inStock: true },
-  { id: "c2", name: "Wet Cat Food Variety Pack 12x85g", category: "cats", subcategory: "cats-food", price: 24.99, image: "https://picsum.photos/seed/c2/400/400", badge: "NEW", rating: 4.8, reviews: 124, description: "Assorted wet food pack with tuna, salmon & chicken.", features: ["12 pouches", "No preservatives", "High moisture content", "Taurine enriched"], inStock: true },
+  { id: "c1", name: "Premium Dry Cat Food 2kg", category: "cats", subcategory: "cats-food", price: 32.99, originalPrice: 39.99, image: "https://picsum.photos/seed/c1/400/400", badge: "SALE", rating: 4.7, reviews: 89, description: "High-protein dry cat food with real chicken.", features: ["Real chicken first ingredient", "No artificial colors", "Grain-free option", "Omega-3 fatty acids"], inStock: true, variants: ["Poulet (دجاج)", "Dinde (ديك رومي)", "Poisson (سمك)"] },
+  { id: "c2", name: "Wet Cat Food Variety Pack 12x85g", category: "cats", subcategory: "cats-food", price: 24.99, image: "https://picsum.photos/seed/c2/400/400", badge: "NEW", rating: 4.8, reviews: 124, description: "Assorted wet food pack with tuna, salmon & chicken.", features: ["12 pouches", "No preservatives", "High moisture content", "Taurine enriched"], inStock: true, variants: ["Thon (تونة)", "Saumon (سلمون)", "Poulet (دجاج)"] },
   { id: "c3", name: "Clumping Cat Litter 10kg", category: "cats", subcategory: "cats-litter", price: 18.99, originalPrice: 22.99, image: "https://picsum.photos/seed/c3/400/400", badge: "SALE", rating: 4.6, reviews: 203, description: "Ultra-clumping bentonite cat litter.", features: ["99% dust-free", "Instant clumping", "Odor control", "Natural clay"], inStock: true },
   { id: "c4", name: "Self-Cleaning Litter Box", category: "cats", subcategory: "cats-litter", price: 89.99, image: "https://picsum.photos/seed/c4/400/400", rating: 4.4, reviews: 67, description: "Automatic self-scooping litter box.", features: ["Auto-clean cycle", "Carbon filter", "Low energy", "Easy dump tray"], inStock: true },
   { id: "c5", name: "Interactive Feather Wand Toy", category: "cats", subcategory: "cats-toys", price: 12.99, image: "https://picsum.photos/seed/c5/400/400", rating: 4.5, reviews: 156, description: "Teaser wand with realistic feathers.", features: ["Real feathers", "Retractable string", "Replaceable attachments", "Ergonomic handle"], inStock: true },
@@ -135,7 +136,7 @@ export const products: Product[] = [
   { id: "c10", name: "Cat Tree Tower 6-Level", category: "cats", subcategory: "cats-beds", price: 139.99, image: "https://picsum.photos/seed/c10/400/400", rating: 4.6, reviews: 73, description: "Multi-level cat tree with sisal scratching posts.", features: ["6 platforms", "Sisal rope posts", "Hanging toy", "Removable cushions"], inStock: true },
   { id: "c11", name: "Stainless Steel Cat Bowls Set", category: "cats", subcategory: "cats-bowls", price: 22.99, image: "https://picsum.photos/seed/c11/400/400", rating: 4.7, reviews: 134, description: "Set of 2 stainless steel bowls with silicone mat.", features: ["Stainless steel", "Non-slip silicone base", "Dishwasher safe", "Raised design"], inStock: true },
   { id: "c12", name: "Automatic Cat Water Fountain", category: "cats", subcategory: "cats-bowls", price: 39.99, image: "https://picsum.photos/seed/c12/400/400", rating: 4.5, reviews: 211, description: "Filtered water fountain with 2L capacity.", features: ["Carbon filter", "Quiet pump", "2L capacity", "BPA-free"], inStock: true },
-  { id: "c13", name: "Cat Grooming Brush - Deshedding", category: "cats", subcategory: "cats-grooming", price: 14.99, image: "/cat-grooming-brush.png", rating: 4.4, reviews: 167, description: "Stainless steel deshedding brush.", features: ["Stainless steel blade", "Ergonomic handle", "Self-cleaning button", "Reduces shedding by 90%"], inStock: true },
+  { id: "c13", name: "Cat Grooming Brush - Deshedding", category: "cats", subcategory: "cats-grooming", price: 14.99, image: "/cat-grooming-brush.png", rating: 4.4, reviews: 167, description: "Stainless steel deshedding brush.", features: ["Stainless steel blade", "Ergonomic handle", "Self-cleaning button", "Reduces shedding by 90%"], inStock: true, variants: ["Vert (أخضر)", "Rose (وردي)", "Bleu (أزرق)"] },
   { id: "c14", name: "Cat Nail Clippers & File Set", category: "cats", subcategory: "cats-grooming", price: 11.99, image: "https://picsum.photos/seed/c14/400/400", rating: 4.3, reviews: 89, description: "Safety nail clippers with file and guide.", features: ["Safety guard", "Stainless steel", "Nail file included", "Non-slip handles"], inStock: true },
 
   // ===== DOGS =====
