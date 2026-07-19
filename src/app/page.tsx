@@ -303,7 +303,10 @@ export default function HomePage() {
       {/* ══════════════════════════════════
           CATEGORIES GRID
       ══════════════════════════════════ */}
-      <section className="py-12 bg-[#F8F7F4]">
+      <section className="py-12 bg-[#F8F7F4] relative overflow-hidden">
+        {/* Background Footprints */}
+        <PawPrint className="absolute top-8 left-[5%] w-14 h-14 rotate-[-12deg] text-[#E3602D]/4 pointer-events-none select-none" />
+        <PawPrint className="absolute bottom-6 right-[4%] w-16 h-16 rotate-[28deg] text-[#E3602D]/4 pointer-events-none select-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center mb-8">
@@ -475,7 +478,10 @@ export default function HomePage() {
       {/* ══════════════════════════════════
           TESTIMONIALS
       ══════════════════════════════════ */}
-      <section className="py-14 bg-white">
+      <section className="py-14 bg-white relative overflow-hidden">
+        {/* Background Footprints */}
+        <PawPrint className="absolute top-10 right-[10%] w-12 h-12 rotate-[15deg] text-[#E3602D]/3 pointer-events-none select-none" />
+        <PawPrint className="absolute bottom-4 left-[8%] w-10 h-10 rotate-[-35deg] text-[#E3602D]/3 pointer-events-none select-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center mb-10">
@@ -508,6 +514,9 @@ export default function HomePage() {
           CTA SECTION
       ══════════════════════════════════ */}
       <section className="py-16 bg-[#1A120B] text-center relative overflow-hidden">
+        {/* Background Footprints */}
+        <PawPrint className="absolute top-4 left-[10%] w-12 h-12 rotate-[-15deg] text-white/3 pointer-events-none select-none" />
+        <PawPrint className="absolute bottom-4 right-[12%] w-16 h-16 rotate-[25deg] text-[#F1C290]/2 pointer-events-none select-none" />
         {/* Gold glow accents */}
         <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#E3602D] rounded-full opacity-5 blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-[#F5851F] rounded-full opacity-5 blur-3xl pointer-events-none" />
