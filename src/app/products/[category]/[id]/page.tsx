@@ -174,7 +174,7 @@ export default function ProductDetailPage() {
 
               {/* Left Side: Product Image & Video Trigger */}
               <div className="lg:col-span-6 flex flex-col gap-4 relative z-10 w-full">
-                <div className="relative w-full aspect-square max-h-[520px] bg-gray-50/55 rounded-3xl p-6 flex items-center justify-center border border-gray-100 shadow-sm group overflow-hidden">
+                <div className="relative w-full aspect-square max-h-[380px] bg-gray-50/55 rounded-3xl p-6 flex items-center justify-center border border-gray-100 shadow-sm group overflow-hidden">
                   {activeMedia === "video" && embed ? (
                     embed.kind === "iframe" ? (
                       <iframe
@@ -219,7 +219,7 @@ export default function ProductDetailPage() {
                         setActiveMedia("image");
                         setActiveImage(product.image);
                       }}
-                      className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border bg-white overflow-hidden p-1.5 transition-all ${
+                      className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl border bg-white overflow-hidden p-1 transition-all ${
                         activeMedia === "image" && activeImage === product.image
                           ? "border-coral ring-2 ring-coral/20"
                           : "border-gray-200 hover:border-coral"
@@ -238,7 +238,7 @@ export default function ProductDetailPage() {
                           setActiveMedia("image");
                           setActiveImage(imgUrl);
                         }}
-                        className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border bg-white overflow-hidden p-1.5 transition-all ${
+                        className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl border bg-white overflow-hidden p-1 transition-all ${
                           activeMedia === "image" && activeImage === imgUrl
                             ? "border-coral ring-2 ring-coral/20"
                             : "border-gray-200 hover:border-coral"
@@ -256,13 +256,13 @@ export default function ProductDetailPage() {
                         onClick={() => {
                           setActiveMedia("video");
                         }}
-                        className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border bg-gray-900 overflow-hidden flex items-center justify-center transition-all ${
+                        className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl border bg-gray-900 overflow-hidden flex items-center justify-center transition-all ${
                           activeMedia === "video"
                             ? "border-coral ring-2 ring-coral/20"
                             : "border-gray-200 hover:border-coral"
                         }`}
                       >
-                        <Play className="w-7 h-7 text-white fill-white/20" />
+                        <Play className="w-5 h-5 text-white fill-white/20" />
                       </button>
                     )}
                   </div>
