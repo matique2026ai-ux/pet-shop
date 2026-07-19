@@ -166,227 +166,221 @@ export default function ProductDetailPage() {
           </div>
         </section>
 
-        <section className="py-8 lg:py-12 bg-gray-50/50">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <AnimatedSection>
-              <div className="relative bg-white rounded-3xl shadow-xl border border-gray-100 p-6 sm:p-8 space-y-6">
-                
-                {/* Background decorative animal footprint patterns */}
-                <FootprintDecorations category={product.category} />
+        <section className="py-8 lg:py-12 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start relative">
+              {/* Background decorative animal footprint patterns */}
+              <FootprintDecorations category={product.category} />
 
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-                  {/* Left Side: Product Image & Video Trigger */}
-                  <div className="md:col-span-5 flex flex-col items-center gap-4">
-                    <div className="relative w-64 h-64 sm:w-72 sm:h-72 bg-white rounded-2xl p-4 flex items-center justify-center border border-gray-100 shadow-sm group">
-                      {activeMedia === "video" && embed ? (
-                        embed.kind === "iframe" ? (
-                          <iframe
-                            src={embed.src}
-                            title={product.name}
-                            className="absolute inset-0 w-full h-full rounded-2xl"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                          />
-                        ) : (
-                          <video src={embed.src} controls autoPlay className="absolute inset-0 w-full h-full object-contain bg-black rounded-2xl" />
-                        )
-                      ) : (
-                        <>
-                          <Image
-                            src={activeImage || "/placeholder.svg"}
-                            alt={product.name}
-                            fill
-                            priority
-                            className="object-contain p-4 transition-transform duration-550 group-hover:scale-105"
-                            sizes="(max-width: 768px) 100vw, 30vw"
-                          />
-                          <button
-                            onClick={() => setLightboxOpen(true)}
-                            className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors flex items-center justify-center rounded-2xl"
-                            aria-label={t.products.zoom}
-                          >
-                            <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 rounded-full p-2.5 shadow-md">
-                              <ZoomIn className="w-4 h-4 text-gray-600" />
-                            </span>
-                          </button>
-                        </>
-                      )}
-                    </div>
+              {/* Left Side: Product Image & Video Trigger */}
+              <div className="lg:col-span-6 flex flex-col gap-4 relative z-10 w-full">
+                <div className="relative w-full aspect-square max-h-[520px] bg-gray-50/55 rounded-3xl p-6 flex items-center justify-center border border-gray-100 shadow-sm group overflow-hidden">
+                  {activeMedia === "video" && embed ? (
+                    embed.kind === "iframe" ? (
+                      <iframe
+                        src={embed.src}
+                        title={product.name}
+                        className="absolute inset-0 w-full h-full rounded-3xl"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    ) : (
+                      <video src={embed.src} controls autoPlay className="absolute inset-0 w-full h-full object-contain bg-black rounded-3xl" />
+                    )
+                  ) : (
+                    <>
+                      <Image
+                        src={activeImage || "/placeholder.svg"}
+                        alt={product.name}
+                        fill
+                        priority
+                        className="object-contain p-6 transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                      />
+                      <button
+                        onClick={() => setLightboxOpen(true)}
+                        className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors flex items-center justify-center rounded-3xl"
+                        aria-label={t.products.zoom}
+                      >
+                        <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 backdrop-blur-sm rounded-full p-3.5 shadow-md">
+                          <ZoomIn className="w-5 h-5 text-gray-700" />
+                        </span>
+                      </button>
+                    </>
+                  )}
+                </div>
 
-                    {/* Gallery Thumbnails */}
-                    {((product.images && product.images.length > 0) || hasVideo) && (
-                      <div className="flex flex-wrap items-center justify-center gap-2 mt-2 max-w-full">
-                        {/* Main Cover Image Thumbnail */}
-                        <button
-                          onClick={() => {
-                            setActiveMedia("image");
-                            setActiveImage(product.image);
-                          }}
-                          className={`relative w-12 h-12 rounded-lg border bg-white overflow-hidden p-1 transition-all ${
-                            activeMedia === "image" && activeImage === product.image
-                              ? "border-coral ring-2 ring-coral/20"
-                              : "border-gray-200 hover:border-coral"
-                          }`}
-                        >
-                          <div className="relative w-full h-full">
-                            <Image src={product.image} alt={product.name} fill className="object-contain" />
-                          </div>
-                        </button>
-
-                        {/* Additional Images Thumbnails */}
-                        {product.images?.map((imgUrl, idx) => (
-                          <button
-                            key={idx}
-                            onClick={() => {
-                              setActiveMedia("image");
-                              setActiveImage(imgUrl);
-                            }}
-                            className={`relative w-12 h-12 rounded-lg border bg-white overflow-hidden p-1 transition-all ${
-                              activeMedia === "image" && activeImage === imgUrl
-                                ? "border-coral ring-2 ring-coral/20"
-                                : "border-gray-200 hover:border-coral"
-                            }`}
-                          >
-                            <div className="relative w-full h-full">
-                              <Image src={imgUrl} alt={`${product.name} - gallery ${idx + 1}`} fill className="object-contain" />
-                            </div>
-                          </button>
-                        ))}
-
-                        {/* Video Thumbnail */}
-                        {hasVideo && (
-                          <button
-                            onClick={() => {
-                              setActiveMedia("video");
-                            }}
-                            className={`relative w-12 h-12 rounded-lg border bg-gray-900 overflow-hidden flex items-center justify-center transition-all ${
-                              activeMedia === "video"
-                                ? "border-coral ring-2 ring-coral/20"
-                                : "border-gray-200 hover:border-coral"
-                            }`}
-                          >
-                            <Play className="w-5 h-5 text-white fill-white/20" />
-                          </button>
-                        )}
+                {/* Gallery Thumbnails */}
+                {((product.images && product.images.length > 0) || hasVideo) && (
+                  <div className="flex flex-wrap items-center justify-start gap-3 mt-1 max-w-full">
+                    {/* Main Cover Image Thumbnail */}
+                    <button
+                      onClick={() => {
+                        setActiveMedia("image");
+                        setActiveImage(product.image);
+                      }}
+                      className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border bg-white overflow-hidden p-1.5 transition-all ${
+                        activeMedia === "image" && activeImage === product.image
+                          ? "border-coral ring-2 ring-coral/20"
+                          : "border-gray-200 hover:border-coral"
+                      }`}
+                    >
+                      <div className="relative w-full h-full">
+                        <Image src={product.image} alt={product.name} fill className="object-contain" />
                       </div>
+                    </button>
+
+                    {/* Additional Images Thumbnails */}
+                    {product.images?.map((imgUrl, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          setActiveMedia("image");
+                          setActiveImage(imgUrl);
+                        }}
+                        className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border bg-white overflow-hidden p-1.5 transition-all ${
+                          activeMedia === "image" && activeImage === imgUrl
+                            ? "border-coral ring-2 ring-coral/20"
+                            : "border-gray-200 hover:border-coral"
+                        }`}
+                      >
+                        <div className="relative w-full h-full">
+                          <Image src={imgUrl} alt={`${product.name} - gallery ${idx + 1}`} fill className="object-contain" />
+                        </div>
+                      </button>
+                    ))}
+
+                    {/* Video Thumbnail */}
+                    {hasVideo && (
+                      <button
+                        onClick={() => {
+                          setActiveMedia("video");
+                        }}
+                        className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border bg-gray-900 overflow-hidden flex items-center justify-center transition-all ${
+                          activeMedia === "video"
+                            ? "border-coral ring-2 ring-coral/20"
+                            : "border-gray-200 hover:border-coral"
+                        }`}
+                      >
+                        <Play className="w-7 h-7 text-white fill-white/20" />
+                      </button>
                     )}
                   </div>
+                )}
+              </div>
 
-                  {/* Right Side: Product Details */}
-                  <div className={`md:col-span-7 space-y-5 ${lang === "ar" ? "text-right" : "text-left"}`} dir={lang === "ar" ? "rtl" : "ltr"}>
-                    <div className="space-y-2">
-                      <div>
-                        <span className="text-xs font-bold text-emerald-800 uppercase bg-emerald-50 px-2.5 py-1 rounded-lg">
-                          {catName}
-                        </span>
-                      </div>
-                      
-                      <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight">
-                        {product.name}
-                      </h1>
+              {/* Right Side: Product Details */}
+              <div className={`lg:col-span-6 space-y-6 relative z-10 ${lang === "ar" ? "text-right" : "text-left"}`} dir={lang === "ar" ? "rtl" : "ltr"}>
+                <div className="space-y-3">
+                  <div>
+                    <span className="text-xs font-bold text-emerald-800 uppercase bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100/50">
+                      {catName}
+                    </span>
+                  </div>
+                  
+                  <h1 className={`text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900 leading-tight tracking-tight ${lang === "ar" ? "font-cairo" : "font-outfit"}`}>
+                    {product.name}
+                  </h1>
 
-                      {/* Ratings */}
-                      <div className="flex items-center gap-2 pt-1">
-                        <div className="flex items-center gap-0.5">
-                          {[1, 2, 3, 4, 5].map((i) => (
-                            <Star key={i} className={`w-3.5 h-3.5 ${i <= Math.round(product.reviews > 0 ? product.rating : 0) ? "fill-orange-400 text-orange-400" : "fill-gray-200 text-gray-200"}`} />
-                          ))}
-                        </div>
-                        <span className="text-xs font-semibold text-gray-500">
-                          ({product.reviews} {t.products.reviews})
-                        </span>
-                      </div>
+                  {/* Ratings */}
+                  <div className="flex items-center gap-2 pt-1 justify-start">
+                    <div className="flex items-center gap-0.5">
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <Star key={i} className={`w-4 h-4 ${i <= Math.round(product.reviews > 0 ? product.rating : 0) ? "fill-amber-400 text-amber-400" : "fill-gray-200 text-gray-200"}`} />
+                      ))}
                     </div>
+                    <span className="text-xs font-semibold text-gray-500">
+                      ({product.reviews} {t.products.reviews})
+                    </span>
+                  </div>
+                </div>
 
-                    {/* Price section */}
-                    <div className="pt-2">
-                      <div className="flex items-baseline gap-3">
-                        <p className="text-3xl font-extrabold text-gray-900">
-                          {product.price.toLocaleString()} {currency}
-                          {product.sold_by && product.sold_by !== "piece" && <span className="text-sm font-normal text-gray-400"> /{unitLabel(product.sold_by, lang)}</span>}
-                        </p>
-                        {product.originalPrice && (
-                          <p className="text-sm text-gray-400 line-through">{product.originalPrice.toLocaleString()} {currency}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="border-t border-gray-100 pt-5">
-                      {/* Quantity and Add to Cart action */}
-                      <div className={`flex flex-col sm:flex-row flex-wrap items-center gap-3 w-full`}>
-                        {/* Quantity selectors */}
-                        {isContinuousUnit(product.sold_by) ? (
-                          <div className="flex items-center justify-between w-full sm:w-auto bg-gray-100 rounded-xl px-4 py-2 shrink-0">
-                            <input
-                              type="number"
-                              min="0.1"
-                              step="0.1"
-                              value={qty}
-                              onChange={(e) => setQty(Math.max(0.1, Number(e.target.value) || 0.1))}
-                              className="w-16 bg-transparent text-center font-bold text-gray-900 text-sm focus:outline-none"
-                            />
-                            <span className="text-xs text-gray-500 font-semibold">{unitLabel(product.sold_by, lang)}</span>
-                          </div>
-                        ) : (
-                          <div className="flex items-center justify-between w-full sm:w-auto bg-gray-100 rounded-xl shrink-0">
-                            <button
-                              onClick={() => setQty(Math.max(1, qty - 1))}
-                              className="w-12 h-10 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
-                            >
-                              <Minus className="w-3.5 h-3.5" />
-                            </button>
-                            <span className="w-12 text-center font-bold text-gray-900 text-sm">{qty}</span>
-                            <button
-                              onClick={() => setQty(qty + 1)}
-                              className="w-12 h-10 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
-                            >
-                              <Plus className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        )}
-
-                        {/* Add to Cart button */}
-                        <button
-                          onClick={() => { addItem(product, qty); setQty(1); }}
-                          className="w-full sm:w-auto bg-coral hover:bg-coral-600 text-white px-8 py-3 rounded-lg font-bold transition-all shadow-md flex items-center justify-center gap-2 text-sm uppercase tracking-wide min-w-[160px] flex-1"
-                        >
-                          <ShoppingCart className="w-4 h-4 shrink-0" />
-                          {t.products.addToCart}
-                        </button>
-
-                        {/* Direct Shop Purchase button (for all products) */}
-                        <button
-                          onClick={handleOpenReferralModal}
-                          className="w-full sm:w-auto border-2 border-coral text-coral hover:bg-coral/5 px-6 py-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wide min-w-[160px] flex-1"
-                        >
-                          <Ticket className="w-4 h-4 shrink-0" />
-                          {lang === "ar" ? "شراء من المحل (خصم)" : lang === "fr" ? "Achat au magasin (code)" : "Buy at Shop (code)"}
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Features List with custom bullet shapes */}
-                    {product.features && product.features.length > 0 && (
-                      <div className="space-y-2.5 pt-5 border-t border-gray-100">
-                        {product.features.map((f, i) => (
-                          <div key={i} className="flex items-start gap-2.5">
-                            <span className="text-sm text-gray-600 font-medium leading-relaxed">{f}</span>
-                            <div className="w-5 h-5 rounded-full bg-orange-100 text-[#EA580C] flex items-center justify-center text-xs shrink-0 font-bold mt-0.5">
-                              ✓
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                {/* Price section */}
+                <div className="py-5 border-y border-gray-100">
+                  <div className="flex items-baseline gap-3">
+                    <p className={`text-3xl sm:text-4xl font-black text-gray-900 ${lang === "ar" ? "font-cairo" : "font-outfit"}`}>
+                      {product.price.toLocaleString()} {currency}
+                      {product.sold_by && product.sold_by !== "piece" && <span className="text-sm font-normal text-gray-400"> /{unitLabel(product.sold_by, lang)}</span>}
+                    </p>
+                    {product.originalPrice && (
+                      <p className="text-base text-gray-400 line-through">{product.originalPrice.toLocaleString()} {currency}</p>
                     )}
                   </div>
                 </div>
 
+                {/* Actions Section */}
+                <div className="space-y-4 pt-2">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full">
+                    {/* Quantity selectors */}
+                    {isContinuousUnit(product.sold_by) ? (
+                      <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3.5 border border-gray-200/60 shrink-0">
+                        <input
+                          type="number"
+                          min="0.1"
+                          step="0.1"
+                          value={qty}
+                          onChange={(e) => setQty(Math.max(0.1, Number(e.target.value) || 0.1))}
+                          className="w-16 bg-transparent text-center font-bold text-gray-900 text-sm focus:outline-none"
+                        />
+                        <span className="text-xs text-gray-500 font-semibold">{unitLabel(product.sold_by, lang)}</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-between bg-gray-50 rounded-xl border border-gray-200/60 shrink-0">
+                        <button
+                          onClick={() => setQty(Math.max(1, qty - 1))}
+                          className="w-14 h-12 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
+                        >
+                          <Minus className="w-4 h-4" />
+                        </button>
+                        <span className="w-12 text-center font-bold text-gray-900 text-sm">{qty}</span>
+                        <button
+                          onClick={() => setQty(qty + 1)}
+                          className="w-14 h-12 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Add to Cart button */}
+                    <button
+                      onClick={() => { addItem(product, qty); setQty(1); }}
+                      className="bg-coral hover:bg-[#C44E1E] text-white px-8 py-3.5 rounded-xl font-bold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2.5 text-sm uppercase tracking-wide flex-1"
+                    >
+                      <ShoppingCart className="w-4 h-4 shrink-0" />
+                      {t.products.addToCart}
+                    </button>
+                  </div>
+
+                  {/* Direct Shop Purchase button */}
+                  <button
+                    onClick={handleOpenReferralModal}
+                    className="w-full border-2 border-emerald-600 hover:bg-emerald-50/50 text-emerald-800 px-6 py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2.5 text-sm uppercase tracking-wide"
+                  >
+                    <Ticket className="w-4 h-4 shrink-0 text-emerald-600" />
+                    {lang === "ar" ? "شراء من المحل (خصم)" : lang === "fr" ? "Achat au magasin (code)" : "Buy at Shop (code)"}
+                  </button>
+                </div>
+
+                {/* Features List */}
+                {product.features && product.features.length > 0 && (
+                  <div className="space-y-3 pt-6 border-t border-gray-100">
+                    {product.features.map((f, i) => (
+                      <div key={i} className="flex items-start gap-3">
+                        <div className="w-5 h-5 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center text-xs shrink-0 font-bold mt-0.5 border border-emerald-100">
+                          ✓
+                        </div>
+                        <span className="text-sm text-gray-600 font-medium leading-relaxed">{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            </AnimatedSection>
+            </div>
 
             {/* Details tabs */}
             {(product.description || (product.features && product.features.length) || hasIngredients || hasVideo) && (
-              <AnimatedSection className="mt-14">
+              <AnimatedSection className="mt-16 pt-12 border-t border-gray-100">
                 <div className="border-b border-gray-200">
                   <div className="flex gap-1 sm:gap-2 overflow-x-auto">
                     {product.description && (
