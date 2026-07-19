@@ -96,10 +96,10 @@ export default function Footer() {
   return (
     <footer className="bg-[#1A120B] border-t border-stone-800 pt-16 pb-8 text-slate-300 relative overflow-hidden">
       {/* Background Footprints */}
-      <PawPrint className="absolute top-6 left-[8%] w-12 h-12 rotate-[-25deg] text-white/3 pointer-events-none select-none" />
-      <PawPrint className="absolute top-[40%] right-[6%] w-16 h-16 rotate-[35deg] text-white/2 pointer-events-none select-none" />
-      <PawPrint className="absolute bottom-8 left-[25%] w-10 h-10 rotate-[-45deg] text-white/2 pointer-events-none select-none" />
-      <PawPrint className="absolute bottom-12 right-[22%] w-12 h-12 rotate-[15deg] text-[#F1C290]/2 pointer-events-none select-none" />
+      <PawPrint className="absolute top-6 left-[8%] w-12 h-12 rotate-[-25deg] text-white/8 pointer-events-none select-none" />
+      <PawPrint className="absolute top-[40%] right-[6%] w-16 h-16 rotate-[35deg] text-white/6 pointer-events-none select-none" />
+      <PawPrint className="absolute bottom-8 left-[25%] w-10 h-10 rotate-[-45deg] text-white/6 pointer-events-none select-none" />
+      <PawPrint className="absolute bottom-12 right-[22%] w-12 h-12 rotate-[15deg] text-[#F1C290]/8 pointer-events-none select-none" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 gap-y-12">
 
