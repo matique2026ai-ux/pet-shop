@@ -54,7 +54,7 @@ function Footprint({ category, className }: { category: string; className: strin
   }
   
   const path = category === "cats" ? CAT_PAW_PATH : (category === "dogs" ? DOG_PAW_PATH : DEFAULT_PAW_PATH);
-  const colorClass = category === "dogs" ? "text-[#E3602D]/8" : "text-[#E3602D]/10";
+  const colorClass = category === "dogs" ? "text-[#E3602D]/18" : "text-[#E3602D]/22";
   
   return (
     <svg viewBox="0 0 24 24" fill="currentColor"
@@ -69,13 +69,13 @@ function CardFootprintDecor({ category }: { category: string }) {
   return (
     <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
       {/* Top left footprint */}
-      <Footprint category={category} className="absolute top-2 left-2 w-5 h-5 rotate-[-25deg] opacity-75" />
+      <Footprint category={category} className="absolute top-2 left-2 w-7 h-7 rotate-[-25deg]" />
       
       {/* Middle right footprint */}
-      <Footprint category={category} className="absolute top-1/2 right-1.5 w-6 h-6 rotate-[35deg] opacity-60 -translate-y-1/2" />
+      <Footprint category={category} className="absolute top-1/2 right-1.5 w-9 h-9 rotate-[35deg] -translate-y-1/2 opacity-90" />
       
       {/* Bottom left footprint */}
-      <Footprint category={category} className="absolute bottom-2 left-6 w-5 h-5 rotate-[-45deg] opacity-80" />
+      <Footprint category={category} className="absolute bottom-2 left-6 w-8 h-8 rotate-[-45deg] opacity-95" />
     </div>
   );
 }
