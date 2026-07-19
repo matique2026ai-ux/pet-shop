@@ -520,7 +520,7 @@ export default function CartPage() {
                 const fullAddress = deliveryType === "pickup"
                   ? "[Pickup] الاستلام من المحل"
                   : (deliveryType === "stopdesk"
-                    ? `[Stop Desk Yalidine] Commune: ${commune}, Wilaya: ${wilaya}`
+                    ? `[Stop Desk] Commune: ${commune}, Wilaya: ${wilaya}`
                     : `[À Domicile] Adresse: ${addressDetails}, Commune: ${commune}, Wilaya: ${wilaya}`);
 
                 const hasBirds = cartHasBirds;
@@ -599,6 +599,48 @@ export default function CartPage() {
                 <label className="block text-sm font-medium text-gray-700">
                   {lang === "ar" ? "طريقة الاستلام والتوصيل" : lang === "fr" ? "Mode de livraison et retrait" : "Delivery & Pickup Method"}
                 </label>
+                
+                {cartHasBirds ? (
+                  // Force Pickup for Live Animals
+                  <div className="space-y-3">
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800 leading-relaxed" dir={lang === "ar" ? "rtl" : "ltr"}>
+                      <p className="font-bold mb-1">⚠️ {lang === "ar" ? "تنبيه هام:" : lang === "fr" ? "Avis important :" : "Important Notice:"}</p>
+                      {lang === "ar" 
+                        ? "سلة المشتريات تحتوي على كائنات حية. حفاظاً على سلامتها، لا يمكن شحنها عبر شركات التوصيل. يرجى استلام الطلب من المحل مباشرة."
+                        : lang === "fr"
+                        ? "Votre panier contient des animaux vivants. Pour leur sécurité, l'expédition via des sociétés de livraison est impossible. Veuillez récupérer votre commande directement au magasin."
+                        : "Your cart contains live animals. For their safety, they cannot be shipped via delivery companies. Please pick up your order directly from the store."}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setDeliveryType("pickup")}
+                      className={`w-full px-2 py-4 rounded-xl border text-sm font-bold transition-all flex items-center justify-center gap-2 border-amber-600 bg-amber-50 text-amber-800 ring-2 ring-amber-600/20`}
+                    >
+                      <Store className="w-5 h-5 shrink-0" />
+                      <span className="truncate">{lang === "ar" ? "استلام من المحل (إجباري)" : lang === "fr" ? "Retrait en magasin (Obligatoire)" : "Store Pickup (Required)"}</span>
+                    </button>
+                  </div>
+                ) : (
+                  // Hide Pickup, only allow Delivery for other products
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setDeliveryType("home")}
+                      className={`px-2 py-3 rounded-xl border text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${deliveryType === "home" ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
+                    >
+                      <Home className="w-4 h-4 shrink-0" />
+                      <span className="truncate">{lang === "ar" ? "توصيل للمنزل" : lang === "fr" ? "À domicile" : "Home Delivery"}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeliveryType("stopdesk")}
+                      className={`px-2 py-3 rounded-xl border text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${deliveryType === "stopdesk" ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
+                    >
+                      <Building2 className="w-4 h-4 shrink-0" />
+                      <span className="truncate">{lang === "ar" ? "مكتب التوصيل" : lang === "fr" ? "Bureau de livraison" : "Delivery Office"}</span>
+                    </button>
+                  </div>
+                )}
 
                 {deliveryType === "" && (
                   <p className="text-xs text-red-500 mt-1">{lang === "ar" ? "يرجى اختيار نوع التوصيل." : "Veuillez choisir un type de livraison."}</p>
