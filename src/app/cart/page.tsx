@@ -113,13 +113,22 @@ export default function CartPage() {
   }, []);
 
   const cartHasBirds = items.some((item) => {
-    const cat = products.find((p: any) => p.id === item.productId)?.category;
-    return cat === "birds" || cat === "cats"; // Consider live animals
+    const p = products.find((p: any) => p.id === item.productId);
+    if (!p) return false;
+    const cat = p.category?.toLowerCase() || "";
+    const sub = p.subcategory?.toLowerCase() || "";
+    // Only flag as live animal if the category or subcategory is explicitly "live-animals", "pets", "live", etc.
+    // This prevents flagging "bird food" (category: birds) as a live animal.
+    return cat === "live-animals" || sub === "live-animals" || cat === "pets" || sub === "pets" || sub.includes("live");
   });
   
   const cartHasOther = items.some((item) => {
-    const cat = products.find((p: any) => p.id === item.productId)?.category;
-    return cat !== "birds" && cat !== "cats";
+    const p = products.find((p: any) => p.id === item.productId);
+    if (!p) return true;
+    const cat = p.category?.toLowerCase() || "";
+    const sub = p.subcategory?.toLowerCase() || "";
+    const isLiveAnimal = cat === "live-animals" || sub === "live-animals" || cat === "pets" || sub === "pets" || sub.includes("live");
+    return !isLiveAnimal;
   });
   
   const hasMixedCart = cartHasBirds && cartHasOther;
