@@ -116,7 +116,7 @@ export async function POST(req: NextRequest) {
             const itemsList = Array.isArray(o.items) 
               ? o.items.map((it: any) => `${it.name} (Qty: ${it.quantity})`).join(", ")
               : "N/A";
-            return `- Order ID: ${o.id}\n  Date: ${dateStr}\n  Status: ${o.status}\n  Total: ${o.total} DZD\n  Items: ${itemsList}`;
+            return `- Order ID: #${o.id.slice(0, 8).toUpperCase()}\n  Date: ${dateStr}\n  Status: ${o.status}\n  Total: ${o.total} DZD\n  Items: ${itemsList}`;
           }).join("\n\n");
         }
       } catch (err) {
@@ -142,6 +142,8 @@ You must speak in Algerian Darja (الدارجة الجزائرية) or French/A
 When recommending or discussing any specific product, you MUST include its direct Link (from the Link field in the catalog context below) in your response so the customer can view the product images and make a purchase.
 
 If the customer asks about their order status or queries "تتبع طلبيتي" or similar, use the "Recent Orders for this Customer" section below to track it. Explain their order status clearly, translate the status into a friendly Darja explanation, and reassure them.
+
+CRITICAL RULE: DO NOT start your message with "Réponse automatique" or any similar automated prefix. Just answer directly and naturally.
 
 Here is our current in-stock catalog:
 ${catalogContext}
