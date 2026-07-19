@@ -43,6 +43,23 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true });
     }
 
+    const lowerText = text.toLowerCase();
+    // Ignore messages from other autoresponders/bots to prevent infinite loops
+    const isBot = 
+      lowerText.includes("réponse automatique") || 
+      lowerText.includes("reponse automatique") ||
+      lowerText.includes("réponse") ||
+      lowerText.includes("reponse") ||
+      lowerText.includes("automatic reply") ||
+      lowerText.includes("autoresponder") ||
+      lowerText.includes("الرد الآلي") ||
+      lowerText.includes("الرد التلقائي") ||
+      lowerText.includes("bot");
+
+    if (isBot) {
+      return NextResponse.json({ success: true });
+    }
+
     // Retrieve system settings
     const token = process.env.WHATSAPP_TOKEN;
     const phoneId = process.env.WHATSAPP_PHONE_NUMBER_ID;

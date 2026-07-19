@@ -7,7 +7,19 @@ export async function POST(req: NextRequest) {
     const queryVal = body.query;
     const text = (queryVal !== undefined && queryVal !== null ? String(queryVal) : "").toLowerCase().trim();
 
-    if (!text) {
+    // Ignore messages from other autoresponders/bots to prevent infinite loops
+    const isBot = 
+      text.includes("réponse automatique") || 
+      text.includes("reponse automatique") ||
+      text.includes("réponse") ||
+      text.includes("reponse") ||
+      text.includes("automatic reply") ||
+      text.includes("autoresponder") ||
+      text.includes("الرد الآلي") ||
+      text.includes("الرد التلقائي") ||
+      text.includes("bot");
+
+    if (!text || isBot) {
       return NextResponse.json({ replies: [] });
     }
 
