@@ -3,8 +3,38 @@ import { createAdminClient } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const queryVal = body.query;
+    const contentType = req.headers.get("content-type") || "";
+    let body: any = {};
+    
+    try {
+      if (contentType.includes("application/json")) {
+        body = await req.json();
+      } else {
+        const rawText = await req.text();
+        if (contentType.includes("application/x-www-form-urlencoded")) {
+          const params = new URLSearchParams(rawText);
+          body = {};
+          params.forEach((value, key) => {
+            body[key] = value;
+          });
+        } else {
+          try {
+            body = JSON.parse(rawText);
+          } catch {
+            const params = new URLSearchParams(rawText);
+            body = {};
+            params.forEach((value, key) => {
+              body[key] = value;
+            });
+          }
+        }
+      }
+    } catch (err) {
+      console.error("Body parsing error:", err);
+      body = {};
+    }
+
+    const queryVal = body.query || body.message || body.msg || body.text || body.body;
     const text = (queryVal !== undefined && queryVal !== null ? String(queryVal) : "").toLowerCase().trim();
 
     // Ignore messages from other autoresponders/bots to prevent infinite loops
