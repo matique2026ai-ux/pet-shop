@@ -87,12 +87,14 @@ export async function POST(req: NextRequest) {
     if (geminiKey) {
       try {
         const catalogContext = products
-          ? products.map((p) => `- ${p.name} (Category: ${p.category}): ${p.price} DZD. Description: ${p.description || "N/A"}`).join("\n")
+          ? products.map((p) => `- Name: ${p.name}\n  Category: ${p.category}\n  Price: ${p.price} DZD\n  Description: ${p.description || "N/A"}\n  Link: https://pet-cat.vercel.app/products/${p.category}/${p.id}`).join("\n\n")
           : "No products in stock.";
         
         const systemPrompt = `You are a helpful and friendly AI assistant for "Paws & Wings", a pet shop in Algeria (Sétif). 
 Your task is to answer customers' questions about our store, catalog, products, prices, stock, and delivery.
 You must speak in Algerian Darja (الدارجة الجزائرية) or French/Arabic, depending on the customer's language. Keep answers concise, helpful, and polite.
+
+When recommending or discussing any specific product, you MUST include its direct Link (from the Link field in the catalog context below) in your response so the customer can view the product images and make a purchase.
 
 Here is our current in-stock catalog:
 ${catalogContext}
