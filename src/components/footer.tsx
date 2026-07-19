@@ -110,7 +110,7 @@ export default function Footer() {
     ? `${deliveryPrefix} ${delivery.city} • ${delivery.eta}`
     : `${deliveryPrefix} Sétif • 24-48h`;
   const emailAddr  = s("email",     t.contact.emailText || "hello@pawsandwings.com");
-  const whatsapp   = formatWhatsAppNumber(store?.whatsapp, "213555123456");
+  const whatsapp   = formatWhatsAppNumber(store?.whatsapp, "213776075355");
   const instagram  = s("instagram", "https://instagram.com");
   const facebook   = s("facebook",  "https://facebook.com");
   const tiktok     = store && store.tiktok ? store.tiktok : "";

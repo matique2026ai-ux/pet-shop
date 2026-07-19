@@ -6,7 +6,7 @@ import { useSiteSettings } from "@/lib/site-settings";
 export function OrganizationSchema() {
   const { store } = useSiteSettings();
   const storeName = store?.storeName || store?.name || "Paws & Wings";
-  const phone = store?.phone || "+21336123456";
+  const phone = store?.phone || "+2130776075355";
   const email = store?.email || "hello@pawsandwings.com";
   const address = store?.address || "حي الهضاب، سطيف، الجزائر";
 
@@ -55,7 +55,7 @@ export function OrganizationSchema() {
 export function LocalBusinessSchema() {
   const { store } = useSiteSettings();
   const storeName = store?.storeName || store?.name || "Paws & Wings";
-  const phone = store?.phone || "+21336123456";
+  const phone = store?.phone || "+2130776075355";
   const address = store?.address || "حي الهضاب، سطيف، الجزائر";
 
   useEffect(() => {

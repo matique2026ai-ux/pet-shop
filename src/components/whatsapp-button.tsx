@@ -6,7 +6,7 @@ import { useSiteSettings } from "@/lib/site-settings";
 import { useI18n } from "@/lib/i18n-context";
 import { formatWhatsAppNumber } from "@/lib/phone-utils";
 
-const DEFAULT_PHONE = "+213555123456";
+const DEFAULT_PHONE = "+2130776075355";
 
 export default function WhatsAppButton() {
   const pathname = usePathname();

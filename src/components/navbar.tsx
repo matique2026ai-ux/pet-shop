@@ -62,7 +62,7 @@ export default function Navbar() {
   const { totalItems } = useCart();
   const { categories } = useTranslatedData();
   const { store } = useSiteSettings();
-  const storePhone = store?.phone || "+213555123456";
+  const storePhone = store?.phone || "+2130776075355";
   const telHref = "tel:" + storePhone.replace(/[^0-9+]/g, "");
   const { user, profile, loading: authLoading, logout } = useAuth();
   const router = useRouter();

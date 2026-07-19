@@ -604,7 +604,7 @@ export default function ProductDetailPage() {
                 </button>
 
                 <a
-                  href={`https://wa.me/${formatWhatsAppNumber(store?.whatsapp || delivery?.whatsapp || store?.phone, "213555123456")}?text=${encodeURIComponent(
+                  href={`https://wa.me/${formatWhatsAppNumber(store?.whatsapp || delivery?.whatsapp || store?.phone, "213776075355")}?text=${encodeURIComponent(
                     lang === "ar" 
                       ? `مرحباً، أود شراء المنتج "${product.name}" من المحل. كود الحجز والخصم الخاص بي هو: ${generatedCode}` 
                       : `Bonjour, je souhaite acheter le produit "${product.name}" au magasin. Mon code de réduction est : ${generatedCode}`

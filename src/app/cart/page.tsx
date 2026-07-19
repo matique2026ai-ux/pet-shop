@@ -127,7 +127,7 @@ export default function CartPage() {
 
   if (orderPlaced) {
     const orderRef = orderPlaced.id.slice(-6).toUpperCase();
-    const whatsappNum = formatWhatsAppNumber(store?.whatsapp || delivery?.whatsapp || store?.phone, "213555123456");
+    const whatsappNum = formatWhatsAppNumber(store?.whatsapp || delivery?.whatsapp || store?.phone, "213776075355");
     
     const refCodeText = orderReferral ? ` (كود الإحالة: BIRD-${orderReferral.toUpperCase()}-${orderRef})` : ` (كود عمولة الطيور: BIRD-DIRECT-${orderRef})`;
     const isPickup = orderPlaced.delivery_address === "[Pickup] الاستلام من المحل";
