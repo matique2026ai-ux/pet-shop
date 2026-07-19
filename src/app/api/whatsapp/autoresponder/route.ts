@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
       .select("id, name, price, description, in_stock, category")
       .eq("in_stock", true);
 
-    const hasProducts = products && products.length > 0;
+    const hasProducts = !!(products && products.length > 0);
 
     // 2. Response Generation
     let replyText = "";
