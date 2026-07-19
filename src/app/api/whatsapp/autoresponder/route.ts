@@ -34,7 +34,13 @@ export async function POST(req: NextRequest) {
       body = {};
     }
 
-    const queryVal = body.query || body.message || body.msg || body.text || body.body;
+    let queryVal = body.query || body.message || body.msg || body.text || body.body;
+    
+    // AutoResponder app sometimes sends query as an object with nested message field
+    if (queryVal && typeof queryVal === "object") {
+      queryVal = queryVal.message || queryVal.query || queryVal.text || "";
+    }
+
     const text = (queryVal !== undefined && queryVal !== null ? String(queryVal) : "").toLowerCase().trim();
 
     // Ignore messages from other autoresponders/bots to prevent infinite loops
