@@ -55,7 +55,7 @@ function regionForWilaya(w: string, c: string = ""): "setifCenter" | "setifOther
 const DELIVERY_CONFIG = {
   setifCenter: {
     home: 200,
-    stopdesk: 150,
+    stopdesk: 200,
     eta: { en: "12-24h", fr: "12-24h", ar: "12-24 ساعة" }
   },
   setifOther: {
