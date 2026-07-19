@@ -14,7 +14,7 @@ import AnimatedSection from "@/components/animated-section";
 import ProductCard from "@/components/product-card";
 import ProductReviews from "@/components/product-reviews";
 import {
-  Star, ChevronRight, Check, ShoppingCart, Plus, Minus, Share2, X, ZoomIn,
+  Star, StarHalf, ChevronRight, Check, ShoppingCart, Plus, Minus, Share2, X, ZoomIn,
   Play, Truck, ShieldCheck, BadgeCheck, Leaf, Ticket, MessageCircle,
 } from "lucide-react";
 import { unitLabel, isContinuousUnit } from "@/lib/units";
@@ -287,9 +287,24 @@ export default function ProductDetailPage() {
                   {/* Ratings */}
                   <div className="flex items-center gap-2 pt-1 justify-start">
                     <div className="flex items-center gap-0.5">
-                      {[1, 2, 3, 4, 5].map((i) => (
-                        <Star key={i} className={`w-4 h-4 ${i <= Math.round(product.reviews > 0 ? product.rating : 0) ? "fill-amber-400 text-amber-400" : "fill-gray-200 text-gray-200"}`} />
-                      ))}
+                      {(() => {
+                        const r = Number(product.rating) || 0;
+                        const rounded = Math.round(r * 2) / 2;
+                        const full = Math.floor(rounded);
+                        const half = rounded % 1 !== 0;
+                        const empty = Math.max(0, 5 - full - (half ? 1 : 0));
+                        return (
+                          <>
+                            {Array.from({ length: full }).map((_, idx) => (
+                              <Star key={`f-${idx}`} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                            ))}
+                            {half && <StarHalf className="w-4 h-4 fill-amber-400 text-amber-400" />}
+                            {Array.from({ length: empty }).map((_, idx) => (
+                              <Star key={`e-${idx}`} className="w-4 h-4 text-gray-200" />
+                            ))}
+                          </>
+                        );
+                      })()}
                     </div>
                     <span className="text-xs font-semibold text-gray-500">
                       ({product.reviews} {t.products.reviews})
