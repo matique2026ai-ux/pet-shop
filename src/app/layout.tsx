@@ -10,6 +10,7 @@ import Footer from "@/components/footer";
 import CookieConsent from "@/components/cookie-consent";
 import { OrganizationSchema, WebSiteSchema, LocalBusinessSchema } from "@/components/schema-jsonld";
 import Script from "next/script";
+import { PawPrint } from "lucide-react";
 
 const cairo = Cairo({
   subsets: ["latin", "arabic"],
@@ -91,6 +92,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
             <WhatsAppButton />
             <CookieConsent />
+            <GlobalFootprints />
             </AuthProvider>
           </CartProvider>
         </I18nProvider>
@@ -106,5 +108,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Script>
       </body>
     </html>
+  );
+}
+
+function GlobalFootprints() {
+  return (
+    <div className="fixed inset-0 pointer-events-none select-none z-[-1] overflow-hidden opacity-[0.15]">
+      {/* Scattered watermarks */}
+      <PawPrint className="absolute top-[12%] left-[4%] w-24 h-24 rotate-[15deg] text-[#E3602D]/20" />
+      <PawPrint className="absolute top-[28%] right-[6%] w-28 h-28 rotate-[-25deg] text-[#E3602D]/15" />
+      <PawPrint className="absolute top-[52%] left-[10%] w-20 h-20 rotate-[40deg] text-[#E3602D]/15" />
+      <PawPrint className="absolute top-[72%] right-[10%] w-24 h-24 rotate-[-15deg] text-[#E3602D]/12" />
+      <PawPrint className="absolute bottom-[8%] left-[5%] w-28 h-28 rotate-[30deg] text-[#E3602D]/15" />
+      <PawPrint className="absolute bottom-[22%] right-[4%] w-24 h-24 rotate-[-35deg] text-[#E3602D]/20" />
+    </div>
   );
 }
