@@ -112,7 +112,17 @@ export default function CartPage() {
     }
   }, []);
 
-  const cartHasBirds = items.some((item) => products.find((p: any) => p.id === item.productId)?.category === "birds");
+  const cartHasBirds = items.some((item) => {
+    const cat = products.find((p: any) => p.id === item.productId)?.category;
+    return cat === "birds" || cat === "cats"; // Consider live animals
+  });
+  
+  const cartHasOther = items.some((item) => {
+    const cat = products.find((p: any) => p.id === item.productId)?.category;
+    return cat !== "birds" && cat !== "cats";
+  });
+  
+  const hasMixedCart = cartHasBirds && cartHasOther;
 
   const d = { ...DEFAULT_DELIVERY, ...(delivery || {}) };
   const region = regionForWilaya(wilaya, commune);
@@ -408,12 +418,28 @@ export default function CartPage() {
                     <span>{t.cart.codBadge}</span>
                   </div>
 
-                  <button
-                    onClick={() => setCheckingOut(true)}
-                    className="w-full mt-4 bg-emerald-600 text-white py-3 rounded-xl font-medium hover:bg-emerald-700 transition-colors"
-                  >
-                    {t.cart.checkout}
-                  </button>
+                  {hasMixedCart ? (
+                    <div className="mt-4 p-3 bg-red-50 text-red-700 text-xs rounded-xl border border-red-200">
+                      ⚠️ {lang === "ar" ? "لا يمكن جمع كائنات حية مع منتجات أخرى في نفس الطلب. يرجى فصلهما في طلبين (طلب استلام للمحل، وطلب توصيل للمنتجات)."
+                          : lang === "fr" ? "Vous ne pouvez pas mélanger des animaux vivants avec d'autres produits. Veuillez les séparer en deux commandes (retrait pour les animaux, livraison pour le reste)."
+                          : "Cannot mix live animals with other products. Please split into two orders."}
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        // Auto-set the delivery type based on cart contents
+                        if (cartHasBirds) {
+                          setDeliveryType("pickup");
+                        } else if (deliveryType === "pickup" || deliveryType === "") {
+                          setDeliveryType("home");
+                        }
+                        setCheckingOut(true);
+                      }}
+                      className="w-full mt-4 bg-emerald-600 text-white py-3 rounded-xl font-medium hover:bg-emerald-700 transition-colors"
+                    >
+                      {t.cart.checkout}
+                    </button>
+                  )}
 
                   <Link
                     href="/products"
@@ -571,34 +597,9 @@ export default function CartPage() {
               {/* Delivery Type Selection */}
               <div className="space-y-1">
                 <label className="block text-sm font-medium text-gray-700">
-                  {lang === "ar" ? "نوع التوصيل" : lang === "fr" ? "Type de livraison" : "Delivery Type"}
+                  {lang === "ar" ? "طريقة الاستلام والتوصيل" : lang === "fr" ? "Mode de livraison et retrait" : "Delivery & Pickup Method"}
                 </label>
-                <div className="grid grid-cols-3 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setDeliveryType("home")}
-                    className={`px-2 py-3 rounded-xl border text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${deliveryType === "home" ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
-                  >
-                    <Home className="w-4 h-4 shrink-0" />
-                    <span className="truncate">{lang === "ar" ? "للمنزل" : lang === "fr" ? "À domicile" : "Home"}</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setDeliveryType("stopdesk")}
-                    className={`px-2 py-3 rounded-xl border text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${deliveryType === "stopdesk" ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
-                  >
-                    <Building2 className="w-4 h-4 shrink-0" />
-                    <span className="truncate">{lang === "ar" ? "ياليدين" : lang === "fr" ? "Bureau" : "Office"}</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setDeliveryType("pickup")}
-                    className={`px-2 py-3 rounded-xl border text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${deliveryType === "pickup" ? "border-amber-600 bg-amber-50 text-amber-800 ring-2 ring-amber-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
-                  >
-                    <Store className="w-4 h-4 shrink-0" />
-                    <span className="truncate">{t.cart.pickup || "Pickup"}</span>
-                  </button>
-                </div>
+
                 {deliveryType === "" && (
                   <p className="text-xs text-red-500 mt-1">{lang === "ar" ? "يرجى اختيار نوع التوصيل." : "Veuillez choisir un type de livraison."}</p>
                 )}

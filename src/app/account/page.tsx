@@ -83,40 +83,6 @@ export default function AccountPage() {
     }
   };
 
-  const modifyOrder = async (orderId: string, deliveryType: "pickup" | "delivery") => {
-    const label =
-      deliveryType === "pickup"
-        ? lang === "ar" ? "تحويل الطلب إلى استلام من المتجر (مجاني)؟"
-          : lang === "fr" ? "Convertir en retrait en magasin (gratuit) ?"
-          : "Switch to store pickup (free)?"
-        : lang === "ar" ? "تحويل الطلب إلى توصيل للمنزل (250 د.ج)؟"
-          : lang === "fr" ? "Convertir en livraison (250 DZD) ?"
-          : "Switch to home delivery (250 DZD)?";
-    if (!window.confirm(label)) return;
-    setModifyingId(orderId);
-    try {
-      const supabase = createClient();
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return;
-      const res = await fetch(`/api/orders/${orderId}/modify`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ delivery_type: deliveryType }),
-      });
-      if (res.ok) {
-        await loadOrders();
-      } else {
-        const err = await res.json();
-        alert(err.error || (lang === "ar" ? "حدث خطأ" : "Une erreur s'est produite"));
-      }
-    } finally {
-      setModifyingId(null);
-    }
-  };
-
   const save = async () => {
     setSaving(true);
     setSaved(false);
@@ -291,34 +257,7 @@ export default function AccountPage() {
                     {/* Action buttons — only for pending orders */}
                     {o.status === "pending" && (
                       <div className="mt-3 flex flex-col gap-2">
-                        {/* Switch delivery type */}
-                        {o.delivery_area !== "pickup" ? (
-                          <button
-                            onClick={() => modifyOrder(o.id, "pickup")}
-                            disabled={modifyingId === o.id}
-                            className="w-full inline-flex items-center justify-center gap-2 text-sm text-amber-700 border border-amber-200 rounded-xl py-2 hover:bg-amber-50 transition-colors disabled:opacity-50"
-                          >
-                            {modifyingId === o.id
-                              ? <Loader2 className="w-4 h-4 animate-spin" />
-                              : <Package className="w-4 h-4" />}
-                            {lang === "ar" ? "🏪 تحويل إلى استلام من المتجر (مجاني)"
-                              : lang === "fr" ? "🏪 Convertir en retrait magasin (gratuit)"
-                              : "🏪 Switch to store pickup (free)"}
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => modifyOrder(o.id, "delivery")}
-                            disabled={modifyingId === o.id}
-                            className="w-full inline-flex items-center justify-center gap-2 text-sm text-blue-700 border border-blue-200 rounded-xl py-2 hover:bg-blue-50 transition-colors disabled:opacity-50"
-                          >
-                            {modifyingId === o.id
-                              ? <Loader2 className="w-4 h-4 animate-spin" />
-                              : <Package className="w-4 h-4" />}
-                            {lang === "ar" ? "🚚 تحويل إلى توصيل للمنزل (250 د.ج)"
-                              : lang === "fr" ? "🚚 Convertir en livraison (250 DZD)"
-                              : "🚚 Switch to home delivery (250 DZD)"}
-                          </button>
-                        )}
+
                         {/* Cancel button */}
                         <button
                           onClick={() => cancelOrder(o.id)}
