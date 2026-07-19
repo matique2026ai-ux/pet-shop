@@ -34,20 +34,15 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 /* ─── Card Background Footprints ─── */
-function CardFootprintDecor({ category }: { category: string }) {
-  if (category === "cats") {
-    return (
-      <svg viewBox="0 0 24 24" fill="currentColor"
-        className="absolute -bottom-2 -right-2 w-16 h-16 text-[#E3602D]/12 pointer-events-none transform rotate-12 select-none z-0"
-        aria-hidden="true">
-        <path d="M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3zm-4.5-3c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm9 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6.5-3.5C9.17 7.5 8.5 8.17 8.5 9s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm4 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z" />
-      </svg>
-    );
-  }
+const CAT_PAW_PATH = "M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3zm-4.5-3c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm9 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6.5-3.5C9.17 7.5 8.5 8.17 8.5 9s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm4 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z";
+const DOG_PAW_PATH = "M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3zm-4.5-3c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm9 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6.5-3.5C9.17 7.5 8.5 8.17 8.5 9s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm4 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z";
+const DEFAULT_PAW_PATH = "M12 3C8.5 3 5 6.5 5 11c0 4.5 3.5 7.5 5.5 8.5C11 19.8 11.5 20 12 20s1-.2 1.5-.5c2-1 5.5-4 5.5-8.5 0-4.5-3.5-8-7-8zm-2 14c-1.5-1-3.5-3-3.5-6 0-3 2-5 3.5-5 .5 0 1 .5 1 1 0 1.5-1 3-1 5 0 1 .5 2 1 2.5-.5.5-1 1.5-1 2.5zm4.5-2.5c.5-.5 1-1.5 1-2.5 0-2-1-3.5-1-5 0-.5.5-1 1-1 1.5 0 3.5 2 3.5 5 0 3-2 5-3.5 6 0-1-.5-2-1-2.5z";
+
+function Footprint({ category, className }: { category: string; className: string }) {
   if (category === "birds") {
     return (
       <svg viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" fill="none"
-        className="absolute -bottom-2 -right-2 w-16 h-16 text-[#E3602D]/15 pointer-events-none transform rotate-45 select-none z-0"
+        className={`${className} text-[#E3602D]/12 pointer-events-none select-none z-0`}
         aria-hidden="true">
         <line x1="12" y1="4" x2="12" y2="20" />
         <line x1="12" y1="12" x2="6" y2="8" />
@@ -57,21 +52,31 @@ function CardFootprintDecor({ category }: { category: string }) {
       </svg>
     );
   }
-  if (category === "dogs") {
-    return (
-      <svg viewBox="0 0 24 24" fill="currentColor"
-        className="absolute -bottom-2 -right-2 w-20 h-20 text-[#E3602D]/10 pointer-events-none transform -rotate-12 select-none z-0"
-        aria-hidden="true">
-        <path d="M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3zm-4.5-3c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm9 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6.5-3.5C9.17 7.5 8.5 8.17 8.5 9s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm4 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z" />
-      </svg>
-    );
-  }
+  
+  const path = category === "cats" ? CAT_PAW_PATH : (category === "dogs" ? DOG_PAW_PATH : DEFAULT_PAW_PATH);
+  const colorClass = category === "dogs" ? "text-[#E3602D]/8" : "text-[#E3602D]/10";
+  
   return (
     <svg viewBox="0 0 24 24" fill="currentColor"
-      className="absolute -bottom-2 -right-2 w-14 h-14 text-[#E3602D]/10 pointer-events-none transform rotate-12 select-none z-0"
+      className={`${className} ${colorClass} pointer-events-none select-none z-0`}
       aria-hidden="true">
-      <path d="M12 3C8.5 3 5 6.5 5 11c0 4.5 3.5 7.5 5.5 8.5C11 19.8 11.5 20 12 20s1-.2 1.5-.5c2-1 5.5-4 5.5-8.5 0-4.5-3.5-8-7-8zm-2 14c-1.5-1-3.5-3-3.5-6 0-3 2-5 3.5-5 .5 0 1 .5 1 1 0 1.5-1 3-1 5 0 1 .5 2 1 2.5-.5.5-1 1.5-1 2.5zm4.5-2.5c.5-.5 1-1.5 1-2.5 0-2-1-3.5-1-5 0-.5.5-1 1-1 1.5 0 3.5 2 3.5 5 0 3-2 5-3.5 6 0-1-.5-2-1-2.5z" />
+      <path d={path} />
     </svg>
+  );
+}
+
+function CardFootprintDecor({ category }: { category: string }) {
+  return (
+    <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
+      {/* Top left footprint */}
+      <Footprint category={category} className="absolute top-2 left-2 w-5 h-5 rotate-[-25deg] opacity-75" />
+      
+      {/* Middle right footprint */}
+      <Footprint category={category} className="absolute top-1/2 right-1.5 w-6 h-6 rotate-[35deg] opacity-60 -translate-y-1/2" />
+      
+      {/* Bottom left footprint */}
+      <Footprint category={category} className="absolute bottom-2 left-6 w-5 h-5 rotate-[-45deg] opacity-80" />
+    </div>
   );
 }
 
