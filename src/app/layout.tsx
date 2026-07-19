@@ -111,16 +111,42 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   );
 }
 
+function MixedFootprint({ type, className }: { type: "cat" | "dog" | "bird"; className: string }) {
+  if (type === "bird") {
+    return (
+      <svg viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" fill="none"
+        className={`${className} pointer-events-none select-none z-0`}
+        aria-hidden="true">
+        <line x1="12" y1="4" x2="12" y2="20" />
+        <line x1="12" y1="12" x2="6" y2="8" />
+        <line x1="12" y1="12" x2="18" y2="8" />
+        <line x1="12" y1="16" x2="8" y2="19" />
+        <line x1="12" y1="16" x2="16" y2="19" />
+      </svg>
+    );
+  }
+  
+  const path = "M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3zm-4.5-3c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm9 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6.5-3.5C9.17 7.5 8.5 8.17 8.5 9s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm4 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z";
+  
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor"
+      className={`${className} pointer-events-none select-none z-0`}
+      aria-hidden="true">
+      <path d={path} />
+    </svg>
+  );
+}
+
 function GlobalFootprints() {
   return (
     <div className="fixed inset-0 pointer-events-none select-none z-[-1] overflow-hidden opacity-[0.15]">
       {/* Scattered watermarks */}
-      <PawPrint className="absolute top-[12%] left-[4%] w-24 h-24 rotate-[15deg] text-[#E3602D]/20" />
-      <PawPrint className="absolute top-[28%] right-[6%] w-28 h-28 rotate-[-25deg] text-[#E3602D]/15" />
-      <PawPrint className="absolute top-[52%] left-[10%] w-20 h-20 rotate-[40deg] text-[#E3602D]/15" />
-      <PawPrint className="absolute top-[72%] right-[10%] w-24 h-24 rotate-[-15deg] text-[#E3602D]/12" />
-      <PawPrint className="absolute bottom-[8%] left-[5%] w-28 h-28 rotate-[30deg] text-[#E3602D]/15" />
-      <PawPrint className="absolute bottom-[22%] right-[4%] w-24 h-24 rotate-[-35deg] text-[#E3602D]/20" />
+      <MixedFootprint type="cat" className="absolute top-[12%] left-[4%] w-24 h-24 rotate-[15deg] text-[#E3602D]/20" />
+      <MixedFootprint type="dog" className="absolute top-[28%] right-[6%] w-28 h-28 rotate-[-25deg] text-[#E3602D]/15" />
+      <MixedFootprint type="bird" className="absolute top-[52%] left-[10%] w-20 h-20 rotate-[40deg] text-[#E3602D]/15" />
+      <MixedFootprint type="cat" className="absolute top-[72%] right-[10%] w-24 h-24 rotate-[-15deg] text-[#E3602D]/12" />
+      <MixedFootprint type="dog" className="absolute bottom-[8%] left-[5%] w-28 h-28 rotate-[30deg] text-[#E3602D]/15" />
+      <MixedFootprint type="bird" className="absolute bottom-[22%] right-[4%] w-24 h-24 rotate-[-35deg] text-[#E3602D]/20" />
     </div>
   );
 }

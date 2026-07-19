@@ -28,6 +28,32 @@ const catIcons: Record<string, React.ReactNode> = {
 
 
 
+function MixedFootprint({ type, className }: { type: "cat" | "dog" | "bird"; className: string }) {
+  if (type === "bird") {
+    return (
+      <svg viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" fill="none"
+        className={`${className} pointer-events-none select-none z-0`}
+        aria-hidden="true">
+        <line x1="12" y1="4" x2="12" y2="20" />
+        <line x1="12" y1="12" x2="6" y2="8" />
+        <line x1="12" y1="12" x2="18" y2="8" />
+        <line x1="12" y1="16" x2="8" y2="19" />
+        <line x1="12" y1="16" x2="16" y2="19" />
+      </svg>
+    );
+  }
+  
+  const path = "M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3zm-4.5-3c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm9 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6.5-3.5C9.17 7.5 8.5 8.17 8.5 9s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm4 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z";
+  
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor"
+      className={`${className} pointer-events-none select-none z-0`}
+      aria-hidden="true">
+      <path d={path} />
+    </svg>
+  );
+}
+
 export default function Navbar() {
   const pathname = usePathname();
   if (pathname.startsWith("/admin")) return null;
@@ -163,9 +189,9 @@ export default function Navbar() {
           : "bg-black/40 backdrop-blur-xl border-b border-white/10 py-0"
       }`}>
         {/* Background Footprints */}
-        <PawPrint className="absolute top-2 left-[15%] w-8 h-8 rotate-[-15deg] text-white/6 pointer-events-none select-none z-0" />
-        <PawPrint className="absolute bottom-2 right-[25%] w-7 h-7 rotate-[25deg] text-white/5 pointer-events-none select-none z-0" />
-        <PawPrint className="absolute top-4 right-[45%] w-6 h-6 rotate-[-45deg] text-[#F1C290]/6 pointer-events-none select-none z-0" />
+        <MixedFootprint type="cat" className="absolute top-2 left-[15%] w-8 h-8 rotate-[-15deg] text-white/6" />
+        <MixedFootprint type="dog" className="absolute bottom-2 right-[25%] w-7 h-7 rotate-[25deg] text-white/5" />
+        <MixedFootprint type="bird" className="absolute top-4 right-[45%] w-6 h-6 rotate-[-45deg] text-[#F1C290]/6" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex items-center justify-between h-16">
 

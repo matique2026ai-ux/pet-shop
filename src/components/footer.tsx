@@ -43,6 +43,32 @@ function TiktokIcon({ className }: { className?: string }) {
 
 
 
+function MixedFootprint({ type, className }: { type: "cat" | "dog" | "bird"; className: string }) {
+  if (type === "bird") {
+    return (
+      <svg viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" fill="none"
+        className={`${className} pointer-events-none select-none z-0`}
+        aria-hidden="true">
+        <line x1="12" y1="4" x2="12" y2="20" />
+        <line x1="12" y1="12" x2="6" y2="8" />
+        <line x1="12" y1="12" x2="18" y2="8" />
+        <line x1="12" y1="16" x2="8" y2="19" />
+        <line x1="12" y1="16" x2="16" y2="19" />
+      </svg>
+    );
+  }
+  
+  const path = "M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3zm-4.5-3c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm9 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6.5-3.5C9.17 7.5 8.5 8.17 8.5 9s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm4 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z";
+  
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor"
+      className={`${className} pointer-events-none select-none z-0`}
+      aria-hidden="true">
+      <path d={path} />
+    </svg>
+  );
+}
+
 export default function Footer() {
   const pathname = usePathname();
   if (pathname.startsWith("/admin")) return null;
@@ -96,10 +122,10 @@ export default function Footer() {
   return (
     <footer className="bg-[#1A120B] border-t border-stone-800 pt-16 pb-8 text-slate-300 relative overflow-hidden">
       {/* Background Footprints */}
-      <PawPrint className="absolute top-6 left-[8%] w-12 h-12 rotate-[-25deg] text-white/8 pointer-events-none select-none" />
-      <PawPrint className="absolute top-[40%] right-[6%] w-16 h-16 rotate-[35deg] text-white/6 pointer-events-none select-none" />
-      <PawPrint className="absolute bottom-8 left-[25%] w-10 h-10 rotate-[-45deg] text-white/6 pointer-events-none select-none" />
-      <PawPrint className="absolute bottom-12 right-[22%] w-12 h-12 rotate-[15deg] text-[#F1C290]/8 pointer-events-none select-none" />
+      <MixedFootprint type="cat" className="absolute top-6 left-[8%] w-12 h-12 rotate-[-25deg] text-white/8" />
+      <MixedFootprint type="dog" className="absolute top-[40%] right-[6%] w-16 h-16 rotate-[35deg] text-white/6" />
+      <MixedFootprint type="bird" className="absolute bottom-8 left-[25%] w-10 h-10 rotate-[-45deg] text-white/6" />
+      <MixedFootprint type="cat" className="absolute bottom-12 right-[22%] w-12 h-12 rotate-[15deg] text-[#F1C290]/8" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 gap-y-12">
 
