@@ -49,12 +49,23 @@ export async function POST(req: NextRequest) {
       text.includes("الرد التلقائي") ||
       text.includes("bot");
 
+    // 1. Fetch products catalog from Supabase
+    const supabase = createAdminClient();
+
     if (!text || isBot) {
+      await logRequest(supabase, {
+        contentType,
+        body,
+        queryVal,
+        text,
+        userAgent: req.headers.get("user-agent"),
+        ip: req.headers.get("x-forwarded-for"),
+        ignored: true,
+        reason: !text ? "empty query" : "detected bot/autoresponder"
+      });
       return NextResponse.json({ replies: [] });
     }
 
-    // 1. Fetch products catalog from Supabase
-    const supabase = createAdminClient();
     const { data: products } = await supabase
       .from("products")
       .select("id, name, price, description, in_stock, category")
@@ -122,6 +133,16 @@ In-stock products:\n${catalogContext}\nCustomer message: "${text}"`;
       }
     }
 
+    await logRequest(supabase, {
+      contentType,
+      body,
+      queryVal,
+      text,
+      userAgent: req.headers.get("user-agent"),
+      ip: req.headers.get("x-forwarded-for"),
+      response: replyText
+    });
+
     return NextResponse.json({
       replies: [
         {
@@ -131,6 +152,12 @@ In-stock products:\n${catalogContext}\nCustomer message: "${text}"`;
     });
   } catch (err) {
     console.error("Error in AutoResponder webhook POST:", err);
+    try {
+      const supabase = createAdminClient();
+      await logRequest(supabase, {
+        error: (err as Error).message
+      });
+    } catch {}
     return NextResponse.json({ replies: [{ message: "حدث خطأ أثناء معالجة الطلب." }] }, { status: 500 });
   }
 }
@@ -152,4 +179,23 @@ async function askGemini(prompt: string, apiKey: string): Promise<string> {
   }
   const data = await response.json();
   return data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I am having trouble answering right now.";
+}
+
+async function logRequest(supabase: any, content: any) {
+  try {
+    const { data } = await supabase.from("site_settings").select("value").eq("key", "debug_logs").single();
+    let logs = data && Array.isArray(data.value) ? data.value : [];
+    logs.push({
+      timestamp: new Date().toISOString(),
+      ...content
+    });
+    if (logs.length > 20) logs = logs.slice(-20);
+    await supabase.from("site_settings").upsert({
+      key: "debug_logs",
+      value: logs,
+      updated_at: new Date().toISOString()
+    });
+  } catch (err) {
+    console.error("Failed to log request in database:", err);
+  }
 }
