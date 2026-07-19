@@ -101,7 +101,7 @@ In-stock products:\n${catalogContext}\nCustomer message: "${text}"`;
     });
   } catch (err) {
     console.error("Error in AutoResponder webhook POST:", err);
-    return NextResponse.json({ replies: [{ message: "حدث خطأ أثناء معالجة الطلب." }] }, { status: 500 });
+    return NextResponse.json({ replies: [{ message: `Error: ${(err as Error).message}` }] }, { status: 500 });
   }
 }
 
