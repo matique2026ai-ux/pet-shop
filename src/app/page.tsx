@@ -89,49 +89,25 @@ function CategoryFootprintDecor({ category }: { category: string }) {
   );
 }
 
-const CATEGORY_THEMES: Record<string, {
-  gradient: string;
-  glowColor: string;
-  icon: React.ReactNode;
-  accentColor: string;
-  badgeBg: string;
-}> = {
-  cats: {
-    gradient: "from-[#F39C12] via-[#E67E22] to-[#D35400]",
-    glowColor: "rgba(230,126,34,0.35)",
-    icon: <Cat className="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 transform rotate-12 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:text-white/15 pointer-events-none" />,
-    accentColor: "text-[#FFE6CC]",
-    badgeBg: "bg-white/15 backdrop-blur-md text-white border border-white/10",
-  },
-  dogs: {
-    gradient: "from-[#F1C40F] via-[#F39C12] to-[#E67E22]",
-    glowColor: "rgba(243,156,18,0.35)",
-    icon: <Dog className="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 transform -rotate-12 transition-all duration-500 group-hover:scale-110 group-hover:rotate-0 group-hover:text-white/15 pointer-events-none" />,
-    accentColor: "text-[#FFF0D0]",
-    badgeBg: "bg-white/15 backdrop-blur-md text-white border border-white/10",
-  },
-  birds: {
-    gradient: "from-[#2ECC71] via-[#27AE60] to-[#16A085]",
-    glowColor: "rgba(46,204,113,0.35)",
-    icon: <Bird className="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 transform rotate-45 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 group-hover:text-white/15 pointer-events-none" />,
-    accentColor: "text-[#E0F8E8]",
-    badgeBg: "bg-white/15 backdrop-blur-md text-white border border-white/10",
-  },
-  fish: {
-    gradient: "from-[#3498DB] via-[#2980B9] to-[#1F3A60]",
-    glowColor: "rgba(52,152,219,0.35)",
-    icon: <Fish className="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 transform -rotate-45 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 group-hover:text-white/15 pointer-events-none" />,
-    accentColor: "text-[#E1F0FA]",
-    badgeBg: "bg-white/15 backdrop-blur-md text-white border border-white/10",
-  },
-  "small-pets": {
-    gradient: "from-[#9B59B6] via-[#8E44AD] to-[#6C3483]",
-    glowColor: "rgba(155,89,182,0.35)",
-    icon: <Rabbit className="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 transform rotate-12 transition-all duration-500 group-hover:scale-110 group-hover:rotate-0 group-hover:text-white/15 pointer-events-none" />,
-    accentColor: "text-[#F5E6FA]",
-    badgeBg: "bg-white/15 backdrop-blur-md text-white border border-white/10",
-  },
+const catIcons: Record<string, React.ReactNode> = {
+  cats:         <Cat    className="w-8 h-8" />,
+  dogs:         <Dog    className="w-8 h-8" />,
+  birds:        <Bird   className="w-8 h-8" />,
+  fish:         <Fish   className="w-8 h-8" />,
+  "small-pets": <Rabbit className="w-8 h-8" />,
 };
+
+function PawIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3z"/>
+      <circle cx="6.5" cy="11.5" r="1.5" />
+      <circle cx="10" cy="8.5" r="1.5" />
+      <circle cx="14" cy="8.5" r="1.5" />
+      <circle cx="17.5" cy="11.5" r="1.5" />
+    </svg>
+  );
+}
 
 export default function HomePage() {
   const { t, dir, lang } = useI18n();
@@ -341,84 +317,30 @@ export default function HomePage() {
             style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" } as React.CSSProperties}
           >
             {categories.map((cat) => {
-              const theme = CATEGORY_THEMES[cat.id] || {
-                gradient: "from-[#F39C12] via-[#E67E22] to-[#D35400]",
-                glowColor: "rgba(230,126,34,0.35)",
-                icon: <PawPrint className="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 transform rotate-12 transition-all duration-500 pointer-events-none" />,
-                accentColor: "text-[#FFE6CC]",
-                badgeBg: "bg-white/15 backdrop-blur-md text-white border border-white/10",
-              };
-
               return (
                 <Link
                   key={cat.id}
                   href={`/products/${cat.id}`}
-                  className="group relative flex flex-col justify-end p-6 rounded-[2rem] overflow-hidden border border-[#F0EDE6]/40 shadow-[0_10px_35px_rgba(0,0,0,0.02)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_45px_var(--glow-color)] shrink-0 w-[155px] sm:w-[190px] lg:w-auto min-h-[220px] sm:min-h-[260px] text-left"
-                  style={{
-                    "--glow-color": theme.glowColor,
-                  } as React.CSSProperties}
+                  className="group relative flex flex-col items-center justify-between p-6 rounded-[2rem] bg-gradient-to-br from-[#FDFBF7] to-[#F5EEDC] border border-[#E3602D]/10 shadow-[0_4px_20px_rgba(0,0,0,0.01)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-md hover:border-[#E3602D]/35 shrink-0 w-[155px] sm:w-[190px] lg:w-auto min-h-[190px] sm:min-h-[220px] text-center"
                 >
-                  {/* Card Background Media */}
-                  {cat.video_url ? (
-                    <div className="absolute inset-0 z-0">
-                      <video
-                        src={cat.video_url}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                      />
-                      {/* Dark overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/10 z-10 transition-opacity duration-500 group-hover:opacity-95" />
-                    </div>
-                  ) : cat.image_url ? (
-                    <div className="absolute inset-0 z-0">
-                      <Image
-                        src={cat.image_url}
-                        alt={cat.name}
-                        fill
-                        placeholder="blur"
-                        blurDataURL={SHIMMER_BLUR}
-                        sizes="(max-width: 640px) 155px, 190px"
-                        className="object-cover group-hover:scale-110 transition-transform duration-700"
-                      />
-                      {/* Dark overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/10 z-10 transition-opacity duration-500 group-hover:opacity-95" />
-                    </div>
-                  ) : (
-                    // Fallback using premium theme gradient mesh and large vector icon
-                    <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} z-0 transition-transform duration-700 group-hover:scale-105 overflow-hidden`}>
-                      {theme.icon}
-                      {/* Subtitle brand overlay to enrich layout */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent z-10" />
-                    </div>
-                  )}
-
-                  {/* Footprint SVG for decorative texture */}
-                  <CategoryFootprintDecor category={cat.id} />
-
-                  {/* Card Content (Text and Badges) on top of background */}
-                  <div className="relative z-20 flex flex-col items-start w-full">
-                    {/* Floating badge */}
-                    <span className={`text-[9px] sm:text-[10px] font-extrabold px-3 py-1 rounded-full ${theme.badgeBg} tracking-wide transition-all duration-300`}>
-                      {t.nav.subcategoryCount.replace("{n}", String(cat.subcategories ? cat.subcategories.length : 0))}
-                    </span>
-                    
-                    {/* Category Title */}
-                    <h3 className="text-white font-black text-base sm:text-lg lg:text-xl mt-2 mb-1 drop-shadow-sm group-hover:text-[#F1C290] transition-colors duration-300">
-                      {cat.name}
-                    </h3>
+                  {/* Paw footprint background decoration in the card */}
+                  <div className="absolute -bottom-2 -left-2 text-[#E3602D]/5 pointer-events-none w-20 h-20 rotate-12 transition-transform duration-500 group-hover:scale-110">
+                    <PawIcon className="w-full h-full" />
                   </div>
 
-                  {/* Glassmorphic Action Button on hover */}
-                  <div className="relative z-20 mt-2 flex items-center justify-center gap-1.5 w-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/25 text-white rounded-2xl py-2 text-[11px] font-black transition-all duration-300 transform translate-y-6 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 shrink-0">
-                    <span>{lang === "ar" ? "تصفح الآن" : lang === "fr" ? "Découvrir" : "Browse Now"}</span>
-                    {dir === "rtl" ? (
-                      <ChevronLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
-                    ) : (
-                      <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                    )}
+                  {/* Icon Container */}
+                  <div className="w-16 h-16 rounded-2xl bg-white flex items-center justify-center text-[#E3602D] shadow-sm border border-[#E3602D]/5 group-hover:bg-[#E3602D] group-hover:text-white transition-colors duration-300">
+                    {catIcons[cat.id] ?? <PawPrint className="w-8 h-8" />}
+                  </div>
+
+                  {/* Content */}
+                  <div className="space-y-1.5 mt-4 relative z-10">
+                    <h3 className="text-[#1A2D24] font-black text-sm sm:text-base lg:text-lg group-hover:text-[#E3602D] transition-colors line-clamp-1">
+                      {cat.name}
+                    </h3>
+                    <span className="inline-block text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-100/50">
+                      {t.nav.subcategoryCount.replace("{n}", String(cat.subcategories ? cat.subcategories.length : 0))}
+                    </span>
                   </div>
                 </Link>
               );
