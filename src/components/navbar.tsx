@@ -157,12 +157,16 @@ export default function Navbar() {
       </div>
 
       {/* ── Main Navbar ── */}
-      <nav className={`sticky top-0 z-50 transition-all duration-300 ${
+      <nav className={`sticky top-0 z-50 transition-all duration-300 overflow-hidden ${
         isScrolled 
           ? "bg-black/60 backdrop-blur-xl border-b border-white/10 shadow-lg py-1" 
           : "bg-black/40 backdrop-blur-xl border-b border-white/10 py-0"
       }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Background Footprints */}
+        <PawPrint className="absolute top-2 left-[15%] w-8 h-8 rotate-[-15deg] text-white/6 pointer-events-none select-none z-0" />
+        <PawPrint className="absolute bottom-2 right-[25%] w-7 h-7 rotate-[25deg] text-white/5 pointer-events-none select-none z-0" />
+        <PawPrint className="absolute top-4 right-[45%] w-6 h-6 rotate-[-45deg] text-[#F1C290]/6 pointer-events-none select-none z-0" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex items-center justify-between h-16">
 
             {/* Logo Component C4 */}
