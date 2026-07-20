@@ -24,6 +24,26 @@ const DEFAULT_DELIVERY: Record<string, string> = {
   note: "Livraison à domicile dans la commune de Sétif (moto).",
 };
 
+function VisaIcon({ className = "h-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 36 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="36" height="24" rx="3" fill="#1434CB"/>
+      <path d="M14.5 16.5H12.3L13.7 7.5H15.9L14.5 16.5ZM23.4 7.7C22.9 7.5 22.1 7.3 21.2 7.3C18.9 7.3 17.3 8.5 17.3 10.2C17.3 11.5 18.4 12.2 19.3 12.6C20.2 13 20.5 13.3 20.5 13.7C20.5 14.3 19.8 14.6 19.1 14.6C18.1 14.6 17.3 14.3 16.7 14L16.3 15.8C17 16.1 18.1 16.4 19.3 16.4C21.7 16.4 23.3 15.2 23.3 13.4C23.3 10.9 19.8 10.7 19.8 9.7C19.8 9.3 20.2 8.9 21.1 8.9C21.8 8.9 22.5 9.1 23 9.3L23.4 7.7ZM28.5 7.5H26.8C26.1 7.5 25.6 7.9 25.4 8.5L21.7 16.5H24.1L24.6 15.2H27.5L27.8 16.5H30L28.5 7.5ZM25.2 13.4L26.3 10.3L27 13.4H25.2ZM11.1 7.5L8.9 13.6L8.7 12.3C8.4 11.2 8.1 10.7 7.4 10.3C6.7 9.9 5.6 9.5 4.5 9.3L4.6 8.9H7.9C8.7 8.9 9.4 9.4 9.6 10.2L10.3 13.8L11.1 7.5Z" fill="white"/>
+    </svg>
+  );
+}
+
+function MastercardIcon({ className = "h-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 36 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="36" height="24" rx="3" fill="#252525"/>
+      <circle cx="14" cy="12" r="7" fill="#EB001B"/>
+      <circle cx="22" cy="12" r="7" fill="#F79E1B" fillOpacity="0.9"/>
+      <path d="M18 6.8A6.97 6.97 0 0 0 15.4 12A6.97 6.97 0 0 0 18 17.2A6.97 6.97 0 0 0 20.6 12A6.97 6.97 0 0 0 18 6.8Z" fill="#FF5F00"/>
+    </svg>
+  );
+}
+
 const WILAYAS = [
   "Adrar", "Chlef", "Laghouat", "Oum El Bouaghi", "Batna", "Béjaïa", "Biskra", "Béchar",
   "Blida", "Bouira", "Tamanrasset", "Tébessa", "Tlemcen", "Tiaret", "Tizi Ouzou", "Alger",
@@ -778,17 +798,24 @@ export default function CartPage() {
 
 
               {/* Payment info box */}
-              <div className="bg-gray-50 border border-gray-150 rounded-xl p-3 text-xs space-y-1">
-                <p className="font-bold text-gray-700 flex items-center gap-1.5">
-                  <Banknote className="w-4 h-4 text-emerald-600 shrink-0" />
-                  {lang === "ar" ? "طريقة الدفع المتاحة:" : lang === "fr" ? "Mode de paiement disponible :" : "Available payment method:"}
-                </p>
+              <div className="bg-gray-50 border border-gray-150 rounded-xl p-3.5 text-xs space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="font-bold text-gray-700 flex items-center gap-1.5">
+                    <Banknote className="w-4 h-4 text-emerald-600 shrink-0" />
+                    {lang === "ar" ? "طريقة الدفع وسداد الطلب:" : lang === "fr" ? "Mode de paiement :" : "Payment methods:"}
+                  </p>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Accepted</span>
+                    <VisaIcon className="h-5 rounded" />
+                    <MastercardIcon className="h-5 rounded" />
+                  </div>
+                </div>
                 <p className="text-gray-500 leading-relaxed">
                   {lang === "ar"
-                    ? "الدفع عند الاستلام (COD) — الدفع نقداً عند استلام طلبيتك."
+                    ? "الدفع عند الاستلام (COD) — يمكنك الدفع نقداً عند استلام طلبيتك للموزع."
                     : lang === "fr"
                     ? "Paiement à la livraison (COD) — payez en espèces à la réception de votre colis."
-                    : "Cash on Delivery (COD) — pay cash only when your order is delivered."}
+                    : "Cash on Delivery (COD) — pay cash directly upon receiving your order."}
                 </p>
               </div>
 
