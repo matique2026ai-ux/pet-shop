@@ -404,6 +404,19 @@ export default function ProductDetailPage() {
                     <Ticket className="w-4 h-4 shrink-0 text-emerald-600" />
                     {lang === "ar" ? "شراء من المحل (خصم)" : lang === "fr" ? "Achat au magasin (code)" : "Buy at Shop (code)"}
                   </button>
+
+                  {/* Trust Badges / Refund Policy */}
+                  <div className="mt-4 bg-emerald-50/50 border border-emerald-100 rounded-xl p-3 flex items-start gap-3">
+                    <ShieldCheck className="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" />
+                    <div>
+                      <h4 className="text-[13px] font-bold text-gray-900">
+                        {lang === "ar" ? "ضمان استرجاع الأموال 100%" : lang === "fr" ? "Garantie Remboursement 100%" : "100% Money-Back Guarantee"}
+                      </h4>
+                      <p className="text-[11px] text-gray-600 mt-0.5 leading-relaxed">
+                        {lang === "ar" ? "نضمن لك استرجاع نقودك بالكامل أو تعويضك بمنتج جديد في حال تعرض المنتج لأي كسر أو تلف أثناء التوصيل." : lang === "fr" ? "Nous garantissons un remboursement complet ou un remplacement si le produit est cassé ou endommagé pendant la livraison." : "We guarantee a full refund or replacement if the product is broken or damaged during delivery."}
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Features List */}
@@ -620,6 +633,26 @@ export default function ProductDetailPage() {
 
             </div>
           </div>
+        </div>
+        </div>
+      )}
+
+      {/* Mobile Sticky Add to Cart */}
+      {product && (
+        <div className="fixed bottom-0 left-0 right-0 p-3 bg-white/90 backdrop-blur-md border-t border-gray-200 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)] z-40 lg:hidden flex items-center justify-between gap-4 pb-safe">
+          <div className="flex flex-col">
+            <span className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">{t.products.price}</span>
+            <span className="text-sm font-black text-[#1a365d] leading-none mt-1">
+              {product.price.toLocaleString()} {currency}
+            </span>
+          </div>
+          <button
+            onClick={() => { addItem(product, qty, selectedVariant || undefined); setQty(1); }}
+            className="bg-[#E3602D] hover:bg-[#C44E1E] text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm flex items-center justify-center gap-2 text-[13px] uppercase tracking-wide flex-1"
+          >
+            <ShoppingCart className="w-4 h-4 shrink-0" />
+            {t.products.addToCart}
+          </button>
         </div>
       )}
     </>
