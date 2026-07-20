@@ -285,3 +285,19 @@ html[lang='en'] h1, html[lang='en'] h2, html[lang='en'] h3, html[lang='en'] h4, 
 html[lang='fr'] h1, html[lang='fr'] h2, html[lang='fr'] h3, html[lang='fr'] h4, html[lang='fr'] h5, html[lang='fr'] h6 {
   font-family: var(--font-shippori), Georgia, serif !important;
 }
+
+/* Real Heartbeat Animation for Favorites */
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  14% { transform: scale(1.25); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.25); }
+  70% { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+
+.animate-heartbeat {
+  animation: heartbeat 1.3s infinite ease-in-out;
+  display: inline-block;
+  transform-origin: center;
+}

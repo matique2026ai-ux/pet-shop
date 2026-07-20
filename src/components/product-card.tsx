@@ -173,7 +173,7 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
                   : "bg-white/90 border-gray-200 text-gray-700 hover:text-rose-500 hover:border-rose-300"
               }`}
             >
-              <Heart className={`w-4 h-4 ${isFav ? "fill-current" : ""}`} />
+              <Heart className={`w-4 h-4 ${isFav ? "fill-current animate-heartbeat" : ""}`} />
             </button>
           </div>
         </div>
@@ -328,7 +328,7 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
                           : "bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100"
                       }`}
                     >
-                      <Heart className={`w-5 h-5 ${isFav ? "fill-current" : ""}`} />
+                      <Heart className={`w-5 h-5 ${isFav ? "fill-current animate-heartbeat" : ""}`} />
                     </button>
                   </div>
                 </div>

@@ -340,7 +340,7 @@ export default function Navbar() {
 
               {/* Favorites */}
               <Link href="/favorites" className="relative p-2 text-white/70 hover:text-rose-400 hover:bg-white/10 rounded-lg transition-colors" title={lang === "ar" ? "المفضلة" : "Favoris"}>
-                <Heart className="w-5 h-5" />
+                <Heart className={`w-5 h-5 transition-colors ${favorites.length > 0 ? "fill-rose-500 text-rose-500 animate-heartbeat" : ""}`} />
                 {favorites.length > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 rounded-full bg-rose-500 text-white text-xs w-4 h-4 flex items-center justify-center font-bold shadow-sm">
                     {favorites.length}

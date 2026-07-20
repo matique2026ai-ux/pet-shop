@@ -17,7 +17,7 @@ export default function FavoritesPage() {
         <AnimatedSection className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-gray-100">
           <div>
             <div className="flex items-center gap-2 text-rose-500 mb-1">
-              <Heart className="w-5 h-5 fill-current" />
+              <Heart className="w-5 h-5 fill-current animate-heartbeat" />
               <span className="text-xs font-bold uppercase tracking-wider">
                 {lang === "ar" ? "قائمتك المفضلة" : "Vos Favoris"}
               </span>
