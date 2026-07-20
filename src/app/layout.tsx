@@ -13,6 +13,7 @@ import Script from "next/script";
 import { PawPrint } from "lucide-react";
 import { FavoritesProvider } from "@/lib/favorites-context";
 import FloatingCart from "@/components/floating-cart";
+import PlayfulPets from "@/components/playful-pets";
 
 const cairo = Cairo({
   subsets: ["latin", "arabic"],
@@ -97,6 +98,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <CookieConsent />
               <GlobalFootprints />
               <FloatingCart />
+              <PlayfulPets />
               </AuthProvider>
             </FavoritesProvider>
           </CartProvider>
