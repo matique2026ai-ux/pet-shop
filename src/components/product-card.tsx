@@ -124,7 +124,50 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
 
   const cardInner = (
     <div className="relative bg-white rounded-2xl overflow-hidden border border-[#F0EDE6] shadow-md shadow-[#E3602D]/8 group-hover:border-[#F1C290]/40">
-      {/* Image */}
+      {/* Top Header Bar - Completely separate from the image */}
+      <div className="relative z-10 flex items-center justify-between px-3 pt-3 pb-1 bg-white">
+        <div>
+          {product.badge ? (
+            <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-extrabold shadow-sm ${
+              product.badge === "NEW"
+                ? "bg-gradient-to-r from-[#E3602D] to-[#F1C290] text-white"
+                : "bg-gradient-to-r from-[#E3602D] to-[#8A6022] text-white"
+            }`}>
+              {product.badge === "NEW" ? (t.products?.new || "NEW") : (t.products?.sale || "SALE")}
+            </span>
+          ) : (
+            <div className="h-5" />
+          )}
+        </div>
+
+        <div className="flex items-center gap-1 sm:gap-1.5">
+          {/* Quick View Eye Button */}
+          <button
+            type="button"
+            onClick={handleOpenQuickView}
+            title={lang === "ar" ? "نظرة سريعة" : "Aperçu rapide"}
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gray-50 border border-gray-200/90 text-gray-700 flex items-center justify-center shadow-xs hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all transform hover:scale-110 active:scale-95"
+          >
+            <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          </button>
+
+          {/* Heart / Favorite Button */}
+          <button
+            type="button"
+            onClick={handleToggleFavorite}
+            title={isFav ? (lang === "ar" ? "إزالة من المفضلة" : "Retirer des favoris") : (lang === "ar" ? "إضافة للمفضلة" : "Ajouter aux favoris")}
+            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border flex items-center justify-center shadow-xs transition-all transform hover:scale-110 active:scale-95 ${
+              isFav
+                ? "bg-rose-500 text-white border-rose-500"
+                : "bg-gray-50 border-gray-200/90 text-gray-700 hover:text-rose-500 hover:border-rose-300"
+            }`}
+          >
+            <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isFav ? "fill-current animate-heartbeat" : ""}`} />
+          </button>
+        </div>
+      </div>
+
+      {/* Pure Product Image - 100% clean with zero overlapping icons */}
       <div className="relative aspect-square bg-white overflow-hidden">
         <Image
           src={product.image || "/placeholder.svg"}
@@ -132,55 +175,14 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
           fill
           placeholder="blur"
           blurDataURL={SHIMMER_BLUR}
-          className="object-contain p-4 sm:p-5 pt-8 sm:pt-9 transition-transform duration-700 ease-out group-hover:scale-105"
+          className="object-contain p-3 transition-transform duration-700 ease-out group-hover:scale-105"
           sizes={isRelated ? "(max-width: 640px) 50vw, 25vw" : "(max-width: 640px) 100vw, 25vw"}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#E3602D]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        
-        {/* Top Badges & Actions */}
-        <div className="absolute top-2.5 inset-x-2.5 flex items-center justify-between pointer-events-none z-10">
-          <div>
-            {product.badge && (
-              <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-extrabold shadow-sm pointer-events-auto ${
-                product.badge === "NEW"
-                  ? "bg-gradient-to-r from-[#E3602D] to-[#F1C290] text-white"
-                  : "bg-gradient-to-r from-[#E3602D] to-[#8A6022] text-white"
-              }`}>
-                {product.badge === "NEW" ? (t.products?.new || "NEW") : (t.products?.sale || "SALE")}
-              </span>
-            )}
-          </div>
-
-          <div className="flex items-center gap-1 sm:gap-1.5 pointer-events-auto">
-            {/* Quick View Eye Button */}
-            <button
-              type="button"
-              onClick={handleOpenQuickView}
-              title={lang === "ar" ? "نظرة سريعة" : "Aperçu rapide"}
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/85 backdrop-blur-md border border-gray-200/80 text-gray-700 flex items-center justify-center shadow-sm hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all transform hover:scale-110 active:scale-95"
-            >
-              <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            </button>
-
-            {/* Heart / Favorite Button */}
-            <button
-              type="button"
-              onClick={handleToggleFavorite}
-              title={isFav ? (lang === "ar" ? "إزالة من المفضلة" : "Retirer des favoris") : (lang === "ar" ? "إضافة للمفضلة" : "Ajouter aux favoris")}
-              className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full backdrop-blur-md border flex items-center justify-center shadow-sm transition-all transform hover:scale-110 active:scale-95 ${
-                isFav
-                  ? "bg-rose-500 text-white border-rose-500"
-                  : "bg-white/85 border-gray-200/80 text-gray-700 hover:text-rose-500 hover:border-rose-300"
-              }`}
-            >
-              <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isFav ? "fill-current animate-heartbeat" : ""}`} />
-            </button>
-          </div>
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#E3602D]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
         {!product.inStock && (
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-10">
-            <span className="text-white font-semibold text-sm bg-black/30 px-3 py-1.5 rounded-full">
+            <span className="text-white font-semibold text-sm bg-black/40 px-3 py-1.5 rounded-full">
               {t.products?.outOfStock || "Out of Stock"}
             </span>
           </div>
