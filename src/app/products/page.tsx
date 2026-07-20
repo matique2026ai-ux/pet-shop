@@ -8,10 +8,10 @@ import { useI18n } from "@/lib/i18n-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
 import AnimatedSection from "@/components/animated-section";
 import ProductCard, { ProductCardSkeleton } from "@/components/product-card";
-import { Search } from "lucide-react";
+import { Search, Sparkles } from "lucide-react";
 
 function ProductsContent() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { products, categories, productsLoaded } = useTranslatedData();
   const searchParams = useSearchParams();
   const initialFilter = searchParams.get("filter");
@@ -106,8 +106,41 @@ function ProductsContent() {
                 ))}
               </div>
             ) : filtered.length === 0 ? (
-              <div className="text-center py-20">
-                <p className="text-gray-500">{t.products.noResults}</p>
+              <div className="py-12">
+                <div className="bg-white rounded-3xl p-8 sm:p-12 text-center border border-gray-100 shadow-sm max-w-2xl mx-auto mb-12">
+                  <div className="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-4 text-amber-600">
+                    <Sparkles className="w-8 h-8" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    {t.products.noResults}
+                  </h3>
+                  <p className="text-gray-500 text-sm mb-6">
+                    {lang === "ar"
+                      ? "لم نجد نتائج تطابق بحثك الحالي. جرب تغيير كلمة البحث أو تصفح المنتجات المقترحة أدناه:"
+                      : "Aucun résultat trouvé pour votre recherche. Découvrez nos meilleures suggestions :"}
+                  </p>
+                  <button
+                    onClick={() => {
+                      setSearchQuery("");
+                      setSelectedCat("all");
+                    }}
+                    className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-colors"
+                  >
+                    {lang === "ar" ? "عرض جميع المنتجات" : "Afficher tous les produits"}
+                  </button>
+                </div>
+
+                {/* Recommendations */}
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-6 text-start">
+                    {lang === "ar" ? "منتجات قد تعجبك أيضًا 🔥" : "Produits recommandés 🔥"}
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 gap-y-8">
+                    {products.slice(0, 4).map((p) => (
+                      <ProductCard key={p.id} product={p} />
+                    ))}
+                  </div>
+                </div>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 gap-y-8">

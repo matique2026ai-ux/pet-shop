@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Star, ShoppingCart, StarHalf } from "lucide-react";
+import { Star, ShoppingCart, StarHalf, Eye, Heart, X, Check } from "lucide-react";
 import type { Product } from "@/lib/data";
 import { useCart } from "@/lib/cart-context";
+import { useFavorites } from "@/lib/favorites-context";
 import { useI18n } from "@/lib/i18n-context";
 import { SHIMMER_BLUR } from "@/lib/blur";
 import { unitLabel } from "@/lib/units";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 
 interface ProductCardProps {
@@ -83,12 +84,31 @@ function CardFootprintDecor({ category }: { category: string }) {
 export default function ProductCard({ product, variant = "default" }: ProductCardProps) {
   const isRelated = variant === "related";
   const { addItem } = useCart();
+  const { isFavorite, addFavorite, removeFavorite } = useFavorites();
   const { t, currency, lang } = useI18n();
+  const [showQuickView, setShowQuickView] = useState(false);
+  const isFav = isFavorite(product.id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     addItem(product);
+  };
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isFav) {
+      removeFavorite(product.id);
+    } else {
+      addFavorite(product);
+    }
+  };
+
+  const handleOpenQuickView = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowQuickView(true);
   };
 
   // On mobile: skip framer-motion entirely to prevent RAM/GPU overload
@@ -116,17 +136,50 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
           sizes={isRelated ? "(max-width: 640px) 50vw, 25vw" : "(max-width: 640px) 100vw, 25vw"}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#E3602D]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        {product.badge && (
-          <span className={`absolute top-3 ${lang === "ar" ? "right-3" : "left-3"} px-3 py-1 rounded-full text-xs font-bold shadow-lg ${
-            product.badge === "NEW"
-              ? "bg-gradient-to-r from-[#E3602D] to-[#F1C290] text-white"
-              : "bg-gradient-to-r from-[#E3602D] to-[#8A6022] text-white"
-          }`}>
-            {product.badge === "NEW" ? (t.products?.new || "NEW") : (t.products?.sale || "SALE")}
-          </span>
-        )}
+        
+        {/* Top Badges & Actions */}
+        <div className="absolute top-3 inset-x-3 flex items-center justify-between pointer-events-none z-10">
+          <div>
+            {product.badge && (
+              <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold shadow-lg pointer-events-auto ${
+                product.badge === "NEW"
+                  ? "bg-gradient-to-r from-[#E3602D] to-[#F1C290] text-white"
+                  : "bg-gradient-to-r from-[#E3602D] to-[#8A6022] text-white"
+              }`}>
+                {product.badge === "NEW" ? (t.products?.new || "NEW") : (t.products?.sale || "SALE")}
+              </span>
+            )}
+          </div>
+
+          <div className="flex items-center gap-1.5 pointer-events-auto">
+            {/* Quick View Eye Button */}
+            <button
+              type="button"
+              onClick={handleOpenQuickView}
+              title={lang === "ar" ? "نظرة سريعة" : "Aperçu rapide"}
+              className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-md border border-gray-200 text-gray-700 flex items-center justify-center shadow-md hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all transform hover:scale-110"
+            >
+              <Eye className="w-4 h-4" />
+            </button>
+
+            {/* Heart / Favorite Button */}
+            <button
+              type="button"
+              onClick={handleToggleFavorite}
+              title={isFav ? (lang === "ar" ? "إزالة من المفضلة" : "Retirer des favoris") : (lang === "ar" ? "إضافة للمفضلة" : "Ajouter aux favoris")}
+              className={`w-8 h-8 rounded-full backdrop-blur-md border flex items-center justify-center shadow-md transition-all transform hover:scale-110 ${
+                isFav
+                  ? "bg-rose-500 text-white border-rose-500"
+                  : "bg-white/90 border-gray-200 text-gray-700 hover:text-rose-500 hover:border-rose-300"
+              }`}
+            >
+              <Heart className={`w-4 h-4 ${isFav ? "fill-current" : ""}`} />
+            </button>
+          </div>
+        </div>
+
         {!product.inStock && (
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-10">
             <span className="text-white font-semibold text-sm bg-black/30 px-3 py-1.5 rounded-full">
               {t.products?.outOfStock || "Out of Stock"}
             </span>
@@ -192,21 +245,99 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
   );
 
   return (
-    <Link href={`/products/${product.category}/${product.id}`} className="group block">
-      {lite ? (
-        <div className="product-card-hover transition-transform duration-300 active:scale-95">
-          {cardInner}
-        </div>
-      ) : (
-        <motion.div
-          className="product-card-hover"
-          whileHover={{ y: -6 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-        >
-          {cardInner}
-        </motion.div>
-      )}
-    </Link>
+    <>
+      <Link href={`/products/${product.category}/${product.id}`} className="group block">
+        {lite ? (
+          <div className="product-card-hover transition-transform duration-300 active:scale-95">
+            {cardInner}
+          </div>
+        ) : (
+          <motion.div
+            className="product-card-hover"
+            whileHover={{ y: -6 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
+            {cardInner}
+          </motion.div>
+        )}
+      </Link>
+
+      {/* Quick View Modal */}
+      <AnimatePresence>
+        {showQuickView && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative w-full max-w-2xl bg-white rounded-3xl p-6 shadow-2xl overflow-hidden border border-gray-100 max-h-[90vh] overflow-y-auto"
+            >
+              <button
+                onClick={() => setShowQuickView(false)}
+                className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors z-10"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <div className="relative aspect-square rounded-2xl bg-gray-50 overflow-hidden border border-gray-100">
+                  <Image
+                    src={product.image || "/placeholder.svg"}
+                    alt={product.name}
+                    fill
+                    className="object-contain p-4"
+                  />
+                </div>
+
+                <div className="flex flex-col text-start">
+                  <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-1">
+                    {product.category}
+                  </span>
+                  <h2 dir="auto" className="text-xl font-bold text-gray-900 mb-2">
+                    {product.name}
+                  </h2>
+                  <div className="flex items-center gap-2 mb-3">
+                    <StarRating rating={product.rating} />
+                    <span className="text-sm font-semibold text-gray-700">{product.rating}</span>
+                  </div>
+
+                  <p className="text-2xl font-extrabold text-emerald-700 mb-4">
+                    {currency}{product.price.toLocaleString()}
+                  </p>
+
+                  <p className="text-sm text-gray-600 mb-6 line-clamp-3 leading-relaxed">
+                    {product.description}
+                  </p>
+
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={(e) => {
+                        handleAddToCart(e);
+                        setShowQuickView(false);
+                      }}
+                      className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 px-6 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/10 transition-colors"
+                    >
+                      <ShoppingCart className="w-5 h-5" />
+                      {t.products.addToCart}
+                    </button>
+                    <button
+                      onClick={handleToggleFavorite}
+                      className={`p-3.5 rounded-2xl border transition-colors ${
+                        isFav
+                          ? "bg-rose-50 border-rose-200 text-rose-600"
+                          : "bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100"
+                      }`}
+                    >
+                      <Heart className={`w-5 h-5 ${isFav ? "fill-current" : ""}`} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 

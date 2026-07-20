@@ -7,45 +7,11 @@ import { useTranslatedData } from "@/lib/use-translated-data";
 import Link from "next/link";
 import Image from "next/image";
 import AnimatedSection from "@/components/animated-section";
-import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, Truck, MessageCircle, Home, Building2, Banknote, Store, Lock } from "lucide-react";
+import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, Truck, MessageCircle, Home, Building2, Banknote, Store } from "lucide-react";
 import { useSiteSettings } from "@/lib/site-settings";
 import { useAuth } from "@/lib/auth-context";
 import { unitLabel, isContinuousUnit } from "@/lib/units";
 import { formatWhatsAppNumber } from "@/lib/phone-utils";
-
-const formatPrice = (price: number) => {
-  return new Intl.NumberFormat("fr-DZ", {
-    style: "currency",
-    currency: "DZD",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(price).replace("DZD", "د.ج");
-};
-
-const SecurePaymentBadges = () => (
-  <div className="mt-5 pt-5 border-t border-gray-100">
-    <div className="flex items-center justify-center gap-1.5 mb-3">
-      <Lock className="w-3.5 h-3.5 text-gray-400" />
-      <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-        Guaranteed Safe & Secure Checkout
-      </span>
-    </div>
-    <div className="flex items-center justify-center gap-2 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-      <div className="bg-white px-2 py-1 rounded border border-gray-200 shadow-sm flex items-center justify-center h-8 w-12">
-        <svg viewBox="0 0 32 32" className="w-7 h-7" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.288 21.05H10.15L11.458 12.8h2.138l-1.308 8.25zm9.58-8.077c-.394-.122-1.017-.253-1.802-.253-1.986 0-3.385 1.057-3.398 2.571-.018 1.104 1.002 1.72 1.764 2.094.78.384 1.043.633 1.043.978-.005.534-.639.778-1.229.778-.813 0-1.246-.118-1.91-.421l-.266-.123-.3 1.862c.472.217 1.343.407 2.247.416 2.115 0 3.493-1.046 3.515-2.66.014-.888-.538-1.562-1.693-2.113-.71-.362-1.144-.602-1.144-.968.005-.443.488-.905 1.18-.905.594-.014 1.058.127 1.41.272l.168.077.316-1.594h-.001zm-5.756 8.077h2.242s1.428-7.702 1.488-8.25h-2.392c-.366 0-.665.208-.809.548l-2.825 6.703h2.361l.466-1.3h2.89l.275 1.299h-3.7zM18.156 18l.744-2.03.213-1.01h-.032l-.398 1.01-1.14 3.03h.613zm-10.963-4.103l-1.4 5.92-1.503-6.27c-.072-.348-.316-.544-.656-.544H.5v.172c.42.09 1.127.285 1.483.475.212.113.27.24.339.511l2.457 7.96h2.285l3.41-8.224H7.193z" fill="#1434CB"/></svg>
-      </div>
-      <div className="bg-white px-2 py-1 rounded border border-gray-200 shadow-sm flex items-center justify-center h-8 w-12">
-        <svg viewBox="0 0 32 32" className="w-7 h-7" xmlns="http://www.w3.org/2000/svg"><circle cx="11.5" cy="16" r="6" fill="#EB001B"/><circle cx="20.5" cy="16" r="6" fill="#F79E1B"/><path d="M16 20.88A6 6 0 0 1 16 11.12a6 6 0 0 1 0 9.76z" fill="#FF5F00"/></svg>
-      </div>
-      <div className="bg-white px-2 py-1 rounded border border-gray-200 shadow-sm flex items-center justify-center h-8 w-14 overflow-hidden">
-        <span className="text-[9px] font-black text-[#d4af37] tracking-tight whitespace-nowrap">EDAHABIA</span>
-      </div>
-      <div className="bg-white px-2 py-1 rounded border border-gray-200 shadow-sm flex items-center justify-center h-8 w-12">
-         <span className="text-[12px] font-black text-blue-900 tracking-tighter italic">CIB</span>
-      </div>
-    </div>
-  </div>
-);
 
 const DEFAULT_DELIVERY: Record<string, string> = {
   scope: "commune",
@@ -145,6 +111,17 @@ export default function CartPage() {
       } catch {}
     }
   }, []);
+
+  useEffect(() => {
+    if (checkingOut) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [checkingOut]);
 
   const cartHasBirds = items.some((item) => {
     const p = products.find((p: any) => p.id === item.productId);
@@ -521,10 +498,9 @@ export default function CartPage() {
                       }}
                       className="w-full mt-4 bg-emerald-600 text-white py-3 rounded-xl font-medium hover:bg-emerald-700 transition-colors"
                     >
+                      {t.cart.checkout}
                     </button>
                   )}
-                  
-                  <SecurePaymentBadges />
 
                   <Link
                     href="/products"
@@ -814,12 +790,7 @@ export default function CartPage() {
                     ? "Paiement à la livraison (COD) — payez en espèces à la réception de votre colis."
                     : "Cash on Delivery (COD) — pay cash only when your order is delivered."}
                 </p>
-                <div className="mt-2 text-[10px] text-gray-400 flex flex-wrap gap-1">
-                  * {lang === "ar" ? "قريباً: سيتم تفعيل الدفع الإلكتروني بالبطاقة الذهبية، CIB، و Visa/Mastercard." : "Bientôt : Paiement par carte Edahabia, CIB et Visa/Mastercard."}
-                </div>
               </div>
-
-              <SecurePaymentBadges />
 
               <button
                 type="submit"

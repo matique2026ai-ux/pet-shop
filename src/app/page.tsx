@@ -211,7 +211,7 @@ export default function HomePage() {
         {/* Subtle Gold accent at bottom to blend with the tagline */}
         <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/80 to-transparent" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-40 lg:pt-32 lg:pb-48 w-full flex flex-col items-center justify-center">
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32 sm:pt-24 sm:pb-40 lg:pt-32 lg:pb-48 w-full flex flex-col items-center justify-center">
           <StaggerSection className="text-center max-w-5xl mx-auto flex flex-col items-center">
             {/* Premium badge */}
             <FadeIn>
@@ -223,7 +223,7 @@ export default function HomePage() {
 
             <FadeIn>
               <h1 
-                className="text-5xl sm:text-7xl lg:text-8xl font-extrabold text-white leading-tight tracking-tight mb-6"
+                className="text-4xl sm:text-7xl lg:text-8xl font-extrabold text-white leading-tight tracking-tight mb-6"
                 style={{ textShadow: '0 10px 40px rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.5)' }}
               >
                 {heroTitle}
@@ -232,7 +232,7 @@ export default function HomePage() {
             
             <FadeIn>
               <p 
-                className="text-lg sm:text-2xl text-gray-200 font-light mb-12 max-w-3xl mx-auto leading-relaxed"
+                className="text-base sm:text-2xl text-gray-200 font-light mb-10 sm:mb-12 max-w-3xl mx-auto leading-relaxed"
                 style={{ textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}
               >
                 {heroSubtitle}
@@ -240,10 +240,10 @@ export default function HomePage() {
             </FadeIn>
             
             <FadeIn>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 w-full sm:w-auto relative z-30">
                 <Link
                   href="/products"
-                  className="relative group inline-flex justify-center items-center gap-3 bg-gradient-to-r from-[#F5851F] to-[#E06A0A] text-white px-10 py-4 rounded-full font-bold text-lg transition-all hover:scale-105 shadow-[0_0_40px_rgba(245,133,31,0.4)] hover:shadow-[0_0_60px_rgba(245,133,31,0.6)] w-full sm:w-auto"
+                  className="relative group inline-flex justify-center items-center gap-3 bg-gradient-to-r from-[#F5851F] to-[#E06A0A] text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg transition-all hover:scale-105 shadow-[0_0_40px_rgba(245,133,31,0.4)] hover:shadow-[0_0_60px_rgba(245,133,31,0.6)] w-full sm:w-auto"
                 >
                   {heroCta1}
                   {dir === "rtl" ? (
@@ -255,7 +255,7 @@ export default function HomePage() {
                 </Link>
                 <Link
                   href="/blog"
-                  className="inline-flex justify-center items-center gap-3 bg-white/5 backdrop-blur-md text-white px-10 py-4 rounded-full font-bold text-lg transition-all border border-white/20 hover:bg-white/10 hover:border-white/40 hover:scale-105 w-full sm:w-auto"
+                  className="inline-flex justify-center items-center gap-3 bg-white/5 backdrop-blur-md text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg transition-all border border-white/20 hover:bg-white/10 hover:border-white/40 hover:scale-105 w-full sm:w-auto"
                 >
                   <BookOpen className="w-5 h-5 text-[#F1C290]" />
                   {heroCta2}
@@ -266,7 +266,7 @@ export default function HomePage() {
         </div>
 
         {/* Sleek Trust Bar at the bottom of the hero */}
-        <div className="absolute bottom-0 inset-x-0 border-t border-white/10 bg-black/40 backdrop-blur-xl z-20">
+        <div className="relative sm:absolute bottom-0 inset-x-0 border-t border-white/10 bg-black/40 backdrop-blur-xl z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
             <div className="flex flex-wrap items-center justify-center sm:justify-around gap-6">
               {[

@@ -11,6 +11,8 @@ import CookieConsent from "@/components/cookie-consent";
 import { OrganizationSchema, WebSiteSchema, LocalBusinessSchema } from "@/components/schema-jsonld";
 import Script from "next/script";
 import { PawPrint } from "lucide-react";
+import { FavoritesProvider } from "@/lib/favorites-context";
+import FloatingCart from "@/components/floating-cart";
 
 const cairo = Cairo({
   subsets: ["latin", "arabic"],
@@ -83,17 +85,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-inter bg-surface text-slate-800 antialiased">
         <I18nProvider>
           <CartProvider>
-            <AuthProvider>
-            <OrganizationSchema />
-            <WebSiteSchema />
-            <LocalBusinessSchema />
-            <Navbar />
-            <main className="min-h-screen app-shell">{children}</main>
-            <Footer />
-            <WhatsAppButton />
-            <CookieConsent />
-            <GlobalFootprints />
-            </AuthProvider>
+            <FavoritesProvider>
+              <AuthProvider>
+              <OrganizationSchema />
+              <WebSiteSchema />
+              <LocalBusinessSchema />
+              <Navbar />
+              <main className="min-h-screen app-shell">{children}</main>
+              <Footer />
+              <WhatsAppButton />
+              <CookieConsent />
+              <GlobalFootprints />
+              <FloatingCart />
+              </AuthProvider>
+            </FavoritesProvider>
           </CartProvider>
         </I18nProvider>
             <Script

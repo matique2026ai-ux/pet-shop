@@ -2,12 +2,13 @@
 
 import { useI18n } from "@/lib/i18n-context";
 import { useCart } from "@/lib/cart-context";
+import { useFavorites } from "@/lib/favorites-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
 import { useSiteSettings } from "@/lib/site-settings";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, X, ShoppingCart, Phone, Search, Truck, ChevronRight, User, LogIn, Loader2, Cat, Dog, Bird, Fish, Rabbit, PawPrint, BookOpen, Zap } from "lucide-react";
+import { Menu, X, ShoppingCart, Phone, Search, Truck, ChevronRight, User, LogIn, Loader2, Cat, Dog, Bird, Fish, Rabbit, PawPrint, BookOpen, Zap, Heart } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import AuthModal from "@/components/auth-modal";
 import { LogoC4 } from "@/components/brand-logo";
@@ -60,6 +61,7 @@ export default function Navbar() {
 
   const { t, lang, setLang, dir } = useI18n();
   const { totalItems } = useCart();
+  const { favorites } = useFavorites();
   const { categories } = useTranslatedData();
   const { store } = useSiteSettings();
   const storePhone = store?.phone || "+2130776075355";
@@ -335,6 +337,16 @@ export default function Navbar() {
                 <Phone className="w-4 h-4" />
                 {t.nav.callNow}
               </a>
+
+              {/* Favorites */}
+              <Link href="/favorites" className="relative p-2 text-white/70 hover:text-rose-400 hover:bg-white/10 rounded-lg transition-colors" title={lang === "ar" ? "المفضلة" : "Favoris"}>
+                <Heart className="w-5 h-5" />
+                {favorites.length > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 rounded-full bg-rose-500 text-white text-xs w-4 h-4 flex items-center justify-center font-bold shadow-sm">
+                    {favorites.length}
+                  </span>
+                )}
+              </Link>
 
               {/* Cart */}
               <Link href="/cart" className="relative p-2 text-white/70 hover:text-[#F1C290] hover:bg-white/10 rounded-lg transition-colors">
