@@ -131,9 +131,10 @@ export async function POST(req: NextRequest) {
 
     if (geminiKey) {
       try {
+        const origin = req.nextUrl.origin;
         const catalogContext = products
-          ? products.map((p) => `- Name: ${p.name}\n  Category: ${p.category}\n  Price: ${p.price} DZD\n  Description: ${p.description || "N/A"}\n  Link: https://pet-cat.vercel.app/products/${p.category}/${p.id}`).join("\n\n")
-          : "No products in stock.";
+          ? products.map((p) => `- Name: ${p.name}\n  Category: ${p.category}\n  Price: ${p.price} DZD\n  Description: ${p.description || "N/A"}\n  Link: ${origin}/products/${p.category}/${p.id}`).join("\n\n")
+          : "No products available in stock.";
         
         const systemPrompt = `You are a helpful and friendly AI assistant for "Paws & Wings", a pet shop in Algeria (Sétif). 
 Your task is to answer customers' questions about our store, catalog, products, prices, stock, delivery, and their order status.
@@ -165,10 +166,10 @@ Answer directly and politely in their language:`;
         await logRequest(supabase, {
           geminiError: (err as Error).message
         });
-        replyText = getLocalResponse(text, isArabic, hasProducts, products || []);
+        replyText = getLocalResponse(text, isArabic, hasProducts, products || [], req.nextUrl.origin);
       }
     } else {
-      replyText = getLocalResponse(text, isArabic, hasProducts, products || []);
+      replyText = getLocalResponse(text, isArabic, hasProducts, products || [], req.nextUrl.origin);
     }
 
     await logRequest(supabase, {
@@ -239,7 +240,7 @@ async function logRequest(supabase: any, content: any) {
   }
 }
 
-function getLocalResponse(text: string, isArabic: boolean, hasProducts: boolean, products: any[]): string {
+function getLocalResponse(text: string, isArabic: boolean, hasProducts: boolean, products: any[], origin: string): string {
   const wantsDelivery = text.includes("delivery") || text.includes("tousil") || text.includes("toussil") || text.includes("livraison") || text.includes("توصيل") || text.includes("بكم التوصيل") || text.includes("شحن");
   const wantsProducts = text.includes("product") || text.includes("produit") || text.includes("catalog") || text.includes("price") || text.includes("prix") || text.includes("أكل") || text.includes("طعام") || text.includes("منتج") || text.includes("سعر") || text.includes("سومة") || text.includes("عندكم") || text.includes("متوفر");
   const isGreeting = text.includes("hello") || text.includes("hi") || text.includes("bonjour") || text.includes("سلام") || text.includes("مرحبا") || text.includes("صباح الخير") || text.includes("مساء الخير");
@@ -274,8 +275,8 @@ function getLocalResponse(text: string, isArabic: boolean, hasProducts: boolean,
     // Default: list first 5 products and link to the website catalogue
     const list = products.slice(0, 5).map(p => `- ${p.name}: ${p.price} DZD`).join("\n");
     return isArabic
-      ? `🐾 المنتجات المتوفرة حالياً (بعض الأمثلة):\n\n${list}\n\n🔗 لمشاهدة الكتالوج الكامل والطلب مباشرة، تفضل بزيارة موقعنا:\nhttps://pet-cat.vercel.app/products`
-      : `🐾 Produits actuellement disponibles (quelques exemples) :\n\n${list}\n\n🔗 Pour voir tout le catalogue et commander, visitez notre site :\nhttps://pet-cat.vercel.app/products`;
+      ? `🐾 المنتجات المتوفرة حالياً (بعض الأمثلة):\n\n${list}\n\n🔗 لمشاهدة الكتالوج الكامل والطلب مباشرة، تفضل بزيارة موقعنا:\n${origin}/products`
+      : `🐾 Produits actuellement disponibles (quelques exemples) :\n\n${list}\n\n🔗 Pour voir tout le catalogue et commander, visitez notre site :\n${origin}/products`;
   }
 
   if (isGreeting) {
