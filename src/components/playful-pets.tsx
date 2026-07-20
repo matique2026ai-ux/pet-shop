@@ -209,10 +209,10 @@ export default function PlayfulPets() {
           >
             <div className={`transform ${activePet.direction === "rtl" ? "scale-x-[-1]" : ""}`}>
               <div className="relative flex flex-col items-center">
-                <div className="bg-amber-100/95 text-amber-900 text-[11px] font-extrabold px-3 py-1 rounded-full border border-amber-300 shadow-md mb-1 whitespace-nowrap animate-bounce">
+                <div className="bg-white/85 backdrop-blur-md text-amber-950 text-[11px] font-extrabold px-3 py-1 rounded-full border border-amber-200/60 shadow-sm mb-1 whitespace-nowrap animate-bounce">
                   {activePet.message}
                 </div>
-                <RealisticCatVector className="w-24 h-24 sm:w-32 sm:h-32 drop-shadow-xl" />
+                <RealisticCatVector className="w-24 h-24 sm:w-32 sm:h-32 bg-transparent" />
               </div>
             </div>
           </motion.div>
@@ -228,10 +228,10 @@ export default function PlayfulPets() {
             className="absolute bottom-0"
           >
             <div className="relative flex flex-col items-center">
-              <div className="bg-amber-100/95 text-amber-900 text-[12px] font-extrabold px-3.5 py-1.5 rounded-full border border-amber-300 shadow-lg mb-2 whitespace-nowrap animate-pulse">
+              <div className="bg-white/85 backdrop-blur-md text-amber-950 text-[12px] font-extrabold px-3.5 py-1.5 rounded-full border border-amber-200/60 shadow-sm mb-2 whitespace-nowrap animate-pulse">
                 {activePet.message}
               </div>
-              <RealisticCatVector className="w-28 h-28 sm:w-36 sm:h-36 drop-shadow-2xl" />
+              <RealisticCatVector className="w-28 h-28 sm:w-36 sm:h-36 bg-transparent" />
             </div>
           </motion.div>
         )}
@@ -250,10 +250,10 @@ export default function PlayfulPets() {
           >
             <div className={`transform ${activePet.direction === "rtl" ? "scale-x-[-1]" : ""}`}>
               <div className="relative flex flex-col items-center">
-                <div className="bg-emerald-100/95 text-emerald-900 text-[11px] font-extrabold px-3 py-1 rounded-full border border-emerald-300 shadow-md mb-1 whitespace-nowrap">
+                <div className="bg-white/85 backdrop-blur-md text-emerald-950 text-[11px] font-extrabold px-3 py-1 rounded-full border border-emerald-200/60 shadow-sm mb-1 whitespace-nowrap">
                   {activePet.message}
                 </div>
-                <RealisticBirdVector className="w-20 h-20 sm:w-28 sm:h-28 drop-shadow-xl animate-pulse" />
+                <RealisticBirdVector className="w-20 h-20 sm:w-28 sm:h-28 bg-transparent animate-pulse" />
               </div>
             </div>
           </motion.div>
@@ -273,10 +273,10 @@ export default function PlayfulPets() {
           >
             <div className={`transform ${activePet.direction === "rtl" ? "scale-x-[-1]" : ""}`}>
               <div className="relative flex flex-col items-center">
-                <div className="bg-emerald-100/95 text-emerald-900 text-[11px] font-extrabold px-3 py-1 rounded-full border border-emerald-300 shadow-md mb-1 whitespace-nowrap animate-bounce">
+                <div className="bg-white/85 backdrop-blur-md text-emerald-950 text-[11px] font-extrabold px-3 py-1 rounded-full border border-emerald-200/60 shadow-sm mb-1 whitespace-nowrap animate-bounce">
                   {activePet.message}
                 </div>
-                <RealisticBirdVector className="w-22 h-22 sm:w-30 sm:h-30 drop-shadow-2xl" />
+                <RealisticBirdVector className="w-22 h-22 sm:w-30 sm:h-30 bg-transparent" />
               </div>
             </div>
           </motion.div>
@@ -301,10 +301,10 @@ export default function PlayfulPets() {
           >
             <div className={`transform ${activePet.direction === "rtl" ? "scale-x-[-1]" : ""}`}>
               <div className="relative flex flex-col items-center">
-                <div className="bg-orange-100/95 text-orange-900 text-[11px] font-extrabold px-3 py-1 rounded-full border border-orange-300 shadow-md mb-1 whitespace-nowrap animate-bounce">
+                <div className="bg-white/85 backdrop-blur-md text-orange-950 text-[11px] font-extrabold px-3 py-1 rounded-full border border-orange-200/60 shadow-sm mb-1 whitespace-nowrap animate-bounce">
                   {activePet.message}
                 </div>
-                <RealisticHamsterVector className="w-20 h-20 sm:w-28 sm:h-28 drop-shadow-xl" />
+                <RealisticHamsterVector className="w-20 h-20 sm:w-28 sm:h-28 bg-transparent" />
               </div>
             </div>
           </motion.div>
@@ -320,10 +320,10 @@ export default function PlayfulPets() {
             className="absolute bottom-0"
           >
             <div className="relative flex flex-col items-center">
-              <div className="bg-orange-100/95 text-orange-900 text-[11px] font-extrabold px-3 py-1 rounded-full border border-orange-300 shadow-lg mb-1 whitespace-nowrap animate-pulse">
+              <div className="bg-white/85 backdrop-blur-md text-orange-950 text-[11px] font-extrabold px-3 py-1 rounded-full border border-orange-200/60 shadow-sm mb-1 whitespace-nowrap animate-pulse">
                 {activePet.message}
               </div>
-              <RealisticHamsterVector className="w-24 h-24 sm:w-32 sm:h-32 drop-shadow-xl" />
+              <RealisticHamsterVector className="w-24 h-24 sm:w-32 sm:h-32 bg-transparent" />
             </div>
           </motion.div>
         )}

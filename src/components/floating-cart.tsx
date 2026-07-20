@@ -35,8 +35,8 @@ export default function FloatingCart() {
         className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-md"
       >
         <Link href="/cart" className="block w-full group">
-          {/* Orange Glassmorphism Capsule Bar */}
-          <div className="relative overflow-hidden bg-gradient-to-r from-[#E3602D]/95 via-[#EB6B39]/95 to-[#E3602D]/95 backdrop-blur-xl border border-white/30 text-white shadow-2xl shadow-[#E3602D]/35 rounded-full p-2.5 sm:p-3 flex items-center justify-between transition-all duration-300 group-hover:shadow-[#E3602D]/50 group-hover:border-white/50">
+          {/* Orange Glassmorphism Capsule Bar (Semi-transparent with hover focus) */}
+          <div className="relative overflow-hidden bg-gradient-to-r from-[#E3602D]/75 via-[#EB6B39]/75 to-[#E3602D]/75 backdrop-blur-md border border-white/30 text-white shadow-xl shadow-[#E3602D]/20 rounded-full p-2.5 sm:p-3 flex items-center justify-between transition-all duration-300 group-hover:from-[#E3602D]/95 group-hover:via-[#EB6B39]/95 group-hover:to-[#E3602D]/95 group-hover:backdrop-blur-xl group-hover:shadow-2xl group-hover:shadow-[#E3602D]/40 group-hover:border-white/50">
             
             {/* Subtle Animated Background Shine */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out pointer-events-none" />
