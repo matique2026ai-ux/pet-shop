@@ -1,59 +1,105 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
+import { useI18n } from "@/lib/i18n-context";
+import Image from "next/image";
 
-type PetType = "cat" | "bird" | "hamster";
+type ActionType = "cat-walk" | "cat-peek" | "bird-fly" | "bird-swoop" | "hamster-scurry" | "hamster-peek";
 
 interface PetEvent {
   id: number;
-  type: PetType;
+  action: ActionType;
   direction: "ltr" | "rtl";
-  posY: number; // percentage from top (15% to 75%)
+  posY: number;
+  message: string;
 }
+
+const CAT_MESSAGES_AR = ["ميااااو! 🐾", "أهلاً بك في متجرنا! 🐱", "هل تبحث عن طعام لي؟ 😸", "مياو~ 🐾"];
+const CAT_MESSAGES_FR = ["Miaouuu~ 🐾", "Bienvenue chez nous ! 🐱", "Des croquettes pour moi ? 😸", "Purrr~ 🐾"];
+
+const BIRD_MESSAGES_AR = ["زقزقة! 🎵", "تغريد جميل! 🎶", "طيور الجمال والجواد! 🐤", "تويت تويت! 🦜"];
+const BIRD_MESSAGES_FR = ["Chirp chirp ! 🎵", "Cuicui ! 🎶", "Coucou ! 🐤", "Tweeeet ! 🦜"];
+
+const HAMSTER_MESSAGES_AR = ["سقسقة! 🐹", "وجدتك! 🌻", "سرعة التوصيل! ⚡", "أهلاً! 🐾"];
+const HAMSTER_MESSAGES_FR = ["Pouic pouic ! 🐹", "Un tournesol ? 🌻", "Rapide ! ⚡", "Salut ! 🐾"];
 
 export default function PlayfulPets() {
   const pathname = usePathname();
+  const { lang } = useI18n();
   const [activePet, setActivePet] = useState<PetEvent | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    // Don't show in admin dashboard
     if (pathname?.startsWith("/admin")) return;
 
-    // Trigger first pet after 4 seconds
-    const firstTimer = setTimeout(() => {
-      spawnPet();
-    }, 4000);
+    const scheduleNextPet = () => {
+      // Random delay between 14 to 32 seconds
+      const randomDelay = Math.floor(14000 + Math.random() * 18000);
+      timerRef.current = setTimeout(() => {
+        spawnRandomPet();
+        scheduleNextPet();
+      }, randomDelay);
+    };
 
-    // Trigger pets periodically (every 25 seconds)
-    const interval = setInterval(() => {
-      spawnPet();
-    }, 25000);
+    // First spawn after 3.5 seconds
+    const initialTimer = setTimeout(() => {
+      spawnRandomPet();
+      scheduleNextPet();
+    }, 3500);
 
     return () => {
-      clearTimeout(firstTimer);
-      clearInterval(interval);
+      clearTimeout(initialTimer);
+      if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [pathname]);
+  }, [pathname, lang]);
 
-  const spawnPet = () => {
-    const types: PetType[] = ["cat", "bird", "hamster"];
-    const randomType = types[Math.floor(Math.random() * types.length)];
+  const spawnRandomPet = () => {
+    const actions: ActionType[] = [
+      "cat-walk",
+      "cat-peek",
+      "bird-fly",
+      "bird-swoop",
+      "hamster-scurry",
+      "hamster-peek",
+    ];
+
+    const randomAction = actions[Math.floor(Math.random() * actions.length)];
     const randomDir = Math.random() > 0.5 ? "ltr" : "rtl";
-    const posY = randomType === "bird" ? 12 + Math.random() * 20 : 45 + Math.random() * 30;
+    const isAr = lang === "ar";
+
+    let message = "";
+    if (randomAction.startsWith("cat")) {
+      const msgs = isAr ? CAT_MESSAGES_AR : CAT_MESSAGES_FR;
+      message = msgs[Math.floor(Math.random() * msgs.length)];
+    } else if (randomAction.startsWith("bird")) {
+      const msgs = isAr ? BIRD_MESSAGES_AR : BIRD_MESSAGES_FR;
+      message = msgs[Math.floor(Math.random() * msgs.length)];
+    } else {
+      const msgs = isAr ? HAMSTER_MESSAGES_AR : HAMSTER_MESSAGES_FR;
+      message = msgs[Math.floor(Math.random() * msgs.length)];
+    }
+
+    let posY = 50;
+    if (randomAction.startsWith("bird")) {
+      posY = 10 + Math.random() * 25;
+    } else if (randomAction.includes("walk") || randomAction.includes("scurry")) {
+      posY = 40 + Math.random() * 35;
+    }
 
     setActivePet({
       id: Date.now(),
-      type: randomType,
+      action: randomAction,
       direction: randomDir,
       posY,
+      message,
     });
 
-    // Auto clear pet after animation completes
+    const duration = randomAction.includes("peek") ? 4500 : 6800;
     setTimeout(() => {
       setActivePet(null);
-    }, randomType === "hamster" ? 6800 : 7200);
+    }, duration);
   };
 
   if (!activePet || pathname?.startsWith("/admin")) return null;
@@ -61,41 +107,55 @@ export default function PlayfulPets() {
   return (
     <div className="fixed inset-0 pointer-events-none z-[60] overflow-hidden select-none">
       <AnimatePresence key={activePet.id}>
-        {/* WALKING CAT */}
-        {activePet.type === "cat" && (
+        {/* CAT WALK ACROSS */}
+        {activePet.action === "cat-walk" && (
           <motion.div
-            initial={{ x: activePet.direction === "ltr" ? "-100px" : "100vw" }}
-            animate={{ x: activePet.direction === "ltr" ? "100vw" : "-100px" }}
+            initial={{ x: activePet.direction === "ltr" ? "-120px" : "100vw" }}
+            animate={{ x: activePet.direction === "ltr" ? "100vw" : "-120px" }}
             transition={{ duration: 6.5, ease: "easeInOut" }}
             style={{ top: `${activePet.posY}%` }}
             className="absolute"
           >
             <div className={`transform ${activePet.direction === "rtl" ? "scale-x-[-1]" : ""}`}>
               <div className="relative flex flex-col items-center">
-                <div className="bg-amber-100/95 text-amber-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-amber-300 shadow-md mb-1 whitespace-nowrap animate-bounce">
-                  Meow~ 🐾
+                <div className="bg-amber-100/95 text-amber-900 text-[11px] font-extrabold px-3 py-1 rounded-full border border-amber-300 shadow-md mb-1 whitespace-nowrap animate-bounce">
+                  {activePet.message}
                 </div>
-                <svg className="w-12 h-12 text-[#E3602D] filter drop-shadow-md" viewBox="0 0 64 64" fill="currentColor">
-                  <path d="M48 38c0-4.4-3.6-8-8-8H24c-4.4 0-8 3.6-8 8v10h32V38z" />
-                  <circle cx="20" cy="28" r="9" />
-                  <polygon points="13,20 18,12 21,21" />
-                  <polygon points="27,20 22,12 19,21" />
-                  <path d="M48 42c6 0 10-4 10-10s-2-8-5-8" stroke="currentColor" strokeWidth="4" strokeLinecap="round" fill="none" />
-                  <circle cx="17" cy="27" r="1.5" fill="#fff" />
-                  <circle cx="23" cy="27" r="1.5" fill="#fff" />
-                </svg>
+                <div className="relative w-24 h-24 sm:w-32 sm:h-32 drop-shadow-xl mix-blend-multiply">
+                  <Image src="/cat-walk.png" alt="Cat" fill className="object-contain" sizes="128px" />
+                </div>
               </div>
             </div>
           </motion.div>
         )}
 
-        {/* FLUTTERING BIRD */}
-        {activePet.type === "bird" && (
+        {/* CAT PEEK FROM BOTTOM */}
+        {activePet.action === "cat-peek" && (
           <motion.div
-            initial={{ x: activePet.direction === "ltr" ? "-80px" : "100vw", y: 0 }}
+            initial={{ y: "100%" }}
+            animate={{ y: ["100%", "20%", "20%", "100%"] }}
+            transition={{ duration: 4.2, times: [0, 0.25, 0.75, 1], ease: "easeInOut" }}
+            style={{ left: activePet.direction === "ltr" ? "15%" : "75%" }}
+            className="absolute bottom-0"
+          >
+            <div className="relative flex flex-col items-center">
+              <div className="bg-amber-100/95 text-amber-900 text-[12px] font-extrabold px-3.5 py-1.5 rounded-full border border-amber-300 shadow-lg mb-2 whitespace-nowrap animate-pulse">
+                {activePet.message}
+              </div>
+              <div className="relative w-28 h-28 sm:w-36 sm:h-36 drop-shadow-2xl mix-blend-multiply">
+                <Image src="/cat-walk.png" alt="Cat Peek" fill className="object-contain" sizes="144px" />
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* BIRD FLY STRAIGHT */}
+        {activePet.action === "bird-fly" && (
+          <motion.div
+            initial={{ x: activePet.direction === "ltr" ? "-120px" : "100vw", y: 0 }}
             animate={{ 
-              x: activePet.direction === "ltr" ? "100vw" : "-80px",
-              y: [0, -20, 10, -25, 0]
+              x: activePet.direction === "ltr" ? "100vw" : "-120px",
+              y: [0, -25, 15, -30, 0]
             }}
             transition={{ duration: 5.8, ease: "linear" }}
             style={{ top: `${activePet.posY}%` }}
@@ -103,28 +163,50 @@ export default function PlayfulPets() {
           >
             <div className={`transform ${activePet.direction === "rtl" ? "scale-x-[-1]" : ""}`}>
               <div className="relative flex flex-col items-center">
-                <div className="bg-emerald-100/95 text-emerald-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-300 shadow-md mb-1 whitespace-nowrap">
-                  Chirp! 🐤
+                <div className="bg-emerald-100/95 text-emerald-900 text-[11px] font-extrabold px-3 py-1 rounded-full border border-emerald-300 shadow-md mb-1 whitespace-nowrap">
+                  {activePet.message}
                 </div>
-                <svg className="w-10 h-10 text-emerald-600 filter drop-shadow-md animate-bounce" viewBox="0 0 64 64" fill="currentColor">
-                  <path d="M12 32c0 0 10-14 24-10c14 4 20 18 20 18s-12 4-22-4c-6-5-14-2-22-4z" />
-                  <path d="M24 24c0 0 8-12 16-8c4 2 6 10 2 12c-4 2-14-1-18-4z" fill="#34D399" />
-                  <circle cx="48" cy="28" r="1.5" fill="#fff" />
-                  <polygon points="56,28 62,31 55,34" fill="#F59E0B" />
-                </svg>
+                <div className="relative w-20 h-20 sm:w-28 sm:h-28 drop-shadow-xl mix-blend-multiply animate-pulse">
+                  <Image src="/bird-fly.png" alt="Bird" fill className="object-contain" sizes="112px" />
+                </div>
               </div>
             </div>
           </motion.div>
         )}
 
-        {/* CURIOUS HAMSTER */}
-        {activePet.type === "hamster" && (
+        {/* BIRD SWOOP IN & OUT */}
+        {activePet.action === "bird-swoop" && (
           <motion.div
-            initial={{ x: activePet.direction === "ltr" ? "-80px" : "100vw" }}
+            initial={{ x: activePet.direction === "ltr" ? "-100px" : "100vw", y: -50 }}
+            animate={{ 
+              x: activePet.direction === "ltr" ? "100vw" : "-100px",
+              y: [-50, 150, 80, -80]
+            }}
+            transition={{ duration: 5.2, ease: "easeInOut" }}
+            style={{ top: `${activePet.posY}%` }}
+            className="absolute"
+          >
+            <div className={`transform ${activePet.direction === "rtl" ? "scale-x-[-1]" : ""}`}>
+              <div className="relative flex flex-col items-center">
+                <div className="bg-emerald-100/95 text-emerald-900 text-[11px] font-extrabold px-3 py-1 rounded-full border border-emerald-300 shadow-md mb-1 whitespace-nowrap animate-bounce">
+                  {activePet.message}
+                </div>
+                <div className="relative w-22 h-22 sm:w-30 sm:h-30 drop-shadow-2xl mix-blend-multiply">
+                  <Image src="/bird-fly.png" alt="Bird Swoop" fill className="object-contain" sizes="120px" />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* HAMSTER SCURRY & PAUSE */}
+        {activePet.action === "hamster-scurry" && (
+          <motion.div
+            initial={{ x: activePet.direction === "ltr" ? "-100px" : "100vw" }}
             animate={{ 
               x: activePet.direction === "ltr" 
-                ? ["-80px", "45vw", "45vw", "100vw"] 
-                : ["100vw", "45vw", "45vw", "-80px"]
+                ? ["-100px", "45vw", "45vw", "100vw"] 
+                : ["100vw", "45vw", "45vw", "-100px"]
             }}
             transition={{ 
               duration: 6.4, 
@@ -136,17 +218,32 @@ export default function PlayfulPets() {
           >
             <div className={`transform ${activePet.direction === "rtl" ? "scale-x-[-1]" : ""}`}>
               <div className="relative flex flex-col items-center">
-                <div className="bg-orange-100/95 text-orange-900 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-orange-300 shadow-md mb-1 whitespace-nowrap animate-pulse">
-                  Squeak! 🐹
+                <div className="bg-orange-100/95 text-orange-900 text-[11px] font-extrabold px-3 py-1 rounded-full border border-orange-300 shadow-md mb-1 whitespace-nowrap animate-bounce">
+                  {activePet.message}
                 </div>
-                <svg className="w-11 h-11 text-amber-600 filter drop-shadow-md" viewBox="0 0 64 64" fill="currentColor">
-                  <ellipse cx="32" cy="38" rx="16" ry="12" fill="#D97706" />
-                  <ellipse cx="32" cy="40" rx="10" ry="7" fill="#FDE68A" />
-                  <circle cx="20" cy="32" r="10" fill="#D97706" />
-                  <circle cx="17" cy="30" r="2" fill="#000" />
-                  <circle cx="16" cy="21" r="3.5" fill="#F43F5E" />
-                  <circle cx="25" cy="22" r="3.5" fill="#F43F5E" />
-                </svg>
+                <div className="relative w-20 h-20 sm:w-28 sm:h-28 drop-shadow-xl mix-blend-multiply">
+                  <Image src="/hamster-run.png" alt="Hamster" fill className="object-contain" sizes="112px" />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* HAMSTER PEEK FROM CORNER */}
+        {activePet.action === "hamster-peek" && (
+          <motion.div
+            initial={{ y: "100%" }}
+            animate={{ y: ["100%", "15%", "15%", "100%"] }}
+            transition={{ duration: 4.0, times: [0, 0.3, 0.7, 1], ease: "easeInOut" }}
+            style={{ left: activePet.direction === "ltr" ? "80%" : "10%" }}
+            className="absolute bottom-0"
+          >
+            <div className="relative flex flex-col items-center">
+              <div className="bg-orange-100/95 text-orange-900 text-[11px] font-extrabold px-3 py-1 rounded-full border border-orange-300 shadow-lg mb-1 whitespace-nowrap animate-pulse">
+                {activePet.message}
+              </div>
+              <div className="relative w-24 h-24 sm:w-32 sm:h-32 drop-shadow-xl mix-blend-multiply">
+                <Image src="/hamster-run.png" alt="Hamster Peek" fill className="object-contain" sizes="128px" />
               </div>
             </div>
           </motion.div>
