@@ -77,8 +77,10 @@ export async function POST(req: NextRequest) {
       .select("id, name, price, description, in_stock, category")
       .eq("in_stock", true);
 
+    const origin = req.nextUrl.origin;
+
     const catalogContext = products
-      ? products.map((p) => `- Name: ${p.name}\n  Category: ${p.category}\n  Price: ${p.price} DZD\n  Description: ${p.description || "N/A"}\n  Link: https://pet-cat.vercel.app/products/${p.category}/${p.id}`).join("\n\n")
+      ? products.map((p) => `- Name: ${p.name}\n  Category: ${p.category}\n  Price: ${p.price} DZD\n  Description: ${p.description || "N/A"}\n  Link: ${origin}/products/${p.category}/${p.id}`).join("\n\n")
       : "No products available in stock.";
 
     // Fetch customer's recent orders for tracking
@@ -155,7 +157,7 @@ Answer directly and politely in their language:`;
       // Fallback response if Gemini key is not configured
       replyText = `مرحباً! شكراً لتواصلك مع متجر Paws & Wings. 🐾
 لقد تلقينا رسالتك وسيتواصل معك أحد عملائنا يدوياً في أقرب وقت للإجابة على استفسارك.
-يمكنك تصفح متجرنا مباشرة من الرابط التالي: https://pet-cat.vercel.app`;
+يمكنك تصفح متجرنا مباشرة من الرابط التالي: ${origin}`;
     }
 
     // 4. Send the message back via WhatsApp Cloud API
