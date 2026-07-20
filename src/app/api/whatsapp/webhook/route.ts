@@ -36,40 +36,28 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true });
     }
 
-    const type = message.type;
     const sender = message.from; // Phone number of the user
+    const text = message.text?.body; // Message content
 
-    let text = "";
-    let audioId = null;
-
-    if (type === "text") {
-      text = message.text?.body || "";
-    } else if (type === "audio") {
-      audioId = message.audio?.id;
-    }
-
-    if (!text && !audioId) {
-      // Ignore unsupported message types
+    if (!text) {
       return NextResponse.json({ success: true });
     }
 
-    if (text) {
-      const lowerText = text.toLowerCase();
-      // Ignore messages from other autoresponders/bots to prevent infinite loops
-      const isBot = 
-        lowerText.includes("réponse automatique") || 
-        lowerText.includes("reponse automatique") ||
-        lowerText.includes("réponse") ||
-        lowerText.includes("reponse") ||
-        lowerText.includes("automatic reply") ||
-        lowerText.includes("autoresponder") ||
-        lowerText.includes("الرد الآلي") ||
-        lowerText.includes("الرد التلقائي") ||
-        lowerText.includes("bot");
+    const lowerText = text.toLowerCase();
+    // Ignore messages from other autoresponders/bots to prevent infinite loops
+    const isBot = 
+      lowerText.includes("réponse automatique") || 
+      lowerText.includes("reponse automatique") ||
+      lowerText.includes("réponse") ||
+      lowerText.includes("reponse") ||
+      lowerText.includes("automatic reply") ||
+      lowerText.includes("autoresponder") ||
+      lowerText.includes("الرد الآلي") ||
+      lowerText.includes("الرد التلقائي") ||
+      lowerText.includes("bot");
 
-      if (isBot) {
-        return NextResponse.json({ success: true });
-      }
+    if (isBot) {
+      return NextResponse.json({ success: true });
     }
 
     // Retrieve system settings
@@ -134,13 +122,6 @@ export async function POST(req: NextRequest) {
     }
 
     // 2. Prepare System Prompt for Gemini
-    let customerMessageContext = "";
-    if (text) {
-      customerMessageContext = `Customer message: "${text}"`;
-    } else if (audioId) {
-      customerMessageContext = `Customer sent a voice message. Please listen to the attached audio and respond to it.`;
-    }
-
     const systemPrompt = `You are a helpful and friendly AI assistant for "Paws & Wings", a pet shop in Algeria (Sétif). 
 Your task is to answer customers' questions about our store, catalog, products, prices, stock, delivery, and their order status.
 You must speak in Algerian Darja (الدارجة الجزائرية) or French/Arabic, depending on the customer's language. Keep answers concise, helpful, and polite.
@@ -160,21 +141,14 @@ Our Store Info:
 - Location: Sétif, Algeria (Cité elhidhab)
 - Delivery: Delivery is available in Sétif for 250 DZD (Free for orders above 5000 DZD). Delivery takes 24-48h.
 
-${customerMessageContext}
+Customer message: "${text}"
 Answer directly and politely in their language:`;
 
     // 3. Request answer from Gemini
     let replyText = "";
     if (geminiKey) {
       try {
-        let mediaData = null;
-        if (audioId) {
-          mediaData = await downloadWhatsAppMedia(audioId, token);
-          if (!mediaData) {
-            console.error("Failed to download audio for id", audioId);
-          }
-        }
-        replyText = await askGemini(systemPrompt, geminiKey, mediaData);
+        replyText = await askGemini(systemPrompt, geminiKey);
       } catch (err) {
         console.error("Gemini API Error:", err);
         replyText = "مرحباً! شكراً لتواصلك معنا. نحن نواجه عطلاً مؤقتاً في نظام الذكاء الاصطناعي، سنتواصل معك يدوياً قريباً.";
@@ -197,31 +171,15 @@ Answer directly and politely in their language:`;
 }
 
 // Helper: Fetch Gemini API
-async function askGemini(
-  prompt: string, 
-  apiKey: string,
-  inlineData?: { mimeType: string; data: string } | null
-): Promise<string> {
+async function askGemini(prompt: string, apiKey: string): Promise<string> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-  
-  const parts: any[] = [];
-  if (inlineData) {
-    parts.push({
-      inlineData: {
-        mimeType: inlineData.mimeType,
-        data: inlineData.data
-      }
-    });
-  }
-  parts.push({ text: prompt });
-
   const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      contents: [{ parts }],
+      contents: [{ parts: [{ text: prompt }] }],
     }),
   });
   if (!response.ok) {
@@ -254,33 +212,5 @@ async function sendWhatsAppMessage(to: string, text: string, phoneId: string, to
   if (!response.ok) {
     const err = await response.text();
     console.error("Error sending WhatsApp message:", err);
-  }
-}
-
-// Helper: Download Media from WhatsApp API
-async function downloadWhatsAppMedia(mediaId: string, token: string): Promise<{ mimeType: string; data: string } | null> {
-  try {
-    // 1. Get media URL
-    const urlRes = await fetch(`https://graph.facebook.com/v20.0/${mediaId}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!urlRes.ok) return null;
-    const urlData = await urlRes.json();
-    const mediaUrl = urlData.url;
-    const mimeType = urlData.mime_type;
-
-    // 2. Download media binary data
-    const mediaRes = await fetch(mediaUrl, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!mediaRes.ok) return null;
-    const arrayBuffer = await mediaRes.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    const base64Data = buffer.toString('base64');
-
-    return { mimeType, data: base64Data };
-  } catch (err) {
-    console.error("Failed to download WhatsApp media:", err);
-    return null;
   }
 }
