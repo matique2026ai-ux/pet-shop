@@ -121,8 +121,8 @@ function ProductsContent() {
                   </p>
                   <button
                     onClick={() => {
-                      setSearchQuery("");
-                      setSelectedCat("all");
+                      setSearch("");
+                      setCategory("all");
                     }}
                     className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-colors"
                   >
