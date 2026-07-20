@@ -132,16 +132,16 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
           fill
           placeholder="blur"
           blurDataURL={SHIMMER_BLUR}
-          className="object-contain p-3 transition-transform duration-700 ease-out group-hover:scale-108"
+          className="object-contain p-4 sm:p-5 pt-8 sm:pt-9 transition-transform duration-700 ease-out group-hover:scale-105"
           sizes={isRelated ? "(max-width: 640px) 50vw, 25vw" : "(max-width: 640px) 100vw, 25vw"}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#E3602D]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         
         {/* Top Badges & Actions */}
-        <div className="absolute top-3 inset-x-3 flex items-center justify-between pointer-events-none z-10">
+        <div className="absolute top-2.5 inset-x-2.5 flex items-center justify-between pointer-events-none z-10">
           <div>
             {product.badge && (
-              <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold shadow-lg pointer-events-auto ${
+              <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-extrabold shadow-sm pointer-events-auto ${
                 product.badge === "NEW"
                   ? "bg-gradient-to-r from-[#E3602D] to-[#F1C290] text-white"
                   : "bg-gradient-to-r from-[#E3602D] to-[#8A6022] text-white"
@@ -151,15 +151,15 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
             )}
           </div>
 
-          <div className="flex items-center gap-1.5 pointer-events-auto">
+          <div className="flex items-center gap-1 sm:gap-1.5 pointer-events-auto">
             {/* Quick View Eye Button */}
             <button
               type="button"
               onClick={handleOpenQuickView}
               title={lang === "ar" ? "نظرة سريعة" : "Aperçu rapide"}
-              className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-md border border-gray-200 text-gray-700 flex items-center justify-center shadow-md hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all transform hover:scale-110"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/85 backdrop-blur-md border border-gray-200/80 text-gray-700 flex items-center justify-center shadow-sm hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all transform hover:scale-110 active:scale-95"
             >
-              <Eye className="w-4 h-4" />
+              <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </button>
 
             {/* Heart / Favorite Button */}
@@ -167,13 +167,13 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
               type="button"
               onClick={handleToggleFavorite}
               title={isFav ? (lang === "ar" ? "إزالة من المفضلة" : "Retirer des favoris") : (lang === "ar" ? "إضافة للمفضلة" : "Ajouter aux favoris")}
-              className={`w-8 h-8 rounded-full backdrop-blur-md border flex items-center justify-center shadow-md transition-all transform hover:scale-110 ${
+              className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full backdrop-blur-md border flex items-center justify-center shadow-sm transition-all transform hover:scale-110 active:scale-95 ${
                 isFav
                   ? "bg-rose-500 text-white border-rose-500"
-                  : "bg-white/90 border-gray-200 text-gray-700 hover:text-rose-500 hover:border-rose-300"
+                  : "bg-white/85 border-gray-200/80 text-gray-700 hover:text-rose-500 hover:border-rose-300"
               }`}
             >
-              <Heart className={`w-4 h-4 ${isFav ? "fill-current animate-heartbeat" : ""}`} />
+              <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isFav ? "fill-current animate-heartbeat" : ""}`} />
             </button>
           </div>
         </div>
