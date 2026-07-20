@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cairo, Outfit, Shippori_Mincho } from "next/font/google";
+import { Cairo, Inter, Shippori_Mincho } from "next/font/google";
 import "./globals.css";
 import { I18nProvider } from "@/lib/i18n-context";
 import { CartProvider } from "@/lib/cart-context";
@@ -19,10 +19,10 @@ const cairo = Cairo({
   display: "swap",
 });
 
-const outfit = Outfit({
+const inter = Inter({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-outfit",
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -79,8 +79,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${cairo.variable} ${outfit.variable} ${shipporiMincho.variable}`} suppressHydrationWarning>
-      <body className="font-outfit bg-surface text-slate-800 antialiased">
+    <html lang="en" className={`${cairo.variable} ${inter.variable} ${shipporiMincho.variable}`} suppressHydrationWarning>
+      <body className="font-inter bg-surface text-slate-800 antialiased">
         <I18nProvider>
           <CartProvider>
             <AuthProvider>

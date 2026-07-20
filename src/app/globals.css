@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-outfit: var(--font-outfit);
-  --font-playfair: var(--font-outfit);
+  --font-inter: var(--font-inter);
+  --font-playfair: var(--font-inter);
   --font-tajawal: var(--font-cairo);
   --font-shippori: var(--font-shippori);
 
@@ -277,7 +277,7 @@ html[lang='ar'] body {
 
 html[lang='en'] body,
 html[lang='fr'] body {
-  font-family: var(--font-outfit), var(--font-cairo), sans-serif !important;
+  font-family: var(--font-inter), var(--font-cairo), sans-serif !important;
 }
 
 /* Shippori Mincho for Latin headings (Earthy Serif style) */

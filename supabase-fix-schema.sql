@@ -25,6 +25,7 @@ ALTER TABLE products ADD CONSTRAINT products_sold_by_check
 -- 4. Also add extra product columns if missing
 ALTER TABLE products ADD COLUMN IF NOT EXISTS video TEXT;
 ALTER TABLE products ADD COLUMN IF NOT EXISTS ingredients TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS variants JSONB DEFAULT '[]';
 ALTER TABLE products ADD COLUMN IF NOT EXISTS images JSONB DEFAULT '[]';
 ALTER TABLE products ADD COLUMN IF NOT EXISTS stock_quantity INTEGER NOT NULL DEFAULT 0;
 ALTER TABLE products ADD COLUMN IF NOT EXISTS sold_by TEXT NOT NULL DEFAULT 'piece';

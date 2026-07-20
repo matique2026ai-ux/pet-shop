@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS products (
   reviews INTEGER NOT NULL DEFAULT 0,
   description TEXT,
   features JSONB DEFAULT '[]',
+  variants JSONB DEFAULT '[]',
   in_stock BOOLEAN NOT NULL DEFAULT TRUE,
   stock_quantity INTEGER NOT NULL DEFAULT 0,
   sold_by TEXT NOT NULL DEFAULT 'piece' CHECK (sold_by IN ('piece', 'bag', 'box', 'bottle', 'pack', 'dose', 'kg', 'g', 'l', 'ml')),

@@ -117,9 +117,16 @@ export default function CartPage() {
     if (!p) return false;
     const cat = p.category?.toLowerCase() || "";
     const sub = p.subcategory?.toLowerCase() || "";
-    // Only flag as live animal if the category or subcategory is explicitly "live-animals", "pets", "live", etc.
-    // This prevents flagging "bird food" (category: birds) as a live animal.
-    return cat === "live-animals" || sub === "live-animals" || cat === "pets" || sub === "pets" || sub.includes("live");
+    
+    // Check if it's a known animal category
+    const isAnimalCategory = ["birds", "cats", "dogs", "fish", "small-pets", "pets", "live-animals"].includes(cat);
+    
+    // Check if the subcategory implies it's a product, not a live animal
+    const nonLivingSubcategories = ["food", "cages", "accessories", "toys", "health", "beds", "bowls", "grooming", "litter", "aquariums"];
+    const isNonLiving = nonLivingSubcategories.some(term => sub.includes(term));
+    
+    // Flag as live animal ONLY if it's in an animal category AND doesn't have a non-living subcategory
+    return isAnimalCategory && !isNonLiving;
   });
   
   const cartHasOther = items.some((item) => {
@@ -127,7 +134,10 @@ export default function CartPage() {
     if (!p) return true;
     const cat = p.category?.toLowerCase() || "";
     const sub = p.subcategory?.toLowerCase() || "";
-    const isLiveAnimal = cat === "live-animals" || sub === "live-animals" || cat === "pets" || sub === "pets" || sub.includes("live");
+    const isAnimalCategory = ["birds", "cats", "dogs", "fish", "small-pets", "pets", "live-animals"].includes(cat);
+    const nonLivingSubcategories = ["food", "cages", "accessories", "toys", "health", "beds", "bowls", "grooming", "litter", "aquariums"];
+    const isNonLiving = nonLivingSubcategories.some(term => sub.includes(term));
+    const isLiveAnimal = isAnimalCategory && !isNonLiving;
     return !isLiveAnimal;
   });
   
@@ -241,6 +251,37 @@ export default function CartPage() {
             <MessageCircle className="w-5 h-5 shrink-0" />
             {lang === "ar" ? "تأكيد عبر واتساب" : lang === "fr" ? "Confirmer via WhatsApp" : "Confirm via WhatsApp"}
           </a>
+          <button
+            onClick={async () => {
+              if (!confirm(lang === "ar" ? "هل أنت متأكد أنك تريد إلغاء هذا الطلب؟" : lang === "fr" ? "Êtes-vous sûr de vouloir annuler cette commande ?" : "Are you sure you want to cancel this order?")) return;
+              try {
+                // If the user has a token in localStorage or cookies, we could pass it.
+                // Assuming auth-context sets a session in supabase.
+                const supabase = (await import("@/lib/supabase")).createClient();
+                const { data: { session } } = await supabase.auth.getSession();
+                
+                const res = await fetch(`/api/orders/${orderPlaced.id}/cancel`, {
+                  method: "POST",
+                  headers: {
+                    ...(session?.access_token ? { "Authorization": `Bearer ${session.access_token}` } : {})
+                  }
+                });
+                
+                if (res.ok) {
+                  alert(lang === "ar" ? "تم إلغاء الطلب بنجاح" : lang === "fr" ? "Commande annulée avec succès" : "Order cancelled successfully");
+                  window.location.href = "/";
+                } else {
+                  const err = await res.json();
+                  alert((lang === "ar" ? "تعذر إلغاء الطلب: " : "Error: ") + (err.error || ""));
+                }
+              } catch (e) {
+                console.error(e);
+              }
+            }}
+            className="inline-flex items-center justify-center gap-2 bg-red-50 text-red-600 px-6 py-3 rounded-xl font-bold hover:bg-red-100 transition-colors shadow-sm text-sm border border-red-200"
+          >
+            {lang === "ar" ? "إلغاء الطلب" : lang === "fr" ? "Annuler la commande" : "Cancel Order"}
+          </button>
           <Link
             href="/products"
             className="inline-flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-medium hover:bg-gray-200 transition-colors text-sm"
