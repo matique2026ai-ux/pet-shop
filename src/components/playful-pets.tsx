@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useI18n } from "@/lib/i18n-context";
 
-type ActionType = "cat-walk" | "cat-peek" | "bird-fly" | "bird-swoop" | "hamster-scurry" | "hamster-peek";
+type ActionType = "cat-walk" | "cat-peek" | "bird-fly" | "bird-swoop" | "hamster-scurry" | "hamster-peek" | "dog-run" | "dog-peek";
 
 interface PetEvent {
   id: number;
@@ -23,6 +23,58 @@ const BIRD_MESSAGES_FR = ["Chirp chirp ! 🎵", "Cuicui ! 🎶", "Coucou ! 🐤"
 
 const HAMSTER_MESSAGES_AR = ["سقسقة! 🐹", "وجدتك! 🌻", "سرعة التوصيل! ⚡", "أهلاً! 🐾"];
 const HAMSTER_MESSAGES_FR = ["Pouic pouic ! 🐹", "Un tournesol ? 🌻", "Rapide ! ⚡", "Salut ! 🐾"];
+
+const DOG_MESSAGES_AR = ["هو هو! 🐾", "مرحباً يا صديقي! 🐶", "هل نحظى ببعض اللعب؟ 🦴", "واو واو! 🐕"];
+const DOG_MESSAGES_FR = ["Ouaf ouaf ! 🐾", "Salut ami ! 🐶", "Un os pour moi ? 🦴", "Wouf ! 🐕"];
+
+/* 100% Transparent Vector Animal Icons (NO Background Box) */
+function RealisticDogVector({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="dogFur" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#D97706" />
+          <stop offset="50%" stopColor="#B45309" />
+          <stop offset="100%" stopColor="#78350F" />
+        </linearGradient>
+        <linearGradient id="dogEar" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#78350F" />
+          <stop offset="100%" stopColor="#451A03" />
+        </linearGradient>
+        <linearGradient id="dogChest" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#FFFBEB" />
+          <stop offset="100%" stopColor="#FEF3C7" />
+        </linearGradient>
+      </defs>
+      {/* Wagging Tail */}
+      <path d="M72 42 Q86 28 84 15 Q80 10 75 22 Q72 32 68 40" stroke="url(#dogFur)" strokeWidth="7" strokeLinecap="round" />
+      {/* Dog Body */}
+      <ellipse cx="48" cy="48" rx="26" ry="18" fill="url(#dogFur)" />
+      <ellipse cx="42" cy="52" rx="16" ry="12" fill="url(#dogChest)" />
+      {/* Dog Legs */}
+      <rect x="26" y="56" width="7" height="18" rx="3.5" fill="#B45309" />
+      <rect x="36" y="58" width="7" height="16" rx="3.5" fill="#78350F" />
+      <rect x="54" y="56" width="7" height="18" rx="3.5" fill="#B45309" />
+      <rect x="64" y="58" width="7" height="16" rx="3.5" fill="#78350F" />
+      {/* Collar */}
+      <rect x="22" y="38" width="8" height="12" rx="3" fill="#EF4444" transform="rotate(-15 22 38)" />
+      <circle cx="28" cy="48" r="2.5" fill="#F59E0B" />
+      {/* Dog Head */}
+      <circle cx="24" cy="32" r="15" fill="url(#dogFur)" />
+      <ellipse cx="16" cy="36" rx="9" ry="7" fill="url(#dogChest)" />
+      {/* Floppy Ear */}
+      <path d="M22 18 Q12 18 14 34 Q20 32 24 24 Z" fill="url(#dogEar)" />
+      {/* Eye */}
+      <circle cx="20" cy="28" r="2.5" fill="#000000" />
+      <circle cx="19" cy="27" r="0.9" fill="#FFFFFF" />
+      {/* Nose */}
+      <ellipse cx="11" cy="34" rx="3" ry="2.5" fill="#1F2937" />
+      {/* Happy Mouth / Tongue */}
+      <path d="M12 37 Q14 42 16 38" stroke="#1F2937" strokeWidth="1.2" fill="none" />
+      <path d="M13 39 Q14 44 16 43 Q17 41 15 38 Z" fill="#F43F5E" />
+    </svg>
+  );
+}
 
 /* 100% Transparent Vector Animal Icons (NO Background Box) */
 function RealisticCatVector({ className }: { className?: string }) {
@@ -154,6 +206,8 @@ export default function PlayfulPets() {
       "bird-swoop",
       "hamster-scurry",
       "hamster-peek",
+      "dog-run",
+      "dog-peek",
     ];
 
     const randomAction = actions[Math.floor(Math.random() * actions.length)];
@@ -167,6 +221,9 @@ export default function PlayfulPets() {
     } else if (randomAction.startsWith("bird")) {
       const msgs = isAr ? BIRD_MESSAGES_AR : BIRD_MESSAGES_FR;
       message = msgs[Math.floor(Math.random() * msgs.length)];
+    } else if (randomAction.startsWith("dog")) {
+      const msgs = isAr ? DOG_MESSAGES_AR : DOG_MESSAGES_FR;
+      message = msgs[Math.floor(Math.random() * msgs.length)];
     } else {
       const msgs = isAr ? HAMSTER_MESSAGES_AR : HAMSTER_MESSAGES_FR;
       message = msgs[Math.floor(Math.random() * msgs.length)];
@@ -175,7 +232,7 @@ export default function PlayfulPets() {
     let posY = 50;
     if (randomAction.startsWith("bird")) {
       posY = 10 + Math.random() * 25;
-    } else if (randomAction.includes("walk") || randomAction.includes("scurry")) {
+    } else if (randomAction.includes("walk") || randomAction.includes("scurry") || randomAction.includes("run")) {
       posY = 40 + Math.random() * 35;
     }
 
@@ -278,6 +335,44 @@ export default function PlayfulPets() {
                 </div>
                 <RealisticBirdVector className="w-22 h-22 sm:w-30 sm:h-30 bg-transparent" />
               </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* DOG RUN ACROSS */}
+        {activePet.action === "dog-run" && (
+          <motion.div
+            initial={{ x: activePet.direction === "ltr" ? "-130px" : "100vw" }}
+            animate={{ x: activePet.direction === "ltr" ? "100vw" : "-130px" }}
+            transition={{ duration: 6.0, ease: "easeInOut" }}
+            style={{ top: `${activePet.posY}%` }}
+            className="absolute"
+          >
+            <div className={`transform ${activePet.direction === "rtl" ? "scale-x-[-1]" : ""}`}>
+              <div className="relative flex flex-col items-center">
+                <div className="bg-white/85 backdrop-blur-md text-amber-900 text-[11px] font-extrabold px-3 py-1 rounded-full border border-amber-200/60 shadow-sm mb-1 whitespace-nowrap animate-bounce">
+                  {activePet.message}
+                </div>
+                <RealisticDogVector className="w-26 h-26 sm:w-34 sm:h-34 bg-transparent" />
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* DOG PEEK FROM CORNER */}
+        {activePet.action === "dog-peek" && (
+          <motion.div
+            initial={{ y: "100%" }}
+            animate={{ y: ["100%", "20%", "20%", "100%"] }}
+            transition={{ duration: 4.2, times: [0, 0.25, 0.75, 1], ease: "easeInOut" }}
+            style={{ left: activePet.direction === "ltr" ? "30%" : "60%" }}
+            className="absolute bottom-0"
+          >
+            <div className="relative flex flex-col items-center">
+              <div className="bg-white/85 backdrop-blur-md text-amber-900 text-[12px] font-extrabold px-3.5 py-1.5 rounded-full border border-amber-200/60 shadow-sm mb-2 whitespace-nowrap animate-pulse">
+                {activePet.message}
+              </div>
+              <RealisticDogVector className="w-28 h-28 sm:w-36 sm:h-36 bg-transparent" />
             </div>
           </motion.div>
         )}
