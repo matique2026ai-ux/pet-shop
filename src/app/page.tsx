@@ -165,19 +165,15 @@ export default function HomePage() {
       {/* ══════════════════════════════════
           HERO SECTION
       ══════════════════════════════════ */}
-      <section className="relative overflow-hidden min-h-[560px] flex items-center">
+      <section className="relative overflow-hidden min-h-[500px] sm:min-h-[620px] flex items-center justify-center">
         {customBg ? (
           isCustomVideo ? (
-            !isMobile ? (
-              <video
-                autoPlay muted loop playsInline preload="metadata"
-                className="absolute inset-0 w-full h-full object-cover"
-              >
-                <source src={customBg} type="video/mp4" />
-              </video>
-            ) : (
-              <div className="absolute inset-0 bg-gradient-to-br from-[#121B15] via-[#1E2D24] to-[#121B15] z-0" />
-            )
+            <video
+              autoPlay muted loop playsInline preload="metadata"
+              className="absolute inset-0 w-full h-full object-cover z-0"
+            >
+              <source src={customBg} type="video/mp4" />
+            </video>
           ) : (
             <Image
               src={customBg}
@@ -185,11 +181,11 @@ export default function HomePage() {
               fill
               priority
               sizes="100vw"
-              className="object-cover"
+              className="object-cover z-0"
             />
           )
         ) : (
-          !isMobile && heroVideos.length > 0 ? (
+          heroVideos.length > 0 ? (
             <video
               key={heroVideos[videoIdx]}
               autoPlay
@@ -197,7 +193,7 @@ export default function HomePage() {
               playsInline
               preload="metadata"
               onEnded={handleVideoEnded}
-              className="absolute inset-0 w-full h-full object-cover opacity-100 scale-100 z-0"
+              className="absolute inset-0 w-full h-full object-cover opacity-100 z-0"
             >
               <source src={heroVideos[videoIdx]} type="video/mp4" />
             </video>
@@ -205,80 +201,84 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-br from-[#121B15] via-[#1E2D24] to-[#121B15] z-0" />
           )
         )}
-        {/* Cinematic Vignette Overlay */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-black/20 via-black/50 to-black/90" />
         
-        {/* Subtle Gold accent at bottom to blend with the tagline */}
-        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/80 to-transparent" />
+        {/* Cinematic Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/85 z-0" />
+        
+        {/* Ambient Bottom Gradient */}
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/90 to-transparent z-0" />
 
-        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32 sm:pt-24 sm:pb-40 lg:pt-32 lg:pb-48 w-full flex flex-col items-center justify-center">
-          <StaggerSection className="text-center max-w-5xl mx-auto flex flex-col items-center">
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 sm:pt-24 sm:pb-36 lg:pt-28 lg:pb-40 w-full flex flex-col items-center text-center">
+          <StaggerSection className="text-center max-w-4xl mx-auto flex flex-col items-center w-full">
             {/* Premium badge */}
             <FadeIn>
-              <div className="inline-flex items-center gap-2 bg-black/20 backdrop-blur-md border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.1)] text-white rounded-full px-5 py-2 text-sm sm:text-base font-medium mb-8 transition-transform hover:scale-105 cursor-default">
-                <Sparkles className="w-4 h-4 text-[#F1C290]" />
-                {dir === "rtl" ? "متجر الحيوانات الأليفة الأول في الجزائر" : "Premier Pet Shop in Algeria"}
+              <div className="inline-flex items-center gap-2 bg-black/30 backdrop-blur-lg border border-white/20 text-white rounded-full px-4 py-1.5 sm:px-5 sm:py-2 text-xs sm:text-sm font-semibold mb-5 sm:mb-8 shadow-lg">
+                <Sparkles className="w-4 h-4 text-[#F1C290] shrink-0" />
+                <span>{dir === "rtl" ? "متجر الحيوانات الأليفة الأول في الجزائر" : "Premier Pet Shop in Algeria"}</span>
               </div>
             </FadeIn>
 
+            {/* Main Hero Title */}
             <FadeIn>
               <h1 
-                className="text-4xl sm:text-7xl lg:text-8xl font-extrabold text-white leading-tight tracking-tight mb-6"
-                style={{ textShadow: '0 10px 40px rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.5)' }}
+                className="text-3xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.25] sm:leading-tight mb-4 sm:mb-6 tracking-tight drop-shadow-2xl px-2"
+                style={{ textShadow: '0 8px 30px rgba(0,0,0,0.9), 0 2px 10px rgba(0,0,0,0.7)' }}
               >
                 {heroTitle}
               </h1>
             </FadeIn>
             
+            {/* Subtitle */}
             <FadeIn>
               <p 
-                className="text-base sm:text-2xl text-gray-200 font-light mb-10 sm:mb-12 max-w-3xl mx-auto leading-relaxed"
-                style={{ textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}
+                className="text-sm sm:text-xl text-gray-100 font-normal mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed px-3"
+                style={{ textShadow: '0 2px 10px rgba(0,0,0,0.9)' }}
               >
                 {heroSubtitle}
               </p>
             </FadeIn>
             
+            {/* Action Buttons */}
             <FadeIn>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 w-full sm:w-auto relative z-30">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-5 w-full max-w-xs sm:max-w-none mx-auto relative z-30">
                 <Link
                   href="/products"
-                  className="relative group inline-flex justify-center items-center gap-3 bg-gradient-to-r from-[#F5851F] to-[#E06A0A] text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg transition-all hover:scale-105 shadow-[0_0_40px_rgba(245,133,31,0.4)] hover:shadow-[0_0_60px_rgba(245,133,31,0.6)] w-full sm:w-auto"
+                  className="relative group inline-flex justify-center items-center gap-2.5 bg-gradient-to-r from-[#F5851F] to-[#E06A0A] text-white px-7 sm:px-9 py-3.5 sm:py-4 rounded-full font-extrabold text-base sm:text-lg transition-all duration-300 hover:scale-105 shadow-xl shadow-[#F5851F]/30 hover:shadow-[#F5851F]/50 w-full sm:w-auto"
                 >
-                  {heroCta1}
+                  <span>{heroCta1}</span>
                   {dir === "rtl" ? (
-                    <Arrow className="w-5 h-5 group-hover:-translate-x-1 transition-transform rotate-180" />
+                    <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform shrink-0" />
                   ) : (
-                    <Arrow className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform shrink-0" />
                   )}
                   <div className="absolute inset-0 rounded-full border border-white/20 group-hover:border-white/40 transition-colors" />
                 </Link>
                 <Link
                   href="/blog"
-                  className="inline-flex justify-center items-center gap-3 bg-white/5 backdrop-blur-md text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg transition-all border border-white/20 hover:bg-white/10 hover:border-white/40 hover:scale-105 w-full sm:w-auto"
+                  className="inline-flex justify-center items-center gap-2.5 bg-white/10 backdrop-blur-md text-white px-7 sm:px-9 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg transition-all duration-300 border border-white/25 hover:bg-white/20 hover:border-white/50 hover:scale-105 w-full sm:w-auto"
                 >
-                  <BookOpen className="w-5 h-5 text-[#F1C290]" />
-                  {heroCta2}
+                  <BookOpen className="w-5 h-5 text-[#F1C290] shrink-0" />
+                  <span>{heroCta2}</span>
                 </Link>
               </div>
             </FadeIn>
           </StaggerSection>
         </div>
 
-        {/* Sleek Trust Bar at the bottom of the hero */}
-        <div className="relative sm:absolute bottom-0 inset-x-0 border-t border-white/10 bg-black/40 backdrop-blur-xl z-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-            <div className="flex flex-wrap items-center justify-center sm:justify-around gap-6">
+        {/* Sleek Mobile-Responsive Trust Bar */}
+        <div className="absolute bottom-0 inset-x-0 border-t border-white/15 bg-black/50 backdrop-blur-xl z-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4">
+            <div className="grid grid-cols-1 sm:flex sm:flex-wrap items-center justify-center sm:justify-around gap-2 sm:gap-6 text-center">
               {[
-                { icon: <Truck className="w-5 h-5" />, label: dir === "rtl" ? "توصيل سريع لـ 58 ولاية" : "Fast Nationwide Delivery" },
-                { icon: <Award className="w-5 h-5" />, label: dir === "rtl" ? "جودة مضمونة 100%" : "100% Quality Guaranteed" },
-                { icon: <Shield className="w-5 h-5" />, label: dir === "rtl" ? "تسوق إلكتروني آمن" : "Secure Online Shopping" },
+                { icon: <Truck className="w-4 h-4 sm:w-5 sm:h-5" />, label: dir === "rtl" ? "توصيل سريع لـ 58 ولاية" : "Fast Nationwide Delivery" },
+                { icon: <Award className="w-4 h-4 sm:w-5 sm:h-5" />, label: dir === "rtl" ? "جودة مضمونة 100%" : "100% Quality Guaranteed" },
+                { icon: <Shield className="w-4 h-4 sm:w-5 sm:h-5" />, label: dir === "rtl" ? "تسوق إلكتروني آمن" : "Secure Online Shopping" },
               ].map((b, i) => (
-                <div key={i} className="flex items-center gap-3 text-white/90 text-sm sm:text-base font-medium">
-                  <div className="bg-white/10 p-2 rounded-full border border-white/5">
+                <div key={i} className="flex items-center justify-center gap-2 sm:gap-3 text-white/95 text-xs sm:text-base font-medium">
+                  <div className="bg-white/15 p-1.5 sm:p-2 rounded-full border border-white/10 shrink-0">
                     <span className="text-[#F1C290]">{b.icon}</span>
                   </div>
-                  {b.label}
+                  <span>{b.label}</span>
                 </div>
               ))}
             </div>
