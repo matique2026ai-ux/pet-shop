@@ -3,12 +3,12 @@ import { createClient } from "@/lib/supabase";
 import { products as DEMO_CATALOG } from "@/lib/data";
 
 interface Props {
-  params: { category: string; id: string };
+  params: Promise<{ category: string; id: string }>;
   children: React.ReactNode;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = params;
+  const { id } = await params;
   
   // Try fetching from Supabase first
   const supabase = createClient();
@@ -33,6 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: [finalProduct.name, finalProduct.category, ...(finalProduct.features || [])],
     openGraph: {
       title,
       description,
@@ -56,7 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProductLayout({ children, params }: Props) {
-  const { id } = params;
+  const { id } = await params;
   
   // Try fetching from Supabase first
   const supabase = createClient();
