@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { createClient } from "@/lib/supabase";
-import { products as DEMO_CATALOG, Product } from "@/lib/data";
+import { products as DEMO_CATALOG } from "@/lib/data";
 
 interface Props {
   params: { category: string; id: string };
@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { data: product } = await supabase.from("products").select("*").eq("id", id).single();
   
   // Fallback to DEMO_CATALOG
-  const finalProduct = product || DEMO_CATALOG.find((p: Product) => p.id === id);
+  const finalProduct = product || DEMO_CATALOG.find(p => p.id === id);
 
   if (!finalProduct) {
     return {
@@ -61,7 +61,7 @@ export default async function ProductLayout({ children, params }: Props) {
   // Try fetching from Supabase first
   const supabase = createClient();
   const { data: product } = await supabase.from("products").select("*").eq("id", id).single();
-  const finalProduct = product || DEMO_CATALOG.find((p: Product) => p.id === id);
+  const finalProduct = product || DEMO_CATALOG.find(p => p.id === id);
 
   return (
     <>

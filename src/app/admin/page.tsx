@@ -12,7 +12,7 @@ import {
 import {
   Users, ShoppingBag, DollarSign, Package, TrendingUp, TrendingDown,
   Edit, Trash2, ArrowUpRight, Calendar, Menu, X, Lock, Phone,
-  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Search, Filter, Tag, Languages, Video, Star, Check, ChevronRight, BookOpen
+  LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Search, Filter, Tag, Languages, Video, Star, Check, ChevronRight, BookOpen, Download
 } from "lucide-react";
 import HeroVideoManager from "@/components/hero-video-manager";
 import AdminSettingsPanel from "@/components/admin-settings-panel";
@@ -912,6 +912,43 @@ export default function AdminDashboard() {
     return Object.keys(errors).length === 0;
   };
 
+  const handleExport = () => {
+    const dataStr = JSON.stringify(products, null, 2);
+    const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+    const exportFileDefaultName = `products-backup-${new Date().toISOString().split("T")[0]}.json`;
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
+    linkElement.click();
+  };
+
+  const [importing, setImporting] = useState(false);
+  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImporting(true);
+    try {
+      const text = await file.text();
+      const items = JSON.parse(text);
+      if (!Array.isArray(items)) throw new Error("JSON must be an array of products");
+      
+      const res = await apiFetch("/api/products/bulk", {
+        method: "POST",
+        body: JSON.stringify(items),
+      });
+      
+      showAlert(`Successfully imported ${res.count} products!`);
+      // Reload products
+      const updated = await apiFetch("/api/products");
+      setProducts(updated);
+    } catch (err: any) {
+      showAlert("Import failed: " + err.message);
+    } finally {
+      setImporting(false);
+      e.target.value = ""; // reset input
+    }
+  };
+
   const handleSave = async () => {
     if (!validateForm()) return;
     setSaving(true);
@@ -1741,6 +1778,20 @@ export default function AdminDashboard() {
                           <option value="in">{a.products.inStock}</option>
                           <option value="out">{a.products.outOfStock}</option>
                       </select>
+
+                      <label className={`inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl text-sm font-semibold hover:bg-gray-50 transition-colors shadow-sm cursor-pointer ${importing ? "opacity-50 pointer-events-none" : ""}`}>
+                        {importing ? <div className="animate-spin w-4 h-4 border-2 border-emerald-600 border-t-transparent rounded-full" /> : <Upload className="w-4 h-4" />}
+                        Import JSON
+                        <input type="file" accept=".json" onChange={handleImport} className="hidden" />
+                      </label>
+
+                      <button
+                        onClick={handleExport}
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl text-sm font-semibold hover:bg-gray-50 transition-colors shadow-sm"
+                      >
+                        <Download className="w-4 h-4" />
+                        Export JSON
+                      </button>
 
                       <button
                         onClick={openAddModal}

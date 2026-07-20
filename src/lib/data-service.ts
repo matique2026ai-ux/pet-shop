@@ -77,6 +77,27 @@ export async function createProduct(product: Omit<ProductData, "id" | "created_a
   return newProduct;
 }
 
+export async function bulkCreateProducts(productsList: any[]): Promise<any> {
+  if (isSupabaseConfigured()) {
+    return apiFetch("/api/products/bulk", { method: "POST", body: JSON.stringify(productsList) });
+  }
+  const currentProducts = getLocalProducts();
+  const newProducts = productsList.map(p => ({
+    ...p,
+    id: p.id || crypto.randomUUID(),
+    created_at: p.created_at || new Date().toISOString()
+  }));
+  // Merge handling for local: replace existing by id or append
+  const updatedProducts = [...currentProducts];
+  newProducts.forEach(newP => {
+    const idx = updatedProducts.findIndex(p => p.id === newP.id);
+    if (idx !== -1) updatedProducts[idx] = newP;
+    else updatedProducts.unshift(newP);
+  });
+  saveLocalProducts(updatedProducts);
+  return { success: true, count: newProducts.length, data: newProducts };
+}
+
 export async function updateProduct(id: string, product: Partial<ProductData>): Promise<ProductData> {
   if (isSupabaseConfigured()) {
     return apiFetch(`/api/products/${id}`, { method: "PUT", body: JSON.stringify(product) });
