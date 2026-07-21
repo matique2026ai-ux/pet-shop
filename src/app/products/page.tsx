@@ -97,13 +97,15 @@ function ProductsContent() {
                 className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600/20 focus:border-emerald-600"
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 w-full max-w-full touch-pan-x">
               {[{ id: "all", name: t.products.all }, ...categories].map((c) => (
                 <button
                   key={c.id}
                   onClick={() => setCategory(c.id)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                    category === c.id ? "bg-emerald-600 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  className={`px-4 py-2 rounded-xl text-sm font-bold transition-all shrink-0 whitespace-nowrap ${
+                    category === c.id
+                      ? "bg-emerald-600 text-white shadow-sm shadow-emerald-600/30"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
                   {c.name}
