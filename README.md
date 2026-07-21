@@ -140,10 +140,10 @@ A full-featured professional CRM panel with:
 
 - **Login:** Verified via `/api/admin/verify` against the `ADMIN_SECRET` env var.
 - **Dashboard:** Live KPIs (orders, revenue, customers, inventory), revenue bar chart, category pie chart, recent orders, top products.
-- **Products:** Full CRUD with file image upload (Supabase Storage), multi-image gallery upload, video file upload (up to 30 MB), category/subcategory filters, sort by name/category/price/stock, search.
+- **Products:** Full CRUD with file image upload (Supabase Storage), multi-image gallery upload, video file upload (up to 30 MB), category/subcategory filters, smart subcategory validation (optional when category has no subcategories), quick inline subcategory creation directly from product modal, sort by name/category/price/stock, search.
 - **Orders:** Full order list with expandable details (phone click-to-call, WhatsApp link, address, items, notes), status update, delete.
 - **Analytics:** Inventory value, in/out-of-stock counts, products-per-category chart, price distribution, top-rated table.
-- **Categories:** View, add, edit, delete categories + subcategories. Category image upload directly from device.
+- **Categories:** View, add, edit, delete categories + subcategories. Category image upload directly from device. Quick subcategory creation integrated into product form.
 - **Reviews:** Approve / reject / delete product reviews.
 - **Settings:** Fully isolated settings panel for Store Info, Site Content, and Delivery config. Inputs use uncontrolled refs — typing never loses focus.
 - **Translations:** Live override of any storefront text for EN/FR/AR without code changes.
