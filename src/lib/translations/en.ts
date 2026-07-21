@@ -313,7 +313,7 @@ export const en = {
       { title: "Fast Delivery", desc: "Express in Sétif in 24–48h, or to any of the 58 wilayas via trusted services like Yalidine and Yassir." },
     ],
     pricingTitle: "Delivery Rates",
-    pricingSubtitle: "Transparent pricing for all 58 provinces of Algeria",
+    pricingSubtitle: "Transparent pricing for all 69 provinces of Algeria",
     express: "Sétif Express",
     north: "Northern & Central Wilayas",
     south: "Southern Wilayas",
@@ -326,7 +326,7 @@ export const en = {
     ctaDesc: "Browse our collection and enjoy fast delivery with free shipping on orders over 5,000 DZD.",
     ctaButton: "Start Shopping Now",
     sections: [
-      { title: "Delivery & Logistics Information", text: "We ship to all 58 Algerian provinces. Sétif province receives express shipping within 24 to 48 hours, while other regions take 3 to 5 business days. Shipping is fully free on all orders exceeding 5,000 DZD. Standard regional delivery fees are detailed in the rates table below." },
+      { title: "Delivery & Logistics Information", text: "We ship to all 69 Algerian provinces. Sétif commune receives express motorcycle shipping within 12 to 24 hours, while other regions take 2 to 5 business days. Shipping is fully free on all orders exceeding 5,000 DZD." },
       { title: "Statutory Return & Exchange Policy", text: "Pursuant to Article 16 of Algerian Law 18-05 on electronic commerce, consumers have a 7-day cooling-off period to return or exchange products from the date of receipt, provided the items remain unopened, unused, and in their original packaging with proof of purchase. Paws & Wings covers return shipping costs if the items received are defective or non-compliant." },
       { title: "Payment Terms & Conditions", text: "We employ Cash on Delivery (COD) as our primary payment method across Algeria. All store prices are set in Algerian Dinar (DZD) and include all applicable taxes and statutory fees." },
     ],

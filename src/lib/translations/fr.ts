@@ -313,7 +313,7 @@ export const fr = {
       { title: "Livraison rapide", desc: "Livraison express à Sétif sous 24–48h, et vers toutes les wilayas via Yalidine ou Yassir." },
     ],
     pricingTitle: "Tarifs de livraison",
-    pricingSubtitle: "Tarification claire et transparente pour les 58 wilayas d'Algérie",
+    pricingSubtitle: "Tarification claire et transparente pour les 69 wilayas d'Algérie",
     express: "Sétif Express",
     north: "Wilayas du Nord et Centre",
     south: "Wilayas du Sud",
@@ -326,7 +326,7 @@ export const fr = {
     ctaDesc: "Parcourez notre collection et profitez d'une livraison rapide et gratuite pour tout achat de plus de 5 000 DZD.",
     ctaButton: "Commencer mes achats maintenant",
     sections: [
-      { title: "Informations de livraison & Logistique", text: "Nous livrons dans les 58 wilayas d'Algérie. Les livraisons pour la wilaya de Sétif s'effectuent sous 24 à 48 heures, tandis que pour les autres wilayas, le délai est de 3 à 5 jours ouvrables. La livraison est gratuite pour toute commande supérieure à 5 000 DZD. Les tarifs standard selon la région sont détaillés ci-dessous." },
+      { title: "Informations de livraison & Logistique", text: "Nous livrons dans les 69 wilayas d'Algérie. Les livraisons pour la commune de Sétif s'effectuent en express par moto sous 12 à 24 heures, tandis que pour les autres wilayas, le délai est de 2 à 5 jours ouvrables. La livraison est gratuite pour toute commande supérieure à 5 000 DZD." },
       { title: "Délai de rétractation et Politique de retour", text: "Conformément à l'article 16 de la loi algérienne 18-05 relative au commerce électronique, le consommateur dispose d'un délai de 7 jours pour retourner ou échanger un produit à compter de sa réception, à condition que le produit soit dans son état d'origine, non utilisé et dans son emballage scellé avec son justificatif d'achat. Les frais de livraison de retour sont couverts par Paws & Wings en cas de produit défectueux ou non conforme." },
       { title: "Conditions de règlement", text: "Le paiement à la livraison (Cash on Delivery) est notre principal moyen de paiement sécurisé en Algérie. Tous les prix affichés sur notre boutique en ligne sont indiqués en Dinar Algérien (DZD) et s'entendent toutes taxes comprises (TTC)." },
     ],

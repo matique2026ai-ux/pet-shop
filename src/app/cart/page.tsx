@@ -12,6 +12,7 @@ import { useSiteSettings } from "@/lib/site-settings";
 import { useAuth } from "@/lib/auth-context";
 import { unitLabel, isContinuousUnit } from "@/lib/units";
 import { formatWhatsAppNumber } from "@/lib/phone-utils";
+import { SetifMotorcycleDeliveryBadge } from "@/components/setif-courier-icon";
 
 const DEFAULT_DELIVERY: Record<string, string> = {
   scope: "commune",
@@ -51,12 +52,17 @@ const WILAYAS = [
   "Constantine", "Médéa", "Mostaganem", "M'Sila", "Mascara", "Ouargla", "Oran", "El Bayadh",
   "Illizi", "Bordj Bou Arréridj", "Boumerdès", "El Tarf", "Tindouf", "Tissemsilt", "El Oued",
   "Khenchela", "Souk Ahras", "Tipaza", "Mila", "Aïn Defla", "Naâma", "Aïn Témouchent",
-  "Ghardaïa", "Relizane",
+  "Ghardaïa", "Relizane", "Timimoun", "Bordj Badji Mokhtar", "Ouled Djellal", "Béni Abbès",
+  "In Salah", "In Guezzam", "Touggourt", "Djanet", "El M'Ghair", "El Meniaa", "Aflou",
+  "Barika", "El Eulma", "Aïn Oussera", "Bou Saâda", "Ksar Chellala", "M'Sila Ouest", "Maghnia",
+  "Tighennif", "Lakhdaria", "Gouraya"
 ];
 
 const SOUTH_WILAYAS = new Set([
   "Adrar", "Béchar", "Tindouf", "Tamanrasset", "Ouargla", "Illizi",
   "El Oued", "Ghardaïa", "Biskra", "Laghouat", "El Bayadh", "Naâma",
+  "Timimoun", "Bordj Badji Mokhtar", "Béni Abbès", "In Salah", "In Guezzam",
+  "Touggourt", "Djanet", "El M'Ghair", "El Meniaa"
 ]);
 
 function isSetifCommune(c: string) {
@@ -761,6 +767,9 @@ export default function CartPage() {
                     onInput={(e) => (e.target as HTMLInputElement).setCustomValidity("")}
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
+                  {(wilaya === "Sétif" || isSetifCommune(commune)) && (
+                    <SetifMotorcycleDeliveryBadge className="mt-2" />
+                  )}
                   {deliveryType === "home" && (
                     <input
                       type="text"

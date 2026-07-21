@@ -8,6 +8,8 @@ import {
   ShieldCheck, ArrowRight, Zap, CheckCircle, Clock, Phone,
 } from "lucide-react";
 
+import { SetifMotorcycleDeliveryBadge } from "@/components/setif-courier-icon";
+
 const STEP_ICONS = [Truck, Phone, Package, MapPin];
 
 export default function ShippingPage() {
@@ -149,7 +151,8 @@ export default function ShippingPage() {
               <div className="h-full rounded-3xl border border-[#E3602D]/20 bg-[#241A11] p-8 lg:p-10">
                 <div className="mb-8">
                   <h2 className="text-2xl font-bold text-white">{t.shipping.pricingTitle}</h2>
-                  <p className="text-white/50 mt-2">{t.shipping.pricingSubtitle}</p>
+                  <p className="text-white/50 mt-2 mb-6">{t.shipping.pricingSubtitle}</p>
+                  <SetifMotorcycleDeliveryBadge />
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
