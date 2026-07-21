@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
         digitsOnly.length >= 9 ? `customer_phone.ilike."%${digitsOnly.slice(-9)}%"` : null,
       ].filter(Boolean).join(",");
 
-      let query = supabase.from("orders").select("id, customer_name, status, total, items, notes, created_at");
+      let query = supabase.from("orders").select("id, customer_name, status, total, items, delivery_address, notes, created_at");
 
       if (extractedCode) {
         query = query.or(`id.eq."${extractedCode}",id.ilike."%${extractedCode}"`);
@@ -120,7 +120,7 @@ export async function POST(req: NextRequest) {
           const itemsList = Array.isArray(o.items) 
             ? o.items.map((it: any) => `${it.name} (Qty: ${it.quantity || 1})`).join(", ")
             : "N/A";
-          return `- Order #${shortId} (ID: ${o.id})\n  Customer: ${o.customer_name}\n  Date: ${dateStr}\n  Status: ${o.status}\n  Total: ${o.total} DZD\n  Items: ${itemsList}\n  Notes: ${o.notes || "N/A"}`;
+          return `- Order #${shortId} (ID: ${o.id})\n  Customer: ${o.customer_name}\n  Delivery Address: ${o.delivery_address || "N/A"}\n  Date: ${dateStr}\n  Status: ${o.status}\n  Total: ${o.total} DZD\n  Items: ${itemsList}\n  Notes: ${o.notes || "N/A"}`;
         }).join("\n\n");
       }
     } catch (err) {
@@ -150,7 +150,7 @@ ${ordersContext}
 Our Store Info:
 - Store Name: طيور الجمال والجواد (Paws & Wings)
 - Location: Sétif, Algeria (Cité elhidhab)
-- Delivery: Delivery is available in Sétif for 250 DZD (Free for orders above 5000 DZD). Delivery takes 24-48h.
+- Delivery: Delivery is available across all 58 provinces in Algeria. Delivery to Sétif costs 250 DZD (Free for orders above 5000 DZD) and takes 24h. Delivery to other provinces varies in cost and takes 2-4 days. When confirming an order, ALWAYS mention the customer's specific delivery province to reassure them.
 
 Customer message: "${text}"
 Answer directly and politely in their language:`;
