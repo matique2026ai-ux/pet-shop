@@ -13,6 +13,7 @@ import { useAuth } from "@/lib/auth-context";
 import { unitLabel, isContinuousUnit } from "@/lib/units";
 import { formatWhatsAppNumber } from "@/lib/phone-utils";
 import { SetifMotorcycleDeliveryBadge } from "@/components/setif-courier-icon";
+import { setCookie, getCookie } from "@/lib/cookies";
 
 const DEFAULT_DELIVERY: Record<string, string> = {
   scope: "commune",
@@ -124,6 +125,10 @@ export default function CartPage() {
   const [wilaya, setWilaya] = useState("");
   const [commune, setCommune] = useState("");
   const [deliveryType, setDeliveryType] = useState<"home" | "stopdesk" | "pickup" | "">("");
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [addressDetails, setAddressDetails] = useState("");
+  const [hasPreFilledInfo, setHasPreFilledInfo] = useState(false);
   const [phoneError, setPhoneError] = useState<string | null>(null);
   const [referralCode, setReferralCode] = useState("");
   const [orderReferral, setOrderReferral] = useState("");
@@ -132,9 +137,23 @@ export default function CartPage() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       try {
-        const stored = localStorage.getItem("pet_shop_referral") || "";
-        setReferralCode(stored);
-      } catch {}
+        const storedRef = getCookie("pawswings_referral") || localStorage.getItem("pet_shop_referral") || "";
+        setReferralCode(storedRef);
+
+        const cookieVal = getCookie("pawswings_customer_info");
+        const raw = cookieVal || localStorage.getItem("pawswings_customer_info");
+        if (raw) {
+          const c = JSON.parse(raw);
+          if (c.name) setCustomerName(c.name);
+          if (c.phone) setCustomerPhone(c.phone);
+          if (c.wilaya) setWilaya(c.wilaya);
+          if (c.commune) setCommune(c.commune);
+          if (c.addressDetails) setAddressDetails(c.addressDetails);
+          setHasPreFilledInfo(true);
+        }
+      } catch (e) {
+        console.error("Error reading customer cookie:", e);
+      }
     }
   }, []);
 
@@ -646,6 +665,20 @@ export default function CartPage() {
                   });
                   if (!res.ok) throw new Error("Server error");
                   const createdOrder = await res.json();
+
+                  // Save customer info to cookie and localStorage for 180 days for fast 1-click future checkout
+                  const savedInfo = {
+                    name: fd.get("name") as string,
+                    phone,
+                    wilaya,
+                    commune,
+                    addressDetails,
+                  };
+                  setCookie("pawswings_customer_info", JSON.stringify(savedInfo), 180);
+                  try {
+                    localStorage.setItem("pawswings_customer_info", JSON.stringify(savedInfo));
+                  } catch {}
+
                   setOrderPlaced(createdOrder);
                   clearCart();
                 } catch (e) {
@@ -655,9 +688,18 @@ export default function CartPage() {
               }}
               className="space-y-4"
             >
+              {hasPreFilledInfo && (
+                <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs text-emerald-800 flex items-center gap-2 mb-2">
+                  <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>{lang === "ar" ? "⚡ تم استرجاع بياناتك تلقائياً لسرعة الطلب (يمكنك تعديلها بأي وقت)." : "⚡ Vos coordonnées ont été pré-remplies automatiquement."}</span>
+                </div>
+              )}
+
               <input
                 type="text"
                 name="name"
+                value={customerName}
+                onChange={(e) => setCustomerName(e.target.value)}
                 placeholder={t.cart.namePlaceholder}
                 required
                 onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity(lang === "ar" ? "يرجى ملء هذا الحقل" : lang === "fr" ? "Veuillez renseigner ce champ" : "Please fill out this field")}
@@ -667,6 +709,11 @@ export default function CartPage() {
               <input
                 type="tel"
                 name="phone"
+                value={customerPhone}
+                onChange={(e) => {
+                  setCustomerPhone(e.target.value);
+                  if (phoneError) setPhoneError(null);
+                }}
                 placeholder={t.cart.phonePlaceholder}
                 inputMode="tel"
                 dir="auto"
@@ -675,7 +722,6 @@ export default function CartPage() {
                 onInput={(e) => {
                   (e.target as HTMLInputElement).setCustomValidity("");
                 }}
-                onChange={() => phoneError && setPhoneError(null)}
                 className={`w-full px-4 py-3 rounded-xl border text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${phoneError ? "border-red-400 bg-red-50" : "border-gray-200"}`}
               />
               {phoneError && (
@@ -774,6 +820,8 @@ export default function CartPage() {
                     <input
                       type="text"
                       name="address_details"
+                      value={addressDetails}
+                      onChange={(e) => setAddressDetails(e.target.value)}
                       placeholder={lang === "ar" ? "العنوان بالتفصيل (الحي، الشارع، رقم الشقة...)" : lang === "fr" ? "Adresse détaillée (Quartier, Rue, N°...)" : "Detailed Address (Neighborhood, Street, N°...)"}
                       required
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
