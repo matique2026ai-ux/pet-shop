@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase";
+import { sendBrevoEmail, getOrderReceiptEmailHtml } from "@/lib/brevo-email";
 
 export async function GET(request: Request) {
   if (request.headers.get("x-admin-secret") !== process.env.ADMIN_SECRET) {
@@ -60,5 +61,17 @@ export async function POST(request: Request) {
     .select()
     .single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // Asynchronously send order receipt via Brevo if email is available
+  if (email && data) {
+    const orderRef = (data.id || "").slice(-6).toUpperCase();
+    sendBrevoEmail({
+      toEmail: email,
+      toName: name,
+      subject: `تأكيد طلبية #${orderRef} | طيور الجمال والجواد`,
+      htmlContent: getOrderReceiptEmailHtml(data, "ar"),
+    }).catch((e) => console.error("Async Brevo order email error:", e));
+  }
+
   return NextResponse.json(data);
 }

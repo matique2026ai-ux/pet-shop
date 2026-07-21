@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
 import type { User } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase";
+import { sendBrevoEmail, getWelcomeEmailHtml } from "@/lib/brevo-email";
 
 export interface Profile {
   id: string;
@@ -83,6 +84,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } catch (e) {
         console.error("Failed to upsert profile record:", e);
       }
+
+      // Asynchronously trigger Brevo Welcome Email
+      sendBrevoEmail({
+        toEmail: email,
+        toName: fullName,
+        subject: `مرحباً بك في طيور الجمال والجواد 🐾`,
+        htmlContent: getWelcomeEmailHtml(fullName, "ar"),
+      }).catch((e) => console.error("Async Brevo welcome email error:", e));
     }
     if (data?.session) {
       setUser(data.session.user);
