@@ -18,7 +18,7 @@ type AdminTranslations = {
     title: string; addProduct: string; editProduct: string; searchPlaceholder: string;
     allCategories: string; allStock: string; inStock: string; outOfStock: string;
     stockQuantity: string; stockHelp: string; noProducts: string; addFirst: string;
-    filtersNoMatch: string; clearFilters: string; name: string; category: string; price: string; oldPrice: string; stock: string; badge: string; actions: string;
+    filtersNoMatch: string; clearFilters: string; name: string; category: string; subcategory: string; noSubcategories: string; addSubcategoryQuick: string; price: string; oldPrice: string; stock: string; badge: string; actions: string;
     soldBy: string; soldByPiece: string; soldByWeight: string; weightHelp: string;
     video: string; videoHelp: string; ingredients: string; ingredientsHelp: string;
   };
@@ -71,7 +71,7 @@ const en: AdminTranslations = {
     allCategories: "All Categories", allStock: "All Stock", inStock: "In Stock", outOfStock: "Out of Stock",
     stockQuantity: "Stock Quantity", stockHelp: "0 = out of stock. Product is marked “In Stock” when quantity > 0.",
     noProducts: "No products yet", addFirst: "Add your first product to get started", filtersNoMatch: "No products match your filters", clearFilters: "Clear filters",
-    name: "Name", category: "Category", price: "Price", oldPrice: "Old Price", stock: "Stock", badge: "Badge", actions: "Actions",
+    name: "Name", category: "Category", subcategory: "Subcategory", noSubcategories: "No subcategories available", addSubcategoryQuick: "+ Add Subcategory", price: "Price", oldPrice: "Old Price", stock: "Stock", badge: "Badge", actions: "Actions",
     soldBy: "Unit of Measure", soldByPiece: "Piece (each)", soldByWeight: "Weight (kg)", weightHelp: "Continuous unit — price is per unit (e.g. per kg, per g, per L). Customer enters a decimal quantity.",
     video: "Product Video URL", videoHelp: "Optional. YouTube, Vimeo, or a direct .mp4 link. Shown on the product page.", ingredients: "Ingredients & Composition", ingredientsHelp: "Optional. List the ingredients / composition (supports multiple lines).",
   },
@@ -125,7 +125,7 @@ const fr: AdminTranslations = {
     allCategories: "Toutes les catégories", allStock: "Tout le stock", inStock: "En stock", outOfStock: "Rupture de stock",
     stockQuantity: "Quantité en stock", stockHelp: "0 = rupture de stock. Le produit est « En stock » si quantité > 0.",
     noProducts: "Aucun produit pour l'instant", addFirst: "Ajoutez votre premier produit", filtersNoMatch: "Aucun produit ne correspond à vos filtres", clearFilters: "Effacer les filtres",
-    name: "Nom", category: "Catégorie", price: "Prix", oldPrice: "Ancien prix", stock: "Stock", badge: "Badge", actions: "Actions",
+    name: "Nom", category: "Catégorie", subcategory: "Sous-catégorie", noSubcategories: "Aucune sous-catégorie disponible", addSubcategoryQuick: "+ Ajouter une sous-catégorie", price: "Prix", oldPrice: "Ancien prix", stock: "Stock", badge: "Badge", actions: "Actions",
     soldBy: "Unité de mesure", soldByPiece: "Pièce (l'unité)", soldByWeight: "Poids (kg)", weightHelp: "Unité continue — le prix est par unité (ex. au kg, au g, au L). Le client saisit une quantité décimale.",
     video: "URL de la vidéo produit", videoHelp: "Facultatif. YouTube, Vimeo ou un lien .mp4 direct. Affiché sur la page produit.", ingredients: "Ingrédients & Composition", ingredientsHelp: "Facultatif. Listez les ingrédients / la composition (plusieurs lignes possibles).",
   },
@@ -179,7 +179,7 @@ const ar: AdminTranslations = {
     allCategories: "كل الفئات", allStock: "كل المخزون", inStock: "متوفر", outOfStock: "غير متوفر",
     stockQuantity: "كمية المخزون", stockHelp: "0 = غير متوفر. يُعتبر المنتج «متوفر» عندما تكون الكمية > 0.",
     noProducts: "لا توجد منتجات بعد", addFirst: "أضف أول منتج لتبدأ", filtersNoMatch: "لا توجد منتجات تطابق عوامل التصفية", clearFilters: "مسح عوامل التصفية",
-    name: "الاسم", category: "الفئة", price: "السعر", oldPrice: "السعر القديم", stock: "المخزون", badge: "الشارة", actions: "الإجراءات",
+    name: "الاسم", category: "الفئة", subcategory: "الفئة الفرعية", noSubcategories: "لا توجد فئات فرعية متاحة", addSubcategoryQuick: "+ إضافة فئة فرعية", price: "السعر", oldPrice: "السعر القديم", stock: "المخزون", badge: "الشارة", actions: "الإجراءات",
     soldBy: "وحدة القياس", soldByPiece: "قطعة", soldByWeight: "الوزن (كغ)", weightHelp: "وحدة مستمرة — السعر لكل وحدة (مثلاً لكل كغ، غ، لتر). يُدخل الزبون الكمية بأرقام عشرية.",
     video: "رابط فيديو المنتج", videoHelp: "اختياري. YouTube أو Vimeo أو رابط .mp4 مباشر. يُعرض في صفحة المنتج.", ingredients: "المكوّنات والتركيبة", ingredientsHelp: "اختياري. اذكر المكوّنات/التركيبة (أسطر متعددة).",
   },

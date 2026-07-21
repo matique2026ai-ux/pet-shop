@@ -22,6 +22,7 @@ import type { TranslationOverrides } from "@/lib/i18n-context";
 import { LogoC1, LogoC4 } from "@/components/brand-logo";
 import { type UnitType, UNIT_OPTIONS, isContinuousUnit, unitLabel } from "@/lib/units";
 import { compressImage } from "@/lib/image-utils";
+import { categories as defaultCategories } from "@/lib/data";
 
 const COLORS = ["#059669", "#10B981", "#34D399", "#6EE7B7", "#A7F3D0"];
 
@@ -741,28 +742,32 @@ export default function AdminDashboard() {
   const loadCategories = useCallback(async () => {
     try {
       const data = await fetch("/api/categories").then((r) => r.json());
-      setCategories(data);
-      if (typeof window !== "undefined" && Array.isArray(data)) {
-        try {
-          const iconMap: Record<string, string> = { cat: "cat", dog: "dog", bird: "bird", fish: "fish", rabbit: "rabbit" };
-          const mapped = data.map((c: any) => ({
-            id: c.id,
-            name: c.name,
-            icon: iconMap[c.icon] || "paw-print",
-            description: "",
-            image_url: c.image_url,
-            video_url: c.video_url,
-            subcategories: Array.isArray(c.subcategories) 
-              ? c.subcategories.map((s: any) => ({ id: s.id, name: s.name, slug: s.id }))
-              : []
-          }));
-          localStorage.setItem("pet_shop_categories", JSON.stringify(mapped));
-        } catch (e) {
-          console.error("Failed to cache categories:", e);
+      if (Array.isArray(data) && data.length > 0) {
+        setCategories(data);
+        if (typeof window !== "undefined") {
+          try {
+            const iconMap: Record<string, string> = { cat: "cat", dog: "dog", bird: "bird", fish: "fish", rabbit: "rabbit" };
+            const mapped = data.map((c: any) => ({
+              id: c.id,
+              name: c.name,
+              icon: iconMap[c.icon] || "paw-print",
+              description: "",
+              image_url: c.image_url,
+              video_url: c.video_url,
+              subcategories: Array.isArray(c.subcategories) 
+                ? c.subcategories.map((s: any) => ({ id: s.id, name: s.name, slug: s.id }))
+                : []
+            }));
+            localStorage.setItem("pet_shop_categories", JSON.stringify(mapped));
+          } catch (e) {
+            console.error("Failed to cache categories:", e);
+          }
         }
+      } else {
+        setCategories(defaultCategories as any);
       }
     } catch {
-      // fallback empty
+      setCategories(defaultCategories as any);
     }
   }, []);
 
@@ -901,10 +906,14 @@ export default function AdminDashboard() {
 
   const validateForm = (): boolean => {
     const errors: Partial<Record<keyof FormState, string>> = {};
-    if (!form.name.trim()) errors.name = "Required";
-    if (!form.category) errors.category = "Required";
-    if (!form.subcategory) errors.subcategory = "Required";
-    if (!form.price || isNaN(Number(form.price))) errors.price = "Required";
+    if (!form.name.trim()) errors.name = a.common.required;
+    if (!form.category) errors.category = a.common.required;
+    
+    const selectedCatObj = categories.find((c) => c.id === form.category);
+    const catHasSubcategories = !!(selectedCatObj && Array.isArray(selectedCatObj.subcategories) && selectedCatObj.subcategories.length > 0);
+    if (catHasSubcategories && !form.subcategory) errors.subcategory = a.common.required;
+
+    if (!form.price || isNaN(Number(form.price))) errors.price = a.common.required;
     if (form.originalPrice && isNaN(Number(form.originalPrice))) errors.originalPrice = "Invalid number";
     if (form.rating && (isNaN(Number(form.rating)) || Number(form.rating) < 1 || Number(form.rating) > 5)) errors.rating = "Must be 1-5";
     if (form.reviews && isNaN(Number(form.reviews))) errors.reviews = "Invalid number";
@@ -956,7 +965,7 @@ export default function AdminDashboard() {
       const body: Omit<ProductData, "id" | "created_at"> & { original_price?: number } = {
         name: form.name.trim(),
         category: form.category,
-        subcategory: form.subcategory,
+        subcategory: form.subcategory ? form.subcategory : undefined,
         price: Number(form.price),
         image: form.image || undefined,
         images: form.images,
@@ -1102,13 +1111,17 @@ export default function AdminDashboard() {
   const saveSub = async () => {
     if (!subModal.id.trim() || !subModal.name.trim()) { showAlert(a.common.name + " / " + a.common.id + " " + a.common.required, "Validation"); return; }
     try {
+      const newSubId = subModal.id.trim();
       if (subModal.editingId) {
         await apiFetch("/api/subcategories", { method: "PUT", body: JSON.stringify({ id: subModal.editingId, name: subModal.name, category_id: subModal.category_id }) });
       } else {
-        await apiFetch("/api/subcategories", { method: "POST", body: JSON.stringify({ id: subModal.id.trim(), name: subModal.name, category_id: subModal.category_id }) });
+        await apiFetch("/api/subcategories", { method: "POST", body: JSON.stringify({ id: newSubId, name: subModal.name, category_id: subModal.category_id }) });
       }
       closeSubModal();
       await loadCategories();
+      if (subModal.category_id === form.category) {
+        setForm((f) => ({ ...f, subcategory: newSubId }));
+      }
     } catch (e) {
       showAlert("Failed to save subcategory: " + (e as Error).message);
     }
@@ -1669,9 +1682,18 @@ export default function AdminDashboard() {
                     </div>
                   </td>
                   <td className="px-4 py-3 hidden md:table-cell">
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-gray-100 text-gray-600 text-xs font-medium">
-                      {categories.find((c) => c.id === product.category)?.name || product.category || "General"}
-                    </span>
+                    <div className="flex flex-col items-start gap-1">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-gray-100 text-gray-700 text-xs font-medium">
+                        {categories.find((c) => c.id === product.category)?.name || product.category || "General"}
+                      </span>
+                      {product.subcategory && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[10px] font-medium">
+                          {categories
+                            .find((c) => c.id === product.category)
+                            ?.subcategories.find((s) => s.id === product.subcategory)?.name || product.subcategory}
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap hidden sm:table-cell">
                     {currency}{Number(product.price || 0).toFixed(2)}
@@ -2423,13 +2445,13 @@ export default function AdminDashboard() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{a.products.category} *</label>
                   <select
                     value={form.category}
                     onChange={(e) => setForm({ ...form, category: e.target.value, subcategory: "" })}
                     className={`w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${formErrors.category ? "border-red-300" : "border-gray-200"}`}
                   >
-                    <option value="">Select...</option>
+                    <option value="">{a.common.all}...</option>
                     {categories.map((c) => (
                       <option key={c.id} value={c.id}>{c.name}</option>
                     ))}
@@ -2437,18 +2459,47 @@ export default function AdminDashboard() {
                   {formErrors.category && <p className="text-xs text-red-500 mt-1">{formErrors.category}</p>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Subcategory *</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-sm font-medium text-gray-700">
+                      {a.products.subcategory} {
+                        form.category &&
+                        (categories.find((c) => c.id === form.category)?.subcategories?.length ?? 0) > 0
+                          ? "*"
+                          : `(${a.common.all})`
+                      }
+                    </label>
+                    {form.category && (
+                      <button
+                        type="button"
+                        onClick={() => openSubModal(form.category)}
+                        className="text-xs text-emerald-600 hover:text-emerald-700 font-medium hover:underline flex items-center gap-0.5"
+                      >
+                        {a.products.addSubcategoryQuick}
+                      </button>
+                    )}
+                  </div>
                   <select
                     value={form.subcategory}
                     onChange={(e) => setForm({ ...form, subcategory: e.target.value })}
-                    className={`w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${formErrors.subcategory ? "border-red-300" : "border-gray-200"}`}
+                    disabled={!form.category}
+                    className={`w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${formErrors.subcategory ? "border-red-300" : "border-gray-200"} ${!form.category ? "bg-gray-100 cursor-not-allowed text-gray-400" : ""}`}
                   >
-                    <option value="">Select...</option>
+                    <option value="">
+                      {!form.category
+                        ? "Select Category first"
+                        : ((categories.find((c) => c.id === form.category)?.subcategories?.length ?? 0) > 0
+                            ? "Select..."
+                            : a.products.noSubcategories)}
+                    </option>
                     {categories
                       .find((c) => c.id === form.category)
                       ?.subcategories.map((s) => (
                         <option key={s.id} value={s.id}>{s.name}</option>
                       ))}
+                    {form.subcategory &&
+                      !categories.find((c) => c.id === form.category)?.subcategories.some((s) => s.id === form.subcategory) && (
+                        <option value={form.subcategory}>{form.subcategory}</option>
+                      )}
                   </select>
                   {formErrors.subcategory && <p className="text-xs text-red-500 mt-1">{formErrors.subcategory}</p>}
                 </div>
