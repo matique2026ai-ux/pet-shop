@@ -135,7 +135,11 @@ export async function POST(req: NextRequest) {
     // 2. Response Generation
     let replyText = "";
     const isArabic = /[\u0600-\u06FF]/.test(text);
-    const geminiKey = process.env.GEMINI_API_KEY;
+    const geminiKey = 
+      process.env.GEMINI_API_KEY || 
+      process.env.GEMINI_KEY || 
+      process.env.GOOGLE_API_KEY || 
+      process.env.GOOGLE_GEMINI_KEY;
 
     if (geminiKey) {
       try {
@@ -236,7 +240,14 @@ function cleanWhatsAppLinks(text: string): string {
 }
 
 async function askGemini(prompt: string, apiKey: string): Promise<string> {
-  const models = ["gemini-1.5-flash", "gemini-1.5-flash-8b", "gemini-2.0-flash-exp", "gemini-1.5-pro"];
+  const models = [
+    "gemini-3.5-flash-lite",
+    "gemini-2.0-flash-lite",
+    "gemini-2.0-flash-001",
+    "gemini-2.5-flash-lite",
+    "gemini-3.1-flash-lite",
+    "gemini-2.0-flash"
+  ];
   let lastError: Error | null = null;
   for (const model of models) {
     for (let attempt = 0; attempt < 2; attempt++) {

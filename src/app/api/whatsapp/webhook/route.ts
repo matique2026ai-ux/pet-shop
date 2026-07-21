@@ -60,7 +60,11 @@ export async function POST(req: NextRequest) {
     // Retrieve system settings
     const token = process.env.WHATSAPP_TOKEN;
     const phoneId = process.env.WHATSAPP_PHONE_NUMBER_ID;
-    const geminiKey = process.env.GEMINI_API_KEY;
+    const geminiKey = 
+      process.env.GEMINI_API_KEY || 
+      process.env.GEMINI_KEY || 
+      process.env.GOOGLE_API_KEY || 
+      process.env.GOOGLE_GEMINI_KEY;
 
     if (!token || !phoneId) {
       console.error("WhatsApp credentials not set in environment.");
@@ -191,7 +195,14 @@ function cleanWhatsAppLinks(text: string): string {
 
 // Helper: Fetch Gemini API
 async function askGemini(prompt: string, apiKey: string): Promise<string> {
-  const models = ["gemini-1.5-flash", "gemini-1.5-flash-8b", "gemini-2.0-flash-exp", "gemini-1.5-pro"];
+  const models = [
+    "gemini-3.5-flash-lite",
+    "gemini-2.0-flash-lite",
+    "gemini-2.0-flash-001",
+    "gemini-2.5-flash-lite",
+    "gemini-3.1-flash-lite",
+    "gemini-2.0-flash"
+  ];
   let lastError: Error | null = null;
   for (const model of models) {
     for (let attempt = 0; attempt < 2; attempt++) {
