@@ -90,13 +90,18 @@ function FootprintDecorations({ category }: { category: string }) {
 
 export default function ProductDetailPage() {
   const { t, currency, lang } = useI18n();
-  const { products, categories } = useTranslatedData();
+  const { products, categories, productsLoaded } = useTranslatedData();
   const { addItem } = useCart();
   const { addId } = useRecentlyViewed();
   const params = useParams();
   const { store, delivery } = useSiteSettings();
-  const product = products.find((p) => p.id === params.id);
-  
+
+  const paramId = Array.isArray(params?.id) ? params.id[0] : params?.id;
+  const cleanId = String(paramId || "").trim();
+  const product = products.find(
+    (p) => String(p.id).trim() === cleanId || String(p.id).trim().toLowerCase() === cleanId.toLowerCase()
+  );
+
   let isLiveAnimal = false;
   if (product) {
     const cat = product.category?.toLowerCase() || "";
@@ -142,11 +147,20 @@ export default function ProductDetailPage() {
     setSelectedVariant(product?.variants?.[0] || "");
   }, [product?.id, product?.variants]);
 
+  if (!productsLoaded) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 text-gray-400 min-h-[50vh]">
+        <div className="animate-spin w-8 h-8 border-4 border-emerald-600 border-t-transparent rounded-full mb-4" />
+        <p className="text-sm font-medium">{lang === "ar" ? "جاري التحميل..." : "Loading..."}</p>
+      </div>
+    );
+  }
+
   if (!product) {
     return (
-      <div className="text-center py-20">
+      <div className="text-center py-20 min-h-[50vh] flex flex-col items-center justify-center">
         <h1 className="text-2xl font-bold text-gray-900 mb-4">{t.products.notFound}</h1>
-        <Link href="/products" className="text-emerald-600 hover:underline">{t.products.viewAll}</Link>
+        <Link href="/products" className="text-emerald-600 font-semibold hover:underline">{t.products.viewAll}</Link>
       </div>
     );
   }

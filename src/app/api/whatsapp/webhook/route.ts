@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
     const origin = req.nextUrl.origin;
 
     const catalogContext = products
-      ? products.map((p) => `- Name: ${p.name}\n  Category: ${p.category}\n  Price: ${p.price} DZD\n  Description: ${p.description || "N/A"}\n  Link: ${origin}/products/${p.category}/${p.id}`).join("\n\n")
+      ? products.map((p) => `- Name: ${p.name}\n  Category: ${p.category}\n  Price: ${p.price} DZD\n  Description: ${p.description || "N/A"}\n  Link: ${origin}/products/${encodeURIComponent(p.category || "all")}/${p.id}`).join("\n\n")
       : "No products available in stock.";
 
     // Fetch customer's recent orders for tracking

@@ -24,20 +24,34 @@ export default function CategoryPage() {
   const { products, categories, productsLoaded } = useTranslatedData();
   const params = useParams();
   const searchParams = useSearchParams();
-  const catSlug = params.category as string;
+  const catSlug = decodeURIComponent(String(params?.category || "")).trim();
   const activeSub = searchParams.get("sub");
-  const cat = categories.find((c) => c.id === catSlug);
-  const catProducts = products.filter((p) => p.category === catSlug);
+  
+  const cat = categories.find(
+    (c) => String(c.id).trim() === catSlug || String(c.id).trim().toLowerCase() === catSlug.toLowerCase()
+  );
+  const catProducts = products.filter(
+    (p) => String(p.category).trim() === catSlug || String(p.category).trim().toLowerCase() === catSlug.toLowerCase()
+  );
 
   const filtered = activeSub
     ? catProducts.filter((p) => p.subcategory === activeSub)
     : catProducts;
 
+  if (!productsLoaded) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 text-gray-400 min-h-[50vh]">
+        <div className="animate-spin w-8 h-8 border-4 border-emerald-600 border-t-transparent rounded-full mb-4" />
+        <p className="text-sm font-medium">{t.products.title ? (t.products as any).loading || (t as any).loading || "Loading..." : "Loading..."}</p>
+      </div>
+    );
+  }
+
   if (!cat) {
     return (
-      <div className="text-center py-20">
+      <div className="text-center py-20 min-h-[50vh] flex flex-col items-center justify-center">
         <h1 className="text-2xl font-bold text-gray-900 mb-4">{t.products.categoryNotFound}</h1>
-        <Link href="/products" className="text-emerald-600 hover:underline">{t.products.viewAll}</Link>
+        <Link href="/products" className="text-emerald-600 font-semibold hover:underline">{t.products.viewAll}</Link>
       </div>
     );
   }
