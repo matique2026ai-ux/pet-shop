@@ -616,19 +616,43 @@ export default function ProductDetailPage() {
                   {copied ? (lang === "ar" ? "تم نسخ الكود!" : "Copié !") : (lang === "ar" ? "نسخ الكود" : "Copier le code")}
                 </button>
 
-                <a
-                  href={`https://wa.me/${formatWhatsAppNumber(store?.whatsapp || delivery?.whatsapp || store?.phone, "213776075355")}?text=${encodeURIComponent(
-                    lang === "ar" 
-                      ? `مرحباً، أود شراء المنتج "${product.name}" من المحل. كود الحجز والخصم الخاص بي هو: ${generatedCode}` 
-                      : `Bonjour, je souhaite acheter le produit "${product.name}" au magasin. Mon code de réduction est : ${generatedCode}`
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={async () => {
+                    const waNum = formatWhatsAppNumber(store?.whatsapp || delivery?.whatsapp || store?.phone, "213776075355");
+                    let orderRef = "";
+                    try {
+                      const res = await fetch("/api/orders", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          customer_name: lang === "ar" ? "حجز من صفحة المنتج" : "Réservation Produit Direct",
+                          customer_phone: waNum,
+                          delivery_address: "[Pickup] حجز مباشر من المحل",
+                          items: [{ id: product.id, name: product.name, price: product.price, quantity: 1, image: product.image }],
+                          total: product.price,
+                          notes: `كود الخصم والحجز: ${generatedCode}`,
+                          status: "pending"
+                        }),
+                      });
+                      if (res.ok) {
+                        const newOrder = await res.json();
+                        if (newOrder?.id) orderRef = ` (طلب #${newOrder.id.slice(-6).toUpperCase()})`;
+                      }
+                    } catch (e) {
+                      console.error("Failed to auto-create order record for booking:", e);
+                    }
+
+                    const waText = lang === "ar" 
+                      ? `مرحباً، أود شراء المنتج "${product.name}" من المحل.${orderRef} كود الحجز والخصم الخاص بي هو: ${generatedCode}` 
+                      : `Bonjour, je souhaite acheter le produit "${product.name}" au magasin.${orderRef} Mon code de réduction est : ${generatedCode}`;
+
+                    window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(waText)}`, "_blank", "noopener,noreferrer");
+                  }}
                   className="w-full bg-[#25D366] text-white py-3 rounded-xl font-bold hover:bg-[#20ba56] transition-colors shadow-md text-xs flex items-center justify-center gap-2"
                 >
                   <MessageCircle className="w-4 h-4 shrink-0" />
                   {lang === "ar" ? "تأكيد عبر واتساب" : "WhatsApp"}
-                </a>
+                </button>
               </div>
 
             </div>

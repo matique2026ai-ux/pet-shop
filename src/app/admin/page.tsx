@@ -9,9 +9,10 @@ import {
   BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip,
   PieChart, Pie, Cell,
 } from "recharts";
+import { formatWhatsAppNumber } from "@/lib/phone-utils";
 import {
   Users, ShoppingBag, DollarSign, Package, TrendingUp, TrendingDown,
-  Edit, Trash2, ArrowUpRight, Calendar, Menu, X, Lock, Phone,
+  Edit, Trash2, ArrowUpRight, Calendar, Menu, X, Lock, Phone, MessageCircle,
   LayoutDashboard, Package2, ShoppingCart, BarChart3, Settings, Plus, ImageIcon, Upload, ChevronDown, Search, Filter, Tag, Languages, Video, Star, Check, ChevronRight, BookOpen, Download
 } from "lucide-react";
 import HeroVideoManager from "@/components/hero-video-manager";
@@ -366,11 +367,14 @@ function OrderDetailRow({
                   <Phone className="w-3.5 h-3.5 text-emerald-600" /> {order.customer_phone}
                 </a>
                 <a
-                  href={`https://wa.me/${(order.customer_phone || "").replace(/[^0-9]/g, "")}`}
+                  href={`https://wa.me/${formatWhatsAppNumber(order.customer_phone)}?text=${encodeURIComponent(
+                    `مرحباً ${order.customer_name || "زبوننا العزيز"}، بخصوص طلبك رقم #${order.id ? String(order.id).slice(-6).toUpperCase() : ""} بقيمة ${order.total} د.ج من متجر Paws & Wings 🐾`
+                  )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-[#25D366] text-white px-2 py-0.5 rounded-lg text-[10px] font-bold flex items-center gap-1 hover:bg-[#20ba56] transition-colors"
+                  className="bg-[#25D366] text-white px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-[#20ba56] transition-colors shadow-sm"
                 >
+                  <MessageCircle className="w-3.5 h-3.5" />
                   WhatsApp
                 </a>
               </div>

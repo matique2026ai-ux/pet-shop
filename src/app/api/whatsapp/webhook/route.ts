@@ -85,40 +85,45 @@ export async function POST(req: NextRequest) {
 
     // Fetch customer's recent orders for tracking
     let ordersContext = "No recent orders found for this phone number.";
-    if (sender) {
-      try {
-        const cleanedSender = sender.replace(/\s+/g, "");
-        const digitsOnly = sender.replace(/\D/g, "");
-        let localFormat = digitsOnly;
-        if (digitsOnly.startsWith("213")) {
-          localFormat = "0" + digitsOnly.slice(3);
-        }
-        const orFilter = [
-          `customer_phone.eq."${sender}"`,
-          `customer_phone.eq."${cleanedSender}"`,
-          `customer_phone.eq."${digitsOnly}"`,
-          `customer_phone.eq."${localFormat}"`
-        ].join(",");
+    try {
+      // Extract short order ID from text if customer mentions e.g. #A1B2C3 or order ID
+      const orderCodeMatch = text.match(/#([A-Za-z0-9]{6})/i) || text.match(/\b([A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12})\b/i);
+      const extractedCode = orderCodeMatch ? orderCodeMatch[1] : null;
 
-        const { data: customerOrders } = await supabase
-          .from("orders")
-          .select("id, status, total, items, created_at")
-          .or(orFilter)
-          .order("created_at", { ascending: false })
-          .limit(3);
-
-        if (customerOrders && customerOrders.length > 0) {
-          ordersContext = customerOrders.map(o => {
-            const dateStr = new Date(o.created_at).toLocaleDateString("fr-FR");
-            const itemsList = Array.isArray(o.items) 
-              ? o.items.map((it: any) => `${it.name} (Qty: ${it.quantity})`).join(", ")
-              : "N/A";
-            return `- Order ID: ${o.id}\n  Date: ${dateStr}\n  Status: ${o.status}\n  Total: ${o.total} DZD\n  Items: ${itemsList}`;
-          }).join("\n\n");
-        }
-      } catch (err) {
-        console.error("Error fetching customer orders for tracking in webhook:", err);
+      const digitsOnly = (sender || "").replace(/\D/g, "");
+      let localFormat = digitsOnly;
+      if (digitsOnly.startsWith("213")) {
+        localFormat = "0" + digitsOnly.slice(3);
       }
+      const phoneFilters = [
+        sender ? `customer_phone.eq."${sender}"` : null,
+        digitsOnly ? `customer_phone.eq."${digitsOnly}"` : null,
+        localFormat ? `customer_phone.eq."${localFormat}"` : null,
+        digitsOnly.length >= 9 ? `customer_phone.ilike."%${digitsOnly.slice(-9)}%"` : null,
+      ].filter(Boolean).join(",");
+
+      let query = supabase.from("orders").select("id, customer_name, status, total, items, notes, created_at");
+
+      if (extractedCode) {
+        query = query.or(`id.eq."${extractedCode}",id.ilike."%${extractedCode}"`);
+      } else if (phoneFilters) {
+        query = query.or(phoneFilters);
+      }
+
+      const { data: customerOrders } = await query.order("created_at", { ascending: false }).limit(5);
+
+      if (customerOrders && customerOrders.length > 0) {
+        ordersContext = customerOrders.map(o => {
+          const dateStr = new Date(o.created_at).toLocaleDateString("fr-FR");
+          const shortId = o.id ? String(o.id).slice(-6).toUpperCase() : "N/A";
+          const itemsList = Array.isArray(o.items) 
+            ? o.items.map((it: any) => `${it.name} (Qty: ${it.quantity || 1})`).join(", ")
+            : "N/A";
+          return `- Order #${shortId} (ID: ${o.id})\n  Customer: ${o.customer_name}\n  Date: ${dateStr}\n  Status: ${o.status}\n  Total: ${o.total} DZD\n  Items: ${itemsList}\n  Notes: ${o.notes || "N/A"}`;
+        }).join("\n\n");
+      }
+    } catch (err) {
+      console.error("Error fetching customer orders for tracking in webhook:", err);
     }
 
     // 2. Prepare System Prompt for Gemini
