@@ -158,7 +158,7 @@ export default function CartPage() {
   }, []);
 
   useEffect(() => {
-    if (checkingOut) {
+    if (checkingOut && !orderPlaced) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -166,7 +166,7 @@ export default function CartPage() {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [checkingOut]);
+  }, [checkingOut, orderPlaced]);
 
   const cartHasBirds = items.some((item) => {
     const p = products.find((p: any) => p.id === item.productId);
@@ -680,6 +680,10 @@ export default function CartPage() {
                   } catch {}
 
                   setOrderPlaced(createdOrder);
+                  setCheckingOut(false);
+                  if (typeof document !== "undefined") {
+                    document.body.style.overflow = "";
+                  }
                   clearCart();
                 } catch (e) {
                   alert(t.cart.orderFailed);
