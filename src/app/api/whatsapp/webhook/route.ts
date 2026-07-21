@@ -196,9 +196,9 @@ function cleanWhatsAppLinks(text: string): string {
 // Helper: Fetch Gemini API
 async function askGemini(prompt: string, apiKey: string): Promise<string> {
   const models = [
-    "gemini-1.5-flash",
-    "gemini-1.5-pro",
-    "gemini-2.0-flash",
+    "gemini-3.5-flash",
+    "gemini-3.5-flash-lite",
+    "gemini-2.5-flash",
     "gemini-2.0-flash-lite"
   ];
   let lastError: Error | null = null;
