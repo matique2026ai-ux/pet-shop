@@ -226,19 +226,19 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
           lite ? (
             <button
               onClick={handleAddToCart}
-              className="relative z-10 add-cart-btn mt-3 w-full flex items-center justify-center gap-2 py-2.5 text-sm font-bold active:scale-95 transition-transform"
+              className="relative z-10 add-cart-btn mt-3 w-full flex items-center justify-center gap-1.5 h-10 px-2 text-xs sm:text-sm font-bold whitespace-nowrap overflow-hidden transition-transform active:scale-95"
             >
-              <ShoppingCart className="w-4 h-4" />
-              {t.products.addToCart}
+              <ShoppingCart className="w-4 h-4 shrink-0" />
+              <span className="truncate">{t.products?.addToCart || "Add to Cart"}</span>
             </button>
           ) : (
             <motion.button
               whileTap={{ scale: 0.92 }}
               onClick={handleAddToCart}
-              className="relative z-10 add-cart-btn mt-3 w-full flex items-center justify-center gap-2 py-2.5 text-sm font-bold"
+              className="relative z-10 add-cart-btn mt-3 w-full flex items-center justify-center gap-1.5 h-10 px-2 text-xs sm:text-sm font-bold whitespace-nowrap overflow-hidden"
             >
-              <ShoppingCart className="w-4 h-4" />
-              {t.products.addToCart}
+              <ShoppingCart className="w-4 h-4 shrink-0" />
+              <span className="truncate">{t.products?.addToCart || "Add to Cart"}</span>
             </motion.button>
           )
         )}

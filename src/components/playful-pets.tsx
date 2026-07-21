@@ -52,6 +52,10 @@ export default function PlayfulPets() {
 
   useEffect(() => {
     if (pathname?.startsWith("/admin")) return;
+    // Skip pet animations on mobile screens to ensure 60fps smooth scrolling and zero lag
+    if (typeof window !== "undefined" && (window.innerWidth < 768 || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent))) {
+      return;
+    }
 
     const scheduleNextPet = () => {
       const randomDelay = Math.floor(14000 + Math.random() * 18000);

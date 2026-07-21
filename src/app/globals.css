@@ -132,6 +132,8 @@ nav a:active {
   box-shadow: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 8px;
+  white-space: nowrap;
+  max-width: 100%;
 }
 .add-cart-btn:hover {
   background: linear-gradient(135deg, #F19E75 0%, #E3602D 100%);
