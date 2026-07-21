@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  --font-inter: var(--font-inter);
-  --font-playfair: var(--font-inter);
+  --font-outfit: var(--font-outfit);
+  --font-inter: var(--font-outfit);
+  --font-playfair: var(--font-outfit);
+  --font-shippori: var(--font-outfit);
   --font-tajawal: var(--font-cairo);
-  --font-shippori: var(--font-shippori);
 
   --color-white: #ffffff;
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cairo, Inter, Shippori_Mincho } from "next/font/google";
+import { Cairo, Outfit, Inter, Shippori_Mincho } from "next/font/google";
 import "./globals.css";
 import { I18nProvider } from "@/lib/i18n-context";
 import { CartProvider } from "@/lib/cart-context";
@@ -26,6 +26,13 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-outfit",
   display: "swap",
 });
 
@@ -82,8 +89,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${cairo.variable} ${inter.variable} ${shipporiMincho.variable}`} suppressHydrationWarning>
-      <body className="font-inter bg-surface text-slate-800 antialiased">
+    <html lang="en" className={`${cairo.variable} ${outfit.variable}`} suppressHydrationWarning>
+      <body className="font-outfit bg-surface text-slate-800 antialiased">
         <I18nProvider>
           <CartProvider>
             <FavoritesProvider>

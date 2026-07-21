@@ -1,3 +1,5 @@
+"use client";
+
 import { useI18n } from "@/lib/i18n-context";
 import { BookOpen, Search, Sparkles, PawPrint, Feather, Heart, Stethoscope } from "lucide-react";
 import AnimatedSection from "@/components/animated-section";

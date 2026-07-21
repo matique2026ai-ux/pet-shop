@@ -2,11 +2,11 @@
 
 import { useI18n } from "@/lib/i18n-context";
 import AnimatedSection from "@/components/animated-section";
-import { Shield, Clock, FileText, CheckCircle } from "lucide-react";
+import { Shield, Clock, FileText, CheckCircle, PawPrint, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 export default function PrivacyPage() {
-  const { t, dir } = useI18n();
+  const { t, dir, lang } = useI18n();
 
   // Safeguard against missing translation keys
   const privacyData = (t as any).privacy || {
@@ -24,24 +24,27 @@ export default function PrivacyPage() {
       {/* ═══════════════════════════════
           HERO
       ═══════════════════════════════ */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#1A1A2E] via-[#2D2B45] to-[#1A1A2E] py-20 lg:py-24">
-        <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#E3602D] rounded-full opacity-5 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-[#F1C290] rounded-full opacity-5 blur-3xl pointer-events-none" />
+      <section className="relative overflow-hidden py-16 lg:py-24 bg-gradient-to-br from-[#0F1913] via-[#1C2C22] to-[#0A120D] text-white">
+        {/* Glow & Paw Decor */}
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#F5851F]/10 rounded-full blur-[130px] pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[130px] pointer-events-none" />
+        <PawPrint className="absolute top-8 left-[6%] w-24 h-24 text-white/5 rotate-[-20deg] pointer-events-none select-none" />
+        <PawPrint className="absolute bottom-8 right-[8%] w-32 h-32 text-white/5 rotate-[15deg] pointer-events-none select-none" />
 
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <AnimatedSection>
-            <div className="inline-flex items-center gap-2 bg-[#E3602D]/20 backdrop-blur-sm border border-[#E3602D]/40 text-[#F1C290] rounded-full px-4 py-1.5 text-sm font-medium mb-6">
-              <Shield className="w-4 h-4" />
-              {privacyData.heroBadge}
+            <div className="inline-flex items-center gap-2 px-5 py-2 bg-white/10 backdrop-blur-md rounded-full text-xs sm:text-sm font-semibold text-[#F1C290] border border-white/15 mb-6 shadow-xl">
+              <Shield className="w-4 h-4 text-[#F5851F]" />
+              <span>{privacyData.heroBadge}</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-5 drop-shadow-lg">
+            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-black text-white leading-tight mb-4 tracking-tight drop-shadow-xl">
               {privacyData.title}
             </h1>
-            <p className="text-base sm:text-lg text-white/70 max-w-xl mx-auto mb-4">
+            <p className="text-base sm:text-xl text-emerald-100/70 max-w-xl mx-auto mb-5 font-light leading-relaxed">
               {privacyData.subtitle}
             </p>
-            <div className="flex items-center justify-center gap-1.5 text-xs text-white/50">
-              <Clock className="w-3.5 h-3.5" />
+            <div className="flex items-center justify-center gap-1.5 text-xs text-white/60 font-medium">
+              <Clock className="w-4 h-4 text-[#F1C290]" />
               <span>{privacyData.lastUpdated}</span>
             </div>
           </AnimatedSection>
