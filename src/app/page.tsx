@@ -128,6 +128,10 @@ export default function HomePage() {
   const Arrow        = isRtl ? ChevronLeft : ChevronRight;
   const highRated = products.filter((p) => p.rating >= 4.6);
   const bestsellers = highRated.length > 0 ? highRated.slice(0, 8) : products.slice(0, 8);
+  const catCounts: Record<string, number> = {};
+  categories.forEach((cat) => {
+    catCounts[cat.id] = products.filter((p) => p.category === cat.id).length;
+  });
   const { ids: recentIds } = useRecentlyViewed();
   const recentProducts = products.filter((p) => recentIds.includes(p.id)).slice(0, 4);
   const [videoIdx, setVideoIdx]     = useState(0);
@@ -301,53 +305,118 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════════════════════════
-          CATEGORIES GRID
+          CATEGORIES GRID (Rich Cards Design)
       ══════════════════════════════════ */}
-      <section className="py-12 bg-[#F8F7F4] relative overflow-hidden">
+      <section className="py-12 lg:py-16 bg-[#F8F7F4] relative overflow-hidden">
         {/* Background Footprints */}
         <PawPrint className="absolute top-8 left-[5%] w-14 h-14 rotate-[-12deg] text-[#E3602D]/4 pointer-events-none select-none" />
         <PawPrint className="absolute bottom-6 right-[4%] w-16 h-16 rotate-[28deg] text-[#E3602D]/4 pointer-events-none select-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-[#1A1A2E]">{t.nav.categories}</h2>
-              <div className="mt-2 mx-auto w-16 h-1 rounded-full bg-gradient-to-r from-[#E3602D] to-[#F1C290]" />
+            <div className="flex items-center justify-between gap-2 mb-8 flex-wrap">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-black text-[#1A1A2E]">{t.nav.categories}</h2>
+                <div className="mt-2 w-16 h-1 rounded-full bg-gradient-to-r from-[#E3602D] to-[#F1C290]" />
+              </div>
+              <Link
+                href="/categories"
+                className="flex items-center gap-1 text-[#E3602D] font-semibold text-sm hover:text-[#A87A2E] shrink-0 transition-colors"
+              >
+                {t.home.viewAll} <Arrow className="w-4 h-4" />
+              </Link>
             </div>
           </AnimatedSection>
-          {/* Scroll row sits OUTSIDE AnimatedSection to avoid Framer Motion intercepting touch events */}
+
           <div
-            className="flex overflow-x-auto lg:grid lg:grid-cols-5 gap-4 lg:gap-6 pb-6 px-1 scrollbar-none"
+            className="flex overflow-x-auto lg:grid lg:grid-cols-5 gap-6 pb-6 px-1 scrollbar-none snap-x snap-mandatory"
             style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" } as React.CSSProperties}
           >
-            {categories.map((cat) => {
-              return (
+            {categories.map((cat, idx) => (
+              <AnimatedSection
+                key={cat.id}
+                className="shrink-0 w-[280px] sm:w-[320px] lg:w-auto snap-start"
+              >
                 <Link
-                  key={cat.id}
                   href={`/products/${cat.id}`}
-                  className="group relative flex flex-col items-center justify-between p-6 rounded-[2rem] bg-gradient-to-br from-[#FDFBF7] to-[#F5EEDC] border border-[#E3602D]/10 shadow-[0_4px_20px_rgba(0,0,0,0.01)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-md hover:border-[#E3602D]/35 shrink-0 w-[155px] sm:w-[190px] lg:w-auto min-h-[190px] sm:min-h-[220px] text-center"
+                  className="group block h-full"
                 >
-                  {/* Paw footprint background decoration in the card */}
-                  <div className="absolute -bottom-2 -left-2 text-[#E3602D]/5 pointer-events-none w-20 h-20 rotate-12 transition-transform duration-500 group-hover:scale-110">
-                    <PawIcon className="w-full h-full" />
-                  </div>
+                  <div
+                    className="bg-white rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-1.5 h-full flex flex-col justify-between"
+                    style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.02)" }}
+                  >
+                    <div className="relative aspect-[4/3] overflow-hidden bg-gray-50 shrink-0">
+                      {cat.video_url ? (
+                        <video
+                          src={cat.video_url}
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
+                        />
+                      ) : cat.image_url ? (
+                        <Image
+                          src={cat.image_url}
+                          alt={cat.name}
+                          fill
+                          className="object-cover transition-all duration-700 group-hover:scale-105"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          priority={idx < 3}
+                        />
+                      ) : (
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#1E2D24] to-[#0E1611] flex flex-col items-center justify-center p-4">
+                          <div className="relative w-16 h-16 opacity-30 group-hover:opacity-50 transition-opacity duration-300">
+                            <Image
+                              src="/logo-badge.png"
+                              alt="Logo"
+                              fill
+                              className="object-contain"
+                            />
+                          </div>
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    </div>
 
-                  {/* Icon Container */}
-                  <div className="w-16 h-16 rounded-2xl bg-white flex items-center justify-center text-[#E3602D] shadow-sm border border-[#E3602D]/5 group-hover:bg-[#E3602D] group-hover:text-white transition-colors duration-300">
-                    {catIcons[cat.id] ?? <PawPrint className="w-8 h-8" />}
-                  </div>
+                    <div className="p-5 flex-1 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center justify-between mb-2.5 gap-2">
+                          <h3 className="text-base font-bold text-[#1A1A2E] leading-tight line-clamp-1">{cat.name}</h3>
+                          <span className="text-[11px] text-[#E3602D] bg-[#F8F7F4] font-medium px-2.5 py-0.5 rounded-full whitespace-nowrap border border-[#ECDCAE]/40">
+                            {catCounts[cat.id] !== undefined ? catCounts[cat.id] : (cat.subcategories ? cat.subcategories.length : 0)} {t.categories.items}
+                          </span>
+                        </div>
 
-                  {/* Content */}
-                  <div className="space-y-1.5 mt-4 relative z-10">
-                    <h3 className="text-[#1A2D24] font-black text-sm sm:text-base lg:text-lg group-hover:text-[#E3602D] transition-colors line-clamp-1">
-                      {cat.name}
-                    </h3>
-                    <span className="inline-block text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-100/50">
-                      {t.nav.subcategoryCount.replace("{n}", String(cat.subcategories ? cat.subcategories.length : 0))}
-                    </span>
+                        <p className="text-xs text-gray-500 mb-3.5 line-clamp-2">{cat.description}</p>
+
+                        <div className="flex flex-wrap gap-1.5 mb-4">
+                          {cat.subcategories?.slice(0, 3).map((sub) => (
+                            <span
+                              key={sub.id}
+                              className="px-2.5 py-0.5 bg-[#F8F7F4] text-gray-600 text-[10px] rounded-full border border-gray-100 transition-colors group-hover:bg-[#EFF6FF] group-hover:text-[#E3602D] group-hover:border-[#DBEAFE]"
+                            >
+                              {sub.name}
+                            </span>
+                          ))}
+                          {cat.subcategories && cat.subcategories.length > 3 && (
+                            <span className="px-2 py-0.5 bg-gray-50 text-gray-400 text-[10px] rounded-full">
+                              +{cat.subcategories.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-3 border-t border-gray-100 mt-auto">
+                        <span className="text-[10px] text-gray-400">{t.nav.subcategoryCount.replace("{n}", String(cat.subcategories ? cat.subcategories.length : 0))}</span>
+                        <span className="flex items-center gap-1 text-xs font-semibold text-[#E3602D] group-hover:gap-2 transition-all">
+                          {t.categories.browseAll} <Arrow className="w-3 h-3" />
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </Link>
-              );
-            })}
+              </AnimatedSection>
+            ))}
           </div>
         </div>
       </section>
