@@ -27,7 +27,7 @@ export default function ShippingPage() {
       {/* ═══════════════════════════════
           HERO SECTION
       ═══════════════════════════════ */}
-      <section className="relative overflow-hidden py-14 lg:py-20 bg-gradient-to-b from-[#0B130E] via-[#121F17] to-[#15241B] text-white border-b border-white/10">
+      <section className="relative overflow-hidden pt-28 sm:pt-36 pb-14 lg:pb-20 bg-gradient-to-b from-[#0B130E] via-[#121F17] to-[#15241B] text-white border-b border-white/10">
         {/* Glow & Paw Decor */}
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#F5851F]/10 rounded-full blur-[130px] pointer-events-none" />
         <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[130px] pointer-events-none" />

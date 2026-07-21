@@ -146,7 +146,9 @@ export default function PlayfulPets() {
               <div className="bg-white/90 backdrop-blur-md text-amber-950 text-[11px] font-extrabold px-3 py-1 rounded-full border border-amber-200/60 shadow-sm mb-1 whitespace-nowrap animate-bounce">
                 {activePet.message}
               </div>
-              <RealCatPhoto className={`w-24 h-24 sm:w-32 sm:h-32 bg-transparent ${activePet.direction === "ltr" ? "scale-x-[-1]" : "scale-x-1"}`} />
+              <div style={{ transform: activePet.direction === "ltr" ? "scaleX(-1)" : "scaleX(1)" }}>
+                <RealCatPhoto className="w-24 h-24 sm:w-32 sm:h-32 bg-transparent" />
+              </div>
             </div>
           </motion.div>
         )}
@@ -185,7 +187,9 @@ export default function PlayfulPets() {
               <div className="bg-white/90 backdrop-blur-md text-emerald-950 text-[11px] font-extrabold px-3 py-1 rounded-full border border-emerald-200/60 shadow-sm mb-1 whitespace-nowrap">
                 {activePet.message}
               </div>
-              <RealBirdPhoto className={`w-20 h-20 sm:w-28 sm:h-28 bg-transparent animate-pulse ${activePet.direction === "ltr" ? "scale-x-[-1]" : "scale-x-1"}`} />
+              <div style={{ transform: activePet.direction === "ltr" ? "scaleX(-1)" : "scaleX(1)" }}>
+                <RealBirdPhoto className="w-20 h-20 sm:w-28 sm:h-28 bg-transparent animate-pulse" />
+              </div>
             </div>
           </motion.div>
         )}
@@ -206,7 +210,9 @@ export default function PlayfulPets() {
               <div className="bg-white/90 backdrop-blur-md text-emerald-950 text-[11px] font-extrabold px-3 py-1 rounded-full border border-emerald-200/60 shadow-sm mb-1 whitespace-nowrap animate-bounce">
                 {activePet.message}
               </div>
-              <RealBirdPhoto className={`w-22 h-22 sm:w-30 sm:h-30 bg-transparent ${activePet.direction === "ltr" ? "scale-x-[-1]" : "scale-x-1"}`} />
+              <div style={{ transform: activePet.direction === "ltr" ? "scaleX(-1)" : "scaleX(1)" }}>
+                <RealBirdPhoto className="w-22 h-22 sm:w-30 sm:h-30 bg-transparent" />
+              </div>
             </div>
           </motion.div>
         )}
@@ -224,7 +230,9 @@ export default function PlayfulPets() {
               <div className="bg-white/90 backdrop-blur-md text-amber-900 text-[11px] font-extrabold px-3 py-1 rounded-full border border-amber-200/60 shadow-sm mb-1 whitespace-nowrap animate-bounce">
                 {activePet.message}
               </div>
-              <RealDogPhoto className={`w-26 h-26 sm:w-34 sm:h-34 bg-transparent ${activePet.direction === "ltr" ? "scale-x-[-1]" : "scale-x-1"}`} />
+              <div style={{ transform: activePet.direction === "ltr" ? "scaleX(-1)" : "scaleX(1)" }}>
+                <RealDogPhoto className="w-26 h-26 sm:w-34 sm:h-34 bg-transparent" />
+              </div>
             </div>
           </motion.div>
         )}
@@ -268,7 +276,9 @@ export default function PlayfulPets() {
               <div className="bg-white/90 backdrop-blur-md text-orange-950 text-[11px] font-extrabold px-3 py-1 rounded-full border border-orange-200/60 shadow-sm mb-1 whitespace-nowrap animate-bounce">
                 {activePet.message}
               </div>
-              <RealHamsterPhoto className={`w-20 h-20 sm:w-28 sm:h-28 bg-transparent ${activePet.direction === "ltr" ? "scale-x-[-1]" : "scale-x-1"}`} />
+              <div style={{ transform: activePet.direction === "ltr" ? "scaleX(-1)" : "scaleX(1)" }}>
+                <RealHamsterPhoto className="w-20 h-20 sm:w-28 sm:h-28 bg-transparent" />
+              </div>
             </div>
           </motion.div>
         )}
