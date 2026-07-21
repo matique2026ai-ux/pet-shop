@@ -18,6 +18,8 @@ Pet-shop e-commerce site (Algerian market). Next.js 16 (App Router) + React 19 +
 6. **Demo catalog source of truth** is `src/lib/data.ts`; to change products, edit it then click **Seed** in the admin Products tab.
 7. **Always commit and push** every change to `main` (Vercel auto-deploys) **without asking for confirmation**. The user prefers autonomous publishing. Still: never commit `.env*`, secrets, or the password text file.
 8. **Official Circular Badge Logo is at `/logo-badge.png`**. Do not construct custom SVG code paths or attempt mock vectors to represent the logo in `LogoC1`, `LogoC4`, or `LogoFullStack` - the official transparent circle badge `/logo-badge.png` (which has the background removed and the subtitle erased) must be used directly everywhere.
+9. **WhatsApp AutoResponder & Webhook**: The store uses an automated WhatsApp bot / AutoResponder (`/api/whatsapp/webhook` + Meta Webhook). All generated WhatsApp links/messages must format phone numbers via `formatWhatsAppNumber` (yielding clean digits `213XXXXXXXXX` without `+` or leading `0` after country code) and maintain structured text for automated responder triggers.
+
 
 ## Quick orientation
 

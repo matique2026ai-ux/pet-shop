@@ -8,13 +8,14 @@ import { formatWhatsAppNumber } from "@/lib/phone-utils";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 
-const DEFAULT_PHONE = "+2130776075355";
+const DEFAULT_PHONE = "213776075355";
 
 export default function WhatsAppButton() {
   const pathname = usePathname();
   const { store } = useSiteSettings();
   const { dir, t } = useI18n();
   const [windowBounds, setWindowBounds] = useState({ left: -300, right: 300, top: -600, bottom: 20 });
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -38,6 +39,7 @@ export default function WhatsAppButton() {
   const phone = formatWhatsAppNumber(store?.whatsapp, DEFAULT_PHONE);
 
   const handleClick = () => {
+    if (isDragging) return;
     window.open(
       `https://wa.me/${phone}?text=${encodeURIComponent(t.nav.whatsappMessage)}`,
       "_blank",
@@ -51,6 +53,8 @@ export default function WhatsAppButton() {
       dragConstraints={windowBounds}
       dragElastic={0.15}
       dragMomentum={true}
+      onDragStart={() => setIsDragging(true)}
+      onDragEnd={() => setTimeout(() => setIsDragging(false), 150)}
       whileDrag={{ scale: 1.18, boxShadow: "0px 15px 30px rgba(0,0,0,0.3)" }}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
