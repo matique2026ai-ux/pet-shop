@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase";
 
+export const runtime = "edge";
+
 // WhatsApp webhook verification (GET)
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -75,13 +77,13 @@ export async function POST(req: NextRequest) {
     const supabase = createAdminClient();
     const { data: products } = await supabase
       .from("products")
-      .select("id, name, price, description, in_stock, category")
+      .select("id, name, price, in_stock, category")
       .eq("in_stock", true);
 
     const origin = req.nextUrl.origin;
 
     const catalogContext = products
-      ? products.map((p) => `- Name: ${p.name}\n  Category: ${p.category}\n  Price: ${p.price} DZD\n  Description: ${p.description || "N/A"}\n  Link: ${origin}/products/${encodeURIComponent(p.category || "all")}/${p.id}`).join("\n\n")
+      ? products.map((p) => `- Name: ${p.name}\n  Category: ${p.category}\n  Price: ${p.price} DZD\n  Link: ${origin}/products/${encodeURIComponent(p.category || "all")}/${p.id}`).join("\n\n")
       : "No products available in stock.";
 
     // Fetch customer's recent orders for tracking
@@ -196,8 +198,8 @@ function cleanWhatsAppLinks(text: string): string {
 // Helper: Fetch Gemini API
 async function askGemini(prompt: string, apiKey: string): Promise<string> {
   const models = [
-    "gemini-3.5-flash",
     "gemini-3.5-flash-lite",
+    "gemini-3.5-flash",
     "gemini-2.5-flash",
     "gemini-2.0-flash-lite"
   ];

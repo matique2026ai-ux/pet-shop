@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase";
 
+export const runtime = "edge";
+
 export async function POST(req: NextRequest) {
   try {
     const contentType = req.headers.get("content-type") || "";
@@ -78,7 +80,7 @@ export async function POST(req: NextRequest) {
 
     const { data: products } = await supabase
       .from("products")
-      .select("id, name, price, description, in_stock, category")
+      .select("id, name, price, in_stock, category")
       .eq("in_stock", true);
 
     const hasProducts = !!(products && products.length > 0);
@@ -145,7 +147,7 @@ export async function POST(req: NextRequest) {
       try {
         const origin = req.nextUrl.origin;
         const catalogContext = products
-          ? products.map((p) => `- Name: ${p.name}\n  Category: ${p.category}\n  Price: ${p.price} DZD\n  Description: ${p.description || "N/A"}\n  Link: ${origin}/products/${p.category}/${p.id}`).join("\n\n")
+          ? products.map((p) => `- Name: ${p.name}\n  Category: ${p.category}\n  Price: ${p.price} DZD\n  Link: ${origin}/products/${p.category}/${p.id}`).join("\n\n")
           : "No products available in stock.";
         
         const systemPrompt = `You are a helpful and friendly AI assistant for "Paws & Wings", a pet shop in Algeria (Sétif). 
@@ -241,8 +243,8 @@ function cleanWhatsAppLinks(text: string): string {
 
 async function askGemini(prompt: string, apiKey: string): Promise<string> {
   const models = [
-    "gemini-3.5-flash",
     "gemini-3.5-flash-lite",
+    "gemini-3.5-flash",
     "gemini-2.5-flash",
     "gemini-2.0-flash-lite"
   ];
