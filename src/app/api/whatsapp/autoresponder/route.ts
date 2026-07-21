@@ -43,17 +43,14 @@ export async function POST(req: NextRequest) {
 
     const text = (queryVal !== undefined && queryVal !== null ? String(queryVal) : "").toLowerCase().trim();
 
-    // Ignore messages from other autoresponders/bots to prevent infinite loops
+    // Ignore messages from other autoresponders/bots to prevent infinite loops (avoid single word false positives)
     const isBot = 
       text.includes("réponse automatique") || 
       text.includes("reponse automatique") ||
-      text.includes("réponse") ||
-      text.includes("reponse") ||
       text.includes("automatic reply") ||
       text.includes("autoresponder") ||
       text.includes("الرد الآلي") ||
-      text.includes("الرد التلقائي") ||
-      text.includes("bot");
+      text.includes("الرد التلقائي");
 
     // 1. Fetch products catalog from Supabase
     const supabase = createAdminClient();
@@ -69,7 +66,7 @@ export async function POST(req: NextRequest) {
         ignored: true,
         reason: !text ? "empty query" : "detected bot/autoresponder"
       });
-      return NextResponse.json({ replies: [] });
+      return NextResponse.json({ replies: [], reply: "", message: "" });
     }
 
     let sender = "";
@@ -209,7 +206,9 @@ Answer directly and politely in their language:`;
         {
           message: replyText
         }
-      ]
+      ],
+      reply: replyText,
+      message: replyText
     });
   } catch (err) {
     console.error("Error in AutoResponder webhook POST:", err);
@@ -219,7 +218,11 @@ Answer directly and politely in their language:`;
         error: (err as Error).message
       });
     } catch {}
-    return NextResponse.json({ replies: [{ message: "حدث خطأ أثناء معالجة الطلب." }] }, { status: 500 });
+    return NextResponse.json({ 
+      replies: [{ message: "حدث خطأ أثناء معالجة الطلب." }],
+      reply: "حدث خطأ أثناء معالجة الطلب.",
+      message: "حدث خطأ أثناء معالجة الطلب."
+    }, { status: 500 });
   }
 }
 
@@ -233,30 +236,38 @@ function cleanWhatsAppLinks(text: string): string {
 }
 
 async function askGemini(prompt: string, apiKey: string): Promise<string> {
-  const models = ["gemini-1.5-flash", "gemini-2.0-flash", "gemini-1.5-pro"];
+  const models = ["gemini-1.5-flash", "gemini-1.5-flash-8b", "gemini-2.0-flash-exp", "gemini-1.5-pro"];
   let lastError: Error | null = null;
   for (const model of models) {
-    try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-        }),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        const resText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (resText) return resText;
-      } else {
-        const errorText = await response.text();
-        console.error(`Gemini model ${model} error:`, errorText);
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+          }),
+        });
+        if (response.ok) {
+          const data = await response.json();
+          const resText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (resText) return resText;
+        } else {
+          const errorText = await response.text();
+          console.error(`Gemini model ${model} (attempt ${attempt + 1}) error ${response.status}:`, errorText);
+          if (response.status === 503 || response.status === 429) {
+            await new Promise((r) => setTimeout(r, 300));
+            continue;
+          }
+          break;
+        }
+      } catch (err) {
+        lastError = err as Error;
+        await new Promise((r) => setTimeout(r, 300));
       }
-    } catch (err) {
-      lastError = err as Error;
     }
   }
   throw lastError || new Error("All Gemini models failed");

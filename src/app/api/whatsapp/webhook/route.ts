@@ -44,17 +44,14 @@ export async function POST(req: NextRequest) {
     }
 
     const lowerText = text.toLowerCase();
-    // Ignore messages from other autoresponders/bots to prevent infinite loops
+    // Ignore messages from other autoresponders/bots to prevent infinite loops (avoid single word false positives)
     const isBot = 
       lowerText.includes("réponse automatique") || 
       lowerText.includes("reponse automatique") ||
-      lowerText.includes("réponse") ||
-      lowerText.includes("reponse") ||
       lowerText.includes("automatic reply") ||
       lowerText.includes("autoresponder") ||
       lowerText.includes("الرد الآلي") ||
-      lowerText.includes("الرد التلقائي") ||
-      lowerText.includes("bot");
+      lowerText.includes("الرد التلقائي");
 
     if (isBot) {
       return NextResponse.json({ success: true });
@@ -194,30 +191,38 @@ function cleanWhatsAppLinks(text: string): string {
 
 // Helper: Fetch Gemini API
 async function askGemini(prompt: string, apiKey: string): Promise<string> {
-  const models = ["gemini-1.5-flash", "gemini-2.0-flash", "gemini-1.5-pro"];
+  const models = ["gemini-1.5-flash", "gemini-1.5-flash-8b", "gemini-2.0-flash-exp", "gemini-1.5-pro"];
   let lastError: Error | null = null;
   for (const model of models) {
-    try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-        }),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        const resText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (resText) return resText;
-      } else {
-        const errorText = await response.text();
-        console.error(`Gemini model ${model} error:`, errorText);
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+          }),
+        });
+        if (response.ok) {
+          const data = await response.json();
+          const resText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (resText) return resText;
+        } else {
+          const errorText = await response.text();
+          console.error(`Gemini model ${model} (attempt ${attempt + 1}) error ${response.status}:`, errorText);
+          if (response.status === 503 || response.status === 429) {
+            await new Promise((r) => setTimeout(r, 300));
+            continue;
+          }
+          break;
+        }
+      } catch (err) {
+        lastError = err as Error;
+        await new Promise((r) => setTimeout(r, 300));
       }
-    } catch (err) {
-      lastError = err as Error;
     }
   }
   throw lastError || new Error("All Gemini models failed");
