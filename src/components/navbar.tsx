@@ -8,7 +8,7 @@ import { useSiteSettings } from "@/lib/site-settings";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, X, ShoppingCart, Phone, Search, Truck, ChevronRight, User, LogIn, Loader2, Cat, Dog, Bird, Fish, Rabbit, PawPrint, BookOpen, Zap, Heart } from "lucide-react";
+import { Menu, X, ShoppingCart, Phone, Search, Truck, ChevronRight, User, LogIn, Loader2, Cat, Dog, Bird, Fish, Rabbit, PawPrint, BookOpen, Zap, Heart, MessageCircle } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import AuthModal from "@/components/auth-modal";
 import { LogoC4 } from "@/components/brand-logo";
@@ -329,13 +329,15 @@ export default function Navbar() {
                 )}
               </div>
 
-              {/* Call button */}
+              {/* WhatsApp direct button */}
               <a
-                href={telHref}
-                className="hidden xl:flex items-center gap-2 bg-gradient-to-r from-[#F5851F] to-[#E06A0A] text-white px-4 py-2 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity shadow-md"
+                href="https://wa.me/213776075355"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden xl:flex items-center gap-2 bg-gradient-to-r from-[#25D366] to-emerald-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity shadow-md"
               >
-                <Phone className="w-4 h-4" />
-                {t.nav.callNow}
+                <MessageCircle className="w-4 h-4" />
+                {lang === "ar" ? "تواصل واتساب" : "WhatsApp"}
               </a>
 
               {/* Favorites */}

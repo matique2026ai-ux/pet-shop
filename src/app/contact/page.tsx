@@ -5,17 +5,16 @@ import Image from "next/image";
 import { useI18n } from "@/lib/i18n-context";
 import { useSiteSettings } from "@/lib/site-settings";
 import AnimatedSection from "@/components/animated-section";
-import { MapPin, Phone, Mail, Clock, Send, Sparkles, ChevronRight, CheckCircle, Loader2, PawPrint } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, Sparkles, ChevronRight, CheckCircle, Loader2, PawPrint, MessageCircle } from "lucide-react";
 
 export default function ContactPage() {
-  const { t, dir } = useI18n();
+  const { t, dir, lang } = useI18n();
   const { store } = useSiteSettings();
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
 
   const storeVal = (k: string, fb: string) => (store && store[k] ? store[k] : fb);
   const address = storeVal("address", t.contact.addressText);
-  const phone = storeVal("phone", t.contact.phoneText);
   const email = storeVal("email", t.contact.emailText);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,7 +40,13 @@ export default function ContactPage() {
 
   const info = [
     { icon: <MapPin className="w-5 h-5" />, title: t.contact.address, text: address },
-    { icon: <Phone className="w-5 h-5" />, title: t.contact.phone, text: phone },
+    {
+      icon: <MessageCircle className="w-5 h-5" />,
+      title: lang === "ar" ? "تواصل عبر الواتساب" : lang === "fr" ? "Contact WhatsApp" : "WhatsApp Chat",
+      text: lang === "ar" ? "دردشة مباشرة واستفسارات فورية" : lang === "fr" ? "Assistance rapide sur WhatsApp" : "Instant chat & support",
+      href: "https://wa.me/213776075355",
+      isBtn: true,
+    },
     { icon: <Mail className="w-5 h-5" />, title: t.contact.email, text: email },
     { icon: <Clock className="w-5 h-5" />, title: t.contact.hours, text: `${t.contact.weekday}\n${t.contact.weekend}` },
   ];
@@ -78,13 +83,31 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
             {info.map((item, i) => (
               <AnimatedSection key={item.title} delay={i * 0.1}>
-                <div className="bg-white rounded-3xl p-6 text-center border border-[#E2DDD4] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 h-full flex flex-col items-center justify-center">
-                  <div className="w-14 h-14 rounded-full flex items-center justify-center text-white mb-4 bg-gradient-to-br from-[#F1C290] to-[#E3602D] shadow-lg shadow-[#E3602D]/30">
-                    {item.icon}
+                {item.href ? (
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-white rounded-3xl p-6 text-center border border-[#E2DDD4] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 h-full flex flex-col items-center justify-center group"
+                  >
+                    <div className="w-14 h-14 rounded-full flex items-center justify-center text-white mb-4 bg-emerald-600 shadow-lg shadow-emerald-600/30 group-hover:scale-110 transition-transform">
+                      {item.icon}
+                    </div>
+                    <h3 className="font-bold text-[#1A1A2E] text-lg mb-2 group-hover:text-emerald-700 transition-colors">{item.title}</h3>
+                    <p dir="auto" className="text-sm text-[#5C5348] whitespace-pre-line mb-3">{item.text}</p>
+                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200/60">
+                      {lang === "ar" ? "افتح الواتساب الآن 💬" : "Ouvrir WhatsApp"}
+                    </span>
+                  </a>
+                ) : (
+                  <div className="bg-white rounded-3xl p-6 text-center border border-[#E2DDD4] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 h-full flex flex-col items-center justify-center">
+                    <div className="w-14 h-14 rounded-full flex items-center justify-center text-white mb-4 bg-gradient-to-br from-[#F1C290] to-[#E3602D] shadow-lg shadow-[#E3602D]/30">
+                      {item.icon}
+                    </div>
+                    <h3 className="font-bold text-[#1A1A2E] text-lg mb-2">{item.title}</h3>
+                    <p dir="auto" className="text-sm text-[#5C5348] whitespace-pre-line">{item.text}</p>
                   </div>
-                  <h3 className="font-bold text-[#1A1A2E] text-lg mb-2">{item.title}</h3>
-                  <p dir="auto" className="text-sm text-[#5C5348] whitespace-pre-line">{item.text}</p>
-                </div>
+                )}
               </AnimatedSection>
             ))}
           </div>
