@@ -13,9 +13,10 @@ import { formatWhatsAppNumber } from "@/lib/phone-utils";
 import AnimatedSection from "@/components/animated-section";
 import ProductCard from "@/components/product-card";
 import ProductReviews from "@/components/product-reviews";
+import QuickOrderModal from "@/components/quick-order-modal";
 import {
   Star, StarHalf, ChevronRight, Check, ShoppingCart, Plus, Minus, Share2, X, ZoomIn,
-  Play, Truck, ShieldCheck, BadgeCheck, Leaf, Ticket, MessageCircle,
+  Play, Truck, ShieldCheck, BadgeCheck, Leaf, Ticket, MessageCircle, Zap,
 } from "lucide-react";
 import { unitLabel, isContinuousUnit } from "@/lib/units";
 
@@ -118,6 +119,7 @@ export default function ProductDetailPage() {
   const [activeImage, setActiveImage] = useState("");
   const [tab, setTab] = useState<"overview" | "features" | "ingredients" | "video">("overview");
   const [selectedVariant, setSelectedVariant] = useState<string>("");
+  const [quickOrderOpen, setQuickOrderOpen] = useState(false);
   
   const [referralModalOpen, setReferralModalOpen] = useState(false);
   const [generatedCode, setGeneratedCode] = useState("");
@@ -414,12 +416,36 @@ export default function ProductDetailPage() {
                     {/* Add to Cart button */}
                     <button
                       onClick={() => { addItem(product, qty, selectedVariant || undefined); setQty(1); }}
-                      className="bg-[#E3602D] hover:bg-[#C44E1E] text-white px-8 py-3 rounded-xl font-bold transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2.5 text-sm uppercase tracking-wide flex-1"
+                      className="bg-[#E3602D] hover:bg-[#C44E1E] text-white px-6 py-3 rounded-xl font-bold transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2 text-sm uppercase tracking-wide flex-1"
                     >
                       <ShoppingCart className="w-4 h-4 shrink-0" />
                       {t.products.addToCart}
                     </button>
+
+                    {/* Express Quick Order ⚡ Button */}
+                    <button
+                      onClick={() => setQuickOrderOpen(true)}
+                      className="bg-[#1E2D24] hover:bg-[#15221B] text-white px-6 py-3 rounded-xl font-bold transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2 text-sm flex-1"
+                    >
+                      <Zap className="w-4 h-4 shrink-0 text-[#F5851F] fill-current" />
+                      <span>{lang === "ar" ? "شراء سريع ⚡" : "Achat Rapide ⚡"}</span>
+                    </button>
                   </div>
+
+                  {/* Direct WhatsApp Order Link */}
+                  <a
+                    href={`https://wa.me/213776075355?text=${encodeURIComponent(
+                      lang === "ar"
+                        ? `مرحباً، أرغب في طلب المنتج: ${product.name} ${selectedVariant ? `(${selectedVariant})` : ""} بسعر ${product.price} ${currency}.`
+                        : `Bonjour, je veux commander: ${product.name} ${selectedVariant ? `(${selectedVariant})` : ""}.`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/40 text-[#1a8842] font-bold py-3 px-4 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 transition-all"
+                  >
+                    <MessageCircle className="w-4 h-4 text-[#25D366]" />
+                    <span>{lang === "ar" ? "اطلب هذا المنتج مباشرة عبر الواتساب 💬" : "Commander sur WhatsApp 💬"}</span>
+                  </a>
 
                   {/* Direct Shop Purchase button - ONLY for Live Animals */}
                   {isLiveAnimal && (
@@ -672,6 +698,17 @@ export default function ProductDetailPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Quick Order Modal */}
+      {product && (
+        <QuickOrderModal
+          product={product}
+          variant={selectedVariant}
+          quantity={qty}
+          isOpen={quickOrderOpen}
+          onClose={() => setQuickOrderOpen(false)}
+        />
       )}
     </>
   );

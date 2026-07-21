@@ -1,3 +1,5 @@
+export { WILAYAS } from "@/lib/wilayas";
+
 export interface Product {
   id: string;
   name: string;

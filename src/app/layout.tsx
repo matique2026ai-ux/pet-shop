@@ -87,6 +87,8 @@ export const metadata: Metadata = {
   },
 };
 
+import LiveSocialProof from "@/components/live-social-proof";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${cairo.variable} ${outfit.variable}`} suppressHydrationWarning>
@@ -106,6 +108,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <GlobalFootprints />
               <FloatingCart />
               <PlayfulPets />
+              <LiveSocialProof />
               </AuthProvider>
             </FavoritesProvider>
           </CartProvider>

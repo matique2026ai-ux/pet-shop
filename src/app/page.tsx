@@ -8,6 +8,7 @@ import { useTranslatedData } from "@/lib/use-translated-data";
 import { useRecentlyViewed } from "@/lib/use-recently-viewed";
 import { useSiteSettings } from "@/lib/site-settings";
 import AnimatedSection, { StaggerSection, FadeIn } from "@/components/animated-section";
+import PetNutritionCalculator from "@/components/pet-nutrition-calculator";
 
 import ProductCard, { ProductCardSkeleton } from "@/components/product-card";
 import BlogCard from "@/components/blog-card";
@@ -501,8 +502,14 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════════════════════════
-          VET SERVICES
+          PET NUTRITION CALCULATOR
       ══════════════════════════════════ */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <AnimatedSection>
+          <PetNutritionCalculator />
+        </AnimatedSection>
+      </div>
+
       {/* ══════════════════════════════════
           BLOG ARTICLES
       ══════════════════════════════════ */}
