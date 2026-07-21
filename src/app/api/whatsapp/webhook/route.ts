@@ -131,6 +131,11 @@ export async function POST(req: NextRequest) {
 Your task is to answer customers' questions about our store, catalog, products, prices, stock, delivery, and their order status.
 You must speak in Algerian Darja (الدارجة الجزائرية) or French/Arabic, depending on the customer's language. Keep answers concise, helpful, and polite.
 
+CRITICAL RULE FOR LINKS IN WHATSAPP:
+DO NOT format URLs as Markdown links like [product name](https://...) or [https://...](https://...).
+ALWAYS output URLs as clean, raw plain text without any square brackets or parentheses (e.g. https://pet-cat.vercel.app/products/cats/c1).
+WhatsApp does NOT support markdown links, and using brackets [] or () around links will corrupt the URL and cause a 404 error!
+
 When recommending or discussing any specific product, you MUST include its direct Link (from the Link field in the catalog context below) in your response so the customer can view the product images and make a purchase.
 
 If the customer asks about their order status or queries "تتبع طلبيتي" or similar, use the "Recent Orders for this Customer" section below to track it. Explain their order status clearly, translate the status into a friendly Darja explanation, and reassure them.
@@ -154,6 +159,7 @@ Answer directly and politely in their language:`;
     if (geminiKey) {
       try {
         replyText = await askGemini(systemPrompt, geminiKey);
+        replyText = cleanWhatsAppLinks(replyText);
       } catch (err) {
         console.error("Gemini API Error:", err);
         replyText = "مرحباً! شكراً لتواصلك معنا. نحن نواجه عطلاً مؤقتاً في نظام الذكاء الاصطناعي، سنتواصل معك يدوياً قريباً.";
@@ -165,6 +171,8 @@ Answer directly and politely in their language:`;
 يمكنك تصفح متجرنا مباشرة من الرابط التالي: ${origin}`;
     }
 
+    replyText = cleanWhatsAppLinks(replyText);
+
     // 4. Send the message back via WhatsApp Cloud API
     await sendWhatsAppMessage(sender, replyText, phoneId, token);
 
@@ -175,24 +183,44 @@ Answer directly and politely in their language:`;
   }
 }
 
+function cleanWhatsAppLinks(text: string): string {
+  if (!text) return "";
+  // 1. Convert markdown links [text](http://...) or [http://...](http://...) into plain http://...
+  let cleaned = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g, (_match, _label, url) => url);
+  // 2. Strip brackets around URLs e.g. [https://...] or (https://...)
+  cleaned = cleaned.replace(/[\(\[]\s*(https?:\/\/[^\s\]\)]+)\s*[\)\]]/g, "$1");
+  return cleaned;
+}
+
 // Helper: Fetch Gemini API
 async function askGemini(prompt: string, apiKey: string): Promise<string> {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-    }),
-  });
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Gemini API error: ${errorText}`);
+  const models = ["gemini-1.5-flash", "gemini-2.0-flash", "gemini-1.5-pro"];
+  let lastError: Error | null = null;
+  for (const model of models) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+        }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const resText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (resText) return resText;
+      } else {
+        const errorText = await response.text();
+        console.error(`Gemini model ${model} error:`, errorText);
+      }
+    } catch (err) {
+      lastError = err as Error;
+    }
   }
-  const data = await response.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I am having trouble answering right now.";
+  throw lastError || new Error("All Gemini models failed");
 }
 
 // Helper: Send WhatsApp Message

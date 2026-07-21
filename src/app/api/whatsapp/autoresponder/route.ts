@@ -86,10 +86,23 @@ export async function POST(req: NextRequest) {
 
     const hasProducts = !!(products && products.length > 0);
 
-    // Fetch customer's recent orders for tracking
-    let ordersContext = "No recent orders found for this phone number.";
-    if (sender) {
-      try {
+    // Extract order code if present (e.g., #9F2E52 or order code)
+    const orderCodeMatch = 
+      text.match(/#([A-Za-z0-9]{6})/i) || 
+      text.match(/طلب\s*(?:رقم)?\s*#?([A-Za-z0-9]{6})/i) || 
+      text.match(/commande\s*#?([A-Za-z0-9]{6})/i) || 
+      text.match(/\b([A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12})\b/i);
+    const extractedCode = orderCodeMatch ? orderCodeMatch[1] : null;
+
+    let matchedOrder: any = null;
+    let ordersContext = "No recent orders found for this phone number/code.";
+
+    try {
+      let query = supabase.from("orders").select("id, customer_name, customer_phone, status, total, items, delivery_address, notes, created_at");
+
+      if (extractedCode) {
+        query = query.or(`id.ilike.%${extractedCode}%,id.eq."${extractedCode}"`);
+      } else if (sender) {
         const cleanedSender = sender.replace(/\s+/g, "");
         const digitsOnly = sender.replace(/\D/g, "");
         let localFormat = digitsOnly;
@@ -102,26 +115,24 @@ export async function POST(req: NextRequest) {
           `customer_phone.eq."${digitsOnly}"`,
           `customer_phone.eq."${localFormat}"`
         ].join(",");
-
-        const { data: customerOrders } = await supabase
-          .from("orders")
-          .select("id, status, total, items, created_at")
-          .or(orFilter)
-          .order("created_at", { ascending: false })
-          .limit(3);
-
-        if (customerOrders && customerOrders.length > 0) {
-          ordersContext = customerOrders.map(o => {
-            const dateStr = new Date(o.created_at).toLocaleDateString("fr-FR");
-            const itemsList = Array.isArray(o.items) 
-              ? o.items.map((it: any) => `${it.name} (Qty: ${it.quantity})`).join(", ")
-              : "N/A";
-            return `- Order ID: #${o.id.slice(0, 8).toUpperCase()}\n  Date: ${dateStr}\n  Status: ${o.status}\n  Total: ${o.total} DZD\n  Items: ${itemsList}`;
-          }).join("\n\n");
-        }
-      } catch (err) {
-        console.error("Error fetching customer orders for tracking:", err);
+        query = query.or(orFilter);
       }
+
+      const { data: customerOrders } = await query.order("created_at", { ascending: false }).limit(3);
+
+      if (customerOrders && customerOrders.length > 0) {
+        matchedOrder = customerOrders[0];
+        ordersContext = customerOrders.map(o => {
+          const dateStr = new Date(o.created_at).toLocaleDateString("fr-FR");
+          const shortId = o.id.slice(-6).toUpperCase();
+          const itemsList = Array.isArray(o.items) 
+            ? o.items.map((it: any) => `${it.name} (Qty: ${it.quantity || 1})`).join(", ")
+            : "N/A";
+          return `- Order #${shortId} (ID: ${o.id})\n  Customer: ${o.customer_name}\n  Date: ${dateStr}\n  Status: ${o.status}\n  Total: ${o.total} DZD\n  Items: ${itemsList}`;
+        }).join("\n\n");
+      }
+    } catch (err) {
+      console.error("Error fetching customer orders for tracking:", err);
     }
 
     // 2. Response Generation
@@ -140,16 +151,23 @@ export async function POST(req: NextRequest) {
 Your task is to answer customers' questions about our store, catalog, products, prices, stock, delivery, and their order status.
 You must speak in Algerian Darja (الدارجة الجزائرية) or French/Arabic, depending on the customer's language. Keep answers concise, helpful, and polite.
 
-When recommending or discussing any specific product, you MUST include its direct Link (from the Link field in the catalog context below) in your response so the customer can view the product images and make a purchase.
+CRITICAL RULE FOR LINKS IN WHATSAPP:
+DO NOT format URLs as Markdown links like [product name](https://...) or [https://...](https://...).
+ALWAYS output URLs as clean, raw plain text without any square brackets or parentheses (e.g. https://pet-cat.vercel.app/products/cats/c1).
+WhatsApp does NOT support markdown links, and using brackets [] or () around links will corrupt the URL and cause a 404 error!
 
-If the customer asks about their order status or queries "تتبع طلبيتي" or similar, use the "Recent Orders for this Customer" section below to track it. Explain their order status clearly, translate the status into a friendly Darja explanation, and reassure them.
+CRITICAL RULE FOR ORDER CONFIRMATION & TRACKING:
+If the customer message mentions an order (e.g., "مرحباً، لقد قمت بطلب رقم #9F2E52..." or asks to confirm/track their order), check the "Recent Orders for this Customer" section below.
+Confirm that their order has been received, state the order reference, customer name, total amount, items, and reassure them that their order is being prepared and delivery team will contact them by phone.
+
+When recommending or discussing any specific product, include its direct Link from the catalog context.
 
 CRITICAL RULE: DO NOT start your message with "Réponse automatique" or any similar automated prefix. Just answer directly and naturally.
 
 Here is our current in-stock catalog:
 ${catalogContext}
 
-Recent Orders for this Customer (${sender || "N/A"}):
+Recent Orders for this Customer/Query (${sender || extractedCode || "N/A"}):
 ${ordersContext}
 
 Our Store Info:
@@ -161,16 +179,19 @@ Customer message: "${queryVal}"
 Answer directly and politely in their language:`;
 
         replyText = await askGemini(systemPrompt, geminiKey);
+        replyText = cleanWhatsAppLinks(replyText);
       } catch (err) {
         console.error("Gemini AI agent error, falling back to local keywords:", err);
         await logRequest(supabase, {
           geminiError: (err as Error).message
         });
-        replyText = getLocalResponse(text, isArabic, hasProducts, products || [], req.nextUrl.origin);
+        replyText = getLocalResponse(text, isArabic, hasProducts, products || [], req.nextUrl.origin, matchedOrder, extractedCode);
       }
     } else {
-      replyText = getLocalResponse(text, isArabic, hasProducts, products || [], req.nextUrl.origin);
+      replyText = getLocalResponse(text, isArabic, hasProducts, products || [], req.nextUrl.origin, matchedOrder, extractedCode);
     }
+
+    replyText = cleanWhatsAppLinks(replyText);
 
     await logRequest(supabase, {
       contentType,
@@ -202,23 +223,43 @@ Answer directly and politely in their language:`;
   }
 }
 
+function cleanWhatsAppLinks(text: string): string {
+  if (!text) return "";
+  // 1. Convert markdown links [text](http://...) or [http://...](http://...) into plain http://...
+  let cleaned = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g, (_match, _label, url) => url);
+  // 2. Strip brackets around URLs e.g. [https://...] or (https://...)
+  cleaned = cleaned.replace(/[\(\[]\s*(https?:\/\/[^\s\]\)]+)\s*[\)\]]/g, "$1");
+  return cleaned;
+}
+
 async function askGemini(prompt: string, apiKey: string): Promise<string> {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-    }),
-  });
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Gemini API error: ${errorText}`);
+  const models = ["gemini-1.5-flash", "gemini-2.0-flash", "gemini-1.5-pro"];
+  let lastError: Error | null = null;
+  for (const model of models) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+        }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const resText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (resText) return resText;
+      } else {
+        const errorText = await response.text();
+        console.error(`Gemini model ${model} error:`, errorText);
+      }
+    } catch (err) {
+      lastError = err as Error;
+    }
   }
-  const data = await response.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I am having trouble answering right now.";
+  throw lastError || new Error("All Gemini models failed");
 }
 
 async function logRequest(supabase: any, content: any) {
@@ -240,7 +281,55 @@ async function logRequest(supabase: any, content: any) {
   }
 }
 
-function getLocalResponse(text: string, isArabic: boolean, hasProducts: boolean, products: any[], origin: string): string {
+function getLocalResponse(
+  text: string, 
+  isArabic: boolean, 
+  hasProducts: boolean, 
+  products: any[], 
+  origin: string,
+  matchedOrder: any,
+  extractedCode: string | null
+): string {
+  const wantsOrder = 
+    text.includes("طلب رقم") || 
+    text.includes("طلب") || 
+    text.includes("طلبيتي") || 
+    text.includes("تأكيد الطلب") || 
+    text.includes("تأكيد") || 
+    text.includes("تتبع") || 
+    text.includes("commande") || 
+    text.includes("confirm") || 
+    !!extractedCode;
+
+  if (wantsOrder) {
+    if (matchedOrder) {
+      const shortId = matchedOrder.id.slice(-6).toUpperCase();
+      const itemsList = Array.isArray(matchedOrder.items)
+        ? matchedOrder.items.map((it: any) => `• ${it.name} (${it.quantity || 1}x)`).join("\n")
+        : "منتجات متنوعة";
+      
+      const statusMap: Record<string, string> = {
+        pending: "مقبول وقيد التحضير (سنتصل بك هاتفياً لتأكيد التوصيل)",
+        confirmed: "مؤكد وقيد الإعداد للشحن 📦",
+        processing: "جاري تحضير الطلبية 📦",
+        shipped: "في الطريق إليك مع موزّع التوصيل 🚚",
+        delivered: "تم التسليم بنجاح 🎉",
+        cancelled: "ملغى ❌"
+      };
+
+      const statusText = statusMap[matchedOrder.status] || matchedOrder.status;
+
+      return isArabic
+        ? `✅ مرحباً بك! تم استلام طلبك رقم #${shortId} بنجاح! 🐾\n\n📋 تفاصيل طلبك:\n• الاسم: ${matchedOrder.customer_name || "زبوننا الكريم"}\n${itemsList}\n• المجموع: ${matchedOrder.total} د.ج\n• حالة الطلب: ${statusText}\n\n🚚 التوصيل: متوفر في سطيف ومختلف الولايات. سيتم التواصل معك هاتفياً للتأكيد والتسليم في أقرب وقت.\nشكراً لثقتك في متجر طيور الجمال والجواد (Paws & Wings) ✨`
+        : `✅ Bonjour ! Nous avons bien reçu votre commande #${shortId} ! 🐾\n\n📋 Détails :\n• Nom: ${matchedOrder.customer_name || "Client"}\n${itemsList}\n• Total: ${matchedOrder.total} DZD\n• Statut: ${matchedOrder.status}\n\n🚚 Nous vous contacterons par téléphone pour confirmer l'expédition. Merci de votre confiance en Paws & Wings ! ✨`;
+    }
+
+    const orderRefDisplay = extractedCode ? `#${extractedCode.toUpperCase()}` : "الخاص بك";
+    return isArabic
+      ? `✅ مرحباً بك! تم استقبال طلبك رقم ${orderRefDisplay} في متجر طيور الجمال والجواد (Paws & Wings) 🐾\n\nلقد قمنا بتسجيل التأكيد، وسيتم التواصل معك هاتفياً على هذا الرقم للتحقق من بيانات العنوان والشحن وإرسال طلبيتك فوراً.\nإذا كان لديك أي استفسار، يسعدنا مساعدتك!`
+      : `✅ Bonjour ! Votre commande ${orderRefDisplay} a bien été enregistrée chez Paws & Wings 🐾\n\nNous vous contacterons par téléphone pour confirmer l'adresse et l'expédition. Merci de votre confiance !`;
+  }
+
   const wantsDelivery = text.includes("delivery") || text.includes("tousil") || text.includes("toussil") || text.includes("livraison") || text.includes("توصيل") || text.includes("بكم التوصيل") || text.includes("شحن");
   const wantsProducts = text.includes("product") || text.includes("produit") || text.includes("catalog") || text.includes("price") || text.includes("prix") || text.includes("أكل") || text.includes("طعام") || text.includes("منتج") || text.includes("سعر") || text.includes("سومة") || text.includes("عندكم") || text.includes("متوفر");
   const isGreeting = text.includes("hello") || text.includes("hi") || text.includes("bonjour") || text.includes("سلام") || text.includes("مرحبا") || text.includes("صباح الخير") || text.includes("مساء الخير");
