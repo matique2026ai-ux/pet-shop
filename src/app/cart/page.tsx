@@ -46,18 +46,7 @@ function MastercardIcon({ className = "h-4" }: { className?: string }) {
   );
 }
 
-const WILAYAS = [
-  "Adrar", "Chlef", "Laghouat", "Oum El Bouaghi", "Batna", "Béjaïa", "Biskra", "Béchar",
-  "Blida", "Bouira", "Tamanrasset", "Tébessa", "Tlemcen", "Tiaret", "Tizi Ouzou", "Alger",
-  "Djelfa", "Jijel", "Sétif", "Saïda", "Skikda", "Sidi Bel Abbès", "Annaba", "Guelma",
-  "Constantine", "Médéa", "Mostaganem", "M'Sila", "Mascara", "Ouargla", "Oran", "El Bayadh",
-  "Illizi", "Bordj Bou Arréridj", "Boumerdès", "El Tarf", "Tindouf", "Tissemsilt", "El Oued",
-  "Khenchela", "Souk Ahras", "Tipaza", "Mila", "Aïn Defla", "Naâma", "Aïn Témouchent",
-  "Ghardaïa", "Relizane", "Timimoun", "Bordj Badji Mokhtar", "Ouled Djellal", "Béni Abbès",
-  "In Salah", "In Guezzam", "Touggourt", "Djanet", "El M'Ghair", "El Meniaa", "Aflou",
-  "Barika", "El Eulma", "Aïn Oussera", "Bou Saâda", "Ksar Chellala", "M'Sila Ouest", "Maghnia",
-  "Tighennif", "Lakhdaria", "Gouraya"
-];
+import { WILAYAS, WILAYAS_AR } from "@/lib/wilayas";
 
 const SOUTH_WILAYAS = new Set([
   "Adrar", "Béchar", "Tindouf", "Tamanrasset", "Ouargla", "Illizi",
@@ -865,8 +854,8 @@ export default function CartPage() {
                           className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm"
                         >
                           <option value="" disabled hidden>{lang === "ar" ? "اختر الولاية" : "Sélectionnez une wilaya"}</option>
-                          {WILAYAS.map((w) => (
-                            <option key={w} value={w}>{w}</option>
+                          {WILAYAS.map((w, i) => (
+                            <option key={w} value={w}>{lang === "ar" ? WILAYAS_AR[i] : w}</option>
                           ))}
                         </select>
                       </div>

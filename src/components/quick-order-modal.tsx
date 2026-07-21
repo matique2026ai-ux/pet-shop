@@ -7,6 +7,7 @@ import { useI18n } from "@/lib/i18n-context";
 import { formatWhatsAppNumber } from "@/lib/phone-utils";
 import { setCookie } from "@/lib/cookies";
 import { WILAYAS } from "@/lib/data";
+import { WILAYAS_AR } from "@/lib/wilayas";
 
 interface QuickOrderModalProps {
   product: {
@@ -234,8 +235,8 @@ export default function QuickOrderModal({
                     className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm"
                   >
                     <option value="" disabled hidden>{lang === "ar" ? "اختر الولاية" : "Sélectionner"}</option>
-                    {WILAYAS.map((w: string) => (
-                      <option key={w} value={w}>{w}</option>
+                    {WILAYAS.map((w: string, i: number) => (
+                      <option key={w} value={w}>{lang === "ar" ? WILAYAS_AR[i] : w}</option>
                     ))}
                   </select>
                 </div>
