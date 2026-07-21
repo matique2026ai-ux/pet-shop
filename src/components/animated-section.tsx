@@ -31,10 +31,9 @@ export default function AnimatedSection({ children, className = "", delay = 0 }:
   if (lite) return <div className={className}>{children}</div>;
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "0px" }}
-      transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay }}
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay }}
       className={className}
     >
       {children}
@@ -69,8 +68,7 @@ export function StaggerSection({ children, className = "" }: { children: ReactNo
     <motion.div
       variants={staggerContainer}
       initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-80px" }}
+      animate="show"
       className={className}
     >
       {children}

@@ -7,7 +7,7 @@ import { useTranslatedData } from "@/lib/use-translated-data";
 import Link from "next/link";
 import Image from "next/image";
 import AnimatedSection from "@/components/animated-section";
-import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, Truck, MessageCircle, Home, Building2, Banknote, Store } from "lucide-react";
+import { Trash2, ShoppingBag, ArrowLeft, Plus, Minus, CreditCard, CheckCircle, Truck, MessageCircle, Home, Building2, Banknote, Store, PawPrint } from "lucide-react";
 import { useSiteSettings } from "@/lib/site-settings";
 import { useAuth } from "@/lib/auth-context";
 import { unitLabel, isContinuousUnit } from "@/lib/units";
@@ -116,7 +116,7 @@ function isValidAlgerianPhone(raw: string): boolean {
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, clearCart } = useCart();
   const { products } = useTranslatedData();
-  const { t, currency, lang } = useI18n();
+  const { t, currency, lang, dir } = useI18n();
   const { user } = useAuth();
   const { store, delivery } = useSiteSettings();
   const [checkingOut, setCheckingOut] = useState(false);
@@ -370,22 +370,44 @@ export default function CartPage() {
   }
 
   return (
-    <div>
-      <section className="bg-gradient-to-br from-emerald-50 via-emerald-100 to-emerald-50 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900">{t.cart.title}</h1>
+    <div className="bg-[#F8F7F4] min-h-screen pb-20" dir={dir}>
+      {/* ══════════════════════════════════
+          CREATIVE CART HERO
+      ══════════════════════════════════ */}
+      <section className="relative overflow-hidden py-14 lg:py-20 bg-gradient-to-br from-[#0F1913] via-[#1C2C22] to-[#0A120D] text-white mb-8">
+        {/* Glow & Paw Decor */}
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#F5851F]/10 rounded-full blur-[130px] pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[130px] pointer-events-none" />
+        <PawPrint className="absolute top-8 left-[6%] w-24 h-24 text-white/5 rotate-[-20deg] pointer-events-none select-none" />
+        <PawPrint className="absolute bottom-8 right-[8%] w-32 h-32 text-white/5 rotate-[15deg] pointer-events-none select-none" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[#F1C290] text-xs sm:text-sm font-semibold mb-3 shadow-sm">
+              <ShoppingBag className="w-4 h-4 text-[#F5851F]" />
+              <span>{t.cart.title || "Shopping Cart"}</span>
+            </div>
+            <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight mb-2">
+              {t.cart.title || "عربة التسوق"}
+            </h1>
+            <p className="text-sm sm:text-base text-emerald-100/70 max-w-xl">
+              {dir === "rtl"
+                ? "مراجعة المنتجات المختارة وإكمال الطلب في ثوانٍ معدودة مع التوصيل لجميع الولايات"
+                : "Vérifiez vos articles et finalisez votre commande en toute sécurité."}
+            </p>
+          </AnimatedSection>
         </div>
       </section>
 
-      <section className="py-8">
+      <section className="py-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
-            <div className="flex flex-col lg:flex-row gap-8">
-              <div className="flex-1 space-y-4">
+            <div className="flex flex-col lg:flex-row gap-8 items-start w-full overflow-hidden">
+              <div className="flex-1 min-w-0 w-full space-y-4">
                 {items.map((item) => (
                   <div
                     key={`${item.productId}-${item.selectedVariant || "default"}`}
-                    className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-row items-start sm:items-center gap-3 sm:gap-4 relative"
+                    className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-row items-start sm:items-center gap-3 sm:gap-4 relative overflow-hidden"
                   >
                     {/* Product Image */}
                     <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-100">
@@ -401,8 +423,8 @@ export default function CartPage() {
                     {/* Product Details & Actions */}
                     <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
                       {/* Name & Unit Price */}
-                      <div className="min-w-0">
-                        <h3 className="font-semibold text-gray-900 text-sm sm:text-base truncate pr-6 sm:pr-0 rtl:pl-6 rtl:pr-0">
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-semibold text-gray-900 text-sm sm:text-base line-clamp-2 pr-6 sm:pr-0 rtl:pl-6 rtl:pr-0">
                           {item.name}
                         </h3>
                         {item.selectedVariant && (
@@ -423,7 +445,7 @@ export default function CartPage() {
                       </div>
 
                       {/* Quantity & Price Summary Row */}
-                      <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto mt-1 sm:mt-0 pt-2 sm:pt-0 border-t border-dashed border-gray-100 sm:border-0">
+                      <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto mt-1 sm:mt-0 pt-2 sm:pt-0 border-t border-dashed border-gray-100 sm:border-0 shrink-0">
                         {/* Quantity Selector / Weight Input */}
                         <div className="flex items-center">
                           {isContinuousUnit(item.sold_by) ? (
@@ -481,7 +503,7 @@ export default function CartPage() {
                 ))}
               </div>
 
-              <div className="lg:w-80">
+              <div className="w-full lg:w-80 lg:shrink-0">
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.cart.summary}</h3>
 
