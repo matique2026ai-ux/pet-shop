@@ -72,7 +72,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       options: { data: { full_name: fullName } },
     });
     if (error) return { error: error.message };
-    if (data.session) {
+    if (data?.user) {
+      try {
+        await supabase.from("profiles").upsert({
+          id: data.user.id,
+          email: data.user.email,
+          full_name: fullName,
+          newsletter: false,
+        }, { onConflict: "id" });
+      } catch (e) {
+        console.error("Failed to upsert profile record:", e);
+      }
+    }
+    if (data?.session) {
       setUser(data.session.user);
       await fetchProfile(data.session.user.id);
       return {};
