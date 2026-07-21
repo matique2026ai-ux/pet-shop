@@ -174,7 +174,7 @@ ${ordersContext}
 Our Store Info:
 - Store Name: طيور الجمال والجواد (Paws & Wings)
 - Location: Sétif, Algeria (Cité elhidhab)
-- Delivery: Delivery is available across all 58 provinces in Algeria. Delivery to Sétif costs 250 DZD (Free for orders above 5000 DZD) and takes 24h. Delivery to other provinces varies in cost and takes 2-4 days. When confirming an order, ALWAYS mention the customer's specific delivery province to reassure them.
+- Delivery: Delivery is available across all 69 provinces in Algeria. Delivery to Sétif costs 250 DZD (Free for orders above 5000 DZD) and takes 24h. Delivery to other provinces varies in cost and takes 2-4 days. When confirming an order, ALWAYS mention the customer's specific delivery province to reassure them.
 
 Customer message: "${queryVal}"
 Answer directly and politely in their language:`;
