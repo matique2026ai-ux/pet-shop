@@ -9,26 +9,7 @@ export async function POST(
 ) {
   const { id } = await params;
 
-  // Verify user identity via Bearer token
-  const authHeader = request.headers.get("authorization");
-  if (!authHeader?.startsWith("Bearer ")) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const accessToken = authHeader.replace("Bearer ", "");
-
-  // Resolve the user from the access token
-  const anonClient = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-  const { data: { user }, error: authError } = await anonClient.auth.getUser(accessToken);
-
-  if (authError || !user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  // Fetch the order using admin client
+  // Fetch the order using admin client first
   const supabase = createAdminClient();
   const { data: order, error: fetchError } = await supabase
     .from("orders")
@@ -40,12 +21,23 @@ export async function POST(
     return NextResponse.json({ error: "Order not found" }, { status: 404 });
   }
 
-  // Verify this order belongs to the authenticated user
-  if (order.user_id !== user.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  // Verify user identity via Bearer token if present
+  const authHeader = request.headers.get("authorization");
+  if (authHeader?.startsWith("Bearer ")) {
+    const accessToken = authHeader.replace("Bearer ", "");
+    const anonClient = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    const { data: { user } } = await anonClient.auth.getUser(accessToken);
+
+    // If order has a user_id, ensure it matches the authenticated user
+    if (order.user_id && user && order.user_id !== user.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
   }
 
-  // Only pending orders can be cancelled by the customer
+  // Only pending orders can be cancelled
   if (order.status !== "pending") {
     return NextResponse.json(
       { error: "Only pending orders can be cancelled" },
