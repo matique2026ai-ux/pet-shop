@@ -8,10 +8,10 @@ import { useI18n } from "@/lib/i18n-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
 import AnimatedSection from "@/components/animated-section";
 import ProductCard, { ProductCardSkeleton } from "@/components/product-card";
-import { Search, Sparkles } from "lucide-react";
+import { Search, Sparkles, PawPrint, Tag } from "lucide-react";
 
 function ProductsContent() {
-  const { t, lang } = useI18n();
+  const { t, lang, dir } = useI18n();
   const { products, categories, productsLoaded } = useTranslatedData();
   const searchParams = useSearchParams();
   const initialFilter = searchParams.get("filter");
@@ -47,11 +47,40 @@ function ProductsContent() {
   }, [products, search, category, initialFilter, sort]);
 
   return (
-    <div>
-      <section className="bg-gradient-to-br from-emerald-50 via-emerald-100 to-emerald-50 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">{t.products.title}</h1>
-          <p className="text-gray-500">{t.products.subtitle}</p>
+    <div dir={dir} className="bg-[#F8F7F4] min-h-screen">
+      {/* ══════════════════════════════════
+          CREATIVE PRODUCTS HERO
+      ══════════════════════════════════ */}
+      <section className="relative overflow-hidden py-14 lg:py-20 bg-gradient-to-br from-[#0F1913] via-[#1C2C22] to-[#0A120D] text-white">
+        {/* Glow & Paw Decor */}
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#F5851F]/10 rounded-full blur-[130px] pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[130px] pointer-events-none" />
+        <PawPrint className="absolute top-8 left-[6%] w-24 h-24 text-white/5 rotate-[-20deg] pointer-events-none select-none" />
+        <PawPrint className="absolute bottom-8 right-[8%] w-32 h-32 text-white/5 rotate-[15deg] pointer-events-none select-none" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[#F1C290] text-xs sm:text-sm font-semibold mb-4 shadow-sm">
+              <Sparkles className="w-4 h-4 text-[#F5851F]" />
+              <span>
+                {initialFilter === "offers"
+                  ? (lang === "ar" ? "تخفيضات وعروض حصرية" : "Offres Spéciales")
+                  : initialFilter === "new"
+                  ? (lang === "ar" ? "منتجات جديدة وصلتنا حديثاً" : "Nouveautés")
+                  : (lang === "ar" ? "كتالوج المنتجات الرسمي" : "Catalogue Officiel")}
+              </span>
+            </div>
+            <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight mb-3">
+              {initialFilter === "offers"
+                ? (lang === "ar" ? "عروض وتخفيضات مميزة" : "Offres & Promotions Exclusives")
+                : initialFilter === "new"
+                ? (lang === "ar" ? "أحدث المقتنيات والمنتجات" : "Dernières Nouveautés")
+                : t.products.title}
+            </h1>
+            <p className="text-sm sm:text-lg text-emerald-100/70 max-w-xl">
+              {t.products.subtitle}
+            </p>
+          </AnimatedSection>
         </div>
       </section>
 

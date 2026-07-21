@@ -5,7 +5,7 @@ import AnimatedSection from "@/components/animated-section";
 import Link from "next/link";
 import {
   Truck, Package, MapPin, CreditCard, RotateCcw,
-  ShieldCheck, ArrowRight, Zap, CheckCircle, Clock, Phone,
+  ShieldCheck, ArrowRight, Zap, CheckCircle, Clock, Phone, PawPrint, Sparkles,
 } from "lucide-react";
 
 import { SetifMotorcycleDeliveryBadge } from "@/components/setif-courier-icon";
@@ -22,15 +22,17 @@ export default function ShippingPage() {
   const regionLabels = [t.shipping.express, t.shipping.north, t.shipping.south];
 
   return (
-    <div className="bg-[#1A120B] text-slate-200 pb-20" dir={dir}>
+    <div className="bg-[#F8F7F4] text-slate-800 pb-20" dir={dir}>
 
       {/* ═══════════════════════════════
           HERO
       ═══════════════════════════════ */}
-      <section className="relative overflow-hidden pt-12 pb-16 lg:pt-20 lg:pb-24">
-        {/* Gold glow accents */}
-        <div className="absolute top-0 left-1/4 w-72 h-72 bg-[#E3602D] rounded-full opacity-10 blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-[#F1C290] rounded-full opacity-10 blur-[100px] pointer-events-none" />
+      <section className="relative overflow-hidden py-16 lg:py-24 bg-gradient-to-br from-[#0F1913] via-[#1C2C22] to-[#0A120D] text-white">
+        {/* Glow & Paw Decor */}
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#F5851F]/10 rounded-full blur-[130px] pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[130px] pointer-events-none" />
+        <PawPrint className="absolute top-8 left-[6%] w-24 h-24 text-white/5 rotate-[-20deg] pointer-events-none select-none" />
+        <PawPrint className="absolute bottom-8 right-[8%] w-32 h-32 text-white/5 rotate-[15deg] pointer-events-none select-none" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">

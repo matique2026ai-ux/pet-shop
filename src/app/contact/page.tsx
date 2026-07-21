@@ -5,11 +5,11 @@ import Image from "next/image";
 import { useI18n } from "@/lib/i18n-context";
 import { useSiteSettings } from "@/lib/site-settings";
 import AnimatedSection from "@/components/animated-section";
-import { MapPin, Phone, Mail, Clock, Send, Sparkles, ChevronRight, CheckCircle, Loader2 } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, Sparkles, ChevronRight, CheckCircle, Loader2, PawPrint } from "lucide-react";
 
 export default function ContactPage() {
   const { t, dir } = useI18n();
-  const { store, content } = useSiteSettings();
+  const { store } = useSiteSettings();
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
 
@@ -17,8 +17,6 @@ export default function ContactPage() {
   const address = storeVal("address", t.contact.addressText);
   const phone = storeVal("phone", t.contact.phoneText);
   const email = storeVal("email", t.contact.emailText);
-  
-  const heroBg = content?.contactHeroImage || "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1400&h=600&fit=crop";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,36 +47,31 @@ export default function ContactPage() {
   ];
 
   return (
-    <div className="bg-[#F8F7F4] min-h-screen">
+    <div className="bg-[#F8F7F4] min-h-screen" dir={dir}>
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 lg:py-32 flex items-center">
-        <Image
-          src={heroBg}
-          alt={t.contact.title}
-          fill
-          sizes="100vw"
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-[#1A120B]/80 backdrop-blur-sm" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#F8F7F4] to-transparent opacity-90" />
-        
+      <section className="relative overflow-hidden py-16 lg:py-24 bg-gradient-to-br from-[#0F1913] via-[#1C2C22] to-[#0A120D] text-white">
+        {/* Glow & Paw Decor */}
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#F5851F]/10 rounded-full blur-[130px] pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[130px] pointer-events-none" />
+        <PawPrint className="absolute top-8 left-[6%] w-24 h-24 text-white/5 rotate-[-20deg] pointer-events-none select-none" />
+        <PawPrint className="absolute bottom-8 right-[8%] w-32 h-32 text-white/5 rotate-[15deg] pointer-events-none select-none" />
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
           <AnimatedSection>
-            <span className="inline-flex items-center gap-2 px-5 py-2 bg-white/10 backdrop-blur-md rounded-full text-sm font-bold text-[#F1C290] border border-[#F1C290]/30 mb-6 shadow-xl">
-              <Sparkles className="w-4 h-4" /> {t.contact.heroBadge}
+            <span className="inline-flex items-center gap-2 px-5 py-2 bg-white/10 backdrop-blur-md rounded-full text-xs sm:text-sm font-semibold text-[#F1C290] border border-white/15 mb-6 shadow-xl">
+              <Sparkles className="w-4 h-4 text-[#F5851F]" /> {t.contact.heroBadge}
             </span>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 tracking-tight drop-shadow-xl">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-4 tracking-tight drop-shadow-xl">
               {t.contact.title}
             </h1>
-            <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto font-light drop-shadow-md">
+            <p className="text-base md:text-xl text-emerald-100/70 max-w-2xl mx-auto font-light drop-shadow-md">
               {t.contact.subtitle}
             </p>
           </AnimatedSection>
         </div>
       </section>
 
-      <section className="pb-24 -mt-10 relative z-10">
+      <section className="py-12 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Info Cards */}
