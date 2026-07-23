@@ -1,7 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase";
 
 export const runtime = "edge";
+
+let cachedProducts: any[] | null = null;
+let cacheTimestamp = 0;
+const CACHE_TTL = 5 * 60 * 1000;
 
 // WhatsApp webhook verification (GET)
 export async function GET(req: NextRequest) {
@@ -73,12 +78,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing WhatsApp credentials" }, { status: 500 });
     }
 
-    // 1. Fetch products catalog from Supabase to feed into AI context
     const supabase = createAdminClient();
-    const { data: products } = await supabase
-      .from("products")
-      .select("id, name, price, in_stock, category")
-      .eq("in_stock", true);
+    let products: any[] = [];
+    const now = Date.now();
+    if (cachedProducts && (now - cacheTimestamp < CACHE_TTL)) {
+      products = cachedProducts;
+    } else {
+      const { data } = await supabase
+        .from("products")
+        .select("id, name, price, in_stock, category")
+        .eq("in_stock", true);
+      products = data || [];
+      if (products.length > 0) {
+        cachedProducts = products;
+        cacheTimestamp = now;
+      }
+    }
 
     const origin = req.nextUrl.origin;
 
@@ -198,8 +213,8 @@ function cleanWhatsAppLinks(text: string): string {
 // Helper: Fetch Gemini API
 async function askGemini(prompt: string, apiKey: string): Promise<string> {
   const models = [
-    "gemini-3.5-flash-lite",
-    "gemini-3.5-flash",
+    "gemini-1.5-flash",
+    "gemini-1.5-pro",
     "gemini-2.5-flash",
     "gemini-2.0-flash-lite"
   ];

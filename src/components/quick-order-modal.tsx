@@ -8,6 +8,7 @@ import { formatWhatsAppNumber } from "@/lib/phone-utils";
 import { setCookie } from "@/lib/cookies";
 import { WILAYAS } from "@/lib/data";
 import { WILAYAS_AR } from "@/lib/wilayas";
+import { toast } from "sonner";
 
 interface QuickOrderModalProps {
   product: {
@@ -92,7 +93,7 @@ export default function QuickOrderModal({
 
       setOrderPlaced(createdOrder);
     } catch {
-      alert(lang === "ar" ? "تعذر إرسال الطلب، يرجى المحاولة مرة أخرى" : "Erreur lors de l'envoi de la commande");
+      toast.error(lang === "ar" ? "تعذر إرسال الطلب، يرجى المحاولة مرة أخرى" : "Erreur lors de l'envoi de la commande");
     } finally {
       setIsSubmitting(false);
     }

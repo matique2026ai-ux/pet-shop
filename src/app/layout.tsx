@@ -88,6 +88,7 @@ export const metadata: Metadata = {
 };
 
 import LiveSocialProof from "@/components/live-social-proof";
+import { Toaster } from "sonner";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -109,6 +110,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <FloatingCart />
               <PlayfulPets />
               <LiveSocialProof />
+              <Toaster position="top-center" richColors />
               </AuthProvider>
             </FavoritesProvider>
           </CartProvider>
