@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cairo, Outfit, Inter, Shippori_Mincho } from "next/font/google";
+import { Cairo, Outfit } from "next/font/google";
 import "./globals.css";
 import { I18nProvider } from "@/lib/i18n-context";
 import { CartProvider } from "@/lib/cart-context";
