@@ -198,9 +198,12 @@ export default function Navbar() {
 
             {/* Logo Component C4 */}
             <Link href="/" className="relative shrink-0 group logo-gold-pulse z-50 flex items-center justify-center h-16 w-24 sm:w-28 md:w-32">
-              {/* The Logo positioned to hang down seamlessly without any box background causing seams */}
-              <div className="absolute top-[8px] sm:top-[12px] z-10 flex items-center justify-center">
-                <LogoC4 className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 filter drop-shadow-xl transition-transform duration-300 group-hover:scale-105" />
+              {/* Solid Medallion Background to hide scrolling text without glassmorphism seams */}
+              <div className="absolute top-0 w-full h-[76px] sm:h-[88px] md:h-[110px] bg-[#1A120B] rounded-b-full shadow-lg shadow-black/30 border-x border-b border-t-0 border-[#E3602D]/20 transition-all duration-300 pointer-events-none z-0" />
+              
+              {/* The Logo */}
+              <div className="absolute top-[6px] sm:top-[8px] md:top-[12px] z-10 flex items-center justify-center">
+                <LogoC4 className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 filter drop-shadow-xl transition-transform duration-300 group-hover:scale-105" />
               </div>
             </Link>
 
