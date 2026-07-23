@@ -197,8 +197,8 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16">
 
             {/* Logo Component C4 */}
-            <Link href="/" className="relative h-16 w-16 sm:w-20 md:w-24 shrink-0 group logo-gold-pulse">
-              <LogoC4 className="absolute top-1.5 left-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 z-50 filter drop-shadow-md transition-transform duration-300 group-hover:scale-105" />
+            <Link href="/" className="flex items-center justify-center h-full shrink-0 group logo-gold-pulse">
+              <LogoC4 className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 z-50 filter drop-shadow-md transition-transform duration-300 group-hover:scale-105" />
             </Link>
 
             {/* Desktop Nav Links */}
