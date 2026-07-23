@@ -190,7 +190,7 @@ Recent Orders for this Customer/Query (${sender || extractedCode || "N/A"}):
 ${ordersContext}
 
 Our Store Info:
-- Store Name: طيور الجمال والجواد (Paws & Wings)
+- Store Name: مخالب وأجنحة (Paws & Wings)
 - Location: Sétif, Algeria (Cité elhidhab)
 - Delivery: Delivery is available across all 69 provinces in Algeria. Delivery inside the commune of Sétif only costs 150 DZD (Free for orders above 5000 DZD) and takes 24h. Delivery to other provinces varies in cost and takes 2-4 days. When confirming an order, ALWAYS mention the customer's specific delivery province to reassure them.
 
@@ -358,13 +358,13 @@ function getLocalResponse(
       const statusText = statusMap[matchedOrder.status] || matchedOrder.status;
 
       return isArabic
-        ? `✅ مرحباً بك! تم استلام طلبك رقم #${shortId} بنجاح! 🐾\n\n📋 تفاصيل طلبك:\n• الاسم: ${matchedOrder.customer_name || "زبوننا الكريم"}\n${itemsList}\n• المجموع: ${matchedOrder.total} د.ج\n• حالة الطلب: ${statusText}\n\n🚚 التوصيل: متوفر في سطيف ومختلف الولايات. سيتم التواصل معك هاتفياً للتأكيد والتسليم في أقرب وقت.\nشكراً لثقتك في متجر طيور الجمال والجواد (Paws & Wings) ✨`
+        ? `✅ مرحباً بك! تم استلام طلبك رقم #${shortId} بنجاح! 🐾\n\n📋 تفاصيل طلبك:\n• الاسم: ${matchedOrder.customer_name || "زبوننا الكريم"}\n${itemsList}\n• المجموع: ${matchedOrder.total} د.ج\n• حالة الطلب: ${statusText}\n\n🚚 التوصيل: متوفر في سطيف ومختلف الولايات. سيتم التواصل معك هاتفياً للتأكيد والتسليم في أقرب وقت.\nشكراً لثقتك في متجر مخالب وأجنحة (Paws & Wings) ✨`
         : `✅ Bonjour ! Nous avons bien reçu votre commande #${shortId} ! 🐾\n\n📋 Détails :\n• Nom: ${matchedOrder.customer_name || "Client"}\n${itemsList}\n• Total: ${matchedOrder.total} DZD\n• Statut: ${matchedOrder.status}\n\n🚚 Nous vous contacterons par téléphone pour confirmer l'expédition. Merci de votre confiance en Paws & Wings ! ✨`;
     }
 
     const orderRefDisplay = extractedCode ? `#${extractedCode.toUpperCase()}` : "الخاص بك";
     return isArabic
-      ? `✅ مرحباً بك! تم استقبال طلبك رقم ${orderRefDisplay} في متجر طيور الجمال والجواد (Paws & Wings) 🐾\n\nلقد قمنا بتسجيل التأكيد، وسيتم التواصل معك هاتفياً على هذا الرقم للتحقق من بيانات العنوان والشحن وإرسال طلبيتك فوراً.\nإذا كان لديك أي استفسار، يسعدنا مساعدتك!`
+      ? `✅ مرحباً بك! تم استقبال طلبك رقم ${orderRefDisplay} في متجر مخالب وأجنحة (Paws & Wings) 🐾\n\nلقد قمنا بتسجيل التأكيد، وسيتم التواصل معك هاتفياً على هذا الرقم للتحقق من بيانات العنوان والشحن وإرسال طلبيتك فوراً.\nإذا كان لديك أي استفسار، يسعدنا مساعدتك!`
       : `✅ Bonjour ! Votre commande ${orderRefDisplay} a bien été enregistrée chez Paws & Wings 🐾\n\nNous vous contacterons par téléphone pour confirmer l'adresse et l'expédition. Merci de votre confiance !`;
   }
 
@@ -410,17 +410,17 @@ function getLocalResponse(
     if (hasProducts) {
       const list = products.slice(0, 5).map(p => `- ${p.name}: ${p.price} DZD`).join("\n");
       return isArabic
-        ? `مرحباً بك في متجر طيور الجمال والجواد (Paws & Wings)! 🐾✨\nكيف يمكنني مساعدتك اليوم؟\n\nبعض منتجاتنا المتوفرة حالياً:\n${list}\n\n- اكتب "توصيل" لمعرفة معلومات الشحن.\n- اكتب "منتجات" لعرض الكتالوج بالكامل.`
-        : `Bienvenue chez Paws & Wings (طيور الجمال والجواد) ! 🐾✨\nComment puis-je vous aider aujourd'hui ?\n\nQuelques produits disponibles :\n${list}\n\n- Écrivez "livraison" pour les infos de livraison.\n- Écrivez "produits" pour voir tout le catalogue.`;
+        ? `مرحباً بك في متجر مخالب وأجنحة (Paws & Wings)! 🐾✨\nكيف يمكنني مساعدتك اليوم؟\n\nبعض منتجاتنا المتوفرة حالياً:\n${list}\n\n- اكتب "توصيل" لمعرفة معلومات الشحن.\n- اكتب "منتجات" لعرض الكتالوج بالكامل.`
+        : `Bienvenue chez Paws & Wings (مخالب وأجنحة) ! 🐾✨\nComment puis-je vous aider aujourd'hui ?\n\nQuelques produits disponibles :\n${list}\n\n- Écrivez "livraison" pour les infos de livraison.\n- Écrivez "produits" pour voir tout le catalogue.`;
     } else {
       return isArabic
-        ? "مرحباً بك في متجر طيور الجمال والجواد (Paws & Wings)! 🐾 كيف يمكنني مساعدتك اليوم؟"
+        ? "مرحباً بك في متجر مخالب وأجنحة (Paws & Wings)! 🐾 كيف يمكنني مساعدتك اليوم؟"
         : "Bienvenue chez Paws & Wings ! 🐾 Comment puis-je vous aider aujourd'hui ?";
     }
   }
 
   // General fallback
   return isArabic
-    ? "شكراً لتواصلك مع متجر طيور الجمال والجواد! 🐾\nرسالتك وصلت وسيقوم أحد عملائنا بالرد عليك يدوياً في أقرب وقت.\nاكتب 'منتجات' لرؤية ما هو متوفر حالياً في المخزن."
+    ? "شكراً لتواصلك مع متجر مخالب وأجنحة! 🐾\nرسالتك وصلت وسيقوم أحد عملائنا بالرد عليك يدوياً في أقرب وقت.\nاكتب 'منتجات' لرؤية ما هو متوفر حالياً في المخزن."
     : "Merci de contacter Paws & Wings ! 🐾\nVotre message a été reçu, un conseiller vous répondra manuellement sous peu.\nÉcrivez 'produits' pour voir le stock disponible.";
 }

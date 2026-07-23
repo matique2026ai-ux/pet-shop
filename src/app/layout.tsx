@@ -35,8 +35,8 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: {
-    default: "طيور الجمال والجواد | Tawra Al-Jamal Wa Al-Jawad",
-    template: "%s | طيور الجمال والجواد",
+    default: "مخالب وأجنحة | Paws & Wings",
+    template: "%s | مخالب وأجنحة",
   },
   alternates: {
     languages: {
@@ -50,8 +50,8 @@ export const metadata: Metadata = {
     shortcut: "/logo-badge.png",
     apple: "/logo-badge.png",
   },
-  description: "طيور الجمال والجواد — المتجر الإلكتروني الرائد في الجزائر لكل ما يخص الحيوانات الأليفة والخيول. أغذية، إكسسوارات، ورعاية بيطرية متكاملة.",
-  keywords: ["طيور الجمال والجواد", "متجر حيوانات أليفة سطيف", "عيادة بيطرية سطيف", "Tawra Al-Jamal Wa Al-Jawad", "مستلزمات الخيول والحيوانات الأليفة", "توصيل سريع سطيف", "pet shop horses Algeria"],
+  description: "مخالب وأجنحة — المتجر الإلكتروني الرائد في الجزائر لكل ما يخص الحيوانات الأليفة والخيول. أغذية، إكسسوارات، ورعاية بيطرية متكاملة.",
+  keywords: ["مخالب وأجنحة", "متجر حيوانات أليفة سطيف", "عيادة بيطرية سطيف", "Paws & Wings", "مستلزمات الخيول والحيوانات الأليفة", "توصيل سريع سطيف", "pet shop horses Algeria"],
   other: {
     "geo.region": "DZ-19",
     "geo.placename": "Sétif",
@@ -60,17 +60,17 @@ export const metadata: Metadata = {
     "language": "ar, fr, en",
   },
   openGraph: {
-    title: "طيور الجمال والجواد | Tawra Al-Jamal Wa Al-Jawad",
+    title: "مخالب وأجنحة | Paws & Wings",
     description: "متجر إلكتروني متكامل للحيوانات الأليفة والخيول في الجزائر. جودة، مصداقية، وتوصيل سريع.",
     url: "https://www.tawra-aljamal.com",
-    siteName: "طيور الجمال والجواد",
+    siteName: "مخالب وأجنحة",
     locale: "ar_DZ",
     type: "website",
     images: [{ url: "https://www.tawra-aljamal.com/favicon.svg", width: 512, height: 512 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "طيور الجمال والجواد | Tawra Al-Jamal Wa Al-Jawad",
+    title: "مخالب وأجنحة | Paws & Wings",
     description: "متجر إلكتروني متكامل للحيوانات الأليفة والخيول في الجزائر.",
   },
   robots: {

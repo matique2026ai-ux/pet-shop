@@ -89,7 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       sendBrevoEmail({
         toEmail: email,
         toName: fullName,
-        subject: `مرحباً بك في طيور الجمال والجواد 🐾`,
+        subject: `مرحباً بك في مخالب وأجنحة 🐾`,
         htmlContent: getWelcomeEmailHtml(fullName, "ar"),
       }).catch((e) => console.error("Async Brevo welcome email error:", e));
     }

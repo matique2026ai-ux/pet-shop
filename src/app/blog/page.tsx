@@ -78,7 +78,7 @@ export default function BlogListingPage() {
             {/* Pill Badge */}
             <div className="inline-flex items-center gap-2 px-5 py-2 bg-white/10 backdrop-blur-md rounded-full text-xs sm:text-sm font-semibold text-[#F1C290] border border-white/15 mb-6 shadow-xl">
               <BookOpen className="w-4 h-4 text-[#F5851F]" />
-              <span>{lang === "ar" ? "مدونة ومرشد طيور الجمال والجواد" : lang === "fr" ? "Guide et conseils vétérinaires" : "Pet Care Guide & Blog"}</span>
+              <span>{lang === "ar" ? "مدونة ومرشد مخالب وأجنحة" : lang === "fr" ? "Guide et conseils vétérinaires" : "Pet Care Guide & Blog"}</span>
             </div>
 
             {/* Main Title */}

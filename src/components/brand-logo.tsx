@@ -4,7 +4,7 @@ import React from "react";
 
 import { useSiteSettings } from "@/lib/site-settings";
 
-/* Component C1: Transparent Circular Badge Logo (Icon + 'طيور الجمال والجواد' + 'تأسس 2024') */
+/* Component C1: Transparent Circular Badge Logo (Icon + 'مخالب وأجنحة' + 'تأسس 2024') */
 export function LogoC1({ className = "w-20 h-20" }: { className?: string }) {
   const { store } = useSiteSettings();
   const logoSrc = store?.storeLogo || "/logo-badge.png";
@@ -12,7 +12,7 @@ export function LogoC1({ className = "w-20 h-20" }: { className?: string }) {
   return (
     <img
       src={logoSrc}
-      alt={store?.storeName || "طيور الجمال والجواد"}
+      alt={store?.storeName || "مخالب وأجنحة"}
       className={`${className} object-contain`}
       style={{ display: "inline-block" }}
     />
@@ -24,7 +24,7 @@ export function LogoC2({ className = "", light = false }: { className?: string; 
   return (
     <div className={`flex flex-col text-right select-none ${className}`} dir="rtl">
       <span className={`text-lg sm:text-2xl font-black tracking-tight leading-tight ${light ? "text-white" : "text-[#1E2D24]"} font-cairo`}>
-        طيور الجمال والجواد
+        مخالب وأجنحة
       </span>
     </div>
   );

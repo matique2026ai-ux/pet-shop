@@ -18,7 +18,7 @@ interface PetEvent {
 const CAT_MESSAGES_AR = ["ميااااو! 🐾", "أهلاً بك في متجرنا! 🐱", "هل تبحث عن طعام لي؟ 😸", "مياو~ 🐾"];
 const CAT_MESSAGES_FR = ["Miaouuu~ 🐾", "Bienvenue chez nous ! 🐱", "Des croquettes pour moi ? 😸", "Purrr~ 🐾"];
 
-const BIRD_MESSAGES_AR = ["زقزقة! 🎵", "تغريد جميل! 🎶", "طيور الجمال والجواد! 🐤", "تويت تويت! 🦜"];
+const BIRD_MESSAGES_AR = ["زقزقة! 🎵", "تغريد جميل! 🎶", "مخالب وأجنحة! 🐤", "تويت تويت! 🦜"];
 const BIRD_MESSAGES_FR = ["Chirp chirp ! 🎵", "Cuicui ! 🎶", "Coucou ! 🐤", "Tweeeet ! 🦜"];
 
 const HAMSTER_MESSAGES_AR = ["سقسقة! 🐹", "وجدتك! 🌻", "سرعة التوصيل! ⚡", "أهلاً! 🐾"];

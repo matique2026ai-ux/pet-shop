@@ -113,7 +113,7 @@ export default function Footer() {
   const tiktok     = store && store.tiktok ? store.tiktok : "";
 
   const storeName = store?.storeName || store?.name || (
-    lang === "ar" ? "طيور الجمال والجواد" : "Paws & Wings"
+    lang === "ar" ? "مخالب وأجنحة" : "Paws & Wings"
   );
 
   if (pathname.startsWith("/admin")) return null;

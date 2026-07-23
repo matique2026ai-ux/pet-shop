@@ -174,7 +174,7 @@ export default function ProductDetailPage() {
   const hasVideo = !!embed;
   const storeName = store?.storeName || store?.name || (
     lang === "ar"
-      ? "طيور الجمال والجواد"
+      ? "مخالب وأجنحة"
       : "Paws & Wings"
   );
 

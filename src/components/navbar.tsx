@@ -96,7 +96,7 @@ export default function Navbar() {
 
   const storeName = store?.storeName || store?.name || (
     lang === "ar"
-      ? "طيور الجمال والجواد"
+      ? "مخالب وأجنحة"
       : "Paws & Wings"
   );
 

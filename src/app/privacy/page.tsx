@@ -81,7 +81,7 @@ export default function PrivacyPage() {
                   </h4>
                   <p className="text-xs text-[#7A6F61] leading-relaxed">
                     {dir === "rtl" 
-                      ? "يتعهّد موقع طيور الجمال والجواد بالمعالجة النزيهة للبيانات الشخصية ووضعها فقط في خدمة تأكيد وتنفيذ عقود البيع الإلكتروني وتفادي أي استخدام تجاري دون موافقة صريحة من العميل."
+                      ? "يتعهّد موقع مخالب وأجنحة بالمعالجة النزيهة للبيانات الشخصية ووضعها فقط في خدمة تأكيد وتنفيذ عقود البيع الإلكتروني وتفادي أي استخدام تجاري دون موافقة صريحة من العميل."
                       : "Paws & Wings s'engage à traiter de bonne foi les données personnelles exclusivement pour la validation et l'exécution des contrats de vente électronique, en évitant toute utilisation commerciale non sollicitée."}
                   </p>
                 </div>

@@ -13,7 +13,7 @@ interface SendEmailParams {
 export async function sendBrevoEmail({ toEmail, toName, subject, htmlContent }: SendEmailParams) {
   const apiKey = process.env.BREVO_API_KEY;
   const senderEmail = process.env.BREVO_SENDER_EMAIL || "contact@pawsandwings.com";
-  const senderName = process.env.BREVO_SENDER_NAME || "طيور الجمال والجواد | Paws & Wings";
+  const senderName = process.env.BREVO_SENDER_NAME || "مخالب وأجنحة | Paws & Wings";
 
   if (!apiKey) {
     console.warn("⚠️ BREVO_API_KEY is not set in environment variables. Email sending skipped.");
@@ -75,7 +75,7 @@ export function getWelcomeEmailHtml(fullName: string, lang = "ar"): string {
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مرحباً بك في طيور الجمال والجواد</title>
+    <title>مرحباً بك في مخالب وأجنحة</title>
   </head>
   <body style="margin:0; padding:0; background-color:#FDFBF7; font-family:'Cairo', Arial, sans-serif; color:#1A120B;">
     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#FDFBF7; padding:20px 0;">
@@ -86,7 +86,7 @@ export function getWelcomeEmailHtml(fullName: string, lang = "ar"): string {
             <tr>
               <td align="center" style="background: linear-gradient(135deg, #1E2D24 0%, #0E1611 100%); padding:36px 20px; text-align:center;">
                 <img src="https://pet-shop.vercel.app/logo-badge.png" alt="Paws & Wings Logo" width="90" height="90" style="display:block; margin:0 auto 12px auto; border-radius:50%; border:2px solid #E3602D;">
-                <h1 style="color:#F1C290; margin:0; font-size:24px; font-weight:800;">طيور الجمال والجواد</h1>
+                <h1 style="color:#F1C290; margin:0; font-size:24px; font-weight:800;">مخالب وأجنحة</h1>
                 <p style="color:#ffffff; opacity:0.8; margin:6px 0 0 0; font-size:13px;">المتجر الإلكتروني الرائد للحيوانات الأليفة والخيول في الجزائر</p>
               </td>
             </tr>
@@ -95,7 +95,7 @@ export function getWelcomeEmailHtml(fullName: string, lang = "ar"): string {
               <td style="padding:32px 28px;">
                 <h2 style="color:#1E2D24; font-size:20px; margin-top:0;">مرحباً بك يا ${name}! 🐾</h2>
                 <p style="font-size:15px; line-height:1.7; color:#5C523D;">
-                  سعداء جداً بأنك أصبحت عضواً في عائلة <strong>طيور الجمال والجواد</strong>! حسابك جاهز الآن لتصفح أفضل المنتجات، الأغذية، والإكسسوارات المعتمدة لحيواناتك الأليفة والخيول.
+                  سعداء جداً بأنك أصبحت عضواً في عائلة <strong>مخالب وأجنحة</strong>! حسابك جاهز الآن لتصفح أفضل المنتجات، الأغذية، والإكسسوارات المعتمدة لحيواناتك الأليفة والخيول.
                 </p>
                 <div style="background-color:#FBF8F3; border-radius:16px; border:1px solid #ECDCAE; padding:20px; margin:24px 0;">
                   <h3 style="margin:0 0 10px 0; color:#E3602D; font-size:16px;">💡 مميزات حسابك معنا:</h3>
@@ -116,7 +116,7 @@ export function getWelcomeEmailHtml(fullName: string, lang = "ar"): string {
             <tr>
               <td style="background-color:#1A120B; color:#9A8D70; padding:20px; text-align:center; font-size:12px; border-top:1px solid #241A11;">
                 <p style="margin:0 0 6px 0;">سطيف، الجزائر • هاتف: 0776.07.53.55 / 0661.23.45.67</p>
-                <p style="margin:0;">© 2026 طيور الجمال والجواد | Paws & Wings. جميع الحقوق محفوظة.</p>
+                <p style="margin:0;">© 2026 مخالب وأجنحة | Paws & Wings. جميع الحقوق محفوظة.</p>
               </td>
             </tr>
           </table>
@@ -180,7 +180,7 @@ export function getOrderReceiptEmailHtml(order: any, lang = "ar"): string {
               <td style="padding:28px;">
                 <p style="font-size:15px; color:#3E3729; margin-top:0;">
                   مرحباً <strong>${order.customer_name || "عميلنا العزيز"}</strong>،<br>
-                  شكراً لثقتك بمتجر <strong>طيور الجمال والجواد</strong>! تم تسجيل طلبك بنجاح وسنقوم بالتواصل معك هاتفياً لتأكيد الشحن والتوصيل.
+                  شكراً لثقتك بمتجر <strong>مخالب وأجنحة</strong>! تم تسجيل طلبك بنجاح وسنقوم بالتواصل معك هاتفياً لتأكيد الشحن والتوصيل.
                 </p>
 
                 <!-- Customer & Delivery Info Box -->
@@ -230,7 +230,7 @@ export function getOrderReceiptEmailHtml(order: any, lang = "ar"): string {
             <!-- Footer -->
             <tr>
               <td style="background-color:#1A120B; color:#9A8D70; padding:18px; text-align:center; font-size:12px;">
-                <p style="margin:0;">© 2026 طيور الجمال والجواد | Paws & Wings. سطيف، الجزائر</p>
+                <p style="margin:0;">© 2026 مخالب وأجنحة | Paws & Wings. سطيف، الجزائر</p>
               </td>
             </tr>
           </table>

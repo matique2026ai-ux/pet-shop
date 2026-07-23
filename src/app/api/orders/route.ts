@@ -68,7 +68,7 @@ export async function POST(request: Request) {
     sendBrevoEmail({
       toEmail: email,
       toName: name,
-      subject: `تأكيد طلبية #${orderRef} | طيور الجمال والجواد`,
+      subject: `تأكيد طلبية #${orderRef} | مخالب وأجنحة`,
       htmlContent: getOrderReceiptEmailHtml(data, "ar"),
     }).catch((e) => console.error("Async Brevo order email error:", e));
   }
