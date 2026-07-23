@@ -197,16 +197,16 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16">
 
             {/* Logo Component C4 */}
-            <Link href="/" className="relative shrink-0 group logo-gold-pulse z-50 flex flex-col items-center justify-start h-16 w-24 sm:w-28 md:w-36">
-              {/* Glass hanging background - Wider & Seamless */}
-              <div className={`absolute -top-4 w-full h-[100px] sm:h-[110px] md:h-[136px] rounded-b-full transition-all duration-300 pointer-events-none z-0 ${
+            <Link href="/" className="relative shrink-0 group logo-gold-pulse z-50 flex items-center justify-center h-16 w-24 sm:w-28 md:w-36">
+              {/* Glass hanging background - strictly below navbar to prevent doubled blur */}
+              <div className={`absolute top-[64px] w-full h-[40px] sm:h-[50px] md:h-[60px] rounded-b-full transition-all duration-300 pointer-events-none z-0 border-x border-b border-t-0 ${
                 isScrolled 
-                  ? "bg-black/60 backdrop-blur-xl border border-t-0 border-white/10 shadow-lg shadow-black/20" 
-                  : "bg-black/40 backdrop-blur-xl border border-t-0 border-white/10 shadow-sm shadow-black/10"
+                  ? "bg-black/60 backdrop-blur-xl border-white/10 shadow-lg shadow-black/20" 
+                  : "bg-black/40 backdrop-blur-xl border-white/10 shadow-sm shadow-black/10"
               }`} />
               
-              {/* The Logo */}
-              <div className="relative z-10 pt-1 sm:pt-2 md:pt-3">
+              {/* The Logo positioned to center across navbar + drop */}
+              <div className="absolute top-[10px] sm:top-[12px] md:top-[14px] z-10 flex items-center justify-center">
                 <LogoC4 className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 filter drop-shadow-md transition-transform duration-300 group-hover:scale-105" />
               </div>
             </Link>
