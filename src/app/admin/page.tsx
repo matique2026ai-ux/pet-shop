@@ -19,7 +19,11 @@ import HeroVideoManager from "@/components/hero-video-manager";
 import AdminSettingsPanel from "@/components/admin-settings-panel";
 import BlogAdminPanel from "@/components/blog-admin";
 import { en } from "@/lib/translations/en";
+import { fr } from "@/lib/translations/fr";
+import { ar } from "@/lib/translations/ar";
 import type { TranslationOverrides } from "@/lib/i18n-context";
+
+const DEFAULT_TRANSLATIONS = { en, fr, ar };
 import { LogoC1, LogoC4 } from "@/components/brand-logo";
 import { type UnitType, UNIT_OPTIONS, isContinuousUnit, unitLabel } from "@/lib/units";
 import { compressImage } from "@/lib/image-utils";
@@ -2416,21 +2420,23 @@ export default function AdminDashboard() {
                   </div>
                   <div className="divide-y divide-gray-100 max-h-[70vh] overflow-y-auto">
                     {TRANS_KEYS.filter((k) => k.path.toLowerCase().includes(transFilter.toLowerCase())).map((k) => {
-                      const def = getByPath(en, k.path);
                       return (
                         <div key={k.path} className="grid grid-cols-[minmax(180px,1fr)_1fr_1fr_1fr] gap-px bg-gray-100 items-start">
                           <div className="bg-white px-4 py-3 text-sm font-mono text-gray-600 break-all">{k.path}</div>
-                          {(["en", "fr", "ar"] as const).map((lang) => (
-                            <div key={lang} className="bg-white px-2 py-2">
-                              <input
-                                value={transOverride[lang][k.path] || ""}
-                                onChange={(e) => setTrans(lang, k.path, e.target.value)}
-                                placeholder={def}
-                                dir={lang === "ar" ? "rtl" : "ltr"}
-                                className="w-full px-2 py-1.5 text-sm rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                              />
-                            </div>
-                          ))}
+                          {(["en", "fr", "ar"] as const).map((lang) => {
+                            const def = getByPath(DEFAULT_TRANSLATIONS[lang], k.path) || getByPath(en, k.path);
+                            return (
+                              <div key={lang} className="bg-white px-2 py-2">
+                                <input
+                                  value={transOverride[lang][k.path] || ""}
+                                  onChange={(e) => setTrans(lang, k.path, e.target.value)}
+                                  placeholder={def}
+                                  dir={lang === "ar" ? "rtl" : "ltr"}
+                                  className="w-full px-2 py-1.5 text-sm rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                />
+                              </div>
+                            );
+                          })}
                         </div>
                       );
                     })}

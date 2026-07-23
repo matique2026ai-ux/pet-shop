@@ -8,7 +8,7 @@ import { useSiteSettings } from "@/lib/site-settings";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, X, ShoppingCart, Phone, Search, Truck, ChevronRight, User, LogIn, Loader2, Cat, Dog, Bird, Fish, Rabbit, PawPrint, BookOpen, Zap, Heart, MessageCircle } from "lucide-react";
+import { Menu, X, ShoppingCart, Search, Truck, ChevronRight, User, LogIn, Loader2, Cat, Dog, Bird, Fish, Rabbit, PawPrint, BookOpen, Zap, Heart } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import AuthModal from "@/components/auth-modal";
 import { LogoC4 } from "@/components/brand-logo";
@@ -57,15 +57,11 @@ function MixedFootprint({ type, className }: { type: "cat" | "dog" | "bird"; cla
 
 export default function Navbar() {
   const pathname = usePathname();
-  if (pathname.startsWith("/admin")) return null;
-
   const { t, lang, setLang, dir } = useI18n();
   const { totalItems } = useCart();
   const { favorites } = useFavorites();
   const { categories } = useTranslatedData();
   const { store } = useSiteSettings();
-  const storePhone = store?.phone || "+2130776075355";
-  const telHref = "tel:" + storePhone.replace(/[^0-9+]/g, "");
   const { user, profile, loading: authLoading, logout } = useAuth();
   const router = useRouter();
   const [mobileOpen, setMobileOpen]     = useState(false);
@@ -81,7 +77,6 @@ export default function Navbar() {
   const catBtnRef  = useRef<HTMLButtonElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isRtl = dir === "rtl";
-
   const [expandedCats, setExpandedCats] = useState<Record<string, boolean>>({});
   const toggleCat = (catId: string) => {
     setExpandedCats((prev) => ({
@@ -161,6 +156,8 @@ export default function Navbar() {
     return pathname === base || pathname.startsWith(base + "/");
   };
 
+  if (pathname.startsWith("/admin")) return null;
+
   useEffect(() => {
     const handle = (e: MouseEvent) => {
       if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) setUserMenuOpen(false);
@@ -185,15 +182,17 @@ export default function Navbar() {
       </div>
 
       {/* ── Main Navbar ── */}
-      <nav className={`sticky top-0 z-50 transition-all duration-300 overflow-hidden ${
+      <nav className={`sticky top-0 z-50 transition-all duration-300 ${
         isScrolled 
           ? "bg-black/60 backdrop-blur-xl border-b border-white/10 shadow-lg py-1" 
           : "bg-black/40 backdrop-blur-xl border-b border-white/10 py-0"
       }`}>
         {/* Background Footprints */}
-        <MixedFootprint type="cat" className="absolute top-2 left-[15%] w-8 h-8 rotate-[-15deg] text-white/6" />
-        <MixedFootprint type="dog" className="absolute bottom-2 right-[25%] w-7 h-7 rotate-[25deg] text-white/5" />
-        <MixedFootprint type="bird" className="absolute top-4 right-[45%] w-6 h-6 rotate-[-45deg] text-[#F1C290]/6" />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <MixedFootprint type="cat" className="absolute top-2 left-[15%] w-8 h-8 rotate-[-15deg] text-white/6" />
+          <MixedFootprint type="dog" className="absolute bottom-2 right-[25%] w-7 h-7 rotate-[25deg] text-white/5" />
+          <MixedFootprint type="bird" className="absolute top-4 right-[45%] w-6 h-6 rotate-[-45deg] text-[#F1C290]/6" />
+        </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex items-center justify-between h-16">
 
@@ -329,16 +328,6 @@ export default function Navbar() {
                 )}
               </div>
 
-              {/* WhatsApp direct button */}
-              <a
-                href="https://wa.me/213776075355"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden xl:flex items-center gap-2 bg-gradient-to-r from-[#25D366] to-emerald-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity shadow-md"
-              >
-                <MessageCircle className="w-4 h-4" />
-                {lang === "ar" ? "تواصل واتساب" : "WhatsApp"}
-              </a>
 
               {/* Favorites */}
               <Link href="/favorites" className="relative p-2 text-white/70 hover:text-rose-400 hover:bg-white/10 rounded-lg transition-colors" title={lang === "ar" ? "المفضلة" : "Favoris"}>
