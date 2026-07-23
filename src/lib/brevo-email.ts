@@ -128,29 +128,55 @@ export function getWelcomeEmailHtml(fullName: string, lang = "ar"): string {
   `;
 }
 
+interface OrderItem {
+  name?: string;
+  title?: string;
+  variant?: string;
+  quantity?: number;
+  qty?: number;
+  price?: number;
+}
+
+interface OrderReceipt {
+  id?: string;
+  items?: OrderItem[];
+  customer_name?: string;
+  customer_phone?: string;
+  delivery_address?: string;
+  city?: string;
+  delivery_eta?: string;
+  delivery_fee?: number;
+  total?: number;
+}
+
 /**
  * HTML Template: Order Invoice & Confirmation Email
  */
-export function getOrderReceiptEmailHtml(order: any, lang = "ar"): string {
+export function getOrderReceiptEmailHtml(order: OrderReceipt, lang = "ar"): string {
   const isAr = lang === "ar";
   const orderRef = (order.id || "").slice(-6).toUpperCase();
   const items = Array.isArray(order.items) ? order.items : [];
   const currency = "د.ج";
 
-  const itemsListHtml = items.map((item: any) => `
+  const itemsListHtml = items.map((item: OrderItem) => {
+    const price = typeof item.price === "number" ? item.price : 0;
+    const qty = typeof item.quantity === "number" ? item.quantity : (typeof item.qty === "number" ? item.qty : 1);
+    const itemTotal = price * qty;
+    return `
     <tr>
       <td style="padding:10px 0; border-bottom:1px solid #F0EDE6; font-size:14px; color:#1A120B;">
         <strong>${item.name || item.title || "منتج"}</strong>
         ${item.variant ? `<br><span style="font-size:12px; color:#7A6F54;">الحجم/النوع: ${item.variant}</span>` : ""}
       </td>
       <td align="center" style="padding:10px 0; border-bottom:1px solid #F0EDE6; font-size:14px; color:#5C523D;">
-        ${item.quantity || item.qty || 1}
+        ${qty}
       </td>
       <td align="left" style="padding:10px 0; border-bottom:1px solid #F0EDE6; font-size:14px; font-weight:bold; color:#1E2D24;">
-        ${((item.price || 0) * (item.quantity || item.qty || 1)).toLocaleString()} ${currency}
+        ${itemTotal.toLocaleString()} ${currency}
       </td>
     </tr>
-  `).join("");
+  `;
+  }).join("");
 
   return `
   <!DOCTYPE html>
