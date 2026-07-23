@@ -197,8 +197,18 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16">
 
             {/* Logo Component C4 */}
-            <Link href="/" className="flex items-center justify-center h-full shrink-0 group logo-gold-pulse">
-              <LogoC4 className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 z-50 filter drop-shadow-md transition-transform duration-300 group-hover:scale-105" />
+            <Link href="/" className="relative shrink-0 group logo-gold-pulse z-50 flex flex-col items-center justify-start h-16 w-20 sm:w-24 md:w-28">
+              {/* Glass hanging background */}
+              <div className={`absolute top-0 w-20 h-24 sm:w-24 sm:h-28 md:w-28 md:h-[120px] rounded-b-full border-x border-b transition-all duration-300 pointer-events-none -z-10 ${
+                isScrolled 
+                  ? "bg-black/60 backdrop-blur-xl border-white/10 shadow-lg shadow-black/20" 
+                  : "bg-black/40 backdrop-blur-xl border-white/10 shadow-sm shadow-black/10"
+              }`} />
+              
+              {/* The Logo */}
+              <div className="pt-2 sm:pt-3 md:pt-4">
+                <LogoC4 className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 filter drop-shadow-md transition-transform duration-300 group-hover:scale-105" />
+              </div>
             </Link>
 
             {/* Desktop Nav Links */}
