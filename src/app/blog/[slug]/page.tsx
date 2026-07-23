@@ -1,4 +1,4 @@
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
 import BlogClientPage from "./client-page";
 import { createClient } from "@/lib/supabase";
 
@@ -17,8 +17,7 @@ async function fetchBlogPost(slug: string) {
 }
 
 export async function generateMetadata(
-  { params }: { params: Promise<{ slug: string }> },
-  parent: ResolvingMetadata
+  { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const resolvedParams = await params;
   const post = await fetchBlogPost(resolvedParams.slug);
@@ -55,6 +54,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const resolvedParams = await params;
   const post = await fetchBlogPost(resolvedParams.slug);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let jsonLd: any = null;
   if (post) {
     const baseUrl = "https://www.pawsandwings.com";

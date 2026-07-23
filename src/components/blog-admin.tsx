@@ -1,12 +1,26 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
-  Plus, Edit2, Trash2, CheckCircle, XCircle, Eye, EyeOff,
+  Plus, Edit2, Trash2, CheckCircle, XCircle,
   BookOpen, Calendar, User, Globe, X, AlertTriangle, Upload, ImageIcon, RefreshCw
 } from "lucide-react";
 import type { BlogPost } from "@/lib/use-translated-data";
 import { compressImage } from "@/lib/image-utils";
+import dynamic from "next/dynamic";
+import "react-quill-new/dist/quill.snow.css";
+
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
+
+const quillModules = {
+  toolbar: [
+    [{ header: [1, 2, 3, false] }],
+    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+    [{ list: 'ordered' }, { list: 'bullet' }],
+    ['link', 'image', 'video'],
+    ['clean'],
+  ],
+};
 
 // ── Inline mini confirm modal ──────────────────────────────────────────────
 function MiniConfirm({
@@ -117,9 +131,7 @@ export default function BlogAdminPanel({ adminSecret }: { adminSecret: string })
     image_url: "", author: "", seo_keywords: "", published: true,
   });
 
-  useEffect(() => { fetchPosts(); }, []);
-
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch("/api/blog?admin=true");
@@ -131,7 +143,12 @@ export default function BlogAdminPanel({ adminSecret }: { adminSecret: string })
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => { 
+    // We defer the fetch to avoid synchronous setState inside the effect body
+    setTimeout(() => { fetchPosts(); }, 0);
+  }, [fetchPosts]);
 
   const handleImageUpload = async (rawFile: File) => {
     setUploadingImg(true);
@@ -234,7 +251,7 @@ export default function BlogAdminPanel({ adminSecret }: { adminSecret: string })
       contentEn: post.content.en || "",
       image_url: post.image_url || "",
       author: post.author,
-      seo_keywords: (post as any).seo_keywords || "",
+      seo_keywords: (post as unknown as Record<string, unknown>).seo_keywords as string || "",
       published: post.published,
     });
     setEditingPost(post);
@@ -333,13 +350,16 @@ export default function BlogAdminPanel({ adminSecret }: { adminSecret: string })
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Content (AR)</label>
-                      <textarea
-                        rows={8}
-                        value={form.contentAr}
-                        onChange={(e) => setForm({ ...form, contentAr: e.target.value })}
-                        placeholder="محتوى المقال..."
-                        className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
-                      />
+                      <div className="bg-white rounded-xl overflow-hidden border border-gray-200">
+                        <ReactQuill
+                          theme="snow"
+                          modules={quillModules}
+                          value={form.contentAr}
+                          onChange={(val) => setForm({ ...form, contentAr: val })}
+                          placeholder="محتوى المقال..."
+                          className="w-full text-sm [&_.ql-container]:min-h-[200px] [&_.ql-editor]:min-h-[200px]"
+                        />
+                      </div>
                     </div>
                   </>
                 )}
@@ -356,13 +376,16 @@ export default function BlogAdminPanel({ adminSecret }: { adminSecret: string })
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Content (FR)</label>
-                      <textarea
-                        rows={8}
-                        value={form.contentFr}
-                        onChange={(e) => setForm({ ...form, contentFr: e.target.value })}
-                        placeholder="Contenu de l'article..."
-                        className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
-                      />
+                      <div className="bg-white rounded-xl overflow-hidden border border-gray-200">
+                        <ReactQuill
+                          theme="snow"
+                          modules={quillModules}
+                          value={form.contentFr}
+                          onChange={(val) => setForm({ ...form, contentFr: val })}
+                          placeholder="Contenu de l'article..."
+                          className="w-full text-sm [&_.ql-container]:min-h-[200px] [&_.ql-editor]:min-h-[200px]"
+                        />
+                      </div>
                     </div>
                   </>
                 )}
@@ -379,13 +402,16 @@ export default function BlogAdminPanel({ adminSecret }: { adminSecret: string })
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Content (EN)</label>
-                      <textarea
-                        rows={8}
-                        value={form.contentEn}
-                        onChange={(e) => setForm({ ...form, contentEn: e.target.value })}
-                        placeholder="Article content..."
-                        className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
-                      />
+                      <div className="bg-white rounded-xl overflow-hidden border border-gray-200">
+                        <ReactQuill
+                          theme="snow"
+                          modules={quillModules}
+                          value={form.contentEn}
+                          onChange={(val) => setForm({ ...form, contentEn: val })}
+                          placeholder="Article content..."
+                          className="w-full text-sm [&_.ql-container]:min-h-[200px] [&_.ql-editor]:min-h-[200px]"
+                        />
+                      </div>
                     </div>
                   </>
                 )}

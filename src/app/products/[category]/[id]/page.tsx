@@ -1,4 +1,4 @@
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
 import ProductClientPage from "./client-page";
 import { createClient } from "@/lib/supabase";
 import { products as demoProducts } from "@/lib/data";
@@ -18,8 +18,7 @@ async function fetchProduct(id: string) {
 }
 
 export async function generateMetadata(
-  { params }: { params: Promise<{ category: string; id: string }> },
-  parent: ResolvingMetadata
+  { params }: { params: Promise<{ category: string; id: string }> }
 ): Promise<Metadata> {
   const resolvedParams = await params;
   const product = await fetchProduct(resolvedParams.id);
@@ -56,6 +55,7 @@ export default async function ProductPage({ params }: { params: Promise<{ catego
   const resolvedParams = await params;
   const product = await fetchProduct(resolvedParams.id);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let jsonLd: any = null;
   if (product) {
     const images = product.images?.length ? product.images : (product.image ? [product.image] : []);

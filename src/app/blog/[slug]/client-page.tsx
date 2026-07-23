@@ -7,18 +7,33 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, Clock, User, Share2, MessageCircle } from "lucide-react";
 import AnimatedSection from "@/components/animated-section";
 import type { BlogPost } from "@/lib/use-translated-data";
-
 import React, { use } from "react";
+
+interface BlogComment {
+  id: string | number;
+  user_name: string;
+  comment: string;
+  created_at: string;
+}
 
 export default function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
   const { t, dir, lang } = useI18n();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
-  const [comments, setComments] = useState<any[]>([]);
+  const [comments, setComments] = useState<BlogComment[]>([]);
   const [newCommentName, setNewCommentName] = useState("");
   const [newCommentText, setNewCommentText] = useState("");
   const [commenting, setCommenting] = useState(false);
+
+  const fetchComments = () => {
+    fetch(`/api/blog/${slug}/comments`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setComments(data);
+      })
+      .catch(console.error);
+  };
 
   useEffect(() => {
     fetch(`/api/blog/${slug}`)
@@ -36,16 +51,8 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
       });
       
     fetchComments();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
-
-  const fetchComments = () => {
-    fetch(`/api/blog/${slug}/comments`)
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) setComments(data);
-      })
-      .catch(console.error);
-  };
 
   const submitComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,6 +64,8 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_name: newCommentName, comment: newCommentText })
       });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const errData = await res.json().catch(() => ({ error: "Failed to post comment" }));
       if (res.ok) {
         setNewCommentName("");
         setNewCommentText("");
@@ -68,17 +77,18 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
     setCommenting(false);
   };
 
-  const getLocalized = (jsonStr: any) => {
+  const getLocalized = (jsonStr: unknown) => {
     if (typeof jsonStr === "string") {
       try {
-        const obj = JSON.parse(jsonStr);
-        return obj[lang] || obj["ar"] || obj["en"] || "";
+        const obj = JSON.parse(jsonStr) as Record<string, string>;
+        return obj[lang as string] || obj["ar"] || obj["en"] || "";
       } catch {
         return jsonStr;
       }
     }
     if (jsonStr && typeof jsonStr === "object") {
-      return jsonStr[lang] || jsonStr["ar"] || jsonStr["en"] || "";
+      const obj = jsonStr as Record<string, string>;
+      return obj[lang as string] || obj["ar"] || obj["en"] || "";
     }
     return "";
   };
@@ -142,9 +152,10 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
             </div>
           )}
           
-          <div className="prose prose-lg prose-[#5C5348] max-w-none mb-16 whitespace-pre-wrap">
-            {content}
-          </div>
+          <div 
+            className="prose prose-lg prose-[#5C5348] max-w-none mb-16"
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
           
           {/* Comments Section */}
           <div className="mt-16 pt-10 border-t border-[#E2DDD4]">
