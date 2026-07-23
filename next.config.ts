@@ -15,7 +15,7 @@ const securityHeaders = [
       "media-src 'self' data: blob: https:",
       "font-src 'self' data:",
       "connect-src 'self' https://*.supabase.co",
-      "frame-src 'self' https://*.google.com https://*.google.dz https://maps.google.com https://www.google.com",
+      "frame-src 'self' https://*.google.com https://*.google.dz https://maps.google.com https://www.google.com https://www.youtube.com https://youtube.com",
       "frame-ancestors 'none'",
     ].join("; "),
   },
