@@ -156,8 +156,6 @@ export default function Navbar() {
     return pathname === base || pathname.startsWith(base + "/");
   };
 
-  if (pathname.startsWith("/admin")) return null;
-
   useEffect(() => {
     const handle = (e: MouseEvent) => {
       if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) setUserMenuOpen(false);
@@ -165,6 +163,8 @@ export default function Navbar() {
     document.addEventListener("mousedown", handle);
     return () => document.removeEventListener("mousedown", handle);
   }, []);
+
+  if (pathname.startsWith("/admin")) return null;
 
   return (
     <>

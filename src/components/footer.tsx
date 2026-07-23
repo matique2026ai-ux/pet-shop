@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Heart, Mail, CheckCircle, Truck, PawPrint } from "lucide-react";
+import { Mail, CheckCircle, Truck, Heart } from "lucide-react";
 import { useI18n } from "@/lib/i18n-context";
 import { useSiteSettings } from "@/lib/site-settings";
 import { LogoC4 } from "@/components/brand-logo";
@@ -71,8 +71,6 @@ function MixedFootprint({ type, className }: { type: "cat" | "dog" | "bird"; cla
 
 export default function Footer() {
   const pathname = usePathname();
-  if (pathname.startsWith("/admin")) return null;
-
   const { t, lang } = useI18n();
   const { store, content, delivery } = useSiteSettings();
   const [email, setEmail]         = useState("");
@@ -104,7 +102,6 @@ export default function Footer() {
 
   const s = (k: string, fallback: string) => (store && store[k] ? store[k] : fallback);
   const addressLines = (s("address", t.contact.addressText || "Larbi Ben M'hidi Street\nSétif 19000, Algeria")).split("\n");
-  const phone        = s("phone",    t.contact.phoneText    || "+213 661 234 567");
   const deliveryPrefix = lang === "ar" ? "توصيل" : lang === "fr" ? "Livraison" : "Delivery";
   const coverage = delivery
     ? `${deliveryPrefix} ${delivery.city} • ${delivery.eta}`
@@ -118,6 +115,8 @@ export default function Footer() {
   const storeName = store?.storeName || store?.name || (
     lang === "ar" ? "طيور الجمال والجواد" : "Paws & Wings"
   );
+
+  if (pathname.startsWith("/admin")) return null;
 
   return (
     <footer className="bg-[#1A120B] border-t border-stone-800 pt-16 pb-8 text-slate-300 relative overflow-hidden">
@@ -159,7 +158,7 @@ export default function Footer() {
                 { href: "/blog",      label: t.nav.blog },
                 { href: "/faq",      label: t.nav.faq },
                 { href: "/shipping", label: t.nav.shipping },
-                { href: "/privacy",  label: (t.nav as any).privacy || "Privacy" },
+                { href: "/privacy",  label: (t.nav as Record<string, string>).privacy || "Privacy" },
                 { href: "/about",    label: t.nav.about },
                 { href: "/contact",  label: t.nav.contact },
               ].map((l) => (
