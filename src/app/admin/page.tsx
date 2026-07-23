@@ -321,6 +321,28 @@ function OrderDetailRow({
   a: any;
 }) {
   const [expanded, setExpanded] = useState(false);
+
+  const getWhatsAppMessage = (order: Order) => {
+    const shortId = order.id ? String(order.id).slice(-6).toUpperCase() : "";
+    const name = order.customer_name || "زبوننا العزيز";
+    const total = order.total;
+    
+    switch (order.status) {
+      case "confirmed":
+        return `✅ مرحباً ${name}!\nلقد تم تأكيد طلبيتك رقم #${shortId} بنجاح.\nالمبلغ الإجمالي: ${total} د.ج.\nنحن نعمل على تجهيزها الآن وسنعلمك فور خروجها للتوصيل.\nشكراً لثقتك في متجر طيور الجمال والجواد (Paws & Wings) 🐾✨`;
+      case "processing":
+        return `📦 مرحباً ${name}!\nطلبيتك رقم #${shortId} قيد التحضير والتغليف الآن.\nسنخبرك بمجرد تسليمها لشركة التوصيل.\nشكراً لثقتك (Paws & Wings) 🐾`;
+      case "shipped":
+        return `🚚 مرحباً ${name}!\nطلبيتك رقم #${shortId} في الطريق إليك!\nيرجى إبقاء هاتفك متاحاً ليتواصل معك الموزع قريباً.\n(Paws & Wings) 🐾`;
+      case "delivered":
+        return `🎉 مرحباً ${name}!\nلقد تم تسليم طلبيتك رقم #${shortId} بنجاح.\nنأمل أن تكون راضياً عن منتجاتنا. لا تتردد في مراسلتنا لأي استفسار.\n(Paws & Wings) 🐾`;
+      case "cancelled":
+        return `❌ مرحباً ${name}!\nنعتذر، لقد تم إلغاء طلبيتك رقم #${shortId}.\nللاستفسار أو الطلب من جديد، يسعدنا تواصلك معنا.\n(Paws & Wings) 🐾`;
+      default:
+        return `مرحباً ${name}، بخصوص طلبك رقم #${shortId} بقيمة ${total} د.ج من متجر Paws & Wings 🐾`;
+    }
+  };
+
   return (
     <>
       <div className="grid grid-cols-12 gap-2 items-center px-6 py-4 hover:bg-gray-50/50 transition-colors">
@@ -367,9 +389,7 @@ function OrderDetailRow({
                   <Phone className="w-3.5 h-3.5 text-emerald-600" /> {order.customer_phone}
                 </a>
                 <a
-                  href={`https://wa.me/${formatWhatsAppNumber(order.customer_phone)}?text=${encodeURIComponent(
-                    `✅ مرحباً ${order.customer_name || "زبوننا العزيز"}!\nلقد تم تأكيد طلبيتك رقم #${order.id ? String(order.id).slice(-6).toUpperCase() : ""} بنجاح.\nالمبلغ الإجمالي: ${order.total} د.ج.\nنحن نعمل على تجهيزها الآن وسنعلمك فور خروجها للتوصيل.\nشكراً لثقتك في متجر طيور الجمال والجواد (Paws & Wings) 🐾✨`
-                  )}`}
+                  href={`https://wa.me/${formatWhatsAppNumber(order.customer_phone)}?text=${encodeURIComponent(getWhatsAppMessage(order))}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-[#25D366] text-white px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-[#20ba56] transition-colors shadow-sm"
