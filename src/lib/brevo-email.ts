@@ -13,7 +13,7 @@ interface SendEmailParams {
 export async function sendBrevoEmail({ toEmail, toName, subject, htmlContent }: SendEmailParams) {
   const apiKey = process.env.BREVO_API_KEY;
   const senderEmail = process.env.BREVO_SENDER_EMAIL || "b20715001@smtp-brevo.com";
-  const senderName = process.env.BREVO_SENDER_NAME || "مخالب وأجنحة | Paws & Wings";
+  const senderName = process.env.BREVO_SENDER_NAME || "متجر مخالب وأجنحة | Paws & Wings Store";
 
   if (!apiKey) {
     console.warn("⚠️ BREVO_API_KEY is not set in environment variables. Email sending skipped.");
