@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { X, CheckCircle, Truck, Zap, ShoppingBag, CreditCard } from "lucide-react";
+import { CheckCircle, Truck, Zap, CreditCard } from "lucide-react";
 import { useI18n } from "@/lib/i18n-context";
-import { formatWhatsAppNumber } from "@/lib/phone-utils";
+
 import { setCookie } from "@/lib/cookies";
 import { WILAYAS } from "@/lib/data";
 import { WILAYAS_AR } from "@/lib/wilayas";

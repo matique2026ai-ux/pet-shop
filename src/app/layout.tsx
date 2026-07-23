@@ -10,7 +10,7 @@ import Footer from "@/components/footer";
 import CookieConsent from "@/components/cookie-consent";
 import { OrganizationSchema, WebSiteSchema, LocalBusinessSchema } from "@/components/schema-jsonld";
 import Script from "next/script";
-import { PawPrint } from "lucide-react";
+
 import { FavoritesProvider } from "@/lib/favorites-context";
 import FloatingCart from "@/components/floating-cart";
 import PlayfulPets from "@/components/playful-pets";
@@ -22,12 +22,7 @@ const cairo = Cairo({
   display: "swap",
 });
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-inter",
-  display: "swap",
-});
+
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -36,12 +31,7 @@ const outfit = Outfit({
   display: "swap",
 });
 
-const shipporiMincho = Shippori_Mincho({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-shippori",
-  display: "swap",
-});
+
 
 export const metadata: Metadata = {
   title: {
