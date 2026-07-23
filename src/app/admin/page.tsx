@@ -368,7 +368,7 @@ function OrderDetailRow({
                 </a>
                 <a
                   href={`https://wa.me/${formatWhatsAppNumber(order.customer_phone)}?text=${encodeURIComponent(
-                    `مرحباً ${order.customer_name || "زبوننا العزيز"}، بخصوص طلبك رقم #${order.id ? String(order.id).slice(-6).toUpperCase() : ""} بقيمة ${order.total} د.ج من متجر Paws & Wings 🐾`
+                    `✅ مرحباً ${order.customer_name || "زبوننا العزيز"}!\nلقد تم تأكيد طلبيتك رقم #${order.id ? String(order.id).slice(-6).toUpperCase() : ""} بنجاح.\nالمبلغ الإجمالي: ${order.total} د.ج.\nنحن نعمل على تجهيزها الآن وسنعلمك فور خروجها للتوصيل.\nشكراً لثقتك في متجر طيور الجمال والجواد (Paws & Wings) 🐾✨`
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
