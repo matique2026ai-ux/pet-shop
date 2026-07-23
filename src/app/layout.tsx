@@ -45,6 +45,11 @@ export const metadata: Metadata = {
       ar: "/",
     },
   },
+  icons: {
+    icon: "/logo-badge.png",
+    shortcut: "/logo-badge.png",
+    apple: "/logo-badge.png",
+  },
   description: "طيور الجمال والجواد — المتجر الإلكتروني الرائد في الجزائر لكل ما يخص الحيوانات الأليفة والخيول. أغذية، إكسسوارات، ورعاية بيطرية متكاملة.",
   keywords: ["طيور الجمال والجواد", "متجر حيوانات أليفة سطيف", "عيادة بيطرية سطيف", "Tawra Al-Jamal Wa Al-Jawad", "مستلزمات الخيول والحيوانات الأليفة", "توصيل سريع سطيف", "pet shop horses Algeria"],
   other: {
