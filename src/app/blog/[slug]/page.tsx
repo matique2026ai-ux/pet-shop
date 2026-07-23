@@ -28,8 +28,13 @@ export async function generateMetadata(
     };
   }
 
-  const title = `${post.title} | مدونة مخالب وأجنحة`;
-  const description = post.excerpt || `اقرأ مقال ${post.title} في مدونة مخالب وأجنحة للحيوانات الأليفة.`;
+  const titleText = typeof post.title === "string" ? post.title : (post.title?.ar || post.title?.en || "مقال");
+  const title = `${titleText} | مدونة مخالب وأجنحة`;
+  
+  const excerptObj = post.excerpt || post.content;
+  const excerptText = typeof excerptObj === "string" ? excerptObj : (excerptObj?.ar || excerptObj?.en || "");
+  const description = excerptText ? excerptText.substring(0, 150) : `اقرأ مقال ${titleText} في مدونة مخالب وأجنحة للحيوانات الأليفة.`;
+  
   const images = post.image_url ? [post.image_url] : [];
 
   return {
@@ -60,10 +65,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     const baseUrl = "https://www.pawsandwings.com";
     const absoluteImage = post.image_url?.startsWith("http") ? post.image_url : `${baseUrl}${post.image_url}`;
 
+    const titleText = typeof post.title === "string" ? post.title : (post.title?.ar || post.title?.en || "مقال");
+    const contentObj = post.excerpt || post.content;
+    const contentText = typeof contentObj === "string" ? contentObj : (contentObj?.ar || contentObj?.en || "");
+
     jsonLd = {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": post.title,
+      "headline": titleText,
       "image": absoluteImage ? [absoluteImage] : [],
       "datePublished": post.created_at,
       "dateModified": post.updated_at || post.created_at,
@@ -79,7 +88,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           "url": `${baseUrl}/logo-badge.png`
         }
       },
-      "description": post.excerpt || post.content?.substring(0, 150)
+      "description": contentText.substring(0, 150)
     };
   }
 
