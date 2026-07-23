@@ -196,13 +196,9 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex items-center justify-between h-16">
 
-            {/* Logo Component C4 - Floating Badge Style */}
-            <Link href="/" className="relative shrink-0 group logo-gold-pulse z-50 flex items-center justify-center w-24 sm:w-28 md:w-32 h-16">
-              {/* Solid Medallion Badge - Overflows top & bottom to look like a separate floating element */}
-              <div className="absolute -top-[12px] sm:-top-[16px] md:-top-[24px] w-[88px] h-[88px] sm:w-[96px] sm:h-[96px] md:w-[112px] md:h-[112px] bg-[#16100A] rounded-full shadow-2xl shadow-black/50 border border-[#E3602D]/30 transition-transform duration-300 group-hover:scale-105 pointer-events-none z-0 flex items-center justify-center">
-                {/* The Logo perfectly centered inside the circular badge */}
-                <LogoC4 className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 filter drop-shadow-lg" />
-              </div>
+            {/* Logo Component C4 - Classic Professional Style */}
+            <Link href="/" className="relative shrink-0 group logo-gold-pulse z-50 flex items-center h-16 mr-2">
+              <LogoC4 className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 filter drop-shadow-md transition-transform duration-300 group-hover:scale-105" />
             </Link>
 
             {/* Desktop Nav Links */}
