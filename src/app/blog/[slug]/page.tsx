@@ -91,7 +91,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       )}
-      <BlogClientPage params={params} />
+      <BlogClientPage slug={resolvedParams.slug} />
     </>
   );
 }

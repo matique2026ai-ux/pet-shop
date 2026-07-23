@@ -7,7 +7,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, Clock, User, Share2, MessageCircle } from "lucide-react";
 import AnimatedSection from "@/components/animated-section";
 import type { BlogPost } from "@/lib/use-translated-data";
-import React, { use } from "react";
+import React from "react";
 
 interface BlogComment {
   id: string | number;
@@ -16,8 +16,7 @@ interface BlogComment {
   created_at: string;
 }
 
-export default function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = use(params);
+export default function BlogClientPage({ slug }: { slug: string }) {
   const { t, dir, lang } = useI18n();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
