@@ -85,7 +85,7 @@ export function getWelcomeEmailHtml(fullName: string, lang = "ar"): string {
             <!-- Header -->
             <tr>
               <td align="center" style="background: linear-gradient(135deg, #1E2D24 0%, #0E1611 100%); padding:36px 20px; text-align:center;">
-                <img src="https://pet-shop.vercel.app/logo-badge.png" alt="Paws & Wings Logo" width="90" height="90" style="display:block; margin:0 auto 12px auto; border-radius:50%; border:2px solid #E3602D;">
+                <img src="${process.env.NEXT_PUBLIC_SITE_URL || "https://paws-wings.vercel.app"}/logo-badge.png" alt="Paws & Wings Logo" width="90" height="90" style="display:block; margin:0 auto 12px auto; border-radius:50%; border:2px solid #E3602D;">
                 <h1 style="color:#F1C290; margin:0; font-size:24px; font-weight:800;">مخالب وأجنحة</h1>
                 <p style="color:#ffffff; opacity:0.8; margin:6px 0 0 0; font-size:13px;">المتجر الإلكتروني الرائد للحيوانات الأليفة والخيول في الجزائر</p>
               </td>
@@ -106,7 +106,7 @@ export function getWelcomeEmailHtml(fullName: string, lang = "ar"): string {
                   </ul>
                 </div>
                 <div style="text-align:center; margin:32px 0 16px 0;">
-                  <a href="https://pet-shop.vercel.app/products" style="background: linear-gradient(135deg, #E3602D 0%, #A87A2E 100%); color:#ffffff; font-weight:bold; padding:14px 32px; border-radius:50px; text-decoration:none; display:inline-block; font-size:15px; box-shadow:0 6px 18px rgba(227, 96, 45, 0.35);">
+                  <a href="${process.env.NEXT_PUBLIC_SITE_URL || "https://paws-wings.vercel.app"}/products" style="background: linear-gradient(135deg, #E3602D 0%, #A87A2E 100%); color:#ffffff; font-weight:bold; padding:14px 32px; border-radius:50px; text-decoration:none; display:inline-block; font-size:15px; box-shadow:0 6px 18px rgba(227, 96, 45, 0.35);">
                     ابدأ التصفح والتسوق الآن 🛍️
                   </a>
                 </div>
@@ -194,7 +194,7 @@ export function getOrderReceiptEmailHtml(order: OrderReceipt, lang = "ar"): stri
             <!-- Header -->
             <tr>
               <td align="center" style="background: linear-gradient(135deg, #1E2D24 0%, #0E1611 100%); padding:32px 20px; text-align:center;">
-                <img src="https://pet-shop.vercel.app/logo-badge.png" alt="Paws & Wings" width="80" height="80" style="display:block; margin:0 auto 10px auto; border-radius:50%; border:2px solid #E3602D;">
+                <img src="${process.env.NEXT_PUBLIC_SITE_URL || "https://paws-wings.vercel.app"}/logo-badge.png" alt="Paws & Wings" width="80" height="80" style="display:block; margin:0 auto 10px auto; border-radius:50%; border:2px solid #E3602D;">
                 <h1 style="color:#F1C290; margin:0; font-size:22px; font-weight:800;">تأكيد استلام الطلبية</h1>
                 <div style="display:inline-block; background-color:#E3602D; color:#ffffff; font-weight:bold; padding:4px 14px; border-radius:20px; font-size:13px; margin-top:8px;">
                   رقم الطلب: #${orderRef}
