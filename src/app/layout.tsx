@@ -45,11 +45,7 @@ export const metadata: Metadata = {
       ar: "/",
     },
   },
-  icons: {
-    icon: "/logo-badge.png",
-    shortcut: "/logo-badge.png",
-    apple: "/logo-badge.png",
-  },
+
   description: "مخالب وأجنحة — المتجر الإلكتروني الرائد في الجزائر لكل ما يخص الحيوانات الأليفة والخيول. أغذية، إكسسوارات، ورعاية بيطرية متكاملة.",
   keywords: ["مخالب وأجنحة", "متجر حيوانات أليفة سطيف", "عيادة بيطرية سطيف", "Paws & Wings", "مستلزمات الخيول والحيوانات الأليفة", "توصيل سريع سطيف", "pet shop horses Algeria"],
   other: {
