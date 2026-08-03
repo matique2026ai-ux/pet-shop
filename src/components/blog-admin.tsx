@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import {
   Plus, Edit2, Trash2, CheckCircle, XCircle,
-  BookOpen, Calendar, User, Globe, X, AlertTriangle, Upload, ImageIcon, RefreshCw
+  BookOpen, Calendar, User, Globe, X, AlertTriangle, Upload, ImageIcon, RefreshCw, Code, Eye
 } from "lucide-react";
 import type { BlogPost } from "@/lib/use-translated-data";
 import { compressImage } from "@/lib/image-utils";
@@ -110,6 +110,7 @@ export default function BlogAdminPanel({ adminSecret }: { adminSecret: string })
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [activeLang, setActiveLang] = useState<"ar" | "fr" | "en">("ar");
+  const [editorMode, setEditorMode] = useState<"visual" | "html">("visual");
   const [uploadingImg, setUploadingImg] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -324,19 +325,44 @@ export default function BlogAdminPanel({ adminSecret }: { adminSecret: string })
             </div>
 
             {/* Language tabs + multilingual fields */}
-            <div className="border border-gray-100 rounded-xl overflow-hidden">
-              <div className="flex items-center gap-1 p-2 bg-gray-50 border-b border-gray-100">
-                <Globe className="w-4 h-4 text-gray-400 mx-1" />
-                {(["ar", "fr", "en"] as const).map((l) => (
-                  <LangTab
-                    key={l}
-                    active={activeLang === l}
-                    label={langLabels[l]}
-                    onClick={() => setActiveLang(l)}
-                  />
-                ))}
+            <div className="border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+              <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-gray-50 border-b border-gray-200">
+                <div className="flex items-center gap-1">
+                  <Globe className="w-4 h-4 text-gray-400 mx-1" />
+                  {(["ar", "fr", "en"] as const).map((l) => (
+                    <LangTab
+                      key={l}
+                      active={activeLang === l}
+                      label={langLabels[l]}
+                      onClick={() => setActiveLang(l)}
+                    />
+                  ))}
+                </div>
+                <div className="flex items-center bg-gray-200/80 p-1 rounded-xl gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setEditorMode("visual")}
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 ${
+                      editorMode === "visual" ? "bg-white text-emerald-700 shadow-sm" : "text-gray-600 hover:text-gray-900"
+                    }`}
+                  >
+                    <Eye className="w-3.5 h-3.5" />
+                    Visual (WYSIWYG)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEditorMode("html")}
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 ${
+                      editorMode === "html" ? "bg-emerald-600 text-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+                    }`}
+                  >
+                    <Code className="w-3.5 h-3.5" />
+                    HTML Code
+                  </button>
+                </div>
               </div>
-              <div className="p-4 space-y-4" dir={activeLang === "ar" ? "rtl" : "ltr"}>
+
+              <div className="p-5 space-y-4" dir={activeLang === "ar" ? "rtl" : "ltr"}>
                 {activeLang === "ar" && (
                   <>
                     <div>
@@ -345,21 +371,36 @@ export default function BlogAdminPanel({ adminSecret }: { adminSecret: string })
                         value={form.titleAr}
                         onChange={(e) => setForm({ ...form, titleAr: e.target.value })}
                         placeholder="عنوان المقال"
-                        className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Content (AR)</label>
-                      <div className="bg-white rounded-xl overflow-hidden border border-gray-200">
-                        <ReactQuill
-                          theme="snow"
-                          modules={quillModules}
-                          value={form.contentAr}
-                          onChange={(val) => setForm({ ...form, contentAr: val })}
-                          placeholder="محتوى المقال..."
-                          className="w-full text-sm [&_.ql-container]:min-h-[200px] [&_.ql-editor]:min-h-[200px]"
-                        />
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Content (AR)</label>
+                        <span className="text-[11px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-mono">
+                          {editorMode === "html" ? "HTML Source Mode" : "Visual Editor"}
+                        </span>
                       </div>
+                      {editorMode === "visual" ? (
+                        <div className="bg-white rounded-xl overflow-hidden border border-gray-200">
+                          <ReactQuill
+                            theme="snow"
+                            modules={quillModules}
+                            value={form.contentAr}
+                            onChange={(val) => setForm({ ...form, contentAr: val })}
+                            placeholder="محتوى المقال..."
+                            className="w-full text-sm [&_.ql-container]:min-h-[220px] [&_.ql-editor]:min-h-[220px]"
+                          />
+                        </div>
+                      ) : (
+                        <textarea
+                          value={form.contentAr}
+                          onChange={(e) => setForm({ ...form, contentAr: e.target.value })}
+                          placeholder="<p>أدخل كود HTML الخاص بالمقال هنا...</p>"
+                          className="w-full text-xs font-mono p-4 bg-[#121F18] text-emerald-300 border border-emerald-900/60 rounded-xl leading-relaxed min-h-[260px] focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-inner"
+                          dir="ltr"
+                        />
+                      )}
                     </div>
                   </>
                 )}
@@ -371,21 +412,36 @@ export default function BlogAdminPanel({ adminSecret }: { adminSecret: string })
                         value={form.titleFr}
                         onChange={(e) => setForm({ ...form, titleFr: e.target.value })}
                         placeholder="Titre de l'article"
-                        className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Content (FR)</label>
-                      <div className="bg-white rounded-xl overflow-hidden border border-gray-200">
-                        <ReactQuill
-                          theme="snow"
-                          modules={quillModules}
-                          value={form.contentFr}
-                          onChange={(val) => setForm({ ...form, contentFr: val })}
-                          placeholder="Contenu de l'article..."
-                          className="w-full text-sm [&_.ql-container]:min-h-[200px] [&_.ql-editor]:min-h-[200px]"
-                        />
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Content (FR)</label>
+                        <span className="text-[11px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-mono">
+                          {editorMode === "html" ? "HTML Source Mode" : "Visual Editor"}
+                        </span>
                       </div>
+                      {editorMode === "visual" ? (
+                        <div className="bg-white rounded-xl overflow-hidden border border-gray-200">
+                          <ReactQuill
+                            theme="snow"
+                            modules={quillModules}
+                            value={form.contentFr}
+                            onChange={(val) => setForm({ ...form, contentFr: val })}
+                            placeholder="Contenu de l'article..."
+                            className="w-full text-sm [&_.ql-container]:min-h-[220px] [&_.ql-editor]:min-h-[220px]"
+                          />
+                        </div>
+                      ) : (
+                        <textarea
+                          value={form.contentFr}
+                          onChange={(e) => setForm({ ...form, contentFr: e.target.value })}
+                          placeholder="<p>Saisissez le code HTML de l'article ici...</p>"
+                          className="w-full text-xs font-mono p-4 bg-[#121F18] text-emerald-300 border border-emerald-900/60 rounded-xl leading-relaxed min-h-[260px] focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-inner"
+                          dir="ltr"
+                        />
+                      )}
                     </div>
                   </>
                 )}
@@ -397,21 +453,36 @@ export default function BlogAdminPanel({ adminSecret }: { adminSecret: string })
                         value={form.titleEn}
                         onChange={(e) => setForm({ ...form, titleEn: e.target.value })}
                         placeholder="Article title"
-                        className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Content (EN)</label>
-                      <div className="bg-white rounded-xl overflow-hidden border border-gray-200">
-                        <ReactQuill
-                          theme="snow"
-                          modules={quillModules}
-                          value={form.contentEn}
-                          onChange={(val) => setForm({ ...form, contentEn: val })}
-                          placeholder="Article content..."
-                          className="w-full text-sm [&_.ql-container]:min-h-[200px] [&_.ql-editor]:min-h-[200px]"
-                        />
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Content (EN)</label>
+                        <span className="text-[11px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-mono">
+                          {editorMode === "html" ? "HTML Source Mode" : "Visual Editor"}
+                        </span>
                       </div>
+                      {editorMode === "visual" ? (
+                        <div className="bg-white rounded-xl overflow-hidden border border-gray-200">
+                          <ReactQuill
+                            theme="snow"
+                            modules={quillModules}
+                            value={form.contentEn}
+                            onChange={(val) => setForm({ ...form, contentEn: val })}
+                            placeholder="Article content..."
+                            className="w-full text-sm [&_.ql-container]:min-h-[220px] [&_.ql-editor]:min-h-[220px]"
+                          />
+                        </div>
+                      ) : (
+                        <textarea
+                          value={form.contentEn}
+                          onChange={(e) => setForm({ ...form, contentEn: e.target.value })}
+                          placeholder="<p>Enter HTML article content here...</p>"
+                          className="w-full text-xs font-mono p-4 bg-[#121F18] text-emerald-300 border border-emerald-900/60 rounded-xl leading-relaxed min-h-[260px] focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-inner"
+                          dir="ltr"
+                        />
+                      )}
                     </div>
                   </>
                 )}

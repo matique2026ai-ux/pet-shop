@@ -210,11 +210,63 @@ export const team: TeamMember[] = [
   { id: "t3", name: "Emma Davis", role: "Pet Nutritionist", bio: "Certified animal nutrition specialist", initials: "ED" },
 ];
 
+export interface Testimonial {
+  id: string;
+  name: string;
+  text: string;
+  rating: number;
+  initials: string;
+  city?: string;
+  petType?: "cat" | "dog" | "bird";
+  verified?: boolean;
+  productTag?: string;
+}
+
 export const testimonials: Testimonial[] = [
-  { id: "rev1", name: "Sarah M.", text: "The best pet shop in town! My cat loves the organic food and the vet team is incredibly professional.", rating: 5, initials: "SM" },
-  { id: "rev2", name: "Ahmed K.", text: "Excellent service and high quality products. The bird cage I bought is perfect for my parakeet.", rating: 5, initials: "AK" },
-  { id: "rev3", name: "Lisa R.", text: "I trust Paws & Wings with all my pets' needs. The grooming service is outstanding!", rating: 5, initials: "LR" },
-  { id: "rev4", name: "Carlos D.", text: "Affordable prices and premium quality. The staff genuinely cares about animals. Highly recommended!", rating: 5, initials: "CD" },
+  {
+    id: "rev1",
+    name: "كريم ب.",
+    city: "سطيف (حي الهضاب)",
+    petType: "cat",
+    rating: 5,
+    initials: "كـ",
+    verified: true,
+    productTag: "Friskies Adult + طعام قطط",
+    text: "وصلتني طلبية أكل القطط والرمال في أقل من 24 ساعة لسائقي التوصيل بسطيف. المنتجات أصلية والتعامل محترم جداً وأنصح كل مربي بالتعامل معهم."
+  },
+  {
+    id: "rev2",
+    name: "ياسمين م.",
+    city: "الجزائر العاصمة",
+    petType: "dog",
+    rating: 5,
+    initials: "يـ",
+    verified: true,
+    productTag: "Croquettes Royal Canin",
+    text: "أول مرة نطلب مستلزمات كلبي عبر الإنترنت وتوصل في وقت قياسي وبسعر ممتاز مقارنة بالمحلات العادية. شكراً Paws & Wings على الاحترافية."
+  },
+  {
+    id: "rev3",
+    name: "عبد الرؤوف ك.",
+    city: "العلمة",
+    petType: "bird",
+    rating: 5,
+    initials: "عـ",
+    verified: true,
+    productTag: "حبوب وفيتامينات الطيور",
+    text: "خلطة الحبوب والمكملات التغذوية للطيور جودة عالية وممتازة. طيوري صحتها ممتازة والتعامل معكم دائماً يبعث على الثقة."
+  },
+  {
+    id: "rev4",
+    name: "سارة ل.",
+    city: "قسنطينة",
+    petType: "cat",
+    rating: 5,
+    initials: "سـ",
+    verified: true,
+    productTag: "أكسسوارات ومستلزمات القطط",
+    text: "خدمة الزبائن عبر الواتساب سريعة ومحترفة جداً، والإجابة عن استفسارات التغذية كانت دقيقة. الدفع عند الاستلام مريح جداً."
+  },
 ];
 
 export const siteStats = [

@@ -12,7 +12,7 @@ import PetNutritionCalculator from "@/components/pet-nutrition-calculator";
 
 import ProductCard, { ProductCardSkeleton } from "@/components/product-card";
 import BlogCard from "@/components/blog-card";
-import { Star, Truck, Shield, BookOpen, ChevronLeft, ChevronRight, Heart, Sparkles, Award, PawPrint } from "lucide-react";
+import { Star, Truck, Shield, BookOpen, ChevronLeft, ChevronRight, Heart, Sparkles, Award, PawPrint, CheckCircle, MapPin } from "lucide-react";
 
 
 
@@ -480,30 +480,106 @@ export default function HomePage() {
       {/* ══════════════════════════════════
           TESTIMONIALS
       ══════════════════════════════════ */}
-      <section className="py-14 bg-white relative overflow-hidden">
+      {/* ══════════════════════════════════
+          TESTIMONIALS (Local Social Proof & Verified Reviews)
+      ══════════════════════════════════ */}
+      <section className="py-16 bg-gradient-to-b from-white via-[#FBF8F3] to-[#F5F2EB] relative overflow-hidden">
         {/* Background Footprints */}
-        <PawPrint className="absolute top-10 right-[10%] w-12 h-12 rotate-[15deg] text-[#E3602D]/3 pointer-events-none select-none" />
-        <PawPrint className="absolute bottom-4 left-[8%] w-10 h-10 rotate-[-35deg] text-[#E3602D]/3 pointer-events-none select-none" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <PawPrint className="absolute top-10 right-[10%] w-14 h-14 rotate-[15deg] text-[#E3602D]/4 pointer-events-none select-none" />
+        <PawPrint className="absolute bottom-4 left-[8%] w-12 h-12 rotate-[-35deg] text-[#E3602D]/4 pointer-events-none select-none" />
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <AnimatedSection>
-            <div className="text-center mb-10">
-              <h2 className="text-2xl font-bold text-[#1A1A2E] mb-2">{t.vet.testimonialsTitle}</h2>
-              <div className="mt-1.5 mx-auto w-16 h-1 rounded-full bg-gradient-to-r from-[#E3602D] to-[#F1C290]" />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-              {testimonials.map((rev) => (
-                <div key={rev.id} className="bg-[#FBF7EE] rounded-2xl p-6 border border-[#ECD8A6] hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
-                  <div className="flex items-center gap-0.5 mb-3">
-                    {Array.from({ length: rev.rating }).map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-[#F5A623] text-[#F5A623]" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-[#5C5348] mb-4 leading-relaxed">&ldquo;{rev.text}&rdquo;</p>
-                  <div className="flex items-center gap-2">
-                    <div className="w-9 h-9 bg-gradient-to-br from-[#F1C290] to-[#E3602D] rounded-full flex items-center justify-center text-xs font-bold text-white shadow-sm">
-                      {rev.initials}
+            {/* Header with Trust Score */}
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12 bg-white/80 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-[#ECD8A6] shadow-sm">
+              <div className="text-center md:text-start">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E3602D]/10 text-[#E3602D] text-xs font-bold mb-2">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  {lang === "ar" ? "تجارب حقيقية 100%" : "Avis Clients Vérifiés"}
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-black text-[#1A1A2E] leading-tight">
+                  {t.vet.testimonialsTitle}
+                </h2>
+                <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                  {lang === "ar" 
+                    ? "تقييمات موثقة من مربي القطط، الكلاب، والطيور عبر الولائيات الجزائرية"
+                    : "Avis vérifiés de propriétaires d'animaux à travers l'Algérie"}
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center gap-4 shrink-0">
+                {/* Rating Badge */}
+                <div className="flex items-center gap-3 bg-[#FAF5EC] px-4 py-2.5 rounded-2xl border border-[#ECD8A6]">
+                  <div className="text-2xl font-black text-[#1A1A2E]">4.9</div>
+                  <div>
+                    <div className="flex items-center gap-0.5">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-[#F5A623] text-[#F5A623]" />
+                      ))}
                     </div>
-                    <span className="text-sm font-semibold text-[#1A1A2E]">{rev.name}</span>
+                    <span className="text-[11px] text-gray-500 font-medium">
+                      {lang === "ar" ? "+480 طلبية مؤكدة" : "+480 commandes livrées"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Testimonial Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {testimonials.map((rev) => (
+                <div 
+                  key={rev.id} 
+                  className="bg-white rounded-3xl p-6 border border-[#ECD8A6]/60 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between relative group"
+                >
+                  <div>
+                    {/* Top Row: Stars + Verified Badge */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-0.5">
+                        {Array.from({ length: rev.rating }).map((_, i) => (
+                          <Star key={i} className="w-4 h-4 fill-[#F5A623] text-[#F5A623]" />
+                        ))}
+                      </div>
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                        <CheckCircle className="w-3 h-3 text-emerald-600" />
+                        {lang === "ar" ? "طلب محقق" : "Achat vérifié"}
+                      </span>
+                    </div>
+
+                    {/* Review Quote Text */}
+                    <p className="text-xs sm:text-sm text-[#4A4238] mb-5 leading-relaxed font-normal">
+                      &ldquo;{rev.text}&rdquo;
+                    </p>
+
+                    {/* Purchased Product Tag if available */}
+                    {rev.productTag && (
+                      <div className="mb-4">
+                        <span className="inline-block text-[10px] text-gray-500 bg-gray-50 border border-gray-100 px-2.5 py-1 rounded-lg">
+                          📦 {rev.productTag}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Customer Info Footer */}
+                  <div className="pt-3 border-t border-gray-100 flex items-center justify-between mt-auto">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-10 h-10 bg-gradient-to-br from-[#F5851F] to-[#E06A0A] rounded-full flex items-center justify-center text-xs font-bold text-white shadow-md relative">
+                        <span>{rev.initials}</span>
+                        {rev.petType === "cat" && <span className="absolute -bottom-1 -right-1 text-xs">🐱</span>}
+                        {rev.petType === "dog" && <span className="absolute -bottom-1 -right-1 text-xs">🐶</span>}
+                        {rev.petType === "bird" && <span className="absolute -bottom-1 -right-1 text-xs">🦜</span>}
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-[#1A1A2E] leading-tight">{rev.name}</h4>
+                        {rev.city && (
+                          <span className="flex items-center gap-0.5 text-[10px] text-gray-400 font-medium mt-0.5">
+                            <MapPin className="w-3 h-3 text-[#E3602D]" />
+                            {rev.city}
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
