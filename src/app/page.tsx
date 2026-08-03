@@ -332,7 +332,7 @@ export default function HomePage() {
 
           <div
             className="flex overflow-x-auto lg:grid lg:grid-cols-5 gap-6 pb-6 px-1 scrollbar-none snap-x snap-mandatory"
-            style={{ touchAction: "pan-x", WebkitOverflowScrolling: "touch" } as React.CSSProperties}
+            style={{ touchAction: "pan-x pan-y", WebkitOverflowScrolling: "touch" } as React.CSSProperties}
           >
             {categories.map((cat, idx) => (
               <AnimatedSection
