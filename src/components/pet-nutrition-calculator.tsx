@@ -2,25 +2,42 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Sparkles, Calculator, Droplets, Utensils, ArrowRight, PawPrint, CheckCircle2 } from "lucide-react";
 import { useI18n } from "@/lib/i18n-context";
+import { Utensils as FoodIcon, Droplets as WaterIcon, Sparkles as SparklesIcon, Calculator as CalcIcon, ArrowRight as ArrowIcon, PawPrint as PawIcon } from "lucide-react";
 
 export default function PetNutritionCalculator() {
   const { lang, dir } = useI18n();
   const [petType, setPetType] = useState<"cat" | "dog" | "bird">("cat");
-  const [weight, setWeight] = useState<number>(3);
+  const [weight, setWeight] = useState<number>(4);
   const [ageGroup, setAgeGroup] = useState<"junior" | "adult" | "senior">("adult");
   const [activity, setActivity] = useState<"low" | "normal" | "high">("normal");
 
-  // Calculate daily portion (g) & daily hydration (ml)
-  let baseFactor = petType === "cat" ? 15 : petType === "dog" ? 18 : 8;
+  // Handle pet type change with realistic weight defaults and ranges
+  const handlePetTypeChange = (type: "cat" | "dog" | "bird") => {
+    setPetType(type);
+    if (type === "cat") setWeight(4);
+    else if (type === "dog") setWeight(10);
+    else if (type === "bird") setWeight(0.2);
+  };
+
+  // Realistic weight slider range per pet type
+  const weightConfig = {
+    cat: { min: 0.5, max: 12, step: 0.5 },
+    dog: { min: 1, max: 60, step: 1 },
+    bird: { min: 0.03, max: 1.5, step: 0.01 },
+  }[petType];
+
+  // Calculate daily portion (g) & daily hydration (ml) with realistic biology factors
+  let baseFactor = petType === "cat" ? 15 : petType === "dog" ? 18 : 70;
+  const waterFactor = petType === "cat" ? 50 : petType === "dog" ? 60 : 100;
+
   if (ageGroup === "junior") baseFactor *= 1.3;
   if (ageGroup === "senior") baseFactor *= 0.85;
   if (activity === "high") baseFactor *= 1.2;
   if (activity === "low") baseFactor *= 0.9;
 
-  const dailyPortion = Math.round(weight * baseFactor);
-  const dailyWater = Math.round(weight * 50);
+  const dailyPortion = Math.max(1, Math.round(weight * baseFactor));
+  const dailyWater = Math.max(5, Math.round(weight * waterFactor));
 
   const getProductRecommendation = () => {
     if (petType === "cat") return { label: lang === "ar" ? "أغذية القطط الممتازة" : "Nourriture pour chats", link: "/products/cats" };
@@ -30,18 +47,26 @@ export default function PetNutritionCalculator() {
 
   const rec = getProductRecommendation();
 
+  // Format weight display (show grams for small birds)
+  const formatWeightDisplay = (w: number) => {
+    if (petType === "bird" && w < 1) {
+      return `${Math.round(w * 1000)} g (${w} kg)`;
+    }
+    return `${w} kg`;
+  };
+
   return (
-    <section className="py-12 bg-gradient-to-br from-[#121F18] via-[#1E2D24] to-[#0A120D] text-white rounded-3xl relative overflow-hidden my-12 shadow-2xl border border-white/10" dir={dir}>
+    <section className="py-12 bg-gradient-to-br from-[#121F18] via-[#1E2D24] to-[#0A120D] text-[#FFF] rounded-3xl relative overflow-hidden my-12 shadow-2xl border border-white/10" dir={dir}>
       {/* Glow Orbs & Paw Decor */}
       <div className="absolute top-0 right-1/4 w-80 h-80 bg-[#F5851F]/10 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none" />
-      <PawPrint className="absolute top-6 left-6 w-20 h-20 text-white/5 rotate-[-20deg] pointer-events-none" />
-      <PawPrint className="absolute bottom-6 right-6 w-24 h-24 text-white/5 rotate-[15deg] pointer-events-none" />
+      <PawIcon className="absolute top-6 left-6 w-20 h-20 text-white/5 rotate-[-20deg] pointer-events-none" />
+      <PawIcon className="absolute bottom-6 right-6 w-24 h-24 text-white/5 rotate-[15deg] pointer-events-none" />
 
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-10">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-[#F1C290] border border-white/15 text-xs font-semibold mb-3 shadow-md">
-            <Calculator className="w-4 h-4 text-[#F5851F]" />
+            <CalcIcon className="w-4 h-4 text-[#F5851F]" />
             <span>{lang === "ar" ? "حاسبة التغذية الذكية 🥗" : "Calculateur Nutritionnel"}</span>
           </span>
           <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight mb-3">
@@ -65,13 +90,13 @@ export default function PetNutritionCalculator() {
               </label>
               <div className="grid grid-cols-3 gap-2">
                 {[
-                  { id: "cat", label: lang === "ar" ? "🐱 قطة" : "Chat", icon: "🐱" },
-                  { id: "dog", label: lang === "ar" ? "🐶 كلب" : "Chien", icon: "🐶" },
-                  { id: "bird", label: lang === "ar" ? "🦜 طائر" : "Oiseau", icon: "🦜" },
+                  { id: "cat" as const, label: lang === "ar" ? "🐱 قطة" : "Chat", icon: "🐱" },
+                  { id: "dog" as const, label: lang === "ar" ? "🐶 كلب" : "Chien", icon: "🐶" },
+                  { id: "bird" as const, label: lang === "ar" ? "🦜 طائر" : "Oiseau", icon: "🦜" },
                 ].map((p) => (
                   <button
                     key={p.id}
-                    onClick={() => setPetType(p.id as any)}
+                    onClick={() => handlePetTypeChange(p.id)}
                     className={`py-3 px-3 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 border ${
                       petType === p.id
                         ? "bg-[#F5851F] text-white border-[#F5851F] shadow-lg shadow-[#F5851F]/30"
@@ -89,17 +114,17 @@ export default function PetNutritionCalculator() {
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-bold text-[#F1C290] uppercase tracking-wider">
-                  2. {lang === "ar" ? "وزن الحيوان الأليف (كجم)" : "Poids (kg)"}
+                  2. {lang === "ar" ? "وزن الحيوان الأليف" : "Poids"}
                 </label>
-                <span className="text-lg font-black text-white bg-emerald-500/20 px-3 py-0.5 rounded-full border border-emerald-500/30">
-                  {weight} kg
+                <span className="text-sm font-black text-white bg-emerald-500/20 px-3 py-0.5 rounded-full border border-emerald-500/30">
+                  {formatWeightDisplay(weight)}
                 </span>
               </div>
               <input
                 type="range"
-                min="0.5"
-                max="40"
-                step="0.5"
+                min={weightConfig.min}
+                max={weightConfig.max}
+                step={weightConfig.step}
                 value={weight}
                 onChange={(e) => setWeight(Number(e.target.value))}
                 className="w-full h-2.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#F5851F]"
@@ -114,7 +139,7 @@ export default function PetNutritionCalculator() {
                 </label>
                 <select
                   value={ageGroup}
-                  onChange={(e) => setAgeGroup(e.target.value as any)}
+                  onChange={(e) => setAgeGroup(e.target.value as "junior" | "adult" | "senior")}
                   className="w-full bg-white/10 border border-white/15 rounded-xl py-2.5 px-3 text-xs text-white focus:outline-none focus:ring-2 focus:ring-[#F5851F]"
                 >
                   <option value="junior" className="bg-[#121F18] text-white">{lang === "ar" ? "صغير (أقل من سنة)" : "Junior"}</option>
@@ -128,7 +153,7 @@ export default function PetNutritionCalculator() {
                 </label>
                 <select
                   value={activity}
-                  onChange={(e) => setActivity(e.target.value as any)}
+                  onChange={(e) => setActivity(e.target.value as "low" | "normal" | "high")}
                   className="w-full bg-white/10 border border-white/15 rounded-xl py-2.5 px-3 text-xs text-white focus:outline-none focus:ring-2 focus:ring-[#F5851F]"
                 >
                   <option value="low" className="bg-[#121F18] text-white">{lang === "ar" ? "هادئ / في المنزل" : "Calme"}</option>
@@ -142,19 +167,19 @@ export default function PetNutritionCalculator() {
           {/* ── RIGHT (Results Card 5/12) ── */}
           <div className="lg:col-span-5 bg-gradient-to-br from-white/10 to-white/5 rounded-3xl p-6 border border-white/15 shadow-xl space-y-5 text-center">
             <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#F1C290] bg-white/10 px-3 py-1 rounded-full border border-white/10">
-              <Sparkles className="w-3.5 h-3.5 text-[#F5851F]" />
+              <SparklesIcon className="w-3.5 h-3.5 text-[#F5851F]" />
               <span>{lang === "ar" ? "النتيجة الموصى بها بيطرياً" : "Résultat Recommandé"}</span>
             </div>
 
             <div className="grid grid-cols-2 gap-3 pt-2">
               <div className="bg-black/30 p-4 rounded-2xl border border-white/10">
-                <Utensils className="w-6 h-6 text-[#F5851F] mx-auto mb-1" />
+                <FoodIcon className="w-6 h-6 text-[#F5851F] mx-auto mb-1" />
                 <p className="text-2xl font-black text-white">{dailyPortion}g</p>
                 <p className="text-[11px] text-white/60">{lang === "ar" ? "طعام / يومياً" : "Graines/Nourriture/j"}</p>
               </div>
 
               <div className="bg-black/30 p-4 rounded-2xl border border-white/10">
-                <Droplets className="w-6 h-6 text-sky-400 mx-auto mb-1" />
+                <WaterIcon className="w-6 h-6 text-sky-400 mx-auto mb-1" />
                 <p className="text-2xl font-black text-white">{dailyWater}ml</p>
                 <p className="text-[11px] text-white/60">{lang === "ar" ? "ماء نقي / يومياً" : "Eau fraîche/j"}</p>
               </div>
@@ -171,7 +196,7 @@ export default function PetNutritionCalculator() {
                 className="w-full bg-gradient-to-r from-[#F5851F] to-[#E06A0A] text-white py-3 rounded-2xl font-bold text-xs sm:text-sm hover:opacity-95 transition-all shadow-lg shadow-[#F5851F]/30 inline-flex items-center justify-center gap-2"
               >
                 <span>{rec.label}</span>
-                <ArrowRight className="w-4 h-4 rtl:-scale-x-100" />
+                <ArrowIcon className="w-4 h-4 rtl:-scale-x-100" />
               </Link>
             </div>
           </div>
@@ -180,3 +205,4 @@ export default function PetNutritionCalculator() {
     </section>
   );
 }
+
