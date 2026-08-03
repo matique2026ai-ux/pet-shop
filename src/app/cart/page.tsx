@@ -46,7 +46,7 @@ function MastercardIcon({ className = "h-4" }: { className?: string }) {
   );
 }
 
-import { WILAYAS, WILAYAS_AR } from "@/lib/wilayas";
+import { WILAYAS, WILAYAS_AR, getNumberedWilayaLabel, isSetifWilaya } from "@/lib/wilayas";
 
 const SOUTH_WILAYAS = new Set([
   "Adrar", "Béchar", "Tindouf", "Tamanrasset", "Ouargla", "Illizi",

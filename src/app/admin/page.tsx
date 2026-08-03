@@ -51,11 +51,12 @@ const sidebarTabs = [
   { label: "Products", icon: Package2, key: "products" },
   { label: "Orders", icon: ShoppingCart, key: "orders" },
   { label: "Analytics", icon: BarChart3, key: "analytics" },
-   { label: "Categories", icon: Tag, key: "categories" },
-   { label: "Reviews", icon: Star, key: "reviews" },
-   { label: "Blog", icon: BookOpen, key: "blog" },
-   { label: "Settings", icon: Settings, key: "settings" },
-   { label: "Translations", icon: Languages, key: "translations" },
+  { label: "Categories", icon: Tag, key: "categories" },
+  { label: "Reviews", icon: Star, key: "reviews" },
+  { label: "Blog", icon: BookOpen, key: "blog" },
+  { label: "Hero Media", icon: Video, key: "hero" },
+  { label: "Settings", icon: Settings, key: "settings" },
+  { label: "Translations", icon: Languages, key: "translations" },
 ];
 
 interface Category {
@@ -2347,6 +2348,11 @@ export default function AdminDashboard() {
             {/* ===== BLOG ===== */}
             {activeTab === "blog" && (
               <BlogAdminPanel adminSecret={getSecret()} />
+            )}
+
+            {/* ===== HERO MEDIA ===== */}
+            {activeTab === "hero" && (
+              <HeroVideoManager adminSecret={getSecret()} />
             )}
 
             {/* ===== SETTINGS ===== */}

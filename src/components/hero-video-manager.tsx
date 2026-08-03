@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Upload, Trash2, Film } from "lucide-react";
 
-export default function HeroVideoManager() {
+export default function HeroVideoManager({ adminSecret }: { adminSecret?: string }) {
   const [videos, setVideos] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);

@@ -5,8 +5,8 @@ import { useState, useEffect } from "react";
 export type AdminLang = "en" | "fr" | "ar";
 
 type AdminTranslations = {
-  nav: { dashboard: string; products: string; orders: string; analytics: string; categories: string; reviews: string; blog: string; settings: string; translations: string; viewStore: string };
-  title: { dashboard: string; products: string; orders: string; analytics: string; categories: string; reviews: string; blog: string; settings: string; translations: string };
+  nav: { dashboard: string; products: string; orders: string; analytics: string; categories: string; reviews: string; blog: string; hero: string; settings: string; translations: string; viewStore: string };
+  title: { dashboard: string; products: string; orders: string; analytics: string; categories: string; reviews: string; blog: string; hero: string; settings: string; translations: string };
   lang: { label: string; en: string; fr: string; ar: string };
   common: { loading: string; save: string; cancel: string; create: string; update: string; delete: string; search: string; all: string; confirm: string; close: string; add: string; name: string; id: string; icon: string; order: string; required: string };
   dashboard: {
@@ -57,8 +57,8 @@ type AdminTranslations = {
 };
 
 const en: AdminTranslations = {
-  nav: { dashboard: "Dashboard", products: "Products", orders: "Orders", analytics: "Analytics", categories: "Categories", reviews: "Reviews", blog: "Blog", settings: "Settings", translations: "Translations", viewStore: "View Store" },
-  title: { dashboard: "Admin Dashboard", products: "Products", orders: "Orders", analytics: "Analytics", categories: "Categories", reviews: "Reviews", blog: "Blog", settings: "Settings", translations: "Translations" },
+  nav: { dashboard: "Dashboard", products: "Products", orders: "Orders", analytics: "Analytics", categories: "Categories", reviews: "Reviews", blog: "Blog", hero: "Hero Media", settings: "Settings", translations: "Translations", viewStore: "View Store" },
+  title: { dashboard: "Admin Dashboard", products: "Products", orders: "Orders", analytics: "Analytics", categories: "Categories", reviews: "Reviews", blog: "Blog", hero: "Hero Media Carousel & Videos", settings: "Settings", translations: "Translations" },
   lang: { label: "Language", en: "English", fr: "Français", ar: "العربية" },
   common: { loading: "Loading...", save: "Save", cancel: "Cancel", create: "Create", update: "Update", delete: "Delete", search: "Search", all: "All", confirm: "Confirm", close: "Close", add: "Add", name: "Name", id: "ID", icon: "Icon", order: "Order", required: "is required" },
   dashboard: {
@@ -69,7 +69,7 @@ const en: AdminTranslations = {
   products: {
     title: "Products", addProduct: "Add Product", editProduct: "Edit Product", searchPlaceholder: "Search products...",
     allCategories: "All Categories", allStock: "All Stock", inStock: "In Stock", outOfStock: "Out of Stock",
-    stockQuantity: "Stock Quantity", stockHelp: "0 = out of stock. Product is marked “In Stock” when quantity > 0.",
+    stockQuantity: "Stock Quantity", stockHelp: "0 = out of stock. Product is “In Stock” when quantity > 0.",
     noProducts: "No products yet", addFirst: "Add your first product to get started", filtersNoMatch: "No products match your filters", clearFilters: "Clear filters",
     name: "Name", category: "Category", subcategory: "Subcategory", noSubcategories: "No subcategories available", addSubcategoryQuick: "+ Add Subcategory", price: "Price", oldPrice: "Old Price", stock: "Stock", badge: "Badge", actions: "Actions",
     soldBy: "Unit of Measure", soldByPiece: "Piece (each)", soldByWeight: "Weight (kg)", weightHelp: "Continuous unit — price is per unit (e.g. per kg, per g, per L). Customer enters a decimal quantity.",
@@ -111,8 +111,8 @@ const en: AdminTranslations = {
 };
 
 const fr: AdminTranslations = {
-  nav: { dashboard: "Tableau de bord", products: "Produits", orders: "Commandes", analytics: "Analytique", categories: "Catégories", reviews: "Avis", blog: "Blog", settings: "Paramètres", translations: "Traductions", viewStore: "Voir la boutique" },
-  title: { dashboard: "Tableau de bord admin", products: "Produits", orders: "Commandes", analytics: "Analytique", categories: "Catégories", reviews: "Avis", blog: "Blog", settings: "Paramètres", translations: "Traductions" },
+  nav: { dashboard: "Tableau de bord", products: "Produits", orders: "Commandes", analytics: "Analytique", categories: "Catégories", reviews: "Avis", blog: "Blog", hero: "Médias Hero", settings: "Paramètres", translations: "Traductions", viewStore: "Voir la boutique" },
+  title: { dashboard: "Tableau de bord admin", products: "Produits", orders: "Commandes", analytics: "Analytique", categories: "Catégories", reviews: "Avis", blog: "Blog", hero: "Carrousel Médias & Vidéos Hero", settings: "Paramètres", translations: "Traductions" },
   lang: { label: "Langue", en: "English", fr: "Français", ar: "العربية" },
   common: { loading: "Chargement...", save: "Enregistrer", cancel: "Annuler", create: "Créer", update: "Mettre à jour", delete: "Supprimer", search: "Rechercher", all: "Tous", confirm: "Confirmer", close: "Fermer", add: "Ajouter", name: "Nom", id: "ID", icon: "Icône", order: "Ordre", required: "est requis" },
   dashboard: {
@@ -165,8 +165,8 @@ const fr: AdminTranslations = {
 };
 
 const ar: AdminTranslations = {
-  nav: { dashboard: "لوحة التحكم", products: "المنتجات", orders: "الطلبات", analytics: "التحليلات", categories: "الفئات", reviews: "التقييمات", blog: "المدونة", settings: "الإعدادات", translations: "الترجمات", viewStore: "عرض المتجر" },
-  title: { dashboard: "لوحة تحكم المدير", products: "المنتجات", orders: "الطلبات", analytics: "التحليلات", categories: "الفئات", reviews: "التقييمات", blog: "المدونة", settings: "الإعدادات", translations: "الترجمات" },
+  nav: { dashboard: "لوحة التحكم", products: "المنتجات", orders: "الطلبات", analytics: "التحليلات", categories: "الفئات", reviews: "التقييمات", blog: "المدونة", hero: "وسائط الهيرو", settings: "الإعدادات", translations: "الترجمات", viewStore: "عرض المتجر" },
+  title: { dashboard: "لوحة تحكم المدير", products: "المنتجات", orders: "الطلبات", analytics: "التحليلات", categories: "الفئات", reviews: "التقييمات", blog: "المدونة", hero: "إدارة وسائط وفيديوهات الهيرو", settings: "الإعدادات", translations: "الترجمات" },
   lang: { label: "اللغة", en: "English", fr: "Français", ar: "العربية" },
   common: { loading: "جارٍ التحميل...", save: "حفظ", cancel: "إلغاء", create: "إنشاء", update: "تحديث", delete: "حذف", search: "بحث", all: "الكل", confirm: "تأكيد", close: "إغلاق", add: "إضافة", name: "الاسم", id: "المعرّف", icon: "الأيقونة", order: "الترتيب", required: "مطلوب" },
   dashboard: {
