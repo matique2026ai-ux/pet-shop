@@ -20,7 +20,7 @@ export default function PrivacyPage() {
   const sections = (privacyData.sections || []) as { title: string; text: string }[];
 
   return (
-    <div className="bg-[#F8F7F4] min-h-screen pb-20" dir={dir}>
+    <div className="min-h-screen pb-20" dir={dir}>
       {/* ═══════════════════════════════
           HERO
       ═══════════════════════════════ */}

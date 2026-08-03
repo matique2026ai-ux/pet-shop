@@ -11,7 +11,7 @@
   --color-white: #ffffff;
 
   /* Neutral scale - Adapted to warm sand/cream */
-  --color-gray-50: #F5F2EA;
+  --color-gray-50: #EBE5D9;
   --color-gray-100: #F3ECE0;
   --color-gray-200: #E6DCBF;
   --color-gray-300: #C2B495;
@@ -50,7 +50,7 @@
   --color-coral-600: #C44E1E;
 
   --color-card:    #FFFFFF;
-  --color-surface: #F5F2EA;
+  --color-surface: #EBE5D9;
 }
 
 html {
