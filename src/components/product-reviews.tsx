@@ -131,7 +131,7 @@ export default function ProductReviews({ productId }: { productId: string }) {
           {loading ? (
             <div className="text-gray-400 text-sm">{t.products.loading}</div>
           ) : count === 0 ? (
-            <div className="bg-gradient-to-b from-gray-50 to-white border border-gray-100 rounded-3xl p-10 sm:p-14 text-center flex flex-col items-center justify-center min-h-[300px] shadow-sm">
+            <div className="bg-white border border-gray-200 rounded-3xl p-10 sm:p-14 text-center flex flex-col items-center justify-center min-h-[300px] shadow-md">
               <div className="w-20 h-20 bg-[#E5B25A]/10 rounded-full flex items-center justify-center mb-5">
                 <Star className="w-10 h-10 text-[#E5B25A] opacity-80" />
               </div>
@@ -140,7 +140,7 @@ export default function ProductReviews({ productId }: { productId: string }) {
             </div>
           ) : (
             reviews.map((r) => (
-              <div key={r.id} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+              <div key={r.id} className="bg-white border border-gray-200 rounded-2xl p-5 shadow-md">
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-semibold text-gray-900">{r.user_name}</span>
                   <span className="text-xs text-gray-400">{fmtDate(r.created_at)}</span>
@@ -161,7 +161,7 @@ export default function ProductReviews({ productId }: { productId: string }) {
 
         {/* Write review */}
         <div className="lg:col-span-1">
-          <div className="bg-white border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-3xl p-6 lg:sticky lg:top-24">
+          <div className="bg-white border border-gray-200 shadow-md rounded-3xl p-6 lg:sticky lg:top-24">
             <h3 className="font-bold text-gray-900 mb-6 flex items-center gap-2">
               <Star className="w-5 h-5 text-[#E3602D]" />
               {t.reviews.writeReview}

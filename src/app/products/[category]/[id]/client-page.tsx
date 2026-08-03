@@ -569,7 +569,7 @@ export default function ProductDetailPage() {
         </section>
 
         {/* Reviews Section */}
-        <section className="py-12 lg:py-16 bg-gray-50 border-t border-gray-100">
+        <section className="py-12 lg:py-16 bg-gray-100 border-t border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection>
               <ProductReviews productId={product.id} />
