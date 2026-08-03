@@ -12,6 +12,11 @@ export const ar = {
     ],
     ctaTitle: "مستعد لتقديم الأفضل لحيوانك؟",
     ctaText: "زور متجرنا أو احجز موعداً مع أطبائنا البيطريين اليوم.",
+    // FIXED: i18n keys for previously hardcoded hero badge & trust bar strings
+    heroBadge: "متجر الحيوانات الأليفة الأول في الجزائر",
+    trustBarDelivery: "توصيل سريع لـ 58 ولاية",
+    trustBarQuality: "جودة مضمونة 100%",
+    trustBarSecure: "تسوق إلكتروني آمن",
   },
   nav: {
     home: "الرئيسية",
@@ -112,7 +117,17 @@ export const ar = {
     trustQuality: "جودة مضمونة",
     inStockLabel: "متوفّر",
     lowStockLabel: "كمية محدودة",
-    loading: "جارٍ تحميل المنتجات...",
+    loading: "جاري تحميل المنتجات...",
+    // FIXED: i18n keys for previously hardcoded filter badge labels
+    filterOffers: "تخفيضات وعروض حصرية",
+    filterNew: "منتجات جديدة وصلتنا حديثاً",
+    filterAll: "كتالوج المنتجات الرسمي",
+    // FIXED: i18n keys for empty DB state (no products yet)
+    noProductsTitle: "لا توجد منتجات بعد!",
+    noProductsDesc: "كتالوجنا قيد الإعداد. تفضل عد لاحقاً أو تصفح مدونتنا للنصائح.",
+    showAllProducts: "عرض جميع المنتجات",
+    // FIXED: i18n keys for no-results section
+    recommended: "منتجات قد تعجبك أيضاً 🔥",
     zoom: "تكبير",
     sortPriceAsc: "السعر: من الأقل إلى الأعلى",
     sortPriceDesc: "السعر: من الأعلى إلى الأقل",

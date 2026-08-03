@@ -2,16 +2,15 @@
 
 import { Suspense, useState, useMemo, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useI18n } from "@/lib/i18n-context";
 import { useTranslatedData } from "@/lib/use-translated-data";
 import AnimatedSection from "@/components/animated-section";
 import ProductCard, { ProductCardSkeleton } from "@/components/product-card";
-import { Search, Sparkles, PawPrint, Tag } from "lucide-react";
+import { Search, Sparkles, PawPrint } from "lucide-react";
 
 function ProductsContent() {
-  const { t, lang, dir } = useI18n();
+  const { t, dir } = useI18n();
   const { products, categories, productsLoaded } = useTranslatedData();
   const searchParams = useSearchParams();
   const initialFilter = searchParams.get("filter");
@@ -60,22 +59,19 @@ function ProductsContent() {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
+            {/* FIXED: replaced hardcoded lang ternary with i18n keys */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[#F1C290] text-xs sm:text-sm font-semibold mb-4 shadow-sm">
               <Sparkles className="w-4 h-4 text-[#F5851F]" />
               <span>
                 {initialFilter === "offers"
-                  ? (lang === "ar" ? "تخفيضات وعروض حصرية" : "Offres Spéciales")
+                  ? t.products.filterOffers
                   : initialFilter === "new"
-                  ? (lang === "ar" ? "منتجات جديدة وصلتنا حديثاً" : "Nouveautés")
-                  : (lang === "ar" ? "كتالوج المنتجات الرسمي" : "Catalogue Officiel")}
+                  ? t.products.filterNew
+                  : t.products.filterAll}
               </span>
             </div>
             <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight mb-3">
-              {initialFilter === "offers"
-                ? (lang === "ar" ? "عروض وتخفيضات مميزة" : "Offres & Promotions Exclusives")
-                : initialFilter === "new"
-                ? (lang === "ar" ? "أحدث المقتنيات والمنتجات" : "Dernières Nouveautés")
-                : t.products.title}
+              {t.products.title}
             </h1>
             <p className="text-sm sm:text-lg text-emerald-100/70 max-w-xl">
               {t.products.subtitle}
@@ -131,12 +127,31 @@ function ProductsContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             {!productsLoaded ? (
+              /* Loading skeletons */
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 gap-y-8">
                 {Array.from({ length: 8 }).map((_, i) => (
                   <ProductCardSkeleton key={`sk-${i}`} />
                 ))}
               </div>
+            ) : products.length === 0 && !search && category === "all" ? (
+              /* FIXED (Fix 2): Distinct empty-DB state — catalogue not seeded yet */
+              <div className="py-20 text-center">
+                <div className="bg-white rounded-3xl p-10 sm:p-16 border border-gray-100 shadow-sm max-w-lg mx-auto">
+                  <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <PawPrint className="w-10 h-10 text-emerald-600" />
+                  </div>
+                  <h3 className="text-2xl font-black text-gray-900 mb-3">{t.products.noProductsTitle}</h3>
+                  <p className="text-gray-500 text-sm mb-8 leading-relaxed">{t.products.noProductsDesc}</p>
+                  <Link
+                    href="/"
+                    className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-xl text-sm font-bold transition-colors"
+                  >
+                    {t.products.breadcrumbHome}
+                  </Link>
+                </div>
+              </div>
             ) : filtered.length === 0 ? (
+              /* No search results */
               <div className="py-12">
                 <div className="bg-white rounded-3xl p-8 sm:p-12 text-center border border-gray-100 shadow-sm max-w-2xl mx-auto mb-12">
                   <div className="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-4 text-amber-600">
@@ -145,11 +160,8 @@ function ProductsContent() {
                   <h3 className="text-xl font-bold text-gray-900 mb-2">
                     {t.products.noResults}
                   </h3>
-                  <p className="text-gray-500 text-sm mb-6">
-                    {lang === "ar"
-                      ? "لم نجد نتائج تطابق بحثك الحالي. جرب تغيير كلمة البحث أو تصفح المنتجات المقترحة أدناه:"
-                      : "Aucun résultat trouvé pour votre recherche. Découvrez nos meilleures suggestions :"}
-                  </p>
+                  {/* FIXED: replaced hardcoded lang check with i18n */}
+                  <p className="text-gray-500 text-sm mb-6">{t.products.noProductsDesc}</p>
                   <button
                     onClick={() => {
                       setSearch("");
@@ -157,15 +169,15 @@ function ProductsContent() {
                     }}
                     className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-colors"
                   >
-                    {lang === "ar" ? "عرض جميع المنتجات" : "Afficher tous les produits"}
+                    {/* FIXED: replaced hardcoded lang check with i18n */}
+                    {t.products.showAllProducts}
                   </button>
                 </div>
 
                 {/* Recommendations */}
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-6 text-start">
-                    {lang === "ar" ? "منتجات قد تعجبك أيضًا 🔥" : "Produits recommandés 🔥"}
-                  </h3>
+                  {/* FIXED: replaced hardcoded lang check with i18n */}
+                  <h3 className="text-xl font-bold text-gray-900 mb-6 text-start">{t.products.recommended}</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 gap-y-8">
                     {products.slice(0, 4).map((p) => (
                       <ProductCard key={p.id} product={p} />
@@ -174,6 +186,7 @@ function ProductsContent() {
                 </div>
               </div>
             ) : (
+              /* Normal product grid */
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 gap-y-8">
                 {filtered.map((p) => (
                   <ProductCard key={p.id} product={p} />

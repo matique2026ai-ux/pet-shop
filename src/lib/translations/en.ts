@@ -12,6 +12,11 @@ export const en = {
     ],
     ctaTitle: "Ready to Give Your Pet the Best?",
     ctaText: "Visit our store or book an appointment with our expert veterinarians today.",
+    // FIXED: i18n keys for previously hardcoded hero badge & trust bar strings
+    heroBadge: "Premier Pet Shop in Algeria",
+    trustBarDelivery: "Fast Nationwide Delivery",
+    trustBarQuality: "100% Quality Guaranteed",
+    trustBarSecure: "Secure Online Shopping",
   },
   nav: {
     home: "Home",
@@ -113,6 +118,16 @@ export const en = {
     inStockLabel: "In Stock",
     lowStockLabel: "Low Stock",
     loading: "Loading products...",
+    // FIXED: i18n keys for previously hardcoded filter badge labels
+    filterOffers: "Special Offers & Deals",
+    filterNew: "New Arrivals",
+    filterAll: "Official Product Catalogue",
+    // FIXED: i18n keys for empty DB state (no products yet)
+    noProductsTitle: "No products yet!",
+    noProductsDesc: "Our catalogue is being set up. Check back soon or browse our blog for tips.",
+    showAllProducts: "Show All Products",
+    // FIXED: i18n keys for no-results section
+    recommended: "You may also like 🔥",
     zoom: "Zoom",
     sortPriceAsc: "Price: Low to High",
     sortPriceDesc: "Price: High to Low",

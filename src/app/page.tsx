@@ -219,7 +219,8 @@ export default function HomePage() {
             <FadeIn>
               <div className="inline-flex items-center gap-2 bg-black/30 backdrop-blur-lg border border-white/20 text-white rounded-full px-4 py-1.5 sm:px-5 sm:py-2 text-xs sm:text-sm font-semibold mb-5 sm:mb-8 shadow-lg">
                 <Sparkles className="w-4 h-4 text-[#F1C290] shrink-0" />
-                <span>{dir === "rtl" ? "متجر الحيوانات الأليفة الأول في الجزائر" : "Premier Pet Shop in Algeria"}</span>
+                {/* FIXED: replaced hardcoded dir ternary with i18n key */}
+                <span>{t.home.heroBadge}</span>
               </div>
             </FadeIn>
 
@@ -275,9 +276,10 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4">
             <div className="grid grid-cols-1 sm:flex sm:flex-wrap items-center justify-center sm:justify-around gap-2 sm:gap-6 text-center">
               {[
-                { icon: <Truck className="w-4 h-4 sm:w-5 sm:h-5" />, label: dir === "rtl" ? "توصيل سريع لـ 58 ولاية" : "Fast Nationwide Delivery" },
-                { icon: <Award className="w-4 h-4 sm:w-5 sm:h-5" />, label: dir === "rtl" ? "جودة مضمونة 100%" : "100% Quality Guaranteed" },
-                { icon: <Shield className="w-4 h-4 sm:w-5 sm:h-5" />, label: dir === "rtl" ? "تسوق إلكتروني آمن" : "Secure Online Shopping" },
+                // FIXED: replaced hardcoded dir ternary strings with i18n keys
+                { icon: <Truck className="w-4 h-4 sm:w-5 sm:h-5" />, label: t.home.trustBarDelivery },
+                { icon: <Award className="w-4 h-4 sm:w-5 sm:h-5" />, label: t.home.trustBarQuality },
+                { icon: <Shield className="w-4 h-4 sm:w-5 sm:h-5" />, label: t.home.trustBarSecure },
               ].map((b, i) => (
                 <div key={i} className="flex items-center justify-center gap-2 sm:gap-3 text-white/95 text-xs sm:text-base font-medium">
                   <div className="bg-white/15 p-1.5 sm:p-2 rounded-full border border-white/10 shrink-0">

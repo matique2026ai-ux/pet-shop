@@ -10,6 +10,9 @@ export function OrganizationSchema() {
   const email = store?.email || "hello@pawsandwings.com";
   const address = store?.address || "حي الهضاب، سطيف، الجزائر";
 
+  // FIXED: Updated domain from www.pawsandwings.com to pet-cat.vercel.app
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pet-cat.vercel.app";
+
   useEffect(() => {
     const script = document.createElement("script");
     script.type = "application/ld+json";
@@ -18,9 +21,9 @@ export function OrganizationSchema() {
       "@context": "https://schema.org",
       "@type": "Organization",
       name: storeName,
-      url: "https://www.pawsandwings.com",
-      logo: "https://www.pawsandwings.com/placeholder.svg",
-      description: "Premium pet products and veterinary care for cats, dogs, birds, fish, and small pets.",
+      url: siteUrl,
+      logo: `${siteUrl}/logo-badge.png`,
+      description: "متجر إلكتروني متكامل للحيوانات الأليفة في الجزائر. أغذية، إكسسوارات، ورعاية بيطرية متكاملة.",
       address: {
         "@type": "PostalAddress",
         streetAddress: address,
@@ -47,7 +50,7 @@ export function OrganizationSchema() {
     });
     document.head.appendChild(script);
     return () => { const s = document.getElementById("organization-schema"); if (s) s.remove(); };
-  }, [storeName, phone, email, address]);
+  }, [storeName, phone, email, address, siteUrl]);
 
   return null;
 }
@@ -58,17 +61,22 @@ export function LocalBusinessSchema() {
   const phone = store?.phone || "+2130776075355";
   const address = store?.address || "حي الهضاب، سطيف، الجزائر";
 
+  // FIXED: Updated domain to pet-cat.vercel.app + added additionalType Store
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pet-cat.vercel.app";
+
   useEffect(() => {
     const script = document.createElement("script");
     script.type = "application/ld+json";
     script.id = "localbusiness-schema";
     script.innerHTML = JSON.stringify({
       "@context": "https://schema.org",
-      "@type": "PetStore",
-      "@id": "https://www.pawsandwings.com/#petstore",
+      "@type": ["LocalBusiness", "PetStore"],
+      // FIXED: additionalType Store as requested
+      additionalType: "https://schema.org/Store",
+      "@id": `${siteUrl}/#petstore`,
       name: storeName,
-      image: "https://www.pawsandwings.com/placeholder.svg",
-      url: "https://www.pawsandwings.com",
+      image: `${siteUrl}/logo-badge.png`,
+      url: siteUrl,
       telephone: phone,
       priceRange: "د.ج",
       address: {
@@ -109,7 +117,7 @@ export function LocalBusinessSchema() {
       const s = document.getElementById("localbusiness-schema");
       if (s) s.remove();
     };
-  }, [storeName, phone, address]);
+  }, [storeName, phone, address, siteUrl]);
 
   return null;
 }
@@ -117,6 +125,9 @@ export function LocalBusinessSchema() {
 export function WebSiteSchema() {
   const { store } = useSiteSettings();
   const storeName = store?.storeName || store?.name || "Paws & Wings";
+
+  // FIXED: Updated domain to pet-cat.vercel.app
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pet-cat.vercel.app";
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -126,19 +137,19 @@ export function WebSiteSchema() {
       "@context": "https://schema.org",
       "@type": "WebSite",
       name: storeName,
-      url: "https://www.pawsandwings.com",
+      url: siteUrl,
       potentialAction: {
         "@type": "SearchAction",
         target: {
           "@type": "EntryPoint",
-          urlTemplate: "https://www.pawsandwings.com/products?search={search_term_string}",
+          urlTemplate: `${siteUrl}/products?q={search_term_string}`,
         },
         "query-input": "required name=search_term_string",
       },
     });
     document.head.appendChild(script);
     return () => { const s = document.getElementById("website-schema"); if (s) s.remove(); };
-  }, [storeName]);
+  }, [storeName, siteUrl]);
 
   return null;
 }

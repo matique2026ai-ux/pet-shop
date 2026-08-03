@@ -12,6 +12,11 @@ export const fr = {
     ],
     ctaTitle: "Prêt à Offrir le Meilleur à Votre Animal?",
     ctaText: "Visitez notre magasin ou prenez rendez-vous avec nos vétérinaires experts.",
+    // FIXED: i18n keys for previously hardcoded hero badge & trust bar strings
+    heroBadge: "Premier Pet Shop en Algérie",
+    trustBarDelivery: "Livraison Rapide dans toute l'Algérie",
+    trustBarQuality: "Qualité Garantie à 100%",
+    trustBarSecure: "Shopping en Ligne Sécurisé",
   },
   nav: {
     home: "Accueil",
@@ -113,6 +118,16 @@ export const fr = {
     inStockLabel: "En stock",
     lowStockLabel: "Stock faible",
     loading: "Chargement des produits...",
+    // FIXED: i18n keys for previously hardcoded filter badge labels
+    filterOffers: "Offres Spéciales & Promotions",
+    filterNew: "Nouveautés",
+    filterAll: "Catalogue Officiel",
+    // FIXED: i18n keys for empty DB state (no products yet)
+    noProductsTitle: "Pas encore de produits !",
+    noProductsDesc: "Notre catalogue est en cours de préparation. Revenez bientôt ou consultez notre blog.",
+    showAllProducts: "Afficher tous les produits",
+    // FIXED: i18n keys for no-results section
+    recommended: "Vous aimerez peut-être aussi 🔥",
     zoom: "Agrandir",
     sortPriceAsc: "Prix : croissant",
     sortPriceDesc: "Prix : décroissant",

@@ -58,11 +58,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: "مخالب وأجنحة | Paws & Wings",
     description: "متجر إلكتروني متكامل للحيوانات الأليفة والخيول في الجزائر. جودة، مصداقية، وتوصيل سريع.",
-    url: "https://www.tawra-aljamal.com",
+    // FIXED: replaced wrong tawra-aljamal.com domain with correct production URL
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://pet-cat.vercel.app",
     siteName: "مخالب وأجنحة",
     locale: "ar_DZ",
     type: "website",
-    images: [{ url: "https://www.tawra-aljamal.com/favicon.svg", width: 512, height: 512 }],
+    // FIXED: replaced external tawra-aljamal.com favicon with local logo asset
+    images: [{ url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://pet-cat.vercel.app"}/logo-badge.png`, width: 512, height: 512, alt: "مخالب وأجنحة | Paws & Wings" }],
   },
   twitter: {
     card: "summary_large_image",
