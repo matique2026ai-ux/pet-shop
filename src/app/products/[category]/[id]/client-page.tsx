@@ -202,7 +202,7 @@ export default function ProductDetailPage() {
               <FootprintDecorations category={product.category} />
 
               {/* Left Side: Product Image & Video Trigger */}
-              <div className="lg:col-span-6 flex flex-col gap-4 relative z-10 w-full">
+              <div className="lg:col-span-6 flex flex-col gap-4 relative z-10 w-full lg:sticky lg:top-32 lg:self-start">
                 <div className="relative w-full aspect-square max-h-[380px] bg-gray-50/55 rounded-3xl p-6 flex items-center justify-center border border-gray-100 shadow-sm group overflow-hidden">
                   {activeMedia === "video" && embed ? (
                     embed.kind === "iframe" ? (
