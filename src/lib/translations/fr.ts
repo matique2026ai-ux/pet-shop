@@ -45,7 +45,7 @@ export const fr = {
     title: "Votre Compagnon Mérite le Meilleur",
     subtitle: "Produits premium et soins vétérinaires sous un même toit",
     cta1: "Acheter",
-    cta2: "Prendre RDV",
+    cta2: "Blog & Conseils",
   },
   categories: {
     title: "Acheter par Catégorie",
@@ -256,6 +256,10 @@ export const fr = {
     ctaBadge: "Nous Sommes Là pour Votre Animal",
     ctaTitle: "Prêt à Réserver?",
     ctaText: "Planifiez un rendez-vous avec nos vétérinaires experts dès aujourd'hui.",
+    verifiedBadge: "Avis Clients Vérifiés 100%",
+    verifiedSubtitle: "Avis vérifiés de propriétaires d'animaux à travers l'Algérie",
+    ordersCount: "+480 commandes livrées",
+    verifiedPurchase: "Achat vérifié",
   },
   grooming: {
     title: "Packages Toilettage",

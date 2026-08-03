@@ -379,9 +379,11 @@ export default function CartPage() {
               {t.cart.title || "عربة التسوق"}
             </h1>
             <p className="text-sm sm:text-base text-emerald-100/70 max-w-xl">
-              {dir === "rtl"
+              {lang === "ar"
                 ? "مراجعة المنتجات المختارة وإكمال الطلب في ثوانٍ معدودة مع التوصيل لجميع الولايات"
-                : "Vérifiez vos articles et finalisez votre commande en toute sécurité."}
+                : lang === "fr"
+                ? "Vérifiez vos articles et finalisez votre commande en toute sécurité."
+                : "Review your items and complete your order with delivery across Algeria."}
             </p>
           </AnimatedSection>
         </div>
@@ -526,7 +528,7 @@ export default function CartPage() {
 
                   <div className="flex items-center justify-between py-3 border-b border-gray-100 text-lg font-bold text-gray-900">
                     <span>{t.cart.total}</span>
-                    <span>{currency}{subtotal.toFixed(2)}</span>
+                    <span>{currency}{grandTotal.toFixed(2)}</span>
                   </div>
 
                   <div className="mt-5 flex items-start gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium rounded-xl px-3 py-2.5 leading-relaxed">

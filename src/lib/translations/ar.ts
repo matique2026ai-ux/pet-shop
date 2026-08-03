@@ -14,7 +14,7 @@ export const ar = {
     ctaText: "زور متجرنا أو احجز موعداً مع أطبائنا البيطريين اليوم.",
     // FIXED: i18n keys for previously hardcoded hero badge & trust bar strings
     heroBadge: "متجر الحيوانات الأليفة الأول في الجزائر",
-    trustBarDelivery: "توصيل سريع لـ 58 ولاية",
+    trustBarDelivery: "توصيل سريع لـ 69 ولاية",
     trustBarQuality: "جودة مضمونة 100%",
     trustBarSecure: "تسوق إلكتروني آمن",
   },
@@ -45,7 +45,7 @@ export const ar = {
     title: "حيوانك الأليف يستحق الأفضل",
     subtitle: "منتجات متميزة ورعاية بيطرية تحت سقف واحد",
     cta1: "تسوق الآن",
-    cta2: "احجز موعداً",
+    cta2: "المدونة والنصائح",
   },
   categories: {
     title: "تسوق حسب القسم",
@@ -256,6 +256,10 @@ export const ar = {
     ctaBadge: "نحن هنا من أجل حيوانك",
     ctaTitle: "مستعد للحجز؟",
     ctaText: "احجز موعداً مع أطبائنا البيطريين الخبراء اليوم.",
+    verifiedBadge: "تجارب حقيقية 100%",
+    verifiedSubtitle: "تقييمات موثقة من مربي القطط، الكلاب، والطيور عبر الولايات الجزائرية",
+    ordersCount: "+480 طلبية مؤكدة",
+    verifiedPurchase: "طلب محقق",
   },
   grooming: {
     title: "باقات العناية بالحيوانات",

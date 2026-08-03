@@ -493,15 +493,13 @@ export default function HomePage() {
               <div className="text-center md:text-start">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E3602D]/10 text-[#E3602D] text-xs font-bold mb-2">
                   <Sparkles className="w-3.5 h-3.5" />
-                  {lang === "ar" ? "تجارب حقيقية 100%" : "Avis Clients Vérifiés"}
+                  {t.vet.verifiedBadge}
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-black text-[#1A1A2E] leading-tight">
                   {t.vet.testimonialsTitle}
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                  {lang === "ar" 
-                    ? "تقييمات موثقة من مربي القطط، الكلاب، والطيور عبر الولائيات الجزائرية"
-                    : "Avis vérifiés de propriétaires d'animaux à travers l'Algérie"}
+                  {t.vet.verifiedSubtitle}
                 </p>
               </div>
 
@@ -516,7 +514,7 @@ export default function HomePage() {
                       ))}
                     </div>
                     <span className="text-[11px] text-gray-500 font-medium">
-                      {lang === "ar" ? "+480 طلبية مؤكدة" : "+480 commandes livrées"}
+                    {t.vet.ordersCount}
                     </span>
                   </div>
                 </div>
@@ -540,7 +538,7 @@ export default function HomePage() {
                       </div>
                       <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
                         <CheckCircle className="w-3 h-3 text-emerald-600" />
-                        {lang === "ar" ? "طلب محقق" : "Achat vérifié"}
+                        {t.vet.verifiedPurchase}
                       </span>
                     </div>
 

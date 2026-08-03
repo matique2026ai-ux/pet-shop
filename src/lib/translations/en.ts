@@ -45,7 +45,7 @@ export const en = {
     title: "Your Pet Deserves the Best",
     subtitle: "Premium pet products & veterinary care under one roof",
     cta1: "Shop Now",
-    cta2: "Book Appointment",
+    cta2: "Blog & Tips",
   },
   categories: {
     title: "Shop by Category",
@@ -256,6 +256,10 @@ export const en = {
     ctaBadge: "We're Here for Your Pet",
     ctaTitle: "Ready to Book?",
     ctaText: "Schedule an appointment with our expert veterinarians today.",
+    verifiedBadge: "100% Authentic Reviews",
+    verifiedSubtitle: "Verified reviews from cat, dog, and bird owners across Algeria",
+    ordersCount: "+480 orders delivered",
+    verifiedPurchase: "Verified Purchase",
   },
   grooming: {
     title: "Grooming Packages",
