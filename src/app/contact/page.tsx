@@ -54,7 +54,7 @@ export default function ContactPage() {
   return (
     <div className="bg-[#F8F7F4] min-h-screen" dir={dir}>
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-16 lg:py-24 bg-gradient-to-br from-[#0F1913] via-[#1C2C22] to-[#0A120D] text-white">
+      <section className="relative overflow-hidden py-16 lg:py-24 bg-gradient-to-br from-[#13111C] via-[#1A1A2E] to-[#0D0B14] text-white">
         {/* Glow & Paw Decor */}
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#F5851F]/10 rounded-full blur-[130px] pointer-events-none" />
         <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[130px] pointer-events-none" />

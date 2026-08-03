@@ -79,7 +79,7 @@ export default function CategoryPage() {
               priority
             />
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-[#1E2D24] via-[#0E1611] to-[#1E2D24]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#1A1A2E] via-[#0D0B14] to-[#1A1A2E]" />
           )}
           <div className="absolute inset-0 bg-gradient-to-r from-[#0E1611]/90 via-[#1E2D24]/60 to-transparent" />
         </div>

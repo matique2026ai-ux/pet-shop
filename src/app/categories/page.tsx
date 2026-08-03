@@ -22,7 +22,7 @@ export default function CategoriesPage() {
       {/* ══════════════════════════════════
           HERO SECTION
       ══════════════════════════════════ */}
-      <section className="relative overflow-hidden py-16 lg:py-24 bg-gradient-to-br from-[#0F1913] via-[#1C2C22] to-[#0A120D] text-white">
+      <section className="relative overflow-hidden py-16 lg:py-24 bg-gradient-to-br from-[#13111C] via-[#1A1A2E] to-[#0D0B14] text-white">
         {/* Glow & Paw Decor */}
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#F5851F]/10 rounded-full blur-[130px] pointer-events-none" />
         <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[130px] pointer-events-none" />
@@ -98,7 +98,7 @@ export default function CategoriesPage() {
       {/* ══════════════════════════════════
           IMMERSIVE CATEGORIES GRID
       ══════════════════════════════════ */}
-      <section className="py-16 lg:py-24 bg-gradient-to-b from-[#0B0F0D] via-[#121A15] to-[#0E1611] relative overflow-hidden">
+      <section className="py-16 lg:py-24 bg-gradient-to-b from-[#13111C] via-[#1A1A2E] to-[#0D0B14] relative overflow-hidden">
         {/* Ambient glows */}
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-600/8 rounded-full blur-[160px] pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[#F5851F]/6 rounded-full blur-[140px] pointer-events-none" />
@@ -118,7 +118,7 @@ export default function CategoriesPage() {
                     ) : categories[0].image_url ? (
                       <Image src={categories[0].image_url} alt={categories[0].name} fill className="object-cover transition-transform duration-[1.2s] group-hover:scale-110" sizes="(max-width: 1024px) 100vw, 58vw" priority />
                     ) : (
-                      <div className="absolute inset-0 bg-gradient-to-br from-emerald-900 to-[#0E1611]" />
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#1A1A2E] to-[#0D0B14]" />
                     )}
                     {/* Overlay gradient */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
@@ -174,7 +174,7 @@ export default function CategoriesPage() {
                       ) : cat.image_url ? (
                         <Image src={cat.image_url} alt={cat.name} fill className="object-cover transition-transform duration-700 group-hover:scale-110" sizes="(max-width: 1024px) 50vw, 25vw" priority={idx < 2} />
                       ) : (
-                        <div className="absolute inset-0 bg-gradient-to-br from-emerald-900 to-[#0E1611]" />
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#1A1A2E] to-[#0D0B14]" />
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/10" />
                       <div className="absolute inset-0 bg-emerald-900/0 group-hover:bg-emerald-900/20 transition-colors duration-500" />
@@ -227,7 +227,7 @@ export default function CategoriesPage() {
                       {cat.image_url ? (
                         <Image src={cat.image_url} alt={cat.name} fill className="object-cover transition-transform duration-700 group-hover:scale-110" sizes="(max-width: 640px) 50vw, 25vw" />
                       ) : (
-                        <div className="absolute inset-0 bg-gradient-to-br from-emerald-900 to-[#0E1611]" />
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#1A1A2E] to-[#0D0B14]" />
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/10" />
                       <div className="absolute inset-0 flex flex-col justify-end p-4">
