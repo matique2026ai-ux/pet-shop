@@ -2,8 +2,8 @@
 
 A multilingual (EN / FR / AR) e-commerce site for a pet shop serving the **Algerian market**, built with Next.js (App Router) + Supabase + Vercel. Includes a full storefront, a password-protected admin CRM dashboard, image/video uploads, multi-image product galleries, and a real PostgreSQL backend.
 
-> **Live site:** https://pet-cat.vercel.app
-> **Admin:** https://pet-cat.vercel.app/admin  (password: `admin123`)
+> **Live site:** https://paws-wings.vercel.app
+> **Admin:** https://paws-wings.vercel.app/admin  (password: `admin123`)
 > **Repo:** https://github.com/matique2026ai-ux/pet-shop
 
 ---

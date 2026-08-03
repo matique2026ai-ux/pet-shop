@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin", "/cart"],
     },
-    sitemap: "https://www.pawsandwings.com/sitemap.xml",
+    sitemap: `${process.env.NEXT_PUBLIC_SITE_URL || "https://paws-wings.vercel.app"}/sitemap.xml`,
   };
 }

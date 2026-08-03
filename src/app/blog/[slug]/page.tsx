@@ -62,7 +62,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let jsonLd: any = null;
   if (post) {
-    const baseUrl = "https://www.pawsandwings.com";
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://paws-wings.vercel.app";
     const absoluteImage = post.image_url?.startsWith("http") ? post.image_url : `${baseUrl}${post.image_url}`;
 
     const titleText = typeof post.title === "string" ? post.title : (post.title?.ar || post.title?.en || "مقال");

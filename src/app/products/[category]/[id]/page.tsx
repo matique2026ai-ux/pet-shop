@@ -61,7 +61,7 @@ export default async function ProductPage({ params }: { params: Promise<{ catego
     const images = product.images?.length ? product.images : (product.image ? [product.image] : []);
     
     // Add BASE URL if images are relative
-    const baseUrl = "https://www.pawsandwings.com";
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://paws-wings.vercel.app";
     const absoluteImages = images.map((img: string) => img.startsWith("http") ? img : `${baseUrl}${img}`);
 
     jsonLd = {

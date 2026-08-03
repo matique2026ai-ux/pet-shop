@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase";
 import { products as demoProducts } from "@/lib/data";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://www.pawsandwings.com";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://paws-wings.vercel.app";
   
   let products: any[] = demoProducts;
   let blogPosts: any[] = [];

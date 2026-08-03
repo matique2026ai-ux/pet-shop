@@ -10,8 +10,8 @@ export function OrganizationSchema() {
   const email = store?.email || "hello@pawsandwings.com";
   const address = store?.address || "حي الهضاب، سطيف، الجزائر";
 
-  // FIXED: Updated domain from www.pawsandwings.com to pet-cat.vercel.app
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pet-cat.vercel.app";
+  // FIXED: Updated domain to paws-wings.vercel.app
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://paws-wings.vercel.app";
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -61,8 +61,8 @@ export function LocalBusinessSchema() {
   const phone = store?.phone || "+2130776075355";
   const address = store?.address || "حي الهضاب، سطيف، الجزائر";
 
-  // FIXED: Updated domain to pet-cat.vercel.app + added additionalType Store
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pet-cat.vercel.app";
+  // FIXED: Updated domain to paws-wings.vercel.app + added additionalType Store
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://paws-wings.vercel.app";
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -126,8 +126,8 @@ export function WebSiteSchema() {
   const { store } = useSiteSettings();
   const storeName = store?.storeName || store?.name || "Paws & Wings";
 
-  // FIXED: Updated domain to pet-cat.vercel.app
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pet-cat.vercel.app";
+  // FIXED: Updated domain to paws-wings.vercel.app
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://paws-wings.vercel.app";
 
   useEffect(() => {
     const script = document.createElement("script");
