@@ -532,8 +532,8 @@ export default function CartPage() {
                   }} className="space-y-6">
 
                     {/* Step 1: Contact Info */}
-                    <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 sm:p-8">
-                      <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6">
+                      <div className="flex items-center gap-3 mb-4 border-b border-gray-100 pb-3">
                         <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm">1</div>
                         <h3 className="text-lg font-bold text-gray-900">{lang === "ar" ? "معلومات التواصل" : "Coordonnées"}</h3>
                       </div>
@@ -545,49 +545,49 @@ export default function CartPage() {
                         </div>
                       )}
                       
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-bold text-gray-700 mb-2">{t.cart.namePlaceholder}</label>
-                          <input type="text" name="name" value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder={t.cart.namePlaceholder} required className="w-full px-4 py-3.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all shadow-sm bg-gray-50 focus:bg-white" />
+                          <label className="block text-sm font-bold text-gray-700 mb-1.5">{t.cart.namePlaceholder}</label>
+                          <input type="text" name="name" value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder={t.cart.namePlaceholder} required className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all shadow-sm bg-gray-50 focus:bg-white" />
                         </div>
                         <div>
-                          <label className="block text-sm font-bold text-gray-700 mb-2">{t.cart.phonePlaceholder}</label>
-                          <input type="tel" name="phone" value={customerPhone} onChange={(e) => { setCustomerPhone(e.target.value); if (phoneError) setPhoneError(null); }} placeholder={t.cart.phonePlaceholder} inputMode="tel" dir={lang === "ar" && !customerPhone ? "rtl" : "ltr"} required className={`w-full px-4 py-3.5 rounded-xl border text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all shadow-sm ${phoneError ? "border-red-400 bg-red-50" : "border-gray-200 bg-gray-50 focus:bg-white"}`} />
-                          {phoneError && <p className="text-xs text-red-500 mt-1.5 font-medium">{phoneError}</p>}
+                          <label className="block text-sm font-bold text-gray-700 mb-1.5">{t.cart.phonePlaceholder}</label>
+                          <input type="tel" name="phone" value={customerPhone} onChange={(e) => { setCustomerPhone(e.target.value); if (phoneError) setPhoneError(null); }} placeholder={t.cart.phonePlaceholder} inputMode="tel" dir={lang === "ar" && !customerPhone ? "rtl" : "ltr"} required className={`w-full px-3 py-2.5 rounded-xl border text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all shadow-sm ${phoneError ? "border-red-400 bg-red-50" : "border-gray-200 bg-gray-50 focus:bg-white"}`} />
+                          {phoneError && <p className="text-xs text-red-500 mt-1 font-medium">{phoneError}</p>}
                         </div>
                       </div>
                     </div>
 
                     {/* Step 2: Delivery */}
-                    <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 sm:p-8">
-                      <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6">
+                      <div className="flex items-center gap-3 mb-4 border-b border-gray-100 pb-3">
                         <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm">2</div>
                         <h3 className="text-lg font-bold text-gray-900">{lang === "ar" ? "خيارات التوصيل" : "Options de livraison"}</h3>
                       </div>
 
                       {/* Type Selection */}
-                      <div className="mb-6">
-                        <label className="block text-sm font-bold text-gray-700 mb-3">{lang === "ar" ? "طريقة الاستلام والتوصيل" : "Mode de livraison et retrait"}</label>
+                      <div className="mb-4">
+                        <label className="block text-sm font-bold text-gray-700 mb-2">{lang === "ar" ? "طريقة الاستلام والتوصيل" : "Mode de livraison et retrait"}</label>
                         {cartHasBirds ? (
                           <div className="space-y-3">
-                            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900 leading-relaxed" dir={lang === "ar" ? "rtl" : "ltr"}>
+                            <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-sm text-amber-900 leading-relaxed" dir={lang === "ar" ? "rtl" : "ltr"}>
                               <p className="font-bold flex items-center gap-2 mb-1"><Store className="w-4 h-4"/> {lang === "ar" ? "تنبيه هام:" : "Avis important :"}</p>
                               {lang === "ar" ? "سلة المشتريات تحتوي على طيور/كائنات حية. يرجى استلام الطلب مباشرة من المحل حفاظاً على سلامتها." : "Votre panier contient des animaux vivants. Veuillez récupérer votre commande au magasin."}
                             </div>
-                            <button type="button" onClick={() => setDeliveryType("pickup")} className="w-full p-4 rounded-xl border-2 font-bold transition-all flex items-center justify-center gap-2 border-amber-600 bg-amber-50 text-amber-900 shadow-sm">
+                            <button type="button" onClick={() => setDeliveryType("pickup")} className="w-full p-3 rounded-xl border-2 font-bold transition-all flex items-center justify-center gap-2 border-amber-600 bg-amber-50 text-amber-900 shadow-sm">
                               <Store className="w-5 h-5 shrink-0" />
                               <span>{lang === "ar" ? "استلام من المحل (إجباري للكائنات الحية)" : "Retrait en magasin"}</span>
                             </button>
                           </div>
                         ) : (
-                          <div className="grid grid-cols-2 gap-4">
-                            <button type="button" onClick={() => setDeliveryType("home")} className={`p-4 rounded-2xl border-2 font-bold transition-all flex flex-col items-center justify-center gap-2 ${deliveryType === "home" ? "border-emerald-600 bg-emerald-50 text-emerald-900 shadow-sm" : "border-gray-100 hover:border-gray-300 hover:bg-gray-50 text-gray-600"}`}>
-                              <Home className="w-6 h-6 shrink-0" />
-                              <span>{lang === "ar" ? "توصيل للمنزل" : "À domicile"}</span>
+                          <div className="grid grid-cols-2 gap-3">
+                            <button type="button" onClick={() => setDeliveryType("home")} className={`p-3 rounded-xl border-2 font-bold transition-all flex flex-col items-center justify-center gap-1 ${deliveryType === "home" ? "border-emerald-600 bg-emerald-50 text-emerald-900 shadow-sm" : "border-gray-100 hover:border-gray-300 hover:bg-gray-50 text-gray-600"}`}>
+                              <Home className="w-5 h-5 shrink-0" />
+                              <span className="text-sm">{lang === "ar" ? "توصيل للمنزل" : "À domicile"}</span>
                             </button>
-                            <button type="button" onClick={() => setDeliveryType("stopdesk")} className={`p-4 rounded-2xl border-2 font-bold transition-all flex flex-col items-center justify-center gap-2 ${deliveryType === "stopdesk" ? "border-emerald-600 bg-emerald-50 text-emerald-900 shadow-sm" : "border-gray-100 hover:border-gray-300 hover:bg-gray-50 text-gray-600"}`}>
-                              <Building2 className="w-6 h-6 shrink-0" />
-                              <span>{lang === "ar" ? "مكتب التوصيل" : "Bureau de livraison"}</span>
+                            <button type="button" onClick={() => setDeliveryType("stopdesk")} className={`p-3 rounded-xl border-2 font-bold transition-all flex flex-col items-center justify-center gap-1 ${deliveryType === "stopdesk" ? "border-emerald-600 bg-emerald-50 text-emerald-900 shadow-sm" : "border-gray-100 hover:border-gray-300 hover:bg-gray-50 text-gray-600"}`}>
+                              <Building2 className="w-5 h-5 shrink-0" />
+                              <span className="text-sm">{lang === "ar" ? "مكتب التوصيل" : "Bureau de livraison"}</span>
                             </button>
                           </div>
                         )}
@@ -596,18 +596,18 @@ export default function CartPage() {
 
                       {/* Address Fields */}
                       {(deliveryType === "home" || deliveryType === "stopdesk") && (
-                        <div className="space-y-5 animate-in fade-in slide-in-from-top-2 duration-300">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                              <label className="block text-sm font-bold text-gray-700 mb-2">{t.cart.wilaya}</label>
-                              <select value={wilaya} onChange={(e) => { setWilaya(e.target.value); }} required className="w-full px-4 py-3.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-gray-50 focus:bg-white transition-all shadow-sm cursor-pointer">
+                              <label className="block text-sm font-bold text-gray-700 mb-1.5">{t.cart.wilaya}</label>
+                              <select value={wilaya} onChange={(e) => { setWilaya(e.target.value); }} required className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-gray-50 focus:bg-white transition-all shadow-sm cursor-pointer">
                                 <option value="" disabled hidden>{lang === "ar" ? "اختر الولاية" : "Sélectionnez une wilaya"}</option>
                                 {WILAYAS.map((w, i) => (<option key={w} value={w}>{getNumberedWilayaLabel(i, lang)}</option>))}
                               </select>
                             </div>
                             <div>
-                              <label className="block text-sm font-bold text-gray-700 mb-2">{t.cart.commune}</label>
-                              <input type="text" name="commune" value={commune} onChange={(e) => setCommune(e.target.value)} placeholder={t.cart.commune} required className="w-full px-4 py-3.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-gray-50 focus:bg-white transition-all shadow-sm" />
+                              <label className="block text-sm font-bold text-gray-700 mb-1.5">{t.cart.commune}</label>
+                              <input type="text" name="commune" value={commune} onChange={(e) => setCommune(e.target.value)} placeholder={t.cart.commune} required className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-gray-50 focus:bg-white transition-all shadow-sm" />
                             </div>
                           </div>
 
