@@ -393,567 +393,336 @@ export default function CartPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="flex flex-col lg:flex-row gap-8 items-start w-full overflow-hidden">
-              <div className="flex-1 min-w-0 w-full space-y-4">
-                {items.map((item) => (
-                  <div
-                    key={`${item.productId}-${item.selectedVariant || "default"}`}
-                    className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-row items-start sm:items-center gap-3 sm:gap-4 relative overflow-hidden"
-                  >
-                    {/* Product Image */}
-                    <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-100">
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 640px) 64px, 80px"
-                      />
+              
+              {/* ── LEFT COLUMN: ITEMS OR CHECKOUT FORM ── */}
+              <div className="flex-1 min-w-0 w-full space-y-6">
+                
+                {/* CHECKOUT PROGRESS BAR */}
+                {checkingOut && (
+                  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-6 flex items-center justify-between">
+                    <button onClick={() => setCheckingOut(false)} className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-semibold">
+                      <ArrowLeft className="w-4 h-4 rtl:rotate-180" />
+                      {t.cart.continueShopping}
+                    </button>
+                    <div className="flex items-center gap-2 text-emerald-600 text-sm font-bold">
+                      <CheckCircle className="w-5 h-5" />
+                      <span>{lang === "ar" ? "الدفع الآمن" : "Paiement Sécurisé"}</span>
+                    </div>
+                  </div>
+                )}
+
+                {!checkingOut ? (
+                  // ── CART ITEMS LIST ──
+                  <div className="space-y-4">
+                    {items.map((item) => (
+                      <div key={`${item.productId}-${item.selectedVariant || "default"}`} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-row items-start sm:items-center gap-3 sm:gap-4 relative overflow-hidden transition-all hover:border-emerald-100 hover:shadow-md">
+                        {/* Product Image */}
+                        <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-100">
+                          <Image src={item.image} alt={item.name} fill className="object-cover" sizes="(max-width: 640px) 80px, 96px" />
+                        </div>
+                        {/* Product Details & Actions */}
+                        <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                          <div className="min-w-0 flex-1">
+                            <h3 className="font-bold text-gray-900 text-sm sm:text-base line-clamp-2 pr-6 sm:pr-0 rtl:pl-6 rtl:pr-0">{item.name}</h3>
+                            {item.selectedVariant && (
+                              <div className="mt-1.5">
+                                <span className="inline-block text-[11px] font-bold text-[#E3602D] bg-[#F8F7F4] px-2.5 py-0.5 rounded-lg border border-[#ECDCAE]/50">
+                                  {item.selectedVariant}
+                                </span>
+                              </div>
+                            )}
+                            <p className="text-emerald-700 font-bold text-sm sm:text-base mt-1.5">
+                              {currency}{item.price.toFixed(2)}
+                              {item.sold_by && item.sold_by !== "piece" && (
+                                <span className="text-[11px] font-normal text-gray-400"> /{unitLabel(item.sold_by, lang)}</span>
+                              )}
+                            </p>
+                          </div>
+                          {/* Quantity & Price */}
+                          <div className="flex items-center justify-between sm:justify-end gap-5 w-full sm:w-auto mt-2 sm:mt-0 pt-3 sm:pt-0 border-t border-dashed border-gray-100 sm:border-0 shrink-0">
+                            {isContinuousUnit(item.sold_by) ? (
+                              <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-200/60 rounded-xl px-2.5 py-1.5">
+                                <input type="number" min="0.1" step="0.1" value={item.quantity} onChange={(e) => updateQuantity(item.productId, Math.max(0.1, Number(e.target.value) || 0.1), item.selectedVariant)} className="w-14 sm:w-16 bg-transparent text-center font-bold text-gray-900 text-sm focus:outline-none" />
+                                <span className="text-xs text-gray-400 font-medium">{unitLabel(item.sold_by, lang)}</span>
+                              </div>
+                            ) : (
+                              <div className="flex items-center gap-1 bg-gray-50 border border-gray-200/60 rounded-xl p-1">
+                                <button onClick={() => updateQuantity(item.productId, item.quantity - 1, item.selectedVariant)} disabled={item.quantity <= 1} className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-900 disabled:opacity-30 transition-colors"><Minus className="w-3.5 h-3.5" /></button>
+                                <span className="w-8 text-center font-bold text-gray-900 text-sm">{item.quantity}</span>
+                                <button onClick={() => updateQuantity(item.productId, item.quantity + 1, item.selectedVariant)} className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-900 transition-colors"><Plus className="w-3.5 h-3.5" /></button>
+                              </div>
+                            )}
+                            <div className="text-right sm:min-w-[90px]">
+                              <p className="font-black text-gray-900 text-base">{currency}{(item.price * item.quantity).toFixed(2)}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <button onClick={() => removeItem(item.productId, item.selectedVariant)} className="absolute top-3 right-3 sm:relative sm:top-auto sm:right-auto p-2 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all rtl:left-3 rtl:right-auto sm:rtl:left-auto" aria-label="Remove item"><Trash2 className="w-4 h-4" /></button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  // ── CHECKOUT FORM ──
+                  <form id="checkout-form" onSubmit={async (e) => {
+                    e.preventDefault();
+                    if (deliveryType === "") return;
+                    const fd = new FormData(e.currentTarget);
+                    const phone = (fd.get("phone") as string) || "";
+                    if (!isValidAlgerianPhone(phone)) {
+                      setPhoneError(t.cart.phoneInvalid);
+                      return;
+                    }
+                    setPhoneError(null);
+                    
+                    const addressDetailsInput = fd.get("address_details") as string || "";
+                    const fullAddress = deliveryType === "pickup"
+                      ? "[Pickup] الاستلام من المحل"
+                      : (deliveryType === "stopdesk"
+                        ? `[Stop Desk] Commune: ${commune}, Wilaya: ${wilaya}`
+                        : `[À Domicile] Adresse: ${addressDetailsInput}, Commune: ${commune}, Wilaya: ${wilaya}`);
+
+                    const hasBirds = cartHasBirds;
+                    const refCode = (fd.get("referral_code") as string || "").trim();
+                    let notesVal = "";
+                    if (refCode) notesVal = `Referral Code: ${refCode}`;
+                    if (hasBirds) {
+                      notesVal = notesVal ? `${notesVal} | Birds Commission Tracked` : `Birds Commission Tracked`;
+                      setHasBirdsInOrder(true);
+                      setOrderReferral(refCode);
+                    } else {
+                      setHasBirdsInOrder(false);
+                      setOrderReferral("");
+                    }
+
+                    const order = {
+                      customer_name: fd.get("name") as string,
+                      customer_phone: phone,
+                      delivery_address: fullAddress,
+                      city: deliveryType === "pickup" ? "" : wilaya,
+                      delivery_area: deliveryType === "pickup" ? "" : commune,
+                      delivery_fee: deliveryFee,
+                      delivery_eta: etaText,
+                      items: items.map((i) => ({ productId: i.productId, name: i.name, price: i.price, quantity: i.quantity, sold_by: i.sold_by })),
+                      total: grandTotal,
+                      notes: notesVal || null,
+                      user_id: user?.id || null,
+                    };
+                    try {
+                      const res = await fetch("/api/orders", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(order),
+                      });
+                      if (!res.ok) throw new Error("Server error");
+                      const createdOrder = await res.json();
+                      const savedInfo = { name: fd.get("name") as string, phone, wilaya, commune, addressDetails: addressDetailsInput };
+                      setCookie("pawswings_customer_info", JSON.stringify(savedInfo), 180);
+                      try { localStorage.setItem("pawswings_customer_info", JSON.stringify(savedInfo)); } catch {}
+                      setOrderPlaced(createdOrder);
+                      setCheckingOut(false);
+                      clearCart();
+                    } catch (e) {
+                      alert(t.cart.orderFailed);
+                      return;
+                    }
+                  }} className="space-y-6">
+
+                    {/* Step 1: Contact Info */}
+                    <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 sm:p-8">
+                      <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+                        <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm">1</div>
+                        <h3 className="text-lg font-bold text-gray-900">{lang === "ar" ? "معلومات التواصل" : "Coordonnées"}</h3>
+                      </div>
+                      
+                      {hasPreFilledInfo && (
+                        <div className="mb-5 bg-emerald-50/50 border border-emerald-100 rounded-xl p-3 text-sm text-emerald-800 flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <span>{lang === "ar" ? "تم استرجاع بياناتك تلقائياً لسرعة الطلب." : "Vos coordonnées ont été pré-remplies."}</span>
+                        </div>
+                      )}
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div>
+                          <label className="block text-sm font-bold text-gray-700 mb-2">{t.cart.namePlaceholder}</label>
+                          <input type="text" name="name" value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder={t.cart.namePlaceholder} required className="w-full px-4 py-3.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all shadow-sm bg-gray-50 focus:bg-white" />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-bold text-gray-700 mb-2">{t.cart.phonePlaceholder}</label>
+                          <input type="tel" name="phone" value={customerPhone} onChange={(e) => { setCustomerPhone(e.target.value); if (phoneError) setPhoneError(null); }} placeholder={t.cart.phonePlaceholder} inputMode="tel" dir="auto" required className={`w-full px-4 py-3.5 rounded-xl border text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all shadow-sm ${phoneError ? "border-red-400 bg-red-50" : "border-gray-200 bg-gray-50 focus:bg-white"}`} />
+                          {phoneError && <p className="text-xs text-red-500 mt-1.5 font-medium">{phoneError}</p>}
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Product Details & Actions */}
-                    <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-                      {/* Name & Unit Price */}
-                      <div className="min-w-0 flex-1">
-                        <h3 className="font-semibold text-gray-900 text-sm sm:text-base line-clamp-2 pr-6 sm:pr-0 rtl:pl-6 rtl:pr-0">
-                          {item.name}
-                        </h3>
-                        {item.selectedVariant && (
-                          <div className="mt-1">
-                            <span className="inline-block text-[10px] sm:text-xs font-bold text-orange-700 bg-orange-50 px-2 py-0.5 rounded-md border border-orange-100/50">
-                              {item.selectedVariant}
-                            </span>
+                    {/* Step 2: Delivery */}
+                    <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 sm:p-8">
+                      <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+                        <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm">2</div>
+                        <h3 className="text-lg font-bold text-gray-900">{lang === "ar" ? "خيارات التوصيل" : "Options de livraison"}</h3>
+                      </div>
+
+                      {/* Type Selection */}
+                      <div className="mb-6">
+                        <label className="block text-sm font-bold text-gray-700 mb-3">{lang === "ar" ? "طريقة الاستلام والتوصيل" : "Mode de livraison et retrait"}</label>
+                        {cartHasBirds ? (
+                          <div className="space-y-3">
+                            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900 leading-relaxed" dir={lang === "ar" ? "rtl" : "ltr"}>
+                              <p className="font-bold flex items-center gap-2 mb-1"><Store className="w-4 h-4"/> {lang === "ar" ? "تنبيه هام:" : "Avis important :"}</p>
+                              {lang === "ar" ? "سلة المشتريات تحتوي على طيور/كائنات حية. يرجى استلام الطلب مباشرة من المحل حفاظاً على سلامتها." : "Votre panier contient des animaux vivants. Veuillez récupérer votre commande au magasin."}
+                            </div>
+                            <button type="button" onClick={() => setDeliveryType("pickup")} className="w-full p-4 rounded-xl border-2 font-bold transition-all flex items-center justify-center gap-2 border-amber-600 bg-amber-50 text-amber-900 shadow-sm">
+                              <Store className="w-5 h-5 shrink-0" />
+                              <span>{lang === "ar" ? "استلام من المحل (إجباري للكائنات الحية)" : "Retrait en magasin"}</span>
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="grid grid-cols-2 gap-4">
+                            <button type="button" onClick={() => setDeliveryType("home")} className={`p-4 rounded-2xl border-2 font-bold transition-all flex flex-col items-center justify-center gap-2 ${deliveryType === "home" ? "border-emerald-600 bg-emerald-50 text-emerald-900 shadow-sm" : "border-gray-100 hover:border-gray-300 hover:bg-gray-50 text-gray-600"}`}>
+                              <Home className="w-6 h-6 shrink-0" />
+                              <span>{lang === "ar" ? "توصيل للمنزل" : "À domicile"}</span>
+                            </button>
+                            <button type="button" onClick={() => setDeliveryType("stopdesk")} className={`p-4 rounded-2xl border-2 font-bold transition-all flex flex-col items-center justify-center gap-2 ${deliveryType === "stopdesk" ? "border-emerald-600 bg-emerald-50 text-emerald-900 shadow-sm" : "border-gray-100 hover:border-gray-300 hover:bg-gray-50 text-gray-600"}`}>
+                              <Building2 className="w-6 h-6 shrink-0" />
+                              <span>{lang === "ar" ? "مكتب التوصيل" : "Bureau de livraison"}</span>
+                            </button>
                           </div>
                         )}
-                        <p className="text-emerald-600 font-bold text-xs sm:text-sm mt-0.5 sm:mt-1">
-                          {currency}{item.price.toFixed(2)}
-                          {item.sold_by && item.sold_by !== "piece" && (
-                            <span className="text-[10px] sm:text-xs font-normal text-gray-400">
-                              {" "}/{unitLabel(item.sold_by, lang)}
-                            </span>
-                          )}
-                        </p>
+                        {deliveryType === "" && <p className="text-sm text-red-500 mt-2 font-medium">{lang === "ar" ? "يرجى اختيار نوع التوصيل." : "Veuillez choisir un type de livraison."}</p>}
                       </div>
 
-                      {/* Quantity & Price Summary Row */}
-                      <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto mt-1 sm:mt-0 pt-2 sm:pt-0 border-t border-dashed border-gray-100 sm:border-0 shrink-0">
-                        {/* Quantity Selector / Weight Input */}
-                        <div className="flex items-center">
-                          {isContinuousUnit(item.sold_by) ? (
-                            <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-200/60 rounded-xl px-2.5 py-1">
-                              <input
-                                type="number"
-                                min="0.1"
-                                step="0.1"
-                                value={item.quantity}
-                                onChange={(e) => updateQuantity(item.productId, Math.max(0.1, Number(e.target.value) || 0.1), item.selectedVariant)}
-                                className="w-12 sm:w-16 bg-transparent text-center font-bold text-gray-900 text-xs sm:text-sm focus:outline-none"
-                              />
-                              <span className="text-[10px] sm:text-xs text-gray-400 font-medium">{unitLabel(item.sold_by, lang)}</span>
+                      {/* Address Fields */}
+                      {(deliveryType === "home" || deliveryType === "stopdesk") && (
+                        <div className="space-y-5 animate-in fade-in slide-in-from-top-2 duration-300">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div>
+                              <label className="block text-sm font-bold text-gray-700 mb-2">{t.cart.wilaya}</label>
+                              <select value={wilaya} onChange={(e) => { setWilaya(e.target.value); }} required className="w-full px-4 py-3.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-gray-50 focus:bg-white transition-all shadow-sm cursor-pointer">
+                                <option value="" disabled hidden>{lang === "ar" ? "اختر الولاية" : "Sélectionnez une wilaya"}</option>
+                                {WILAYAS.map((w, i) => (<option key={w} value={w}>{getNumberedWilayaLabel(i, lang)}</option>))}
+                              </select>
                             </div>
-                          ) : (
-                            <div className="flex items-center gap-1 bg-gray-50 border border-gray-200/60 rounded-xl p-0.5">
-                              <button
-                                onClick={() => updateQuantity(item.productId, item.quantity - 1, item.selectedVariant)}
-                                disabled={item.quantity <= 1}
-                                className="w-7 h-7 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:pointer-events-none transition-colors"
-                              >
-                                <Minus className="w-3 h-3" />
-                              </button>
-                              <span className="w-6 text-center font-bold text-gray-900 text-xs sm:text-sm">
-                                {item.quantity}
-                              </span>
-                              <button
-                                onClick={() => updateQuantity(item.productId, item.quantity + 1, item.selectedVariant)}
-                                className="w-7 h-7 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 transition-colors"
-                              >
-                                <Plus className="w-3 h-3" />
-                              </button>
+                            <div>
+                              <label className="block text-sm font-bold text-gray-700 mb-2">{t.cart.commune}</label>
+                              <input type="text" name="commune" value={commune} onChange={(e) => setCommune(e.target.value)} placeholder={t.cart.commune} required className="w-full px-4 py-3.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-gray-50 focus:bg-white transition-all shadow-sm" />
+                            </div>
+                          </div>
+
+                          {(wilaya === "Sétif" || isSetifCommune(commune)) && (
+                            <div className="mt-2">
+                              <SetifMotorcycleDeliveryBadge />
+                            </div>
+                          )}
+
+                          {deliveryType === "home" && (
+                            <div>
+                              <label className="block text-sm font-bold text-gray-700 mb-2">{lang === "ar" ? "العنوان بالتفصيل" : "Adresse détaillée"}</label>
+                              <input type="text" name="address_details" value={addressDetails} onChange={(e) => setAddressDetails(e.target.value)} placeholder={lang === "ar" ? "الحي، الشارع، رقم المنزل/الشقة..." : "Quartier, Rue, N°..."} required className="w-full px-4 py-3.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-gray-50 focus:bg-white transition-all shadow-sm" />
                             </div>
                           )}
                         </div>
+                      )}
 
-                        {/* Total Price for this item */}
-                        <div className="text-right sm:min-w-[90px]">
-                          <p className="font-bold text-gray-900 text-sm sm:text-base">
-                            {currency}{(item.price * item.quantity).toFixed(2)}
-                          </p>
-                        </div>
+                      {/* Referral Code */}
+                      <div className="mt-6 pt-6 border-t border-gray-100">
+                        <label className="block text-sm font-bold text-gray-700 mb-2">{lang === "ar" ? "كود الإحالة (إن وجد)" : "Code de parrainage"}</label>
+                        <input type="text" name="referral_code" value={referralCode} onChange={(e) => setReferralCode(e.target.value)} placeholder={lang === "ar" ? "BIRD-XXXX" : "BIRD-XXXX"} className="w-full max-w-xs px-4 py-3 rounded-xl border border-gray-200 text-gray-900 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-gray-50 focus:bg-white transition-all" />
                       </div>
                     </div>
-
-                    {/* Delete Button (absolute on mobile for neat spacing, standard on desktop) */}
-                    <button
-                      onClick={() => removeItem(item.productId, item.selectedVariant)}
-                      className="absolute top-3 right-3 sm:relative sm:top-auto sm:right-auto p-1.5 sm:p-2 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all border border-transparent hover:border-red-100 rtl:left-3 rtl:right-auto sm:rtl:left-auto"
-                      aria-label="Remove item"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                ))}
+                  </form>
+                )}
               </div>
 
-              <div className="w-full lg:w-80 lg:shrink-0">
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.cart.summary}</h3>
+              {/* ── RIGHT COLUMN: STICKY SUMMARY ── */}
+              <div className="w-full lg:w-96 lg:shrink-0">
+                <div className="bg-white rounded-3xl shadow-lg shadow-gray-200/40 border border-gray-100 p-6 sm:p-8 sticky top-24">
+                  <h3 className="text-xl font-bold text-[#1E2D24] mb-6 flex items-center gap-2">
+                    <ShoppingBag className="w-5 h-5 text-[#F5851F]" />
+                    {t.cart.summary}
+                  </h3>
 
-                  <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                    <span className="text-gray-500">{t.cart.subtotal}</span>
-                    <span className="font-semibold text-gray-900">{currency}{subtotal.toFixed(2)}</span>
+                  {/* Summary Rows */}
+                  <div className="space-y-4 text-sm">
+                    <div className="flex items-center justify-between text-gray-600">
+                      <span>{t.cart.subtotal}</span>
+                      <span className="font-bold text-gray-900">{currency}{subtotal.toFixed(2)}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-gray-600">
+                      <span className="flex items-center gap-1.5">
+                        <Truck className="w-4 h-4" />
+                        {t.nav.shipping || "Shipping"}
+                      </span>
+                      {checkingOut ? (
+                        <span className="font-bold text-gray-900">
+                          {deliveryType === "pickup" ? (lang === "ar" ? "مجاناً" : "Gratuit") : !wilaya ? "-" : (deliveryFee === 0 ? t.cart.free : `${currency}${deliveryFee.toFixed(2)}`)}
+                        </span>
+                      ) : (
+                        <span className="text-xs font-semibold text-[#F5851F] bg-[#F1C290]/20 px-2.5 py-1 rounded-md">
+                          {t.cart.calculatedAtCheckout || "Calculated at checkout"}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                    <span className="text-gray-500 flex items-center gap-1.5">
-                      <Truck className="w-4 h-4" />
-                      {t.nav.shipping || "Shipping"}
-                    </span>
-                    <span className="text-sm font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">
-                      {t.cart.calculatedAtCheckout || "Calculated at checkout"}
-                    </span>
-                  </div>
-
+                  {/* Free Shipping Progress */}
                   {remainingForFree > 0 && (
-                    <div className="mt-3">
-                      <div className="h-2 rounded-full bg-emerald-100 overflow-hidden">
-                        <div
-                          className="h-full bg-emerald-500 rounded-full transition-all duration-500"
-                          style={{ width: `${Math.min(100, (subtotal / freeNum) * 100)}%` }}
-                        />
+                    <div className="mt-5 bg-emerald-50 rounded-xl p-3 border border-emerald-100">
+                      <div className="h-2 rounded-full bg-emerald-200/50 overflow-hidden mb-2">
+                        <div className="h-full bg-emerald-500 rounded-full transition-all duration-700 relative overflow-hidden" style={{ width: `${Math.min(100, (subtotal / freeNum) * 100)}%` }}>
+                          <div className="absolute inset-0 bg-white/20 animate-pulse" />
+                        </div>
                       </div>
-                      <p className="text-xs text-emerald-600 mt-1.5">
+                      <p className="text-xs text-emerald-800 font-medium">
                         {t.cart.freeProgress.replace("{amount}", `${currency}${remainingForFree.toFixed(2)}`)}
                       </p>
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between py-3 border-b border-gray-100 text-lg font-bold text-gray-900">
-                    <span>{t.cart.total}</span>
-                    <span>{currency}{grandTotal.toFixed(2)}</span>
+                  <div className="mt-6 pt-5 border-t border-gray-100 flex items-center justify-between">
+                    <span className="text-lg font-black text-gray-900">{t.cart.total}</span>
+                    <span className="text-2xl font-black text-[#1E2D24]">{currency}{grandTotal.toFixed(2)}</span>
                   </div>
 
-                  <div className="mt-5 flex items-start gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium rounded-xl px-3 py-2.5 leading-relaxed">
-                    <Truck className="w-4 h-4 shrink-0 mt-0.5" />
-                    <span>{t.cart.codBadge}</span>
-                  </div>
-
-                  {hasMixedCart ? (
-                    <div className="mt-4 p-3 bg-red-50 text-red-700 text-xs rounded-xl border border-red-200">
-                      ⚠️ {lang === "ar" ? "لا يمكن جمع كائنات حية مع منتجات أخرى في نفس الطلب. يرجى فصلهما في طلبين (طلب استلام للمحل، وطلب توصيل للمنتجات)."
-                          : lang === "fr" ? "Vous ne pouvez pas mélanger des animaux vivants avec d'autres produits. Veuillez les séparer en deux commandes (retrait pour les animaux, livraison pour le reste)."
-                          : "Cannot mix live animals with other products. Please split into two orders."}
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() => {
-                        // Auto-set the delivery type based on cart contents
-                        if (cartHasBirds) {
-                          setDeliveryType("pickup");
-                        } else if (deliveryType === "pickup" || deliveryType === "") {
-                          setDeliveryType("home");
-                        }
+                  {/* Action Button */}
+                  <div className="mt-8">
+                    {hasMixedCart ? (
+                      <div className="p-4 bg-red-50 text-red-700 text-sm font-medium rounded-xl border border-red-200 text-center">
+                        ⚠️ {lang === "ar" ? "يرجى فصل الطيور في طلب استلام منفصل." : "Séparez les animaux en une commande retrait."}
+                      </div>
+                    ) : checkingOut ? (
+                      <button type="submit" form="checkout-form" className="w-full bg-gradient-to-r from-[#0B0F0D] to-[#1A2D24] text-white py-4 rounded-2xl font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-xl shadow-emerald-900/20 text-lg">
+                        <CreditCard className="w-5 h-5 text-[#F1C290]" />
+                        {t.cart.placeOrder}
+                      </button>
+                    ) : (
+                      <button onClick={() => {
+                        if (cartHasBirds) setDeliveryType("pickup");
+                        else if (deliveryType === "pickup" || deliveryType === "") setDeliveryType("home");
                         setCheckingOut(true);
-                      }}
-                      className="w-full mt-4 bg-emerald-600 text-white py-3 rounded-xl font-medium hover:bg-emerald-700 transition-colors"
-                    >
-                      {t.cart.checkout}
-                    </button>
-                  )}
+                      }} className="w-full bg-gradient-to-r from-[#F5851F] to-[#E3602D] text-white py-4 rounded-2xl font-bold hover:scale-[1.02] transition-transform flex items-center justify-center gap-2 shadow-xl shadow-[#F5851F]/20 text-lg">
+                        {t.cart.checkout}
+                        <ArrowLeft className="w-5 h-5 rtl:rotate-180" />
+                      </button>
+                    )}
+                  </div>
 
-                  <Link
-                    href="/products"
-                    className="w-full mt-3 inline-flex items-center justify-center gap-2 text-sm text-gray-500 hover:text-emerald-600 transition-colors"
-                  >
-                    <ArrowLeft className="w-3.5 h-3.5" />
-                    {t.cart.continueShopping}
-                  </Link>
+                  {/* Trust Signals */}
+                  <div className="mt-6 pt-6 border-t border-gray-100 grid grid-cols-2 gap-3 text-center">
+                    <div className="flex flex-col items-center justify-center gap-1.5 opacity-70">
+                      <Truck className="w-5 h-5 text-gray-500" />
+                      <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wide">{lang === "ar" ? "توصيل 69 ولاية" : "69 WILAYAS"}</span>
+                    </div>
+                    <div className="flex flex-col items-center justify-center gap-1.5 opacity-70">
+                      <Banknote className="w-5 h-5 text-gray-500" />
+                      <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wide">{lang === "ar" ? "الدفع عند الاستلام" : "PAIEMENT COD"}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </AnimatedSection>
         </div>
       </section>
-
-      {checkingOut && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full p-6 sm:p-8 my-auto relative max-h-[92vh] overflow-y-auto">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-gray-100 mb-6">
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
-                  <ShoppingBag className="w-5 h-5" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900">{t.cart.checkout}</h2>
-                  <p className="text-xs text-gray-500">{lang === "ar" ? "أدخل بيانات التوصيل لإكمال طلبك في ثوانٍ" : "Remplissez vos coordonnées de livraison"}</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setCheckingOut(false)}
-                className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-700 flex items-center justify-center text-xl transition-colors"
-              >
-                &times;
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              {/* ── LEFT COLUMN (5/12): Order Summary & Items ── */}
-              <div className="lg:col-span-5 bg-[#FBF9F5] rounded-2xl p-5 border border-[#EFEBE4] space-y-4">
-                <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wider flex items-center gap-2 border-b border-gray-200/60 pb-2.5">
-                  <ShoppingBag className="w-4 h-4 text-emerald-600" />
-                  <span>{lang === "ar" ? "ملخص طلبك" : "Récapitulatif"} ({items.length})</span>
-                </h3>
-
-                {/* Items List */}
-                <div className="space-y-3 max-h-48 overflow-y-auto pr-1">
-                  {items.map((item) => (
-                    <div key={item.productId} className="flex items-center gap-3 text-sm bg-white p-2.5 rounded-xl border border-gray-100">
-                      <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-gray-50 shrink-0 border border-gray-100">
-                        <Image src={item.image} alt={item.name} fill className="object-cover" sizes="48px" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-gray-900 text-xs truncate">{item.name}</p>
-                        <p className="text-[11px] text-gray-400">x{item.quantity} {item.selectedVariant ? `· ${item.selectedVariant}` : ""}</p>
-                      </div>
-                      <span className="font-bold text-gray-900 text-xs shrink-0">{currency}{(item.price * item.quantity).toFixed(2)}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Price Calculation */}
-                <div className="border-t border-gray-200/60 pt-3 space-y-2 text-xs">
-                  <div className="flex items-center justify-between text-gray-600">
-                    <span>{t.cart.subtotal}</span>
-                    <span className="font-semibold text-gray-900">{currency}{subtotal.toFixed(2)}</span>
-                  </div>
-                  <div className="flex items-center justify-between text-gray-600">
-                    <span className="flex items-center gap-1">
-                      <Truck className="w-3.5 h-3.5 text-emerald-600" />
-                      {deliveryType === "pickup"
-                        ? (lang === "ar" ? "الاستلام من المحل (سطيف)" : "Retrait en magasin")
-                        : wilaya
-                        ? (isSetifWilaya(wilaya)
-                            ? (lang === "ar" ? "🛵 توصيل سريع بالدراجة النارية (سطيف)" : "🛵 Livraison express moto (Sétif)")
-                            : `${wilaya} · ${etaText}`)
-                        : (lang === "ar" ? "اختر الولاية أولاً لحساب التوصيل" : "Sélectionnez une wilaya")}
-                    </span>
-                    <span className="font-semibold text-gray-900">
-                      {deliveryType === "pickup"
-                        ? (lang === "ar" ? "مجاناً" : "Gratuit")
-                        : !wilaya
-                        ? "-"
-                        : (deliveryFee === 0 ? t.cart.free : `${currency}${deliveryFee.toFixed(2)}`)}
-                    </span>
-                  </div>
-                  {remainingForFree > 0 && (
-                    <div className="mt-2 pt-1 border-t border-dashed border-gray-200">
-                      <div className="h-1.5 rounded-full bg-emerald-100 overflow-hidden">
-                        <div
-                          className="h-full bg-emerald-500 rounded-full transition-all duration-500"
-                          style={{ width: `${Math.min(100, (subtotal / freeNum) * 100)}%` }}
-                        />
-                      </div>
-                      <p className="text-[11px] text-emerald-700 mt-1 font-medium">{t.cart.freeProgress.replace("{amount}", `${currency}${remainingForFree.toFixed(2)}`)}</p>
-                    </div>
-                  )}
-                  <div className="flex items-center justify-between text-base font-black text-gray-900 pt-2 border-t border-gray-200">
-                    <span>{t.cart.total}</span>
-                    <span className="text-emerald-700">{currency}{grandTotal.toFixed(2)}</span>
-                  </div>
-                </div>
-
-                {/* COD Guarantee */}
-                <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-medium rounded-xl p-2.5 flex items-center gap-2">
-                  <Truck className="w-4 h-4 shrink-0 text-emerald-600" />
-                  <span>{t.cart.codBadge}</span>
-                </div>
-              </div>
-
-              {/* ── RIGHT COLUMN (7/12): Form Inputs ── */}
-              <form
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  if (deliveryType === "") return;
-                  
-                  const fd = new FormData(e.currentTarget);
-                  const phone = (fd.get("phone") as string) || "";
-                  if (!isValidAlgerianPhone(phone)) {
-                    setPhoneError(t.cart.phoneInvalid);
-                    return;
-                  }
-                  setPhoneError(null);
-                  
-                  const addressDetails = fd.get("address_details") as string || "";
-                  const fullAddress = deliveryType === "pickup"
-                    ? "[Pickup] الاستلام من المحل"
-                    : (deliveryType === "stopdesk"
-                      ? `[Stop Desk] Commune: ${commune}, Wilaya: ${wilaya}`
-                      : `[À Domicile] Adresse: ${addressDetails}, Commune: ${commune}, Wilaya: ${wilaya}`);
-
-                  const hasBirds = cartHasBirds;
-                  const refCode = (fd.get("referral_code") as string || "").trim();
-                  let notesVal = "";
-                  if (refCode) {
-                    notesVal = `Referral Code: ${refCode}`;
-                  }
-                  if (hasBirds) {
-                    notesVal = notesVal ? `${notesVal} | Birds Commission Tracked` : `Birds Commission Tracked`;
-                    setHasBirdsInOrder(true);
-                    setOrderReferral(refCode);
-                  } else {
-                    setHasBirdsInOrder(false);
-                    setOrderReferral("");
-                  }
-
-                  const order = {
-                    customer_name: fd.get("name") as string,
-                    customer_phone: phone,
-                    delivery_address: fullAddress,
-                    city: deliveryType === "pickup" ? "" : wilaya,
-                    delivery_area: deliveryType === "pickup" ? "" : commune,
-                    delivery_fee: deliveryFee,
-                    delivery_eta: etaText,
-                    items: items.map((i) => ({ productId: i.productId, name: i.name, price: i.price, quantity: i.quantity, sold_by: i.sold_by })),
-                    total: grandTotal,
-                    notes: notesVal || null,
-                    user_id: user?.id || null,
-                  };
-                  try {
-                    const res = await fetch("/api/orders", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify(order),
-                    });
-                    if (!res.ok) throw new Error("Server error");
-                    const createdOrder = await res.json();
-
-                    // Save customer info to cookie and localStorage for 180 days for fast 1-click future checkout
-                    const savedInfo = {
-                      name: fd.get("name") as string,
-                      phone,
-                      wilaya,
-                      commune,
-                      addressDetails,
-                    };
-                    setCookie("pawswings_customer_info", JSON.stringify(savedInfo), 180);
-                    try {
-                      localStorage.setItem("pawswings_customer_info", JSON.stringify(savedInfo));
-                    } catch {}
-
-                    setOrderPlaced(createdOrder);
-                    setCheckingOut(false);
-                    if (typeof document !== "undefined") {
-                      document.body.style.overflow = "";
-                    }
-                    clearCart();
-                  } catch (e) {
-                    alert(t.cart.orderFailed);
-                    return;
-                  }
-                }}
-                className="lg:col-span-7 space-y-4"
-              >
-                {hasPreFilledInfo && (
-                  <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 text-xs text-emerald-800 flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>{lang === "ar" ? "⚡ تم استرجاع بياناتك تلقائياً لسرعة الطلب." : "⚡ Vos coordonnées ont été pré-remplies."}</span>
-                  </div>
-                )}
-
-                {/* 2-Column Name & Phone Inputs on Desktop */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">{t.cart.namePlaceholder}</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                      placeholder={t.cart.namePlaceholder}
-                      required
-                      onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity(lang === "ar" ? "يرجى ملء هذا الحقل" : lang === "fr" ? "Veuillez renseigner ce champ" : "Please fill out this field")}
-                      onInput={(e) => (e.target as HTMLInputElement).setCustomValidity("")}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">{t.cart.phonePlaceholder}</label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={customerPhone}
-                      onChange={(e) => {
-                        setCustomerPhone(e.target.value);
-                        if (phoneError) setPhoneError(null);
-                      }}
-                      placeholder={t.cart.phonePlaceholder}
-                      inputMode="tel"
-                      dir="auto"
-                      required
-                      onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity(lang === "ar" ? "يرجى ملء هذا الحقل" : lang === "fr" ? "Veuillez renseigner ce champ" : "Please fill out this field")}
-                      onInput={(e) => {
-                        (e.target as HTMLInputElement).setCustomValidity("");
-                      }}
-                      className={`w-full px-3.5 py-2.5 rounded-xl border text-gray-900 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm ${phoneError ? "border-red-400 bg-red-50" : "border-gray-200"}`}
-                    />
-                    {phoneError && (
-                      <p className="text-xs text-red-500 mt-1">{phoneError}</p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Delivery Type Selection */}
-                <div>
-                  <label className="block text-xs font-bold text-gray-700 mb-1.5">
-                    {lang === "ar" ? "طريقة الاستلام والتوصيل" : lang === "fr" ? "Mode de livraison et retrait" : "Delivery & Pickup Method"}
-                  </label>
-                  
-                  {cartHasBirds ? (
-                    <div className="space-y-2">
-                      <div className="bg-amber-50 border border-amber-200 rounded-xl p-2.5 text-xs text-amber-800 leading-relaxed" dir={lang === "ar" ? "rtl" : "ltr"}>
-                        <p className="font-bold mb-0.5">⚠️ {lang === "ar" ? "تنبيه هام:" : "Avis important :"}</p>
-                        {lang === "ar" 
-                          ? "سلة المشتريات تحتوي على طيور/كائنات حية. يرجى استلام الطلب مباشرة من المحل."
-                          : "Votre panier contient des animaux vivants. Veuillez récupérer votre commande au magasin."}
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setDeliveryType("pickup")}
-                        className="w-full px-3 py-3 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-2 border-amber-600 bg-amber-50 text-amber-800 ring-2 ring-amber-600/20"
-                      >
-                        <Store className="w-4 h-4 shrink-0" />
-                        <span>{lang === "ar" ? "استلام من المحل (إجباري للطيور)" : "Retrait en magasin"}</span>
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setDeliveryType("home")}
-                        className={`px-3 py-2.5 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${deliveryType === "home" ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
-                      >
-                        <Home className="w-4 h-4 shrink-0" />
-                        <span className="truncate">{lang === "ar" ? "توصيل للمنزل" : "À domicile"}</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setDeliveryType("stopdesk")}
-                        className={`px-3 py-2.5 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${deliveryType === "stopdesk" ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-600/10" : "border-gray-200 hover:bg-gray-50 text-gray-700"}`}
-                      >
-                        <Building2 className="w-4 h-4 shrink-0" />
-                        <span className="truncate">{lang === "ar" ? "مكتب التوصيل" : "Bureau de livraison"}</span>
-                      </button>
-                    </div>
-                  )}
-
-                  {deliveryType === "" && (
-                    <p className="text-xs text-red-500 mt-1">{lang === "ar" ? "يرجى اختيار نوع التوصيل." : "Veuillez choisir un type de livraison."}</p>
-                  )}
-                </div>
-
-                {/* Conditional Address Fields (2-Column Wilaya & Commune) */}
-                {(deliveryType === "home" || deliveryType === "stopdesk") && (
-                  <div className="space-y-3 animate-in fade-in duration-300">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1">{t.cart.wilaya}</label>
-                        <select
-                          value={wilaya}
-                          onChange={(e) => {
-                            (e.target as HTMLSelectElement).setCustomValidity("");
-                            setWilaya(e.target.value);
-                          }}
-                          onInvalid={(e) => (e.target as HTMLSelectElement).setCustomValidity(lang === "ar" ? "يرجى اختيار ولاية" : lang === "fr" ? "Veuillez sélectionner une wilaya" : "Please select a wilaya")}
-                          name="wilaya"
-                          required
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm"
-                        >
-                          <option value="" disabled hidden>{lang === "ar" ? "اختر الولاية" : "Sélectionnez une wilaya"}</option>
-                          {WILAYAS.map((w, i) => (
-                            <option key={w} value={w}>{getNumberedWilayaLabel(i, lang)}</option>
-                          ))}
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1">{t.cart.commune}</label>
-                        <input
-                          type="text"
-                          name="commune"
-                          value={commune}
-                          onChange={(e) => setCommune(e.target.value)}
-                          placeholder={t.cart.commune}
-                          required
-                          onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity(lang === "ar" ? "يرجى ملء هذا الحقل" : lang === "fr" ? "Veuillez renseigner ce champ" : "Please fill out this field")}
-                          onInput={(e) => (e.target as HTMLInputElement).setCustomValidity("")}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm"
-                        />
-                      </div>
-                    </div>
-
-                    {(wilaya === "Sétif" || isSetifCommune(commune)) && (
-                      <SetifMotorcycleDeliveryBadge className="mt-1" />
-                    )}
-
-                    {deliveryType === "home" && (
-                      <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1">
-                          {lang === "ar" ? "العنوان بالتفصيل" : "Adresse détaillée"}
-                        </label>
-                        <input
-                          type="text"
-                          name="address_details"
-                          value={addressDetails}
-                          onChange={(e) => setAddressDetails(e.target.value)}
-                          placeholder={lang === "ar" ? "الحي، الشارع، رقم المنزل/الشقة..." : "Quartier, Rue, N°..."}
-                          required
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm"
-                        />
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Optional Referral Code */}
-                <div>
-                  <input
-                    type="text"
-                    name="referral_code"
-                    value={referralCode}
-                    onChange={(e) => setReferralCode(e.target.value)}
-                    placeholder={lang === "ar" ? "كود الإحالة / الشريك (اختياري)" : "Code de parrainage (Optionnel)"}
-                    className="w-full px-3.5 py-2 rounded-xl border border-gray-200 text-gray-900 text-xs placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  />
-                </div>
-
-                {/* Payment info box */}
-                <div className="bg-gray-50 border border-gray-200/80 rounded-xl p-3 text-xs space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <p className="font-bold text-gray-700 flex items-center gap-1.5 text-xs">
-                      <Banknote className="w-4 h-4 text-emerald-600 shrink-0" />
-                      {lang === "ar" ? "طريقة الدفع:" : "Paiement :"}
-                    </p>
-                    <div className="flex items-center gap-1.5">
-                      <VisaIcon className="h-4 rounded" />
-                      <MastercardIcon className="h-4 rounded" />
-                    </div>
-                  </div>
-                  <p className="text-gray-500 leading-relaxed text-[11px]">
-                    {lang === "ar" ? "الدفع عند الاستلام (COD) — تدفع نقداً لموزّع التوصيل عند استلام الطلبية." : "Paiement à la livraison (COD) à la réception."}
-                  </p>
-                </div>
-
-                {/* Primary Submit Button */}
-                <button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 text-white py-3.5 rounded-xl font-bold hover:opacity-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-700/20 text-sm sm:text-base"
-                >
-                  <CreditCard className="w-5 h-5" />
-                  {t.cart.placeOrder}
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
