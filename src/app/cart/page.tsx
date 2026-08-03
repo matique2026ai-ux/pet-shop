@@ -399,7 +399,7 @@ export default function CartPage() {
       <section className="py-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
-            <div className="flex flex-col lg:flex-row gap-8 items-start w-full overflow-hidden">
+            <div className="flex flex-col lg:flex-row gap-8 items-start w-full">
               
               {/* ── LEFT COLUMN: ITEMS OR CHECKOUT FORM ── */}
               <div className="flex-1 min-w-0 w-full space-y-6">
@@ -555,7 +555,7 @@ export default function CartPage() {
                         </div>
                         <div>
                           <label className="block text-sm font-bold text-gray-700 mb-2">{t.cart.phonePlaceholder}</label>
-                          <input type="tel" name="phone" value={customerPhone} onChange={(e) => { setCustomerPhone(e.target.value); if (phoneError) setPhoneError(null); }} placeholder={t.cart.phonePlaceholder} inputMode="tel" dir="auto" required className={`w-full px-4 py-3.5 rounded-xl border text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all shadow-sm ${phoneError ? "border-red-400 bg-red-50" : "border-gray-200 bg-gray-50 focus:bg-white"}`} />
+                          <input type="tel" name="phone" value={customerPhone} onChange={(e) => { setCustomerPhone(e.target.value); if (phoneError) setPhoneError(null); }} placeholder={t.cart.phonePlaceholder} inputMode="tel" dir={lang === "ar" && !customerPhone ? "rtl" : "ltr"} required className={`w-full px-4 py-3.5 rounded-xl border text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all shadow-sm ${phoneError ? "border-red-400 bg-red-50" : "border-gray-200 bg-gray-50 focus:bg-white"}`} />
                           {phoneError && <p className="text-xs text-red-500 mt-1.5 font-medium">{phoneError}</p>}
                         </div>
                       </div>
