@@ -96,7 +96,7 @@ export default function HomePage() {
       ══════════════════════════════════ */}
       <section className="relative overflow-hidden min-h-[560px] sm:min-h-[640px] flex items-center justify-center">
         {customBg ? (
-          isCustomVideo ? (
+          !isMobile && isCustomVideo ? (
             <video
               autoPlay muted loop playsInline preload="metadata"
               className="absolute inset-0 w-full h-full object-cover z-0"

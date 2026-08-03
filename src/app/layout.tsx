@@ -56,6 +56,7 @@ export const metadata: Metadata = {
     "geo.position": "36.1898;5.4123",
     "ICBM": "36.1898, 5.4123",
     "language": "ar, fr, en",
+    "fb:app_id": "966242223397117",
   },
   openGraph: {
     title: "مخالب وأجنحة | Paws & Wings",
