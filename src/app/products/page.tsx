@@ -47,7 +47,7 @@ function ProductsContent() {
   }, [products, search, category, initialFilter, sort]);
 
   return (
-    <div dir={dir} className="bg-[#F8F7F4] min-h-screen">
+    <div dir={dir} className="min-h-screen">
       {/* ══════════════════════════════════
           CREATIVE PRODUCTS HERO
       ══════════════════════════════════ */}

@@ -12,7 +12,8 @@ import PetNutritionCalculator from "@/components/pet-nutrition-calculator";
 
 import ProductCard, { ProductCardSkeleton } from "@/components/product-card";
 import BlogCard from "@/components/blog-card";
-import { Star, Truck, Shield, BookOpen, ChevronLeft, ChevronRight, Heart, Sparkles, Award, PawPrint, CheckCircle, MapPin } from "lucide-react";
+import { Star, Truck, Shield, BookOpen, ChevronLeft, ChevronRight, Heart, Sparkles, Award, PawPrint, CheckCircle, MapPin, MessageCircle } from "lucide-react";
+import { formatWhatsAppNumber } from "@/lib/phone-utils";
 
 
 
@@ -36,7 +37,7 @@ const DEFAULT_HERO_VIDEOS = [
 
 export default function HomePage() {
   const { t, dir, lang } = useI18n();
-  const { content } = useSiteSettings();
+  const { content, store } = useSiteSettings();
   const { categories, products, testimonials, blogPosts, productsLoaded } = useTranslatedData();
   
   const getLocalizedContent = (baseKey: string, fallback: string) => {
@@ -182,13 +183,15 @@ export default function HomePage() {
                   )}
                   <div className="absolute inset-0 rounded-full border border-white/20 group-hover:border-white/40 transition-colors" />
                 </Link>
-                <Link
-                  href="/blog"
+                <a
+                  href={`https://wa.me/${formatWhatsAppNumber(store?.whatsapp, "213776075355")}?text=${encodeURIComponent(t.nav.whatsappMessage)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex justify-center items-center gap-2.5 bg-white/10 backdrop-blur-md text-white px-7 sm:px-9 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg transition-all duration-300 border border-white/25 hover:bg-white/20 hover:border-white/50 hover:scale-105 w-full sm:w-auto"
                 >
-                  <BookOpen className="w-5 h-5 text-[#F1C290] shrink-0" />
+                  <MessageCircle className="w-5 h-5 text-[#4ade80] shrink-0" />
                   <span>{heroCta2}</span>
-                </Link>
+                </a>
               </div>
             </FadeIn>
           </StaggerSection>
@@ -218,7 +221,7 @@ export default function HomePage() {
       {/* ══════════════════════════════════
           TAGLINE BAR
       ══════════════════════════════════ */}
-      <section className="py-8 bg-white border-b border-[#F0EDE6]">
+      <section className="py-8 border-b border-[#F0EDE6]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
             <div className="text-center">
@@ -392,7 +395,7 @@ export default function HomePage() {
       {/* ══════════════════════════════════
           BESTSELLERS
       ══════════════════════════════════ */}
-      <section className="py-14 bg-white">
+      <section className="py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-2 mb-8 flex-wrap">
             <AnimatedSection>
@@ -426,7 +429,7 @@ export default function HomePage() {
           RECENTLY VIEWED
       ══════════════════════════════════ */}
       {recentProducts.length > 0 && (
-        <section className="py-12 bg-[#F8F7F4]">
+        <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-8">
               <div>
