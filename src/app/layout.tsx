@@ -71,6 +71,15 @@ export const metadata: Metadata = {
     title: "مخالب وأجنحة | Paws & Wings",
     description: "متجر إلكتروني متكامل للحيوانات الأليفة والخيول في الجزائر.",
   },
+  icons: {
+    icon: [
+      { url: "/icon.png", type: "image/png" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", type: "image/png" },
+    ],
+  },
   robots: {
     index: true,
     follow: true,
