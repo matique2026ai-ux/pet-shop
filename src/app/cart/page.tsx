@@ -298,18 +298,22 @@ export default function CartPage() {
             {lang === "ar" ? "تأكيد عبر واتساب" : lang === "fr" ? "Confirmer via WhatsApp" : "Confirm via WhatsApp"}
           </a>
           <button
+            type="button"
             onClick={async () => {
               if (!confirm(lang === "ar" ? "هل أنت متأكد أنك تريد إلغاء هذا الطلب؟" : lang === "fr" ? "Êtes-vous sûr de vouloir annuler cette commande ?" : "Are you sure you want to cancel this order?")) return;
               try {
-                // If the user has a token in localStorage or cookies, we could pass it.
-                // Assuming auth-context sets a session in supabase.
-                const supabase = (await import("@/lib/supabase")).createClient();
-                const { data: { session } } = await supabase.auth.getSession();
-                
+                let token = "";
+                try {
+                  const { createClient } = await import("@/lib/supabase");
+                  const supabase = createClient();
+                  const { data: { session } } = await supabase.auth.getSession();
+                  if (session?.access_token) token = session.access_token;
+                } catch(e) { console.warn("Supabase auth check skipped", e); }
+
                 const res = await fetch(`/api/orders/${orderPlaced.id}/cancel`, {
                   method: "POST",
                   headers: {
-                    ...(session?.access_token ? { "Authorization": `Bearer ${session.access_token}` } : {})
+                    ...(token ? { "Authorization": `Bearer ${token}` } : {})
                   }
                 });
                 
@@ -321,7 +325,8 @@ export default function CartPage() {
                   alert((lang === "ar" ? "تعذر إلغاء الطلب: " : "Error: ") + (err.error || ""));
                 }
               } catch (e) {
-                console.error(e);
+                console.error("Cancel order error:", e);
+                alert(lang === "ar" ? "حدث خطأ غير متوقع أثناء الإلغاء." : "An unexpected error occurred.");
               }
             }}
             className="inline-flex items-center justify-center gap-2 bg-red-50 text-red-600 px-6 py-3 rounded-xl font-bold hover:bg-red-100 transition-colors shadow-sm text-sm border border-red-200"
