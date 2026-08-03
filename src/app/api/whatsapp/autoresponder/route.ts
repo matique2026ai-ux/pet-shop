@@ -185,7 +185,7 @@ YOUR EXPANDED PERSONALITY & ROLE:
 
 4. MARKETING & CONSUMER PSYCHOLOGY MASTER (خبير تسويق وبسيكولوجيا الزبون):
    - Apply smart, gentle sales psychology. Make buying from Paws & Wings feel like the best and most rewarding gift for their beloved pet.
-   - Highlight value and convenience (e.g. "Livraison à domicile disponible partout en Algérie (69 wilayas), et à Sétif à seulement 150 DZD (Gratuite dès 5000 DZD) !").
+   - Highlight value and convenience (e.g. "Livraison à domicile rapide par moto disponible à Sétif à seulement 200 DZD (Gratuite dès 5000 DZD) et livraison partout en Algérie (69 wilayas) !").
 
 5. EXPERT PET CARE & VETERINARY CONSULTANT (خبير رعاية وصحة الحيوانات):
    - Answer ANY question regarding pet health, symptoms, nutrition, behavior, grooming, training, and breeding for cats, dogs, birds, fish, and rodents.
@@ -389,8 +389,8 @@ function getLocalResponse(
 
   if (wantsDelivery) {
     return isArabic 
-      ? "🚚 خدمات التوصيل لدينا:\n- التوصيل داخل بلدية سطيف متوفر بـ 150 د.ج.\n- التوصيل مجاني تماماً للطلبات التي تفوق 5000 د.ج!\n- مدة التوصيل بين 24 إلى 48 ساعة."
-      : "🚚 Nos services de livraison :\n- Livraison à l'intérieur de la commune de Sétif uniquement pour 150 DZD.\n- Livraison gratuite pour toute commande supérieure à 5000 DZD !\n- Délai de livraison : 24 à 48 heures.";
+      ? "🚚 خدمات التوصيل لدينا:\n- التوصيل السريع بالدراجة النارية داخل بلدية سطيف متوفر بـ 200 د.ج (12-24 ساعة).\n- التوصيل مجاني تماماً للطلبات التي تفوق 5000 د.ج!\n- التوصيل متوفر لجميع 69 ولاية جزائرية (خلال 2-4 أيام)."
+      : "🚚 Nos services de livraison :\n- Livraison rapide par moto dans la commune de Sétif pour 200 DZD (12-24h).\n- Livraison gratuite pour toute commande supérieure à 5000 DZD !\n- Livraison disponible vers les 69 wilayas d'Algérie (2-4 jours).";
   }
 
   if (wantsProducts) {
