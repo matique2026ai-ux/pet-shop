@@ -94,7 +94,7 @@ export default function HomePage() {
       {/* ══════════════════════════════════
           HERO SECTION
       ══════════════════════════════════ */}
-      <section className="relative overflow-hidden min-h-[500px] sm:min-h-[620px] flex items-center justify-center">
+      <section className="relative overflow-hidden min-h-[560px] sm:min-h-[640px] flex items-center justify-center">
         {customBg ? (
           isCustomVideo ? (
             <video
@@ -137,13 +137,12 @@ export default function HomePage() {
         {/* Ambient Bottom Gradient */}
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/90 to-transparent z-0" />
 
-        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 sm:pt-24 sm:pb-36 lg:pt-28 lg:pb-40 w-full flex flex-col items-center text-center">
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-36 sm:pt-24 sm:pb-36 lg:pt-28 lg:pb-40 w-full flex flex-col items-center text-center">
           <StaggerSection className="text-center max-w-4xl mx-auto flex flex-col items-center w-full">
             {/* Premium badge */}
             <FadeIn>
               <div className="inline-flex items-center gap-2 bg-black/30 backdrop-blur-lg border border-white/20 text-white rounded-full px-4 py-1.5 sm:px-5 sm:py-2 text-xs sm:text-sm font-semibold mb-5 sm:mb-8 shadow-lg">
                 <Sparkles className="w-4 h-4 text-[#F1C290] shrink-0" />
-                {/* FIXED: replaced hardcoded dir ternary with i18n key */}
                 <span>{t.home.heroBadge}</span>
               </div>
             </FadeIn>
@@ -170,7 +169,7 @@ export default function HomePage() {
             
             {/* Action Buttons */}
             <FadeIn>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-5 w-full max-w-xs sm:max-w-none mx-auto relative z-30">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-5 w-full max-w-xs sm:max-w-none mx-auto relative z-30 mb-4 sm:mb-0">
                 <Link
                   href="/products"
                   className="relative group inline-flex justify-center items-center gap-2.5 bg-gradient-to-r from-[#F5851F] to-[#E06A0A] text-white px-7 sm:px-9 py-3.5 sm:py-4 rounded-full font-extrabold text-base sm:text-lg transition-all duration-300 hover:scale-105 shadow-xl shadow-[#F5851F]/30 hover:shadow-[#F5851F]/50 w-full sm:w-auto"
@@ -196,20 +195,19 @@ export default function HomePage() {
         </div>
 
         {/* Sleek Mobile-Responsive Trust Bar */}
-        <div className="absolute bottom-0 inset-x-0 border-t border-white/15 bg-black/50 backdrop-blur-xl z-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4">
-            <div className="grid grid-cols-1 sm:flex sm:flex-wrap items-center justify-center sm:justify-around gap-2 sm:gap-6 text-center">
+        <div className="absolute bottom-0 inset-x-0 border-t border-white/15 bg-black/60 backdrop-blur-xl z-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-4">
+            <div className="grid grid-cols-3 sm:flex sm:flex-wrap items-center justify-center sm:justify-around gap-1.5 sm:gap-6 text-center">
               {[
-                // FIXED: replaced hardcoded dir ternary strings with i18n keys
-                { icon: <Truck className="w-4 h-4 sm:w-5 sm:h-5" />, label: t.home.trustBarDelivery },
-                { icon: <Award className="w-4 h-4 sm:w-5 sm:h-5" />, label: t.home.trustBarQuality },
-                { icon: <Shield className="w-4 h-4 sm:w-5 sm:h-5" />, label: t.home.trustBarSecure },
+                { icon: <Truck className="w-3.5 h-3.5 sm:w-5 sm:h-5" />, label: t.home.trustBarDelivery },
+                { icon: <Award className="w-3.5 h-3.5 sm:w-5 sm:h-5" />, label: t.home.trustBarQuality },
+                { icon: <Shield className="w-3.5 h-3.5 sm:w-5 sm:h-5" />, label: t.home.trustBarSecure },
               ].map((b, i) => (
-                <div key={i} className="flex items-center justify-center gap-2 sm:gap-3 text-white/95 text-xs sm:text-base font-medium">
+                <div key={i} className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 text-white/95 text-[11px] sm:text-base font-medium">
                   <div className="bg-white/15 p-1.5 sm:p-2 rounded-full border border-white/10 shrink-0">
                     <span className="text-[#F1C290]">{b.icon}</span>
                   </div>
-                  <span>{b.label}</span>
+                  <span className="line-clamp-1">{b.label}</span>
                 </div>
               ))}
             </div>
