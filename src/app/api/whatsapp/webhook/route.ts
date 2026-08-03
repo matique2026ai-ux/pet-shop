@@ -230,10 +230,10 @@ function cleanWhatsAppLinks(text: string): string {
 // Helper: Fetch Gemini API
 async function askGemini(prompt: string, apiKey: string): Promise<string> {
   const models = [
-    "gemini-1.5-flash",
-    "gemini-1.5-pro",
     "gemini-2.5-flash",
-    "gemini-2.0-flash-lite"
+    "gemini-2.0-flash",
+    "gemini-1.5-flash",
+    "gemini-1.5-pro"
   ];
   let lastError: Error | null = null;
   for (const model of models) {
@@ -273,7 +273,7 @@ async function askGemini(prompt: string, apiKey: string): Promise<string> {
 
 // Helper: Send WhatsApp Message
 async function sendWhatsAppMessage(to: string, text: string, phoneId: string, token: string) {
-  const url = `https://graph.facebook.com/v20.0/${phoneId}/messages`;
+  const url = `https://graph.facebook.com/v22.0/${phoneId}/messages`;
   const response = await fetch(url, {
     method: "POST",
     headers: {
