@@ -593,11 +593,10 @@ export default function HomePage() {
                       &ldquo;{rev.text}&rdquo;
                     </p>
 
-                    {/* Purchased Product Tag if available */}
                     {rev.productTag && (
                       <div className="mb-4">
                         <span className="inline-block text-[10px] text-gray-500 bg-gray-50 border border-gray-100 px-2.5 py-1 rounded-lg">
-                          📦 {rev.productTag}
+                          {rev.productTag}
                         </span>
                       </div>
                     )}
@@ -608,9 +607,6 @@ export default function HomePage() {
                     <div className="flex items-center gap-2.5">
                       <div className="w-10 h-10 bg-gradient-to-br from-[#F5851F] to-[#E06A0A] rounded-full flex items-center justify-center text-xs font-bold text-white shadow-md relative">
                         <span>{rev.initials}</span>
-                        {rev.petType === "cat" && <span className="absolute -bottom-1 -right-1 text-xs">🐱</span>}
-                        {rev.petType === "dog" && <span className="absolute -bottom-1 -right-1 text-xs">🐶</span>}
-                        {rev.petType === "bird" && <span className="absolute -bottom-1 -right-1 text-xs">🦜</span>}
                       </div>
                       <div>
                         <h4 className="text-xs font-bold text-[#1A1A2E] leading-tight">{rev.name}</h4>

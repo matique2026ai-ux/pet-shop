@@ -55,10 +55,10 @@ export default function BlogListingPage() {
 
   const tags = [
     { id: "all", label: lang === "ar" ? "الكل" : lang === "fr" ? "Tous" : "All" },
-    { id: "طيور", label: lang === "ar" ? "🦜 الطيور" : lang === "fr" ? "Oiseaux" : "Birds" },
-    { id: "قطط", label: lang === "ar" ? "🐱 القطط" : lang === "fr" ? "Chats" : "Cats" },
-    { id: "كلاب", label: lang === "ar" ? "🐶 الكلاب" : lang === "fr" ? "Chiens" : "Dogs" },
-    { id: "تغذية", label: lang === "ar" ? "🥗 التغذية" : lang === "fr" ? "Nutrition" : "Nutrition" },
+    { id: "طيور", label: lang === "ar" ? "الطيور" : lang === "fr" ? "Oiseaux" : "Birds" },
+    { id: "قطط", label: lang === "ar" ? "القطط" : lang === "fr" ? "Chats" : "Cats" },
+    { id: "كلاب", label: lang === "ar" ? "الكلاب" : lang === "fr" ? "Chiens" : "Dogs" },
+    { id: "تغذية", label: lang === "ar" ? "التغذية" : lang === "fr" ? "Nutrition" : "Nutrition" },
   ];
 
   return (
