@@ -203,7 +203,7 @@ export default function ProductDetailPage() {
 
               {/* Left Side: Product Image & Video Trigger */}
               <div className="lg:col-span-6 flex flex-col gap-4 relative z-10 w-full lg:sticky lg:top-32 lg:self-start">
-                <div className="relative w-full aspect-square max-h-[380px] bg-gray-50/55 rounded-3xl p-6 flex items-center justify-center border border-gray-100 shadow-sm group overflow-hidden">
+                <div className="relative w-full aspect-square lg:aspect-[4/3] max-h-[480px] bg-white rounded-3xl flex items-center justify-center border border-gray-100 shadow-sm group overflow-hidden">
                   {activeMedia === "video" && embed ? (
                     embed.kind === "iframe" ? (
                       <iframe
@@ -223,7 +223,7 @@ export default function ProductDetailPage() {
                         alt={product.name}
                         fill
                         priority
-                        className="object-contain p-6 transition-transform duration-500 group-hover:scale-105"
+                        className="object-contain p-2 sm:p-4 transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 1024px) 100vw, 50vw"
                       />
                       <button
