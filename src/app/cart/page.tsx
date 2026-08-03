@@ -697,12 +697,13 @@ export default function CartPage() {
                         ⚠️ {lang === "ar" ? "يرجى فصل الطيور في طلب استلام منفصل." : "Séparez les animaux en une commande retrait."}
                       </div>
                     ) : checkingOut ? (
-                      <button type="submit" form="checkout-form" className="w-full bg-gradient-to-r from-[#0B0F0D] to-[#1A2D24] text-white py-4 rounded-2xl font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-xl shadow-emerald-900/20 text-lg">
+                      <button key="btn-submit-order" type="submit" form="checkout-form" className="w-full bg-gradient-to-r from-[#0B0F0D] to-[#1A2D24] text-white py-4 rounded-2xl font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-xl shadow-emerald-900/20 text-lg">
                         <CreditCard className="w-5 h-5 text-[#F1C290]" />
                         {t.cart.placeOrder}
                       </button>
                     ) : (
-                      <button onClick={() => {
+                      <button key="btn-start-checkout" type="button" onClick={(e) => {
+                        e.preventDefault();
                         if (cartHasBirds) setDeliveryType("pickup");
                         else if (deliveryType === "pickup" || deliveryType === "") setDeliveryType("home");
                         setCheckingOut(true);
