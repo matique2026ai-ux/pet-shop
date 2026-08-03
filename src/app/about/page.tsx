@@ -132,9 +132,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-20 relative overflow-hidden"
-        style={{ background: "#F8FAFC" }}
-      >
+      <section className="py-16 lg:py-20 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-emerald-200/40 to-transparent" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
@@ -153,16 +151,17 @@ export default function AboutPage() {
               {t.about.valueItems.map((v: { title: string; text: string }, i: number) => (
                 <div
                   key={i}
-                  className="group relative overflow-hidden rounded-2xl p-5 transition-all duration-500 hover:-translate-y-1"
-                  style={{ background: i % 2 === 0 ? "#FFFFFF" : "#EFF6FF" }}
+                  className={`group relative overflow-hidden rounded-2xl p-5 transition-all duration-500 hover:-translate-y-1 shadow-md border ${
+                    i % 2 === 0 ? "bg-white border-gray-200" : "bg-[#EFF6FF] border-blue-100"
+                  }`}
                 >
                   <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-20 group-hover:opacity-30 transition-opacity"
                     style={{ background: i % 2 === 0 ? "#DBEAFE" : "#FDBA74" }}
                   />
                   <div className="relative flex items-start gap-4">
-                    <span className="w-12 h-12 shrink-0 rounded-xl flex items-center justify-center text-[#F97316] text-lg font-bold"
-                      style={{ background: i % 2 === 0 ? "#EFF6FF" : "#FFFFFF" }}
-                    >
+                    <span className={`w-12 h-12 shrink-0 rounded-xl flex items-center justify-center text-[#F97316] text-lg font-bold ${
+                      i % 2 === 0 ? "bg-[#EFF6FF]" : "bg-white"
+                    }`}>
                       {valueIcons[i]}
                     </span>
                     <div className="min-w-0">
