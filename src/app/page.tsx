@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useI18n } from "@/lib/i18n-context";
@@ -12,8 +12,7 @@ import PetNutritionCalculator from "@/components/pet-nutrition-calculator";
 
 import ProductCard, { ProductCardSkeleton } from "@/components/product-card";
 import BlogCard from "@/components/blog-card";
-import { SHIMMER_BLUR } from "@/lib/blur";
-import { ArrowRight, Star, Truck, Shield, RefreshCw, BookOpen, ChevronLeft, ChevronRight, Heart, Sparkles, Award, Cat, Dog, Bird, Fish, Rabbit, PawPrint } from "lucide-react";
+import { Star, Truck, Shield, BookOpen, ChevronLeft, ChevronRight, Heart, Sparkles, Award, PawPrint } from "lucide-react";
 
 
 
@@ -35,85 +34,10 @@ const DEFAULT_HERO_VIDEOS = [
   "https://cdn.pixabay.com/video/2022/12/03/141480-777708175_large.mp4",
 ];
 
-function CategoryFootprintDecor({ category }: { category: string }) {
-  if (category === "cats") {
-    return (
-      <svg
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        className="absolute -bottom-6 -left-6 w-24 h-24 text-[#E3602D]/4 pointer-events-none transform -rotate-12 select-none group-hover:scale-110 group-hover:text-[#E3602D]/8 transition-all duration-500 z-0"
-        aria-hidden="true"
-      >
-        <path d="M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3zm-4.5-3c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm9 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6.5-3.5C9.17 7.5 8.5 8.17 8.5 9s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm4 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z" />
-      </svg>
-    );
-  }
-  if (category === "birds") {
-    return (
-      <svg
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth="1"
-        fill="none"
-        className="absolute -bottom-6 -left-6 w-24 h-24 text-[#E3602D]/6 pointer-events-none transform rotate-45 select-none group-hover:scale-110 group-hover:text-[#E3602D]/10 transition-all duration-500 z-0"
-        aria-hidden="true"
-      >
-        <line x1="12" y1="4" x2="12" y2="20" />
-        <line x1="12" y1="12" x2="6" y2="8" />
-        <line x1="12" y1="12" x2="18" y2="8" />
-        <line x1="12" y1="16" x2="8" y2="19" />
-        <line x1="12" y1="16" x2="16" y2="19" />
-      </svg>
-    );
-  }
-  if (category === "dogs") {
-    return (
-      <svg
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        className="absolute -bottom-6 -left-6 w-28 h-28 text-[#E3602D]/4 pointer-events-none transform -rotate-45 select-none group-hover:scale-110 group-hover:text-[#E3602D]/8 transition-all duration-500 z-0"
-        aria-hidden="true"
-      >
-        <path d="M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3zm-4.5-3c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm9 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-6.5-3.5C9.17 7.5 8.5 8.17 8.5 9s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm4 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z" />
-      </svg>
-    );
-  }
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className="absolute -bottom-6 -left-6 w-24 h-24 text-[#E3602D]/4 pointer-events-none transform rotate-12 select-none group-hover:scale-110 group-hover:text-[#E3602D]/8 transition-all duration-500 z-0"
-      aria-hidden="true"
-    >
-      <path d="M12 3C8.5 3 5 6.5 5 11c0 4.5 3.5 7.5 5.5 8.5C11 19.8 11.5 20 12 20s1-.2 1.5-.5c2-1 5.5-4 5.5-8.5 0-4.5-3.5-8-7-8zm-2 14c-1.5-1-3.5-3-3.5-6 0-3 2-5 3.5-5 .5 0 1 .5 1 1 0 1.5-1 3-1 5 0 1 .5 2 1 2.5-.5.5-1 1.5-1 2.5zm4.5-2.5c.5-.5 1-1.5 1-2.5 0-2-1-3.5-1-5 0-.5.5-1 1-1 1.5 0 3.5 2 3.5 5 0 3-2 5-3.5 6 0-1-.5-2-1-2.5z" />
-    </svg>
-  );
-}
-
-const catIcons: Record<string, React.ReactNode> = {
-  cats:         <Cat    className="w-8 h-8" />,
-  dogs:         <Dog    className="w-8 h-8" />,
-  birds:        <Bird   className="w-8 h-8" />,
-  fish:         <Fish   className="w-8 h-8" />,
-  "small-pets": <Rabbit className="w-8 h-8" />,
-};
-
-function PawIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path d="M12 14c-1.66 0-3 1.34-3 3 0 2 2 3.5 3 3.5s3-1.5 3-3.5c0-1.66-1.34-3-3-3z"/>
-      <circle cx="6.5" cy="11.5" r="1.5" />
-      <circle cx="10" cy="8.5" r="1.5" />
-      <circle cx="14" cy="8.5" r="1.5" />
-      <circle cx="17.5" cy="11.5" r="1.5" />
-    </svg>
-  );
-}
-
 export default function HomePage() {
   const { t, dir, lang } = useI18n();
   const { content } = useSiteSettings();
-  const { categories, products, vetServices, testimonials, blogPosts, productsLoaded } = useTranslatedData();
+  const { categories, products, testimonials, blogPosts, productsLoaded } = useTranslatedData();
   
   const getLocalizedContent = (baseKey: string, fallback: string) => {
     if (lang === "fr" && content && content[`${baseKey}Fr`]) return content[`${baseKey}Fr`];

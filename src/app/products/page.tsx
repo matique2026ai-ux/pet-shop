@@ -14,15 +14,16 @@ function ProductsContent() {
   const { products, categories, productsLoaded } = useTranslatedData();
   const searchParams = useSearchParams();
   const initialFilter = searchParams.get("filter");
-  const initialSearch = searchParams.get("q") || "";
-  const [search, setSearch] = useState(initialSearch);
+  const paramSearch = searchParams.get("q") || "";
+  const [search, setSearch] = useState(paramSearch);
+  const [prevParamSearch, setPrevParamSearch] = useState(paramSearch);
   const [category, setCategory] = useState<string>("all");
   const [sort, setSort] = useState("default");
 
-  useEffect(() => {
-    const q = searchParams.get("q");
-    if (q) setSearch(q);
-  }, [searchParams]);
+  if (paramSearch !== prevParamSearch) {
+    setPrevParamSearch(paramSearch);
+    setSearch(paramSearch);
+  }
 
   const filtered = useMemo(() => {
     let list = products;
