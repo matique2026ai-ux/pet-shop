@@ -638,11 +638,15 @@ export default function CartPage() {
 
               {/* ── RIGHT COLUMN: ORDER SUMMARY ── */}
               <div className="lg:w-[400px] xl:w-[450px] shrink-0">
-                <div className="bg-white rounded-3xl shadow-md border border-gray-200 p-6 sm:p-8 sticky top-24">
-                  <h3 className="text-xl font-bold text-[#1E2D24] mb-6 flex items-center gap-2">
-                    <ShoppingBag className="w-5 h-5 text-[#F5851F]" />
-                    {t.cart.summary}
-                  </h3>
+                <div className="bg-white/60 backdrop-blur-2xl rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-white/80 p-6 sm:p-8 sticky top-24 relative overflow-hidden">
+                  {/* Glass Shimmer Decor */}
+                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/40 via-transparent to-white/20 pointer-events-none" />
+                  
+                  <div className="relative z-10">
+                    <h3 className="text-xl font-bold text-[#1E2D24] mb-6 flex items-center gap-2">
+                      <ShoppingBag className="w-5 h-5 text-[#F5851F]" />
+                      {t.cart.summary}
+                    </h3>
 
                   {/* Summary Rows */}
                   <div className="space-y-4 text-sm">
@@ -727,6 +731,7 @@ export default function CartPage() {
                       <Banknote className="w-5 h-5 text-gray-500" />
                       <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wide">{lang === "ar" ? "الدفع عند الاستلام" : "PAIEMENT COD"}</span>
                     </div>
+                  </div>
                   </div>
                 </div>
               </div>
