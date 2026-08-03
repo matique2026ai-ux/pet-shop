@@ -101,7 +101,7 @@ export default function ProductReviews({ productId }: { productId: string }) {
     });
 
   return (
-    <div className="mt-14">
+    <div className="w-full">
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-6">
         <div>
           <h2 className="text-2xl font-bold text-[#1E2D24]">{t.reviews.title}</h2>

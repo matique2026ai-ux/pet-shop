@@ -565,6 +565,12 @@ export default function ProductDetailPage() {
               </AnimatedSection>
             )}
 
+          </div>
+        </section>
+
+        {/* Reviews Section */}
+        <section className="py-12 lg:py-16 bg-gray-50 border-t border-gray-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection>
               <ProductReviews productId={product.id} />
             </AnimatedSection>
@@ -572,7 +578,7 @@ export default function ProductDetailPage() {
         </section>
 
         {related.length > 0 && (
-          <section className="py-12 bg-gray-50 border-t border-gray-100">
+          <section className="py-12 lg:py-16 bg-white border-t border-gray-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-8">{t.products.relatedTitle}</h2>
               <AnimatedSection>
