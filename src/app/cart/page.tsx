@@ -362,7 +362,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="bg-[#F8F7F4] min-h-screen pb-20" dir={dir}>
+    <div className="bg-gray-100 min-h-screen pb-20" dir={dir}>
       {/* ══════════════════════════════════
           CREATIVE CART HERO
       ══════════════════════════════════ */}
@@ -403,7 +403,7 @@ export default function CartPage() {
                 
                 {/* CHECKOUT PROGRESS BAR */}
                 {checkingOut && (
-                  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-6 flex items-center justify-between">
+                  <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-5 mb-6 flex items-center justify-between">
                     <button onClick={() => setCheckingOut(false)} className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-semibold">
                       <ArrowLeft className="w-4 h-4 rtl:rotate-180" />
                       {t.cart.continueShopping}
@@ -419,7 +419,7 @@ export default function CartPage() {
                   // ── CART ITEMS LIST ──
                   <div className="space-y-4">
                     {items.map((item) => (
-                      <div key={`${item.productId}-${item.selectedVariant || "default"}`} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-row items-start sm:items-center gap-3 sm:gap-4 relative overflow-hidden transition-all hover:border-emerald-100 hover:shadow-md">
+                      <div key={`${item.productId}-${item.selectedVariant || "default"}`} className="bg-white rounded-2xl shadow-md border border-gray-200 p-4 flex flex-row items-start sm:items-center gap-3 sm:gap-4 relative overflow-hidden transition-all hover:border-emerald-200 hover:shadow-lg">
                         {/* Product Image */}
                         <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-100">
                           <Image src={item.image} alt={item.name} fill className="object-cover" sizes="(max-width: 640px) 80px, 96px" />
@@ -532,7 +532,7 @@ export default function CartPage() {
                   }} className="space-y-6">
 
                     {/* Step 1: Contact Info */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6">
+                    <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-5 sm:p-6">
                       <div className="flex items-center gap-3 mb-4 border-b border-gray-100 pb-3">
                         <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm">1</div>
                         <h3 className="text-lg font-bold text-gray-900">{lang === "ar" ? "معلومات التواصل" : "Coordonnées"}</h3>
@@ -559,7 +559,7 @@ export default function CartPage() {
                     </div>
 
                     {/* Step 2: Delivery */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6">
+                    <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-5 sm:p-6">
                       <div className="flex items-center gap-3 mb-4 border-b border-gray-100 pb-3">
                         <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm">2</div>
                         <h3 className="text-lg font-bold text-gray-900">{lang === "ar" ? "خيارات التوصيل" : "Options de livraison"}</h3>
@@ -636,9 +636,9 @@ export default function CartPage() {
                 )}
               </div>
 
-              {/* ── RIGHT COLUMN: STICKY SUMMARY ── */}
-              <div className="w-full lg:w-96 lg:shrink-0">
-                <div className="bg-white rounded-3xl shadow-lg shadow-gray-200/40 border border-gray-100 p-6 sm:p-8 sticky top-24">
+              {/* ── RIGHT COLUMN: ORDER SUMMARY ── */}
+              <div className="lg:w-[400px] xl:w-[450px] shrink-0">
+                <div className="bg-white rounded-3xl shadow-md border border-gray-200 p-6 sm:p-8 sticky top-24">
                   <h3 className="text-xl font-bold text-[#1E2D24] mb-6 flex items-center gap-2">
                     <ShoppingBag className="w-5 h-5 text-[#F5851F]" />
                     {t.cart.summary}
