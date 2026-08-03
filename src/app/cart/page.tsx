@@ -110,7 +110,6 @@ export default function CartPage() {
   const { store, delivery } = useSiteSettings();
   const [checkingOut, setCheckingOut] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState<{ id: string, delivery_address?: string } | null>(null);
-  const [area, setArea] = useState("");
   const [wilaya, setWilaya] = useState("");
   const [commune, setCommune] = useState("");
   const [deliveryType, setDeliveryType] = useState<"home" | "stopdesk" | "pickup" | "">("");
@@ -625,9 +624,22 @@ export default function CartPage() {
                     <span className="font-semibold text-gray-900">{currency}{subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex items-center justify-between text-gray-600">
-                    <span className="flex items-center gap-1"><Truck className="w-3.5 h-3.5 text-emerald-600" />{wilaya ? `${wilaya} · ${etaText}` : (t.nav.shipping || "Shipping")}</span>
+                    <span className="flex items-center gap-1">
+                      <Truck className="w-3.5 h-3.5 text-emerald-600" />
+                      {deliveryType === "pickup"
+                        ? (lang === "ar" ? "الاستلام من المحل (سطيف)" : "Retrait en magasin")
+                        : wilaya
+                        ? (isSetifWilaya(wilaya)
+                            ? (lang === "ar" ? "🛵 توصيل سريع بالدراجة النارية (سطيف)" : "🛵 Livraison express moto (Sétif)")
+                            : `${wilaya} · ${etaText}`)
+                        : (lang === "ar" ? "اختر الولاية أولاً لحساب التوصيل" : "Sélectionnez une wilaya")}
+                    </span>
                     <span className="font-semibold text-gray-900">
-                      {!wilaya ? "-" : (deliveryFee === 0 ? t.cart.free : `${currency}${deliveryFee.toFixed(2)}`)}
+                      {deliveryType === "pickup"
+                        ? (lang === "ar" ? "مجاناً" : "Gratuit")
+                        : !wilaya
+                        ? "-"
+                        : (deliveryFee === 0 ? t.cart.free : `${currency}${deliveryFee.toFixed(2)}`)}
                     </span>
                   </div>
                   {remainingForFree > 0 && (
@@ -855,7 +867,7 @@ export default function CartPage() {
                         >
                           <option value="" disabled hidden>{lang === "ar" ? "اختر الولاية" : "Sélectionnez une wilaya"}</option>
                           {WILAYAS.map((w, i) => (
-                            <option key={w} value={w}>{lang === "ar" ? WILAYAS_AR[i] : w}</option>
+                            <option key={w} value={w}>{getNumberedWilayaLabel(i, lang)}</option>
                           ))}
                         </select>
                       </div>

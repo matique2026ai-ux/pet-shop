@@ -10,7 +10,7 @@ export default function HeroVideoManager({ adminSecret }: { adminSecret?: string
   const [error, setError] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const getSecret = () => sessionStorage.getItem("admin_secret") || "";
+  const getSecret = () => adminSecret || sessionStorage.getItem("admin_secret") || "";
 
   const load = async () => {
     setLoading(true);
