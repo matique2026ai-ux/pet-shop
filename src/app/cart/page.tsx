@@ -126,8 +126,16 @@ export default function CartPage() {
     if (typeof window !== "undefined") {
       try {
         const storedRef = getCookie("pawswings_referral") || localStorage.getItem("pet_shop_referral") || "";
-        setReferralCode(storedRef);
+        if (storedRef) setReferralCode(storedRef);
+      } catch (e) {
+        console.error("Error reading referral:", e);
+      }
+    }
+  }, []);
 
+  useEffect(() => {
+    if (typeof window !== "undefined" && user && !hasPreFilledInfo) {
+      try {
         const cookieVal = getCookie("pawswings_customer_info");
         const raw = cookieVal || localStorage.getItem("pawswings_customer_info");
         if (raw) {
@@ -143,18 +151,7 @@ export default function CartPage() {
         console.error("Error reading customer cookie:", e);
       }
     }
-  }, []);
-
-  useEffect(() => {
-    if (checkingOut && !orderPlaced) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [checkingOut, orderPlaced]);
+  }, [user, hasPreFilledInfo]);
 
   const cartHasBirds = items.some((item) => {
     const p = products.find((p: any) => p.id === item.productId);
