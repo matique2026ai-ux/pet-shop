@@ -694,10 +694,16 @@ export default function CartPage() {
                         ⚠️ {lang === "ar" ? "يرجى فصل الطيور في طلب استلام منفصل." : "Séparez les animaux en une commande retrait."}
                       </div>
                     ) : checkingOut ? (
-                      <button key="btn-submit-order" type="submit" form="checkout-form" className="w-full bg-gradient-to-r from-[#0B0F0D] to-[#1A2D24] text-white py-4 rounded-2xl font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-xl shadow-emerald-900/20 text-lg">
-                        <CreditCard className="w-5 h-5 text-[#F1C290]" />
-                        {t.cart.placeOrder}
-                      </button>
+                      <div className="space-y-3">
+                        <button key="btn-submit-order" type="submit" form="checkout-form" className="w-full bg-gradient-to-r from-[#0B0F0D] to-[#1A2D24] text-white py-4 rounded-2xl font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-xl shadow-emerald-900/20 text-lg">
+                          <CreditCard className="w-5 h-5 text-[#F1C290]" />
+                          {t.cart.placeOrder}
+                        </button>
+                        <button type="button" onClick={() => setCheckingOut(false)} className="w-full bg-white border-2 border-gray-100 text-gray-500 py-3 rounded-2xl font-bold hover:border-gray-200 hover:text-gray-700 hover:bg-gray-50 transition-all flex items-center justify-center gap-2 text-sm shadow-sm">
+                          <ArrowLeft className="w-4 h-4 rtl:rotate-180" />
+                          {lang === "ar" ? "الرجوع لتعديل المنتجات" : "Retour au panier"}
+                        </button>
+                      </div>
                     ) : (
                       <button key="btn-start-checkout" type="button" onClick={(e) => {
                         e.preventDefault();
