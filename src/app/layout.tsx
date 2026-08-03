@@ -102,8 +102,21 @@ import LiveSocialProof from "@/components/live-social-proof";
 import { Toaster } from "sonner";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://paws-wings.vercel.app";
   return (
     <html lang="en" className={`${cairo.variable} ${outfit.variable}`} suppressHydrationWarning>
+      <head>
+        <meta property="fb:app_id" content="966242223397117" />
+        <meta property="og:site_name" content="مخالب وأجنحة" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={siteUrl} />
+        <meta property="og:title" content="مخالب وأجنحة | Paws & Wings" />
+        <meta property="og:description" content="متجر إلكتروني متكامل للحيوانات الأليفة والخيول في الجزائر. جودة، مصداقية، وتوصيل سريع جميع الولايات." />
+        <meta property="og:image" content={`${siteUrl}/og-image.png`} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content="image/png" />
+      </head>
       <body className="font-outfit bg-surface text-slate-800 antialiased">
         <I18nProvider>
           <CartProvider>
