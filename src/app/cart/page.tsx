@@ -190,8 +190,10 @@ export default function CartPage() {
   const d = { ...DEFAULT_DELIVERY, ...(delivery || {}) };
   const region = regionForWilaya(wilaya, commune);
   const deliv = DELIVERY_CONFIG[region];
-  const feeNum = deliveryType === "pickup" ? 0 : (wilaya ? (deliveryType === "home" ? deliv.home : deliv.stopdesk) : 0);
-  const etaText = deliveryType === "pickup" ? t.cart.readyNow : (wilaya ? deliv.eta[lang] : "");
+  const feeNum = deliveryType === "pickup" ? 0 
+    : (wilaya && deliveryType === "home" ? deliv.home 
+    : (wilaya && deliveryType === "stopdesk" ? deliv.stopdesk : 0));
+  const etaText = deliveryType === "pickup" ? t.cart.readyNow : (wilaya && deliveryType ? deliv.eta[lang] : "");
   const freeNum = Number(d.freeThreshold) || 5000;
   const subtotal = totalPrice;
   const deliveryFee = subtotal > 0 && subtotal >= freeNum ? 0 : feeNum;
