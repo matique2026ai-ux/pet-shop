@@ -13,7 +13,7 @@ export function LogoC1({ className = "w-20 h-20" }: { className?: string }) {
     <img
       src={logoSrc}
       alt={store?.storeName || "مخالب وأجنحة"}
-      className={`${className} object-contain`}
+      className={`${className} object-contain rounded-full`}
       style={{ display: "inline-block" }}
     />
   );
