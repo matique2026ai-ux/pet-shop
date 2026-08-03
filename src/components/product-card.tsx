@@ -123,7 +123,7 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
   const lite = prefersReduced || isLite;
 
   const cardInner = (
-    <div className="relative bg-white rounded-2xl overflow-hidden border border-[#F0EDE6] shadow-md shadow-[#E3602D]/8 group-hover:border-[#F1C290]/40">
+    <div className="relative bg-white rounded-2xl overflow-hidden border border-[#F0EDE6] shadow-[0_4px_20px_-4px_rgba(227,96,45,0.08)] group-hover:shadow-[0_8px_30px_-4px_rgba(227,96,45,0.15)] group-hover:border-[#E3602D]/30 transition-all duration-300">
       {/* Top Header Bar - Completely separate from the image */}
       <div className="relative z-10 flex items-center justify-between px-3 pt-3 pb-1 bg-white">
         <div>
@@ -146,7 +146,7 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
             type="button"
             onClick={handleOpenQuickView}
             title={lang === "ar" ? "نظرة سريعة" : "Aperçu rapide"}
-            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gray-50 border border-gray-200/90 text-gray-700 flex items-center justify-center shadow-xs hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all transform hover:scale-110 active:scale-95"
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gray-50 border border-gray-200/90 text-gray-700 flex items-center justify-center shadow-xs hover:bg-[#E3602D] hover:text-white hover:border-[#E3602D] transition-all transform hover:scale-110 active:scale-95"
           >
             <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
@@ -168,14 +168,14 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
       </div>
 
       {/* Pure Product Image - 100% clean with zero overlapping icons */}
-      <div className="relative aspect-square bg-white overflow-hidden">
+      <div className="relative aspect-square bg-white overflow-hidden group-hover:bg-[#FCFAFA] transition-colors duration-500">
         <Image
           src={product.image || "/placeholder.svg"}
           alt={product.name}
           fill
           placeholder="blur"
           blurDataURL={SHIMMER_BLUR}
-          className="object-contain p-3 transition-transform duration-700 ease-out group-hover:scale-105"
+          className="object-contain p-4 mix-blend-multiply transition-transform duration-700 ease-out group-hover:scale-110"
           sizes={isRelated ? "(max-width: 640px) 50vw, 25vw" : "(max-width: 640px) 100vw, 25vw"}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#E3602D]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -190,9 +190,9 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
       </div>
 
       {/* Content */}
-      <div className={`${isRelated ? "p-3" : "p-4"} relative overflow-hidden`}>
+      <div className={`${isRelated ? "p-3" : "p-4 pt-5"} relative overflow-hidden bg-white`}>
         <CardFootprintDecor category={product.category} />
-        <h3 dir="auto" className={`relative z-10 font-bold text-[#1A1A2E] ${isRelated ? "text-sm" : "text-sm lg:text-base"} leading-tight mb-2 line-clamp-2 group-hover:text-[#E3602D] transition-colors duration-200 text-center mx-auto`}>
+        <h3 dir="auto" className={`relative z-10 font-extrabold text-[#1A1A2E] ${isRelated ? "text-sm" : "text-[15px] lg:text-[17px]"} leading-snug mb-2.5 line-clamp-2 group-hover:text-[#E3602D] transition-colors duration-200 text-center mx-auto tracking-tight`}>
           {product.name}
         </h3>
         {!isRelated && (
@@ -204,20 +204,20 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
             <span className="text-xs text-[#9E9282]">({product.reviews})</span>
           </div>
         )}
-        <div className="relative z-10 flex flex-wrap items-center justify-center gap-2 mb-1">
-          <span className={`font-bold text-[#1A1A2E] ${isRelated ? "text-sm" : "text-lg"}`}>
+        <div className="relative z-10 flex flex-wrap items-center justify-center gap-2 mb-2">
+          <span className={`font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E3602D] to-[#8A6022] ${isRelated ? "text-sm" : "text-xl"}`}>
             {currency}{product.price.toLocaleString()}
             {product.sold_by && product.sold_by !== "piece" && (
-              <span className="text-xs font-normal text-[#9E9282]"> /{unitLabel(product.sold_by, lang)}</span>
+              <span className="text-xs font-semibold text-[#9E9282]"> /{unitLabel(product.sold_by, lang)}</span>
             )}
           </span>
           {product.originalPrice && (
-            <span className={`text-[#9E9282] line-through ${isRelated ? "text-xs" : "text-sm"}`}>
+            <span className={`text-[#9E9282] line-through font-medium ${isRelated ? "text-[10px]" : "text-sm"}`}>
               {currency}{product.originalPrice}
             </span>
           )}
           {product.originalPrice && product.originalPrice > product.price && (
-            <span className="text-[10px] font-bold bg-[#FBF8F3] text-[#E3602D] px-1.5 py-0.5 rounded-full border border-[#ECDCAE] shrink-0">
+            <span className="text-[10px] font-bold bg-[#FFF5F0] text-[#E3602D] px-1.5 py-0.5 rounded-md border border-[#FDE3D6] shrink-0 shadow-sm">
               -{Math.round((1 - product.price / product.originalPrice) * 100)}%
             </span>
           )}
@@ -226,16 +226,16 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
           lite ? (
             <button
               onClick={handleAddToCart}
-              className="relative z-10 add-cart-btn mt-3 w-full flex items-center justify-center gap-1.5 h-10 px-2 text-xs sm:text-sm font-bold whitespace-nowrap overflow-hidden transition-transform active:scale-95"
+              className="relative z-10 w-full flex items-center justify-center gap-1.5 h-11 px-2 text-sm font-bold text-white bg-[#1A1A2E] rounded-xl overflow-hidden transition-all hover:bg-[#E3602D] hover:shadow-lg hover:shadow-[#E3602D]/30 active:scale-95"
             >
               <ShoppingCart className="w-4 h-4 shrink-0" />
               <span className="truncate">{t.products?.addToCart || "Add to Cart"}</span>
             </button>
           ) : (
             <motion.button
-              whileTap={{ scale: 0.92 }}
+              whileTap={{ scale: 0.95 }}
               onClick={handleAddToCart}
-              className="relative z-10 add-cart-btn mt-3 w-full flex items-center justify-center gap-1.5 h-10 px-2 text-xs sm:text-sm font-bold whitespace-nowrap overflow-hidden"
+              className="relative z-10 w-full flex items-center justify-center gap-1.5 h-11 px-2 text-sm font-bold text-white bg-[#1A1A2E] rounded-xl overflow-hidden transition-all hover:bg-[#E3602D] hover:shadow-lg hover:shadow-[#E3602D]/30"
             >
               <ShoppingCart className="w-4 h-4 shrink-0" />
               <span className="truncate">{t.products?.addToCart || "Add to Cart"}</span>
@@ -317,7 +317,7 @@ export default function ProductCard({ product, variant = "default" }: ProductCar
                         handleAddToCart(e);
                         setShowQuickView(false);
                       }}
-                      className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 px-6 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/10 transition-colors"
+                      className="flex-1 bg-[#1A1A2E] hover:bg-[#E3602D] text-white py-3.5 px-6 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-[#1A1A2E]/20 hover:shadow-[#E3602D]/30 transition-all active:scale-95"
                     >
                       <ShoppingCart className="w-5 h-5" />
                       {t.products.addToCart}

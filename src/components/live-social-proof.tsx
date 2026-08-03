@@ -50,35 +50,46 @@ export default function LiveSocialProof() {
 
   return (
     <div
-      className="fixed bottom-20 left-4 sm:bottom-6 sm:left-6 z-40 max-w-xs sm:max-w-sm w-full bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-gray-200/80 shadow-2xl animate-in slide-in-from-bottom-5 fade-in duration-300 rtl:right-4 rtl:left-auto sm:rtl:right-6 sm:rtl:left-auto"
+      className="fixed bottom-24 left-4 sm:bottom-8 sm:left-8 z-40 max-w-[320px] w-full bg-white/80 backdrop-blur-xl rounded-2xl p-3 border border-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] animate-in slide-in-from-bottom-8 fade-in duration-500 rtl:right-4 rtl:left-auto sm:rtl:right-8 sm:rtl:left-auto"
       dir={dir}
     >
       <button
         onClick={() => setVisible(false)}
-        className="absolute top-2 right-2 rtl:right-auto rtl:left-2 p-1 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors"
+        className="absolute top-2 right-2 rtl:right-auto rtl:left-2 p-1.5 text-gray-400 hover:text-gray-800 rounded-full hover:bg-gray-100/50 transition-colors z-10"
       >
         <X className="w-3.5 h-3.5" />
       </button>
 
-      <div className="flex items-center gap-3">
-        <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-emerald-50 shrink-0 border border-emerald-100">
-          <Image src={current.image} alt={current.item} fill className="object-cover" sizes="48px" />
+      <div className="flex items-center gap-3.5 relative z-0">
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-[#E3602D] to-[#F1C290] rounded-xl opacity-30 blur-sm animate-pulse" />
+          <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-white border border-gray-100 shadow-sm shrink-0">
+            <Image src={current.image} alt={current.item} fill className="object-cover" sizes="56px" />
+          </div>
         </div>
 
-        <div className="flex-1 min-w-0 pr-4 rtl:pr-0 rtl:pl-4">
-          <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 mb-0.5">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-            <span className="truncate">{current.name} · {current.city}</span>
+        <div className="flex-1 min-w-0 pr-5 rtl:pr-0 rtl:pl-5">
+          <div className="flex items-center gap-1 mb-1">
+            <span className="flex items-center justify-center w-3.5 h-3.5 rounded-full bg-emerald-100 text-emerald-600 shrink-0">
+              <CheckCircle2 className="w-2.5 h-2.5" />
+            </span>
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+              {lang === "ar" ? "شراء مؤكد" : "Achat Vérifié"}
+            </span>
           </div>
 
-          <p className="text-xs font-bold text-gray-900 truncate mb-0.5">
+          <h4 className="text-sm font-extrabold text-[#1A1A2E] truncate mb-0.5 leading-tight">
+            {current.name}
+          </h4>
+          
+          <p className="text-xs font-medium text-gray-700 truncate mb-1">
             {current.item}
           </p>
 
-          <p className="text-[10px] text-gray-400 flex items-center gap-1">
-            <ShoppingBag className="w-3 h-3 text-orange-500" />
-            <span>{lang === "ar" ? `قام بشراء هذا المنتج ${current.time}` : `A acheté cet article ${current.time}`}</span>
-          </p>
+          <div className="flex items-center gap-1.5 text-[10px] text-gray-400 font-medium">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span>{current.city} • {current.time}</span>
+          </div>
         </div>
       </div>
     </div>

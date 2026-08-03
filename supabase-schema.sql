@@ -34,6 +34,9 @@ CREATE TABLE IF NOT EXISTS products (
   in_stock BOOLEAN NOT NULL DEFAULT TRUE,
   stock_quantity INTEGER NOT NULL DEFAULT 0,
   sold_by TEXT NOT NULL DEFAULT 'piece' CHECK (sold_by IN ('piece', 'bag', 'box', 'bottle', 'pack', 'dose', 'kg', 'g', 'l', 'ml')),
+  seo_title TEXT,
+  seo_description TEXT,
+  seo_keywords TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );

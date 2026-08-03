@@ -530,12 +530,20 @@ export default function ProductDetailPage() {
                     </div>
                   )}
                   {tab === "ingredients" && hasIngredients && (
-                    <div className="max-w-3xl bg-emerald-50/50 border border-emerald-100 rounded-2xl p-6">
-                      <div className="flex items-center gap-2 mb-3">
-                        <Leaf className="w-5 h-5 text-emerald-600" />
-                        <h3 className="font-bold text-gray-900">{t.products.ingredients}</h3>
+                    <div className="max-w-3xl bg-gradient-to-br from-white to-[#FBF8F3] border border-[#ECDCAE] shadow-[0_8px_30px_rgb(229,178,90,0.12)] rounded-3xl p-6 sm:p-8 relative overflow-hidden group">
+                      {/* Decorative Background Icon */}
+                      <Leaf className="absolute -bottom-8 -right-8 w-40 h-40 text-[#E5B25A]/5 rotate-[-15deg] pointer-events-none group-hover:scale-110 transition-transform duration-700" />
+                      
+                      <div className="relative z-10 flex items-center gap-3 mb-5 pb-4 border-b border-[#E5B25A]/20">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#E3602D] to-[#F1C290] flex items-center justify-center shadow-md shadow-[#E3602D]/20">
+                          <Leaf className="w-5 h-5 text-white" />
+                        </div>
+                        <h3 className="text-lg font-black text-[#1A1A2E] tracking-tight">{t.products.ingredients}</h3>
                       </div>
-                      <p dir="auto" className="text-gray-600 leading-relaxed whitespace-pre-line text-start">{product.ingredients}</p>
+                      
+                      <div className="relative z-10 font-medium text-gray-700 leading-loose text-start text-sm sm:text-base bg-white/50 backdrop-blur-sm rounded-2xl p-5 border border-white shadow-inner">
+                        <p dir="auto" className="whitespace-pre-line">{product.ingredients}</p>
+                      </div>
                     </div>
                   )}
                   {tab === "video" && hasVideo && embed && (

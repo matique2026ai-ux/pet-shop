@@ -21,6 +21,9 @@ export interface ProductData {
   created_at?: string;
   images?: string[];
   variants?: string[];
+  seo_title?: string;
+  seo_description?: string;
+  seo_keywords?: string;
 }
 
 function isSupabaseConfigured(): boolean {

@@ -29,13 +29,15 @@ export async function generateMetadata(
     };
   }
 
-  const title = `${product.name} | مخالب وأجنحة`;
-  const description = product.description || `اشتري ${product.name} الآن من متجر مخالب وأجنحة بأفضل الأسعار.`;
+  const title = product.seo_title || `${product.name} | مخالب وأجنحة`;
+  const description = product.seo_description || product.description || `اشتري ${product.name} الآن من متجر مخالب وأجنحة بأفضل الأسعار.`;
+  const keywords = product.seo_keywords ? product.seo_keywords.split(",").map((k: string) => k.trim()) : ["متجر حيوانات", "مخالب وأجنحة", product.name];
   const images = product.images?.[0] || product.image ? [product.images?.[0] || product.image] : [];
 
   return {
     title,
     description,
+    keywords,
     openGraph: {
       title,
       description,

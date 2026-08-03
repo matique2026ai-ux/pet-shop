@@ -292,6 +292,9 @@ type FormState = {
   video: string;
   ingredients: string;
   variants: string;
+  seo_title: string;
+  seo_description: string;
+  seo_keywords: string;
 };
 
 const emptyForm: FormState = {
@@ -312,6 +315,9 @@ const emptyForm: FormState = {
   video: "",
   ingredients: "",
   variants: "",
+  seo_title: "",
+  seo_description: "",
+  seo_keywords: "",
 };
 
 function OrderDetailRow({
@@ -923,6 +929,9 @@ export default function AdminDashboard() {
         video: product.video || "",
         ingredients: product.ingredients || "",
         variants: product.variants?.join(", ") || "",
+        seo_title: product.seo_title || "",
+        seo_description: product.seo_description || "",
+        seo_keywords: product.seo_keywords || "",
       });
     setFormErrors({});
     setShowModal(true);
@@ -1009,6 +1018,9 @@ export default function AdminDashboard() {
         video: form.video || undefined,
         ingredients: form.ingredients || undefined,
         variants: form.variants.split(",").map((v) => v.trim()).filter(Boolean),
+        seo_title: form.seo_title || undefined,
+        seo_description: form.seo_description || undefined,
+        seo_keywords: form.seo_keywords || undefined,
       };
       if (form.originalPrice) body.original_price = Number(form.originalPrice);
 
@@ -2873,6 +2885,45 @@ export default function AdminDashboard() {
                       className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
                     />
                     <p className="text-xs text-gray-400 mt-1">{a.products.ingredientsHelp}</p>
+                  </div>
+
+                  <div className="pt-4 border-t border-gray-200 mt-4">
+                    <h3 className="text-sm font-bold text-gray-900 mb-4">SEO Optimization (Optional)</h3>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">SEO Title</label>
+                        <input
+                          type="text"
+                          value={form.seo_title}
+                          onChange={(e) => setForm({ ...form, seo_title: e.target.value })}
+                          placeholder="Best Dog Food in Algeria"
+                          className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">SEO Description</label>
+                        <textarea
+                          rows={2}
+                          value={form.seo_description}
+                          onChange={(e) => setForm({ ...form, seo_description: e.target.value })}
+                          placeholder="A detailed description for search engines..."
+                          className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">SEO Keywords</label>
+                        <input
+                          type="text"
+                          value={form.seo_keywords}
+                          onChange={(e) => setForm({ ...form, seo_keywords: e.target.value })}
+                          placeholder="dog food, premium pet food, algeria pet shop"
+                          className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useI18n } from "@/lib/i18n-context";
-import { Utensils as FoodIcon, Droplets as WaterIcon, Sparkles as SparklesIcon, Calculator as CalcIcon, ArrowRight as ArrowIcon, PawPrint as PawIcon } from "lucide-react";
+import { Utensils as FoodIcon, Droplets as WaterIcon, Sparkles as SparklesIcon, Calculator as CalcIcon, ArrowRight as ArrowIcon, PawPrint as PawIcon, Cat, Dog, Bird } from "lucide-react";
 
 export default function PetNutritionCalculator() {
   const { lang, dir } = useI18n();
@@ -67,7 +67,7 @@ export default function PetNutritionCalculator() {
         <div className="text-center max-w-2xl mx-auto mb-10">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-[#F1C290] border border-white/15 text-xs font-semibold mb-3 shadow-md">
             <CalcIcon className="w-4 h-4 text-[#F5851F]" />
-            <span>{lang === "ar" ? "حاسبة التغذية الذكية 🥗" : "Calculateur Nutritionnel"}</span>
+            <span>{lang === "ar" ? "حاسبة التغذية الذكية" : "Calculateur Nutritionnel"}</span>
           </span>
           <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight mb-3">
             {lang === "ar" ? "احسب الاحتياج اليومي لحيوانك الأليف" : "Calculez les besoins de votre animal"}
@@ -90,23 +90,26 @@ export default function PetNutritionCalculator() {
               </label>
               <div className="grid grid-cols-3 gap-2">
                 {[
-                  { id: "cat" as const, label: lang === "ar" ? "🐱 قطة" : "Chat", icon: "🐱" },
-                  { id: "dog" as const, label: lang === "ar" ? "🐶 كلب" : "Chien", icon: "🐶" },
-                  { id: "bird" as const, label: lang === "ar" ? "🦜 طائر" : "Oiseau", icon: "🦜" },
-                ].map((p) => (
-                  <button
-                    key={p.id}
-                    onClick={() => handlePetTypeChange(p.id)}
-                    className={`py-3 px-3 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 border ${
-                      petType === p.id
-                        ? "bg-[#F5851F] text-white border-[#F5851F] shadow-lg shadow-[#F5851F]/30"
-                        : "bg-white/5 text-white/80 border-white/10 hover:bg-white/10"
-                    }`}
-                  >
-                    <span>{p.icon}</span>
-                    <span>{p.label}</span>
-                  </button>
-                ))}
+                  { id: "cat" as const, label: lang === "ar" ? "قطة" : "Chat", icon: Cat },
+                  { id: "dog" as const, label: lang === "ar" ? "كلب" : "Chien", icon: Dog },
+                  { id: "bird" as const, label: lang === "ar" ? "طائر" : "Oiseau", icon: Bird },
+                ].map((p) => {
+                  const Icon = p.icon;
+                  return (
+                    <button
+                      key={p.id}
+                      onClick={() => handlePetTypeChange(p.id)}
+                      className={`py-3 px-3 rounded-2xl font-bold text-xs sm:text-sm transition-all flex flex-col sm:flex-row items-center justify-center gap-1.5 border ${
+                        petType === p.id
+                          ? "bg-[#F5851F] text-white border-[#F5851F] shadow-lg shadow-[#F5851F]/30"
+                          : "bg-white/5 text-white/80 border-white/10 hover:bg-white/10 hover:text-white"
+                      }`}
+                    >
+                      <Icon className={`w-5 h-5 ${petType === p.id ? "text-white" : "text-[#F1C290]"}`} />
+                      <span>{p.label}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 

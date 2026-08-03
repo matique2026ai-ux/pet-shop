@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Star } from "lucide-react";
+import { Star, Check, User } from "lucide-react";
 import { useI18n } from "@/lib/i18n-context";
 import { useAuth } from "@/lib/auth-context";
 import { createClient } from "@/lib/supabase";
@@ -131,8 +131,12 @@ export default function ProductReviews({ productId }: { productId: string }) {
           {loading ? (
             <div className="text-gray-400 text-sm">{t.products.loading}</div>
           ) : count === 0 ? (
-            <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6 text-center text-gray-500">
-              {t.reviews.noReviews}
+            <div className="bg-gradient-to-b from-gray-50 to-white border border-gray-100 rounded-3xl p-10 sm:p-14 text-center flex flex-col items-center justify-center min-h-[300px] shadow-sm">
+              <div className="w-20 h-20 bg-[#E5B25A]/10 rounded-full flex items-center justify-center mb-5">
+                <Star className="w-10 h-10 text-[#E5B25A] opacity-80" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">{t.reviews.noReviews}</h3>
+              <p className="text-sm text-gray-500 max-w-sm mx-auto">كن أول من يشارك رأيه وتجربته مع هذا المنتج. تقييمك يساعد الآخرين في اتخاذ القرار الصحيح.</p>
             </div>
           ) : (
             reviews.map((r) => (
@@ -157,24 +161,36 @@ export default function ProductReviews({ productId }: { productId: string }) {
 
         {/* Write review */}
         <div className="lg:col-span-1">
-          <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 lg:sticky lg:top-24">
-            <h3 className="font-bold text-gray-900 mb-4">{t.reviews.writeReview}</h3>
+          <div className="bg-white border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-3xl p-6 lg:sticky lg:top-24">
+            <h3 className="font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <Star className="w-5 h-5 text-[#E3602D]" />
+              {t.reviews.writeReview}
+            </h3>
+            
             {submitted ? (
-              <p className="text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-xl p-3 text-sm">
-                {t.reviews.pendingNote}
-              </p>
+              <div className="bg-emerald-50/50 border border-emerald-100 rounded-2xl p-5 text-center">
+                <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Check className="w-6 h-6" />
+                </div>
+                <p className="text-emerald-800 font-semibold text-sm">
+                  {t.reviews.pendingNote}
+                </p>
+              </div>
             ) : !user ? (
-              <div className="space-y-3">
-                <p className="text-sm text-gray-500">{t.reviews.loginPrompt}</p>
+              <div className="bg-gray-50 rounded-2xl p-6 text-center border border-gray-100">
+                <div className="w-12 h-12 bg-gray-200 text-gray-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <User className="w-6 h-6" />
+                </div>
+                <p className="text-sm font-medium text-gray-600 mb-5">{t.reviews.loginPrompt}</p>
                 <button
                   onClick={() => setAuthOpen(true)}
-                  className="w-full bg-emerald-600 text-white rounded-xl py-2.5 font-semibold hover:bg-emerald-700 transition-colors"
+                  className="w-full bg-[#1A1A2E] text-white rounded-xl py-3 font-bold hover:bg-[#E3602D] hover:shadow-lg hover:shadow-[#E3602D]/30 transition-all active:scale-95"
                 >
                   {t.reviews.loginButton}
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1.5">{t.reviews.yourRating}</label>
                   <div className="flex items-center gap-1">
