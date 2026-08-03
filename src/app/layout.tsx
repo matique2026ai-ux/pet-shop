@@ -35,6 +35,9 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://paws-wings.vercel.app"),
+  facebook: {
+    appId: "966242223397117",
+  },
   title: {
     default: "مخالب وأجنحة | Paws & Wings",
     template: "%s | مخالب وأجنحة",
