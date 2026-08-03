@@ -34,15 +34,17 @@ const outfit = Outfit({
 
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://paws-wings.vercel.app"),
   title: {
     default: "مخالب وأجنحة | Paws & Wings",
     template: "%s | مخالب وأجنحة",
   },
   alternates: {
+    canonical: "https://paws-wings.vercel.app",
     languages: {
-      en: "/",
-      fr: "/",
-      ar: "/",
+      en: "https://paws-wings.vercel.app",
+      fr: "https://paws-wings.vercel.app",
+      ar: "https://paws-wings.vercel.app",
     },
   },
 
@@ -57,19 +59,25 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "مخالب وأجنحة | Paws & Wings",
-    description: "متجر إلكتروني متكامل للحيوانات الأليفة والخيول في الجزائر. جودة، مصداقية، وتوصيل سريع.",
-    // FIXED: replaced wrong domain with correct production URL
+    description: "متجر إلكتروني متكامل للحيوانات الأليفة والخيول في الجزائر. جودة، مصداقية، وتوصيل سريع جميع الولايات.",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://paws-wings.vercel.app",
     siteName: "مخالب وأجنحة",
     locale: "ar_DZ",
     type: "website",
-    // FIXED: replaced external favicon with local logo asset
-    images: [{ url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://paws-wings.vercel.app"}/logo-badge.png`, width: 512, height: 512, alt: "مخالب وأجنحة | Paws & Wings" }],
+    images: [
+      {
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://paws-wings.vercel.app"}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: "مخالب وأجنحة | Paws & Wings Store",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "مخالب وأجنحة | Paws & Wings",
     description: "متجر إلكتروني متكامل للحيوانات الأليفة والخيول في الجزائر.",
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL || "https://paws-wings.vercel.app"}/og-image.png`],
   },
   icons: {
     icon: [
